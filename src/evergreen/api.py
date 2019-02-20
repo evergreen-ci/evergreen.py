@@ -16,6 +16,7 @@ import requests
 import yaml
 
 from evergreen.task import Task
+from evergreen.build import Build
 
 
 EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
@@ -68,16 +69,29 @@ class EvergreenApi(object):
 
         return cls(auth=EvgAuth(config['user'], config['api_key']))
 
-    def tasks_by_build_id(self, build_id):
+    def tasks_by_build_id(self, build_id, params=None):
         """
         Get all tasks for a given build_id.
 
         :param build_id: build_id to query.
+        :param params: Dictionary of parameters to pass to query.
         :return: List of tasks for the specified build.
         """
         url = '{api_server}/rest/v2/builds/{build_id}/tasks'.format(api_server=self._api_server,
                                                                     build_id=build_id)
-        return [Task(task) for task in self._paginate(url)]
+        return [Task(task) for task in self._paginate(url, params)]
+
+    def builds_by_version(self, version_id, params=None):
+        """
+        Get all builds for a given Evergreen version_id.
+
+        :param version_id: Version Id to query for.
+        :param params: Dictionary of parameters to pass to query.
+        :return: List of builds for the specified version.
+        """
+        url = '{api_server}/rest/v2/version/{version_id}/builds'.format(api_server=self._api_server,
+                                                                        version_id=version_id)
+        return [Build(build) for build in self._paginate(url, params)]
 
     @staticmethod
     def _log_api_call_time(response, start_time):
