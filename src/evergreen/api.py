@@ -15,6 +15,8 @@ except ImportError:
 import requests
 import yaml
 
+from evergreen.task import Task
+
 
 EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
 
@@ -75,19 +77,31 @@ class EvergreenApi(object):
         """
         url = '{api_server}/rest/v2/builds/{build_id}/tasks'.format(api_server=self._api_server,
                                                                     build_id=build_id)
-        return self._call_api(url).json()
+        return [Task(task) for task in self._paginate(url)]
 
-    def _call_api(self, url, params=None):
-        start_time = time.time()
-        response = self.session.get(url=url, params=params)
+    @staticmethod
+    def _log_api_call_time(response, start_time):
         duration = round(time.time() - start_time, 2)
         if duration > 10:
             LOGGER.info('Request %s took %fs', response.request.url, duration)
         else:
             LOGGER.debug('Request %s took %fs', response.request.url, duration)
-        try:
-            response.raise_for_status()
-        except requests.exceptions.HTTPError as err:
-            LOGGER.error('Response text: %s', response.text)
-            raise err
+
+    def _call_api(self, url, params=None):
+        start_time = time.time()
+        response = self.session.get(url=url, params=params)
+        self._log_api_call_time(response, start_time)
+
+        response.raise_for_status()
         return response
+
+    def _paginate(self, url, params=None):
+        """Paginate until all results are returned and return a list of all JSON results."""
+        response = self._call_api(url, params)
+        json_data = response.json()
+        while "next" in response.links:
+            response = self._call_api(response.links['next']['url'])
+            if response.json():
+                json_data.extend(response.json())
+
+        return json_data
