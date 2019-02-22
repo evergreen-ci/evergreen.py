@@ -40,7 +40,12 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
     install_requires=[
+        'Click==7.0',
         'PyYAML==3.13',
         'requests==2.21.0',
     ],
+    entry_points='''
+        [console_scripts]
+        evg_api=evergreen.cli.main:main
+    ''',
 )

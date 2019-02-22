@@ -14,4 +14,4 @@ class Build(object):
     def __getattr__(self, item):
         if item in self.json:
             return self.json[item]
-        raise TypeError('Unknown attribute {0}'.format(item))
+        raise TypeError('Unknown build attribute {0}'.format(item))

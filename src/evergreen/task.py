@@ -1,10 +1,26 @@
 # -*- encoding: utf-8 -*-
+"""Task representation of evergreen."""
 from __future__ import absolute_import
-from __future__ import print_function
+
+from evergreen.util import parse_evergreen_datetime
+
+
+EVG_SUCCESS_STATUS = 'success'
+EVG_SYSTEM_FAILURE_STATUS = 'system'
+
+_EVG_DATE_FIELDS_IN_TASK = frozenset([
+    'create_time',
+    'dispatch_time',
+    'finish_time',
+    'ingest_time',
+    'scheduled_time',
+    'start_time',
+])
 
 
 class Task(object):
     """Representation of an Evergreen task."""
+
     def __init__(self, task_json):
         """
         Create an instance of an evergreen task.
@@ -13,8 +29,10 @@ class Task(object):
 
     def __getattr__(self, item):
         if item in self.json:
+            if item in _EVG_DATE_FIELDS_IN_TASK and self.json[item]:
+                return parse_evergreen_datetime(self.json[item])
             return self.json[item]
-        raise TypeError('Unknown attribute {0}'.format(item))
+        raise TypeError('Unknown task attribute {0}'.format(item))
 
     def get_execution(self, execution):
         """
@@ -32,3 +50,41 @@ class Task(object):
                     return Task(task)
 
         return None
+
+    def wait_time(self):
+        """
+        Get the time taken until the task started running.
+
+        :return: Time taken until task started running.
+        """
+        if self.start_time and self.ingest_time:
+            return self.start_time - self.ingest_time
+        return None
+
+    def is_success(self):
+        """
+        Whether task was successful.
+
+        :return: True if task was successful.
+        """
+        return self.status == EVG_SUCCESS_STATUS
+
+    def is_system_failure(self):
+        """
+        Whether task resulted in a system failure.
+
+        :return: True if task was a system failure.
+        """
+        if not self.is_success() and self.status_details and self.status_details['type']:
+            return self.status_details['type'] == EVG_SYSTEM_FAILURE_STATUS
+        return False
+
+    def is_timeout(self):
+        """
+        Whether task results in a timeout.
+
+        :return: True if task was a timeout.
+        """
+        if not self.is_success() and self.status_details and self.status_details['timed_out']:
+            return self.status_details['timed_out']
+        return False
