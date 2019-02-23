@@ -12,3 +12,16 @@ class Build(_BaseEvergreenObject):
         Create an instance of an evergreen task.
         """
         super(Build, self).__init__(json, api)
+
+    def get_tasks(self, fetch_all_executions=False):
+        """
+        Get all tasks for this build.
+
+        :param fetch_all_executions:  fetch all executions for tasks.
+        :return: List of all tasks.
+        """
+        params = {}
+        if fetch_all_executions:
+            params['fetch_all_executions'] = 1
+
+        return self._api.tasks_by_build_id(self.build_id, params)
