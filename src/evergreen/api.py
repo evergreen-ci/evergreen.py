@@ -286,7 +286,7 @@ class _VersionApi(_BaseEvergreenApi):
         :param params: Dictionary of parameters to pass to query.
         :return: List of builds for the specified version.
         """
-        url = self._create_url('/version/{version_id}/builds'.format(version_id=version_id))
+        url = self._create_url('/versions/{version_id}/builds'.format(version_id=version_id))
         build_list = self._paginate(url, params)
         return [Build(build, self) for build in build_list]
 
