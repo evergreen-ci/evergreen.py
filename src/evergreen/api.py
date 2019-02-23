@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from collections import namedtuple
-from functools import lru_cache
+from backports.functools_lru_cache import lru_cache
 import logging
 import os
 import time
