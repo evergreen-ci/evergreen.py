@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from collections import namedtuple
+from functools import lru_cache
 import logging
 import os
 import time
@@ -93,6 +94,7 @@ class _BaseEvergreenApi(object):
         else:
             LOGGER.debug('Request %s took %fs', response.request.url, duration)
 
+    @lru_cache(maxsize=1024)
     def _call_api(self, url, params=None):
         """
         Make a call to the evergreen api.
