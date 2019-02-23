@@ -15,7 +15,7 @@ class RunningTask(_BaseEvergreenObject):
         :param json: json of running task.
         :param api: Evergreen API.
         """
-        super().__init__(json, api)
+        super(RunningTask, self).__init__(json, api)
 
     def get_build(self):
         """
@@ -41,7 +41,7 @@ class Host(_BaseEvergreenObject):
         """
         Create an instance of an evergreen host.
         """
-        super().__init__(json, api)
+        super(Host, self).__init__(json, api)
 
     @property
     def running_task(self):

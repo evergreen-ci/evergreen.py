@@ -11,4 +11,4 @@ class Build(_BaseEvergreenObject):
         """
         Create an instance of an evergreen task.
         """
-        super().__init__(json, api)
+        super(Build, self).__init__(json, api)

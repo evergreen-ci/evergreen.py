@@ -55,7 +55,3 @@ def test_stats(ctx, after_date, before_date, tasks):
 
 def main():
     return cli(obj={})
-
-
-if __name__ == '__main__':
-    main()

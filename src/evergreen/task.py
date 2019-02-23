@@ -25,7 +25,7 @@ class Task(_BaseEvergreenObject):
         """
         Create an instance of an evergreen task.
         """
-        super().__init__(json, api)
+        super(Task, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_TASK
 
     def get_execution(self, execution):

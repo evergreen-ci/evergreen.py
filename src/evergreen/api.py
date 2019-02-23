@@ -51,7 +51,14 @@ def read_evergreen_config():
 
 class _BaseEvergreenApi(object):
     """Base methods for building API objects."""
+
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """
+        Create a _BaseEvergreenApi object.
+
+        :param api_server: URI of Evergreen API server.
+        :param auth: EvgAuth object with auth information.
+        """
         self._api_server = api_server
         self.session = requests.Session()
         adapter = requests.adapters.HTTPAdapter()
@@ -63,7 +70,12 @@ class _BaseEvergreenApi(object):
             })
 
     def _create_url(self, endpoint):
-        """Format the a call to an endpoint."""
+        """
+        Format the a call to an endpoint.
+
+        :param endpoint: endpoint to call.
+        :return: Full url to get endpoint.
+        """
         return '{api_server}/rest/v2{endpoint}'.format(api_server=self._api_server,
                                                        endpoint=endpoint)
 
