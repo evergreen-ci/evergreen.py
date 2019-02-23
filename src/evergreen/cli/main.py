@@ -16,6 +16,15 @@ def cli(ctx):
 
 @cli.command()
 @click.pass_context
+def list_hosts(ctx):
+    api = ctx.obj['api']
+    host_list = api.get_all_hosts()
+    for host in host_list:
+        click.echo(host)
+
+
+@cli.command()
+@click.pass_context
 def list_projects(ctx):
     api = ctx.obj['api']
     project_list = api.get_all_projects()

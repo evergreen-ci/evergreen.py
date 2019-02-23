@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-"""Task representation of evergreen."""
+"""Stats representation of evergreen."""
 from __future__ import absolute_import
 
 from evergreen.util import parse_evergreen_datetime

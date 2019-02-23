@@ -5,11 +5,12 @@ from __future__ import print_function
 
 class Build(object):
     """Representation of an Evergreen build."""
-    def __init__(self, build_json):
+    def __init__(self, build_json, api):
         """
         Create an instance of an evergreen task.
         """
         self.json = build_json
+        self._api = api
 
     def __getattr__(self, item):
         if item in self.json:

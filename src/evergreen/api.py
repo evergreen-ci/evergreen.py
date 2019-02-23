@@ -16,10 +16,11 @@ import requests
 import yaml
 
 from evergreen.build import Build
+from evergreen.host import Host
 from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.task import Task
-from evergreen.test_stats import TestStats
+from evergreen.stats import TestStats
 from evergreen.util import format_evergreen_datetime
 from evergreen.version import Version
 
@@ -126,6 +127,25 @@ class _BaseEvergreenApi(object):
         return json_data
 
 
+class _HostApi(_BaseEvergreenApi):
+    """API for hosts endpoints."""
+
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """Create an Evergreen Api object."""
+        super(_HostApi, self).__init__(api_server, auth)
+
+    def get_all_hosts(self, params=None):
+        """
+        Get all hosts in evergreen.
+
+        :param params: parameters to pass to endpoint.
+        :return: List of all hosts in evergreen.
+        """
+        url = self._create_url('/hosts')
+        host_list = self._paginate(url, params)
+        return [Host(host, self) for host in host_list]
+
+
 class _ProjectApi(_BaseEvergreenApi):
     """API for project endpoints."""
 
@@ -158,7 +178,8 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url(
             '/projects/{project_id}/recent_versions'.format(project_id=project_id))
-        return [Version(version) for version in self._paginate(url, params)]
+        version_list = self._paginate(url, params)
+        return [Version(version) for version in version_list]
 
     def get_patches_per_project(self, project_id, params=None):
         """
@@ -189,7 +210,8 @@ class _ProjectApi(_BaseEvergreenApi):
         :return: Patch queried for.
         """
         url = self._create_url('/projects/{project_id}/test_stats'.format(project_id=project_id))
-        return [TestStats(test_stat) for test_stat in self._paginate(url, params)]
+        test_stats_list = self._paginate(url, params)
+        return [TestStats(test_stat) for test_stat in test_stats_list]
 
 
 class _BuildApi(_BaseEvergreenApi):
@@ -198,6 +220,17 @@ class _BuildApi(_BaseEvergreenApi):
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
         """Create an Evergreen Api object."""
         super(_BuildApi, self).__init__(api_server, auth)
+
+    def build_by_id(self, build_id, params=None):
+        """
+        Get a build by id.
+
+        :param build_id: build id to query.
+        :param params: Parameters to pass to endpoint.
+        :return: Build queried for.
+        """
+        url = self._create_url('/build/{build_id}'.format(build_id=build_id))
+        return Build(self._paginate(url, params), self)
 
     def tasks_by_build_id(self, build_id, params=None):
         """
@@ -208,7 +241,8 @@ class _BuildApi(_BaseEvergreenApi):
         :return: List of tasks for the specified build.
         """
         url = self._create_url('/builds/{build_id}/tasks'.format(build_id=build_id))
-        return [Task(task) for task in self._paginate(url, params)]
+        task_list = self._paginate(url, params)
+        return [Task(task) for task in task_list]
 
 
 class _VersionApi(_BaseEvergreenApi):
@@ -217,6 +251,17 @@ class _VersionApi(_BaseEvergreenApi):
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
         """Create an Evergreen Api object."""
         super(_VersionApi, self).__init__(api_server, auth)
+
+    def version_by_id(self, version_id, params=None):
+        """
+        Get version by version id.
+
+        :param version_id: Id of version to query.
+        :param params: Dictionary of parameters.
+        :return: Version queried for.
+        """
+        url = self._create_url('/versions/{version_id}'.format(version_id=version_id))
+        return Version(self._paginate(url, params), self)
 
     def builds_by_version(self, version_id, params=None):
         """
@@ -227,7 +272,8 @@ class _VersionApi(_BaseEvergreenApi):
         :return: List of builds for the specified version.
         """
         url = self._create_url('/version/{version_id}/builds'.format(version_id=version_id))
-        return [Build(build) for build in self._paginate(url, params)]
+        build_list = self._paginate(url, params)
+        return [Build(build) for build in build_list]
 
 
 class _PatchApi(_BaseEvergreenApi):
@@ -249,7 +295,7 @@ class _PatchApi(_BaseEvergreenApi):
         return Patch(self._call_api(url, params))
 
 
-class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi):
+class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi):
     """Access to the Evergreen API Server."""
 
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
