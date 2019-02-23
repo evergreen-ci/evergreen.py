@@ -116,6 +116,7 @@ class _BaseEvergreenApi(object):
         :param response: response from evergreen api.
         """
         if response.status_code >= 400 and 'error' in response.json():
+            print(response.json())
             raise requests.exceptions.HTTPError(response.json()['error'], response=response)
 
         response.raise_for_status()
