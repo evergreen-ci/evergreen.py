@@ -116,7 +116,6 @@ class _BaseEvergreenApi(object):
         :param response: response from evergreen api.
         """
         if response.status_code >= 400 and 'error' in response.json():
-            print(response.json())
             raise requests.exceptions.HTTPError(response.json()['error'], response=response)
 
         response.raise_for_status()
@@ -243,7 +242,7 @@ class _BuildApi(_BaseEvergreenApi):
         :param params: Parameters to pass to endpoint.
         :return: Build queried for.
         """
-        url = self._create_url('/build/{build_id}'.format(build_id=build_id))
+        url = self._create_url('/builds/{build_id}'.format(build_id=build_id))
         return Build(self._paginate(url, params), self)
 
     def tasks_by_build_id(self, build_id, params=None):
