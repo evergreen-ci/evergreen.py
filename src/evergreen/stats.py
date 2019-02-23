@@ -2,7 +2,7 @@
 """Stats representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.util import parse_evergreen_datetime
+from evergreen.base import _BaseEvergreenObject
 
 
 _EVG_DATE_FIELDS_IN_TEST_STATS = frozenset([
@@ -10,20 +10,14 @@ _EVG_DATE_FIELDS_IN_TEST_STATS = frozenset([
 ])
 
 
-class TestStats(object):
+class TestStats(_BaseEvergreenObject):
     """Representation of an Evergreen test stats object."""
 
-    def __init__(self, test_stats_json):
+    def __init__(self, json, api):
         """
         Create an instance of a test stats object.
 
-        :param test_stats_json: json version of object.
+        :param json: json version of object.
         """
-        self.json = test_stats_json
-
-    def __getattr__(self, item):
-        if item in self.json:
-            if item in _EVG_DATE_FIELDS_IN_TEST_STATS and self.json[item]:
-                return parse_evergreen_datetime(self.json[item])
-            return self.json[item]
-        raise TypeError('Unknown test stats attribute {0}'.format(item))
+        super().__init__(json, api)
+        self._date_fields = _EVG_DATE_FIELDS_IN_TEST_STATS

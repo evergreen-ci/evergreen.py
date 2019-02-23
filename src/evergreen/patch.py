@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from evergreen.util import parse_evergreen_datetime
+from evergreen.base import _BaseEvergreenObject
 
 
 _EVG_DATE_FIELDS_IN_PATCH = frozenset([
@@ -10,22 +10,16 @@ _EVG_DATE_FIELDS_IN_PATCH = frozenset([
 ])
 
 
-class Patch(object):
+class Patch(_BaseEvergreenObject):
     """
     Representation of an Evergreen patch.
     """
 
-    def __init__(self, patch_json):
+    def __init__(self, json, api):
         """
         Create an instance of an evergreen patch.
 
-        :param patch_json: json representing patch.
+        :param json: json representing patch.
         """
-        self.json = patch_json
-
-    def __getattr__(self, item):
-        if item in self.json:
-            if item in _EVG_DATE_FIELDS_IN_PATCH and self.json[item]:
-                return parse_evergreen_datetime(self.json[item])
-            return self.json[item]
-        raise TypeError('Unknown patch attribute {0}'.format(item))
+        super().__init__(json, api)
+        self._date_fields = _EVG_DATE_FIELDS_IN_PATCH

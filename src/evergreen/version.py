@@ -2,8 +2,7 @@
 """Version representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.util import parse_evergreen_datetime
-
+from evergreen.base import _BaseEvergreenObject
 
 _EVG_DATE_FIELDS_IN_VERSION = frozenset([
     'create_time',
@@ -12,36 +11,24 @@ _EVG_DATE_FIELDS_IN_VERSION = frozenset([
 ])
 
 
-class BuildVariantStatus(object):
-    def __init__(self, build_variant_json, api):
-        self.json = build_variant_json
-        self._api = api
+class BuildVariantStatus(_BaseEvergreenObject):
 
-    def __getattr__(self, item):
-        if item in self.json:
-            return self.json[item]
-        raise TypeError('Unknown version attribute {0}'.format(item))
+    def __init__(self, json, api):
+        super().__init__(json, api)
 
     def get_build(self):
         return self._api.build_by_id(self.build_id)
 
 
-class Version(object):
-    def __init__(self, version_json, api):
+class Version(_BaseEvergreenObject):
+    def __init__(self, json, api):
         """
         Create an instance of an evergreen version.
 
-        :param version_json: json representing version
+        :param json: json representing version
         """
-        self.json = version_json
-        self._api = api
-
-    def __getattr__(self, item):
-        if item in self.json:
-            if item in _EVG_DATE_FIELDS_IN_VERSION and self.json[item]:
-                return parse_evergreen_datetime(self.json[item])
-            return self.json[item]
-        raise TypeError('Unknown version attribute {0}'.format(item))
+        super().__init__(json, api)
+        self._date_fields = _EVG_DATE_FIELDS_IN_VERSION
 
     @property
     def build_variants_status(self):

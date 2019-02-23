@@ -2,23 +2,20 @@
 """Evergreen representation of a project."""
 from __future__ import absolute_import
 
+from evergreen.base import _BaseEvergreenObject
 
-class Project(object):
+
+class Project(_BaseEvergreenObject):
     """Representation of an Evergreen project."""
-    def __init__(self, project_json, api):
+
+    def __init__(self, json, api):
         """
         Create an instance of an evergreen project.
 
-        :param project_json: json representing project.
+        :param json: json representing project.
         :param api: evergreen api object.
         """
-        self.json = project_json
-        self._api = api
-
-    def __getattr__(self, item):
-        if item in self.json:
-            return self.json[item]
-        raise TypeError('Unknown project attribute {0}'.format(item))
+        super().__init__(json, api)
 
     def get_patches(self):
         return self._api.get_patches_per_project(self.identifier, params={'limit': 5})

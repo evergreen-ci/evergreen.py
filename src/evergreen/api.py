@@ -64,7 +64,8 @@ class _BaseEvergreenApi(object):
 
     def _create_url(self, endpoint):
         """Format the a call to an endpoint."""
-        return '{api_server}/rest/v2{endpoint}'.format(api_server=self._api_server, endpoint=endpoint)
+        return '{api_server}/rest/v2{endpoint}'.format(api_server=self._api_server,
+                                                       endpoint=endpoint)
 
     @staticmethod
     def _log_api_call_time(response, start_time):
@@ -179,7 +180,7 @@ class _ProjectApi(_BaseEvergreenApi):
         url = self._create_url(
             '/projects/{project_id}/recent_versions'.format(project_id=project_id))
         version_list = self._paginate(url, params)
-        return [Version(version) for version in version_list]
+        return [Version(version, self) for version in version_list]
 
     def get_patches_per_project(self, project_id, params=None):
         """
@@ -191,7 +192,7 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url('/projects/{project_id}/patches'.format(project_id=project_id))
         patches = self._paginate(url, params)
-        return [Patch(patch) for patch in patches]
+        return [Patch(patch, self) for patch in patches]
 
     def get_recent_patches_by_project(self, project_id, start_at, params=None):
         start_at = format_evergreen_datetime(start_at)
@@ -211,7 +212,7 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url('/projects/{project_id}/test_stats'.format(project_id=project_id))
         test_stats_list = self._paginate(url, params)
-        return [TestStats(test_stat) for test_stat in test_stats_list]
+        return [TestStats(test_stat, self) for test_stat in test_stats_list]
 
 
 class _BuildApi(_BaseEvergreenApi):
@@ -242,7 +243,7 @@ class _BuildApi(_BaseEvergreenApi):
         """
         url = self._create_url('/builds/{build_id}/tasks'.format(build_id=build_id))
         task_list = self._paginate(url, params)
-        return [Task(task) for task in task_list]
+        return [Task(task, self) for task in task_list]
 
 
 class _VersionApi(_BaseEvergreenApi):
@@ -273,7 +274,7 @@ class _VersionApi(_BaseEvergreenApi):
         """
         url = self._create_url('/version/{version_id}/builds'.format(version_id=version_id))
         build_list = self._paginate(url, params)
-        return [Build(build) for build in build_list]
+        return [Build(build, self) for build in build_list]
 
 
 class _PatchApi(_BaseEvergreenApi):
@@ -292,7 +293,7 @@ class _PatchApi(_BaseEvergreenApi):
         :return: Patch queried for.
         """
         url = self._create_url('/patches/{patch_id}'.format(patch_id=patch_id))
-        return Patch(self._call_api(url, params))
+        return Patch(self._call_api(url, params), self)
 
 
 class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi):

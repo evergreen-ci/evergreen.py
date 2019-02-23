@@ -2,7 +2,7 @@
 """Task representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.util import parse_evergreen_datetime
+from evergreen.base import _BaseEvergreenObject
 
 
 EVG_SUCCESS_STATUS = 'success'
@@ -18,21 +18,15 @@ _EVG_DATE_FIELDS_IN_TASK = frozenset([
 ])
 
 
-class Task(object):
+class Task(_BaseEvergreenObject):
     """Representation of an Evergreen task."""
 
-    def __init__(self, task_json):
+    def __init__(self, json, api):
         """
         Create an instance of an evergreen task.
         """
-        self.json = task_json
-
-    def __getattr__(self, item):
-        if item in self.json:
-            if item in _EVG_DATE_FIELDS_IN_TASK and self.json[item]:
-                return parse_evergreen_datetime(self.json[item])
-            return self.json[item]
-        raise TypeError('Unknown task attribute {0}'.format(item))
+        super().__init__(json, api)
+        self._date_fields = _EVG_DATE_FIELDS_IN_TASK
 
     def get_execution(self, execution):
         """
@@ -47,7 +41,7 @@ class Task(object):
         if 'previous_executions' in self.json:
             for task in self.json['previous_executions']:
                 if task['execution'] == execution:
-                    return Task(task)
+                    return Task(task, self._api)
 
         return None
 

@@ -1,0 +1,22 @@
+{
+    "host_id": "kings.landing.10gen.cc",
+    "host_url": "kings.landing..10gen.cc",
+    "distro": {
+      "distro_id": "centos6-perf",
+      "provider": "static",
+      "image_id": ""
+    },
+    "provisioned": true,
+    "started_by": "mci",
+    "host_type": "",
+    "user": "mci-perf-exec",
+    "status": "running",
+    "running_task": {
+      "task_id": "sqlproxy_benchmark_benchmark_queries_3.2_8810b00c9e3a1a23be77cb54dc522e123f136aac_19_02_22_18_05_09",
+      "name": "benchmark-queries-3.2",
+      "dispatch_time": "2019-02-22T19:51:42.012Z",
+      "version_id": "sqlproxy_8810b00c9e3a1a23be77cb54dc522e123f136aac",
+      "build_id": "sqlproxy_benchmark_8810b00c9e3a1a23be77cb54dc522e123f136aac_19_02_22_18_05_09"
+    },
+    "user_host": false
+  }

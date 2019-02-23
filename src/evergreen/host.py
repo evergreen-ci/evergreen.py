@@ -2,24 +2,20 @@
 """Host representation of evergreen."""
 from __future__ import absolute_import
 
+from evergreen.base import _BaseEvergreenObject
 
-class RunningTask(object):
+
+class RunningTask(_BaseEvergreenObject):
     """Representation of a running task."""
 
-    def __init__(self, running_task_json, api):
+    def __init__(self, json, api):
         """
         Create an instance of a Running Task.
 
-        :param running_task_json: json of running task.
+        :param json: json of running task.
         :param api: Evergreen API.
         """
-        self.json = running_task_json
-        self._api = api
-
-    def __getattr__(self, item):
-        if item in self.json:
-            return self.json[item]
-        raise TypeError('Unknown running task attribute {0}'.format(item))
+        super().__init__(json, api)
 
     def get_build(self):
         """
@@ -38,27 +34,18 @@ class RunningTask(object):
         return self._api.version_by_id(self.version_id)
 
 
-HOST_SUB_ATTRIBUTE_MAP = {
-    'running_task': RunningTask,
-}
-
-
-class Host(object):
+class Host(_BaseEvergreenObject):
     """Representation of an Evergreen host."""
 
-    def __init__(self, host_json, api):
+    def __init__(self, json, api):
         """
         Create an instance of an evergreen host.
         """
-        self.json = host_json
-        self._api = api
+        super().__init__(json, api)
 
-    def __getattr__(self, item):
-        if item in self.json:
-            if item in HOST_SUB_ATTRIBUTE_MAP:
-                return HOST_SUB_ATTRIBUTE_MAP[item](self.json(item))
-            return self.json[item]
-        raise TypeError('Unknown host attribute {0}'.format(item))
+    @property
+    def running_task(self):
+        return RunningTask(self.json['running_task'], self._api)
 
     def get_build(self):
         """

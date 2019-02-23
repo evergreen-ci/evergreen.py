@@ -1,18 +1,14 @@
 # -*- encoding: utf-8 -*-
 from __future__ import absolute_import
-from __future__ import print_function
+
+from evergreen.base import _BaseEvergreenObject
 
 
-class Build(object):
+class Build(_BaseEvergreenObject):
     """Representation of an Evergreen build."""
-    def __init__(self, build_json, api):
+
+    def __init__(self, json, api):
         """
         Create an instance of an evergreen task.
         """
-        self.json = build_json
-        self._api = api
-
-    def __getattr__(self, item):
-        if item in self.json:
-            return self.json[item]
-        raise TypeError('Unknown build attribute {0}'.format(item))
+        super().__init__(json, api)
