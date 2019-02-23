@@ -15,7 +15,7 @@ class Project(_BaseEvergreenObject):
         :param json: json representing project.
         :param api: evergreen api object.
         """
-        super().__init__(json, api)
+        super(Project, self).__init__(json, api)
 
     def get_patches(self):
         return self._api.get_patches_per_project(self.identifier, params={'limit': 5})

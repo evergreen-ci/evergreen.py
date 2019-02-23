@@ -14,7 +14,7 @@ _EVG_DATE_FIELDS_IN_VERSION = frozenset([
 class BuildVariantStatus(_BaseEvergreenObject):
 
     def __init__(self, json, api):
-        super().__init__(json, api)
+        super(BuildVariantStatus, self).__init__(json, api)
 
     def get_build(self):
         return self._api.build_by_id(self.build_id)
@@ -27,7 +27,7 @@ class Version(_BaseEvergreenObject):
 
         :param json: json representing version
         """
-        super().__init__(json, api)
+        super(Version, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_VERSION
 
     @property

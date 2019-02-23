@@ -21,5 +21,5 @@ class Patch(_BaseEvergreenObject):
 
         :param json: json representing patch.
         """
-        super().__init__(json, api)
+        super(Patch, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_PATCH

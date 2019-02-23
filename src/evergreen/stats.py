@@ -19,5 +19,5 @@ class TestStats(_BaseEvergreenObject):
 
         :param json: json version of object.
         """
-        super().__init__(json, api)
+        super(TestStats, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_TEST_STATS

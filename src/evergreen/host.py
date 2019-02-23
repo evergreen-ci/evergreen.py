@@ -55,6 +55,14 @@ class Host(_BaseEvergreenObject):
         """
         return self.running_task.get_build()
 
+    def get_version(self):
+        """
+        Get the version for the task using this host.
+
+        :return: version for task running on this host.
+        """
+        return self.running_task.get_version()
+
     def __str__(self):
         return '{host_id}: {distro_id} - {status}'.format(
             host_id=self.host_id,
