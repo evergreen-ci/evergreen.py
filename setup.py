@@ -43,7 +43,6 @@ setup(
         'Click==7.0',
         'PyYAML==3.13',
         'requests==2.21.0',
-        'backports.functools-lru-cache==1.5',
     ],
     entry_points='''
         [console_scripts]

@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from collections import namedtuple
-from backports.functools_lru_cache import lru_cache
 import logging
 import os
 import time
@@ -94,7 +93,6 @@ class _BaseEvergreenApi(object):
         else:
             LOGGER.debug('Request %s took %fs', response.request.url, duration)
 
-    @lru_cache(maxsize=1024)
     def _call_api(self, url, params=None):
         """
         Make a call to the evergreen api.
@@ -149,13 +147,17 @@ class _HostApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_HostApi, self).__init__(api_server, auth)
 
-    def get_all_hosts(self, params=None):
+    def get_all_hosts(self, status=None):
         """
         Get all hosts in evergreen.
 
-        :param params: parameters to pass to endpoint.
+        :param status: Only return hosts with specified status.
         :return: List of all hosts in evergreen.
         """
+        params = {}
+        if status:
+            params['status'] = status
+
         url = self._create_url('/hosts')
         host_list = self._paginate(url, params)
         return [Host(host, self) for host in host_list]
@@ -236,16 +238,15 @@ class _BuildApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_BuildApi, self).__init__(api_server, auth)
 
-    def build_by_id(self, build_id, params=None):
+    def build_by_id(self, build_id):
         """
         Get a build by id.
 
         :param build_id: build id to query.
-        :param params: Parameters to pass to endpoint.
         :return: Build queried for.
         """
         url = self._create_url('/builds/{build_id}'.format(build_id=build_id))
-        return Build(self._paginate(url, params), self)
+        return Build(self._paginate(url), self)
 
     def tasks_by_build_id(self, build_id, params=None):
         """
@@ -267,16 +268,15 @@ class _VersionApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_VersionApi, self).__init__(api_server, auth)
 
-    def version_by_id(self, version_id, params=None):
+    def version_by_id(self, version_id):
         """
         Get version by version id.
 
         :param version_id: Id of version to query.
-        :param params: Dictionary of parameters.
         :return: Version queried for.
         """
         url = self._create_url('/versions/{version_id}'.format(version_id=version_id))
-        return Version(self._paginate(url, params), self)
+        return Version(self._paginate(url), self)
 
     def builds_by_version(self, version_id, params=None):
         """
