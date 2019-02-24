@@ -1,7 +1,10 @@
 import json
+from unittest.mock import MagicMock
 import os
 
 import pytest
+
+from evergreen.api import EvergreenApi
 
 
 SAMPLE_DATA_PATH = os.path.join('tests', 'evergreen', 'data')
@@ -29,3 +32,14 @@ def sample_task():
 def sample_version():
     """Return sample version json."""
     return get_sample_json('version.json')
+
+
+@pytest.fixture()
+def mocked_api():
+    """Return an Evergreen API with a mocked session."""
+    api = EvergreenApi()
+    api.session = MagicMock()
+    response_mock = MagicMock()
+    response_mock.status_code = 200
+    api.session.get.return_value = response_mock
+    return api

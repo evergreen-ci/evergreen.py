@@ -21,7 +21,6 @@ from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.task import Task
 from evergreen.stats import TestStats
-from evergreen.util import format_evergreen_datetime
 from evergreen.version import Version
 
 
@@ -147,7 +146,7 @@ class _HostApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_HostApi, self).__init__(api_server, auth)
 
-    def get_all_hosts(self, status=None):
+    def all_hosts(self, status=None):
         """
         Get all hosts in evergreen.
 
@@ -170,22 +169,27 @@ class _ProjectApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_ProjectApi, self).__init__(api_server, auth)
 
-    def get_all_projects(self, params=None):
+    def all_projects(self):
         """
         Get all projects in evergreen.
 
-        :param params: parameters to pass to endpoint.
         :return: List of all projects in evergreen.
         """
         url = self._create_url('/projects')
-        project_list = self._paginate(url, params)
+        project_list = self._paginate(url)
         return [Project(project, self) for project in project_list]
 
-    def get_project_by_id(self, project_id, params=None):
-        url = self._create_url('/projects/{project_id}'.format(project_id=project_id))
-        return Project(self._paginate(url, params), self)
+    def project_by_id(self, project_id):
+        """
+        Get a project by project_id.
 
-    def get_recent_version_per_project(self, project_id, params=None):
+        :param project_id: Id of project to query.
+        :return: Project specified.
+        """
+        url = self._create_url('/projects/{project_id}'.format(project_id=project_id))
+        return Project(self._paginate(url), self)
+
+    def recent_version_by_project(self, project_id, params=None):
         """
         Get recent versions created in specified project.
 
@@ -198,7 +202,7 @@ class _ProjectApi(_BaseEvergreenApi):
         version_list = self._paginate(url, params)
         return [Version(version, self) for version in version_list]
 
-    def get_patches_per_project(self, project_id, params=None):
+    def patches_by_project(self, project_id, params=None):
         """
         Get a list of patches for the specified project.
 
@@ -209,14 +213,6 @@ class _ProjectApi(_BaseEvergreenApi):
         url = self._create_url('/projects/{project_id}/patches'.format(project_id=project_id))
         patches = self._paginate(url, params)
         return [Patch(patch, self) for patch in patches]
-
-    def get_recent_patches_by_project(self, project_id, start_at, params=None):
-        start_at = format_evergreen_datetime(start_at)
-        if not params:
-            params = {'start_at': start_at}
-        else:
-            params['start_at'] = start_at
-        return self.get_patches_per_project(project_id, params)
 
     def test_stats_by_project(self, project_id, params=None):
         """
@@ -248,9 +244,9 @@ class _BuildApi(_BaseEvergreenApi):
         url = self._create_url('/builds/{build_id}'.format(build_id=build_id))
         return Build(self._paginate(url), self)
 
-    def tasks_by_build_id(self, build_id, params=None):
+    def tasks_by_build(self, build_id, params=None):
         """
-        Get all tasks for a given build_id.
+        Get all tasks for a given build.
 
         :param build_id: build_id to query.
         :param params: Dictionary of parameters to pass to query.
