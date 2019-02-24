@@ -24,4 +24,4 @@ class Build(_BaseEvergreenObject):
         if fetch_all_executions:
             params['fetch_all_executions'] = 1
 
-        return self._api.tasks_by_build_id(self._id, params)
+        return self._api.tasks_by_build(self._id, params)

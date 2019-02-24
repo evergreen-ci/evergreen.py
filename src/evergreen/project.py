@@ -18,4 +18,4 @@ class Project(_BaseEvergreenObject):
         super(Project, self).__init__(json, api)
 
     def get_patches(self):
-        return self._api.get_patches_per_project(self.identifier, params={'limit': 5})
+        return self._api.patches_per_project(self.identifier, params={'limit': 5})
