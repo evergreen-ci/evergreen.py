@@ -214,14 +214,45 @@ class _ProjectApi(_BaseEvergreenApi):
         patches = self._paginate(url, params)
         return [Patch(patch, self) for patch in patches]
 
-    def test_stats_by_project(self, project_id, params=None):
+    def test_stats_by_project(self, project_id, after_date, before_date, group_num_days=None,
+                              requesters=None, tests=None, tasks=None, variants=None, distros=None,
+                              group_by=None, sort=None):
         """
         Get a patch by patch id.
 
         :param project_id: Id of patch to query for.
-        :param params: Parameters to pass to endpoint.
+        :param after_date: Collect stats after this date.
+        :param before_date: Collect stats before this date.
+        :param group_num_days: Aggregate statistics to this size.
+        :param requesters: Filter by requestors (mainline, patch, trigger, or adhoc).
+        :param tests: Only include specified tests.
+        :param tasks: Only include specified tasks.
+        :param variants: Only include specified variants.
+        :param distros: Only include specified distros.
+        :param group_by: How to group results (test_task_variant, test_task, or test)
+        :param sort: How to sort results (earliest or latest).
         :return: Patch queried for.
         """
+        params = {
+            'after_date': after_date,
+            'before_date': before_date,
+        }
+        if group_num_days:
+            params['group_num_days'] = group_num_days
+        if requesters:
+            params['requesters'] = requesters
+        if tests:
+            params['tests'] = tests
+        if tasks:
+            params['tasks'] = tasks
+        if variants:
+            params['variants'] = variants
+        if distros:
+            params['distros'] = distros
+        if group_by:
+            params['group_by'] = group_by
+        if sort:
+            params['sort'] = sort
         url = self._create_url('/projects/{project_id}/test_stats'.format(project_id=project_id))
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]

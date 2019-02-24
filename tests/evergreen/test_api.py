@@ -33,9 +33,15 @@ class TestProjectApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=None)
 
     def test_test_stats_by_project(self, mocked_api):
-        mocked_api.test_stats_by_project('project_id')
+        after_date = '2019-01-01'
+        before_date = '2019-02-01'
+        mocked_api.test_stats_by_project('project_id', after_date, before_date)
         expected_url = mocked_api._create_url('/projects/project_id/test_stats')
-        mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+        expected_params = {
+            'after_date': after_date,
+            'before_date': before_date,
+        }
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params)
 
 
 class TestBuildApi(object):

@@ -38,19 +38,27 @@ def list_projects(ctx):
 @click.pass_context
 @click.option('-a', '--after-date', required=True)
 @click.option('-b', '--before-date', required=True)
+@click.option('-p', '--project', required=True)
+@click.option('-d', '--distros', multiple=True)
+@click.option('--group-by')
+@click.option('-g', '--group-num-days')
+@click.option('-r', '--requesters', multiple=True)
+@click.option('-s', '--sort')
+@click.option('--tests', multiple=True)
 @click.option('-t', '--tasks', multiple=True)
-def test_stats(ctx, after_date, before_date, tasks):
+@click.option('-v', '--variants', multiple=True)
+def test_stats(ctx, after_date, before_date, project, distros, group_by, group_num_days, requesters,
+               sort, tests, tasks, variants):
     api = ctx.obj['api']
-    params = {
-        'after_date': after_date,
-        'before_date': before_date,
-    }
-    if tasks:
-        params['tasks'] = tasks
 
-    test_stat_list = api.test_stats_by_project(project_id, params)
+    test_stat_list = api.test_stats_by_project(
+        project, after_date, before_date, group_num_days, requesters, tests, tasks,
+        variants, distros, group_by, sort
+    )
     for t in test_stat_list:
-        print(t.test_file)
+        print('{} - {}:'.format(t.task_name, t.test_file))
+        print('\tpass: {}, fail: {}'.format(t.num_pass, t.num_fail))
+        print('\taverage runtime: {}'.format(t.avg_duration_pass))
 
 
 def main():
