@@ -6,3 +6,4 @@ evergreen.py.egg-info
 __pycache__
 *.pyc
 .tox
+junit-*.xml
