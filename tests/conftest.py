@@ -35,6 +35,12 @@ def sample_version():
 
 
 @pytest.fixture()
+def sample_test_stats():
+    """Return sample test_stats json."""
+    return get_sample_json('test_stats.json')
+
+
+@pytest.fixture()
 def mocked_api():
     """Return an Evergreen API with a mocked session."""
     api = EvergreenApi()
