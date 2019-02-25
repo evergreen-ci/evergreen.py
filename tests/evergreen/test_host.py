@@ -1,4 +1,11 @@
+# -*- encoding: utf-8 -*-
+"""Unit tests for src/evergreen/host.py."""
 from __future__ import absolute_import
+
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
 
 from evergreen.host import Host
 
@@ -13,3 +20,13 @@ class TestHost(object):
         host = Host(sample_host, None)
         running_task = host.running_task
         assert running_task.task_id == sample_host['running_task']['task_id']
+
+    def test_get_build(self, sample_host):
+        mock_api = MagicMock()
+        host = Host(sample_host, mock_api)
+        assert mock_api.build_by_id.return_value == host.get_build()
+
+    def test_get_version(self, sample_host):
+        mock_api = MagicMock()
+        host = Host(sample_host, mock_api)
+        assert mock_api.version_by_id.return_value == host.get_version()

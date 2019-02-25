@@ -53,7 +53,7 @@ class TestBuildApi(object):
     def test_tasks_by_build(self, mocked_api):
         mocked_api.tasks_by_build('build_id')
         expected_url = mocked_api._create_url('/builds/build_id/tasks')
-        mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+        mocked_api.session.get.assert_called_with(url=expected_url, params={})
 
 
 class TestVersionApi(object):

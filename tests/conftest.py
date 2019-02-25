@@ -26,6 +26,12 @@ def sample_host():
 
 
 @pytest.fixture()
+def sample_build():
+    """Return sample build json."""
+    return get_sample_json('build.json')
+
+
+@pytest.fixture()
 def sample_task():
     """Return sample task json."""
     return get_sample_json('task.json')

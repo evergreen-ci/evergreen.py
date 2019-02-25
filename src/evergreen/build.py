@@ -20,8 +20,4 @@ class Build(_BaseEvergreenObject):
         :param fetch_all_executions:  fetch all executions for tasks.
         :return: List of all tasks.
         """
-        params = {}
-        if fetch_all_executions:
-            params['fetch_all_executions'] = 1
-
-        return self._api.tasks_by_build(self._id, params)
+        return self._api.tasks_by_build(self._id, fetch_all_executions)

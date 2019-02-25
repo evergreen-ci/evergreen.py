@@ -275,14 +275,18 @@ class _BuildApi(_BaseEvergreenApi):
         url = self._create_url('/builds/{build_id}'.format(build_id=build_id))
         return Build(self._paginate(url), self)
 
-    def tasks_by_build(self, build_id, params=None):
+    def tasks_by_build(self, build_id, fetch_all_executions=None):
         """
         Get all tasks for a given build.
 
         :param build_id: build_id to query.
-        :param params: Dictionary of parameters to pass to query.
+        :param fetch_all_executions: Fetch all executions for a given task.
         :return: List of tasks for the specified build.
         """
+        params = {}
+        if fetch_all_executions:
+            params['fetch_all_executions'] = 1
+
         url = self._create_url('/builds/{build_id}/tasks'.format(build_id=build_id))
         task_list = self._paginate(url, params)
         return [Task(task, self) for task in task_list]
