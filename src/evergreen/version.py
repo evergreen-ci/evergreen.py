@@ -12,7 +12,6 @@ _EVG_DATE_FIELDS_IN_VERSION = frozenset([
 
 
 class BuildVariantStatus(_BaseEvergreenObject):
-
     def __init__(self, json, api):
         super(BuildVariantStatus, self).__init__(json, api)
 

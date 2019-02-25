@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 from evergreen.base import _BaseEvergreenObject
 
-
 _EVG_DATE_FIELDS_IN_PATCH = frozenset([
     'create_time',
     'start_time',

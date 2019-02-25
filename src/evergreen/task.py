@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 from evergreen.base import _BaseEvergreenObject
 
-
 EVG_SUCCESS_STATUS = 'success'
 EVG_SYSTEM_FAILURE_STATUS = 'system'
 

@@ -65,7 +65,4 @@ class Host(_BaseEvergreenObject):
 
     def __str__(self):
         return '{host_id}: {distro_id} - {status}'.format(
-            host_id=self.host_id,
-            distro_id=self.distro['distro_id'],
-            status=self.status
-        )
+            host_id=self.host_id, distro_id=self.distro['distro_id'], status=self.status)

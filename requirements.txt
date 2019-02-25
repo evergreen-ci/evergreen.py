@@ -5,3 +5,4 @@ pytest-flake8==1.0.4
 PyYAML==3.13
 requests==2.21.0
 tox==3.7.0
+yapf-junit==0.25.0

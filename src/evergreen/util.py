@@ -1,7 +1,6 @@
 """Useful utilities for interacting with Evergreen."""
 from datetime import datetime
 
-
 EVG_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
 EVG_DATE_INPUT_FORMAT = '"%Y-%m-%dT%H:%M:%S.000Z"'
 

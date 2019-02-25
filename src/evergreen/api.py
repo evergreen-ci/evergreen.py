@@ -23,7 +23,6 @@ from evergreen.task import Task
 from evergreen.stats import TestStats
 from evergreen.version import Version
 
-
 EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
 
 LOGGER = logging.getLogger(__name__)
@@ -75,8 +74,8 @@ class _BaseEvergreenApi(object):
         :param endpoint: endpoint to call.
         :return: Full url to get endpoint.
         """
-        return '{api_server}/rest/v2{endpoint}'.format(api_server=self._api_server,
-                                                       endpoint=endpoint)
+        return '{api_server}/rest/v2{endpoint}'.format(
+            api_server=self._api_server, endpoint=endpoint)
 
     @staticmethod
     def _log_api_call_time(response, start_time):
@@ -214,9 +213,18 @@ class _ProjectApi(_BaseEvergreenApi):
         patches = self._paginate(url, params)
         return [Patch(patch, self) for patch in patches]
 
-    def test_stats_by_project(self, project_id, after_date, before_date, group_num_days=None,
-                              requesters=None, tests=None, tasks=None, variants=None, distros=None,
-                              group_by=None, sort=None):
+    def test_stats_by_project(self,
+                              project_id,
+                              after_date,
+                              before_date,
+                              group_num_days=None,
+                              requesters=None,
+                              tests=None,
+                              tasks=None,
+                              variants=None,
+                              distros=None,
+                              group_by=None,
+                              sort=None):
         """
         Get a patch by patch id.
 

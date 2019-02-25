@@ -51,10 +51,9 @@ def test_stats(ctx, after_date, before_date, project, distros, group_by, group_n
                sort, tests, tasks, variants):
     api = ctx.obj['api']
 
-    test_stat_list = api.test_stats_by_project(
-        project, after_date, before_date, group_num_days, requesters, tests, tasks,
-        variants, distros, group_by, sort
-    )
+    test_stat_list = api.test_stats_by_project(project, after_date, before_date, group_num_days,
+                                               requesters, tests, tasks, variants, distros,
+                                               group_by, sort)
     for t in test_stat_list:
         print('{} - {}:'.format(t.task_name, t.test_file))
         print('\tpass: {}, fail: {}'.format(t.num_pass, t.num_fail))
