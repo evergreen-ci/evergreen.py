@@ -1,10 +1,8 @@
 # -*- encoding: utf-8 -*-
+"""API for interacting with evergreen."""
 from __future__ import absolute_import
-from __future__ import print_function
 
-from collections import namedtuple
 import logging
-import os
 import time
 
 try:
@@ -13,9 +11,9 @@ except ImportError:
     from urllib.parse import urlparse  # type: ignore
 
 import requests
-import yaml
 
 from evergreen.build import Build
+from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config
 from evergreen.host import Host
 from evergreen.patch import Patch
 from evergreen.project import Project
@@ -23,28 +21,7 @@ from evergreen.task import Task
 from evergreen.stats import TestStats
 from evergreen.version import Version
 
-EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
-
 LOGGER = logging.getLogger(__name__)
-DEFAULT_API_SERVER = 'http://evergreen.mongodb.com'
-CONFIG_FILE_LOCATIONS = [
-    os.path.join('.', '.evergreen.yml'),
-    os.path.expanduser(os.path.join('~', '.evergreen.yml')),
-    os.path.expanduser(os.path.join('~', 'cli_bin', '.evergreen.yml')),
-]
-
-
-def read_evergreen_config():
-    """
-    Search known location for the evergreen config file.
-
-    :return: First found evergreen configuration.
-    """
-    for filename in [filename for filename in CONFIG_FILE_LOCATIONS if os.path.isfile(filename)]:
-        with open(filename, 'r') as fstream:
-            return yaml.safe_load(fstream)
-
-    return None
 
 
 class _BaseEvergreenApi(object):
@@ -367,6 +344,6 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi):
         """
         if not auth and use_config_file:
             config = read_evergreen_config()
-            auth = EvgAuth(config['user'], config['api_key'])
+            auth = get_auth_from_config(config)
 
         return cls(auth=auth)
