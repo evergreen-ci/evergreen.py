@@ -10,6 +10,11 @@ try:
 except ImportError:
     from urllib.parse import urlparse  # type: ignore
 
+try:
+    from functools import lru_cache
+except ImportError:
+    from backports.functools_lru_cache import lru_cache
+
 import requests
 
 from evergreen.build import Build
@@ -250,6 +255,7 @@ class _BuildApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_BuildApi, self).__init__(api_server, auth)
 
+    @lru_cache(maxsize=5000)
     def build_by_id(self, build_id):
         """
         Get a build by id.
@@ -284,6 +290,7 @@ class _VersionApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_VersionApi, self).__init__(api_server, auth)
 
+    @lru_cache(maxsize=5000)
     def version_by_id(self, version_id):
         """
         Get version by version id.

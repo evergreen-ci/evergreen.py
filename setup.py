@@ -16,13 +16,13 @@ with open("README.md", "r") as fh:
 
 setup(
     name='evergreen.py',
-    version='0.1.0',
+    version='0.1.1',
     license='Apache License, Version 2.0',
     description='Python client for the Evergreen API',
     long_description=long_description,
     author='David Bradford',
     author_email='david.bradford@mongodb.com',
-    url='https://github.com/dbradf/evergreen.py',
+    url='https://github.com/evergreen-ci/evergreen.py',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -40,6 +40,7 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
     install_requires=[
+        'backports.functools_lru_cache==1.5;python_version<"3.3"',
         'Click==7.0',
         'PyYAML==3.13',
         'requests==2.21.0',
