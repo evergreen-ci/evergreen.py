@@ -1,5 +1,4 @@
 
-
 class TestHostApi(object):
     def test_all_hosts(self, mocked_api):
         mocked_api.all_hosts()
@@ -73,3 +72,31 @@ class TestPatchApi(object):
         mocked_api.patch_by_id('patch_id')
         expected_url = mocked_api._create_url('/patches/patch_id')
         mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+
+
+class TestCachedEvergreenApi(object):
+    def test_build_by_id_is_cached(self, mocked_cached_api):
+        build_id = 'some build id'
+        another_build_id = 'some other build id'
+        mocked_cached_api.build_by_id(build_id)
+        mocked_cached_api.build_by_id(build_id)
+        mocked_cached_api.build_by_id(another_build_id)
+        assert mocked_cached_api.session.get.call_count == 2
+
+    def test_version_by_id_is_cached(self, mocked_cached_api):
+        version_id = 'some version id'
+        another_version_id = 'some other version id'
+        mocked_cached_api.version_by_id(version_id)
+        mocked_cached_api.version_by_id(version_id)
+        mocked_cached_api.version_by_id(another_version_id)
+        assert mocked_cached_api.session.get.call_count == 2
+
+    def test_clear_caches(self, mocked_cached_api):
+        build_id = 'some build id'
+        version_id = 'some version id'
+        mocked_cached_api.build_by_id(build_id)
+        mocked_cached_api.version_by_id(version_id)
+        mocked_cached_api.clear_caches()
+        mocked_cached_api.build_by_id(build_id)
+        mocked_cached_api.version_by_id(version_id)
+        assert mocked_cached_api.session.get.call_count == 4

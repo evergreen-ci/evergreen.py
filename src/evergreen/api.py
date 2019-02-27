@@ -27,6 +27,7 @@ from evergreen.stats import TestStats
 from evergreen.version import Version
 
 LOGGER = logging.getLogger(__name__)
+CACHE_SIZE = 5000
 
 
 class _BaseEvergreenApi(object):
@@ -255,7 +256,6 @@ class _BuildApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_BuildApi, self).__init__(api_server, auth)
 
-    @lru_cache(maxsize=5000)
     def build_by_id(self, build_id):
         """
         Get a build by id.
@@ -290,7 +290,6 @@ class _VersionApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_VersionApi, self).__init__(api_server, auth)
 
-    @lru_cache(maxsize=5000)
     def version_by_id(self, version_id):
         """
         Get version by version id.
@@ -354,3 +353,44 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi):
             auth = get_auth_from_config(config)
 
         return cls(auth=auth)
+
+
+class CachedEvergreenApi(EvergreenApi):
+    """
+    Access to the Evergreen API server that caches certain calls.
+    """
+
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """Create an Evergreen Api object."""
+        super(CachedEvergreenApi, self).__init__(api_server, auth)
+
+    @lru_cache(maxsize=CACHE_SIZE)
+    def build_by_id(self, build_id):
+        """
+        Get a build by id.
+
+        :param build_id: build id to query.
+        :return: Build queried for.
+        """
+        super(CachedEvergreenApi, self).build_by_id(build_id)
+
+    @lru_cache(maxsize=CACHE_SIZE)
+    def version_by_id(self, version_id):
+        """
+        Get version by version id.
+
+        :param version_id: Id of version to query.
+        :return: Version queried for.
+        """
+        super(CachedEvergreenApi, self).version_by_id(version_id)
+
+    def clear_caches(self):
+        """
+        Clear the cache.
+        """
+        cached_functions = [
+            self.build_by_id,
+            self.version_by_id,
+        ]
+        for fn in cached_functions:
+            fn.cache_clear()
