@@ -1,0 +1,84 @@
+buildvariants:
+- display_name: Ubuntu 16.04
+  name: ubuntu1604
+  run_on:
+  - ubuntu1604-test
+  tasks:
+  - name: unit_tests
+  - name: validate_requirements
+  - name: yapf_src
+  display_tasks:
+  - name: yapf
+    execution_tasks:
+      - yapf_src
+
+
+functions:
+  create virtualenv:
+  - command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        set -o errexit
+        virtualenv --python=/opt/mongodbtoolchain/v3/bin/python3 venv
+        . venv/bin/activate
+        pip install -r requirements.txt.freeze
+
+  run yapf:
+  - command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        set -o errexit
+        . venv/bin/activate
+
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+
+        yapf-junit --target-dir ${target_directory} --out-file junit-yapf.xml --yapf-config .style.yapf
+
+  validate requirements:
+    - command: shell.exec
+      params:
+        working_dir: src
+        script: |
+          set -o errexit
+          . venv/bin/activate
+
+          pip freeze --local --requirement ${requirements_file} > pip.freeze
+          diff ${requirements_file}.freeze pip.freeze
+
+pre:
+- command: git.get_project
+  params:
+    directory: src
+- func: create virtualenv
+
+post:
+- command: attach.xunit_results
+  params:
+    file: src/junit-*.xml
+
+tasks:
+- name: unit_tests
+  commands:
+  - command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        set -o errexit
+        . venv/bin/activate
+
+        tox
+
+- name: yapf_src
+  commands:
+  - func: run yapf
+    vars:
+      target_directory: src
+
+- name: validate_requirements
+  commands:
+    - func: validate requirements
+      vars:
+        requirements_file: requirements.txt

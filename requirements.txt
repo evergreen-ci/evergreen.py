@@ -1,4 +1,4 @@
-click==7.0
+Click==7.0
 pytest==4.2.1
 pytest-cov==2.6.1
 pytest-flake8==1.0.4
