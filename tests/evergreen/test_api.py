@@ -86,17 +86,17 @@ class TestCachedEvergreenApi(object):
     def test_version_by_id_is_cached(self, mocked_cached_api):
         version_id = 'some version id'
         another_version_id = 'some other version id'
-        mocked_cached_api.version_by_id(version_id)
-        mocked_cached_api.version_by_id(version_id)
-        mocked_cached_api.version_by_id(another_version_id)
+        assert mocked_cached_api.version_by_id(version_id)
+        assert mocked_cached_api.version_by_id(version_id)
+        assert mocked_cached_api.version_by_id(another_version_id)
         assert mocked_cached_api.session.get.call_count == 2
 
     def test_clear_caches(self, mocked_cached_api):
         build_id = 'some build id'
         version_id = 'some version id'
-        mocked_cached_api.build_by_id(build_id)
-        mocked_cached_api.version_by_id(version_id)
+        assert mocked_cached_api.build_by_id(build_id)
+        assert mocked_cached_api.version_by_id(version_id)
         mocked_cached_api.clear_caches()
-        mocked_cached_api.build_by_id(build_id)
-        mocked_cached_api.version_by_id(version_id)
+        assert mocked_cached_api.build_by_id(build_id)
+        assert mocked_cached_api.version_by_id(version_id)
         assert mocked_cached_api.session.get.call_count == 4

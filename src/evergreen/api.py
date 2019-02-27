@@ -372,7 +372,7 @@ class CachedEvergreenApi(EvergreenApi):
         :param build_id: build id to query.
         :return: Build queried for.
         """
-        super(CachedEvergreenApi, self).build_by_id(build_id)
+        return super(CachedEvergreenApi, self).build_by_id(build_id)
 
     @lru_cache(maxsize=CACHE_SIZE)
     def version_by_id(self, version_id):
@@ -382,7 +382,7 @@ class CachedEvergreenApi(EvergreenApi):
         :param version_id: Id of version to query.
         :return: Version queried for.
         """
-        super(CachedEvergreenApi, self).version_by_id(version_id)
+        return super(CachedEvergreenApi, self).version_by_id(version_id)
 
     def clear_caches(self):
         """
