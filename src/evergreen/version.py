@@ -31,7 +31,8 @@ class Version(_BaseEvergreenObject):
 
         if 'build_variants_status' in self.json:
             self.build_variants_map = {
-                bvs['build_variant']: bvs['build_id'] for bvs in self.json['build_variants_status']
+                bvs['build_variant']: bvs['build_id']
+                for bvs in self.json['build_variants_status']
             }
 
     @property
