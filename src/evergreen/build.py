@@ -4,6 +4,11 @@ from __future__ import absolute_import
 from evergreen.base import _BaseEvergreenObject
 
 
+class StatusCounts(_BaseEvergreenObject):
+    def __init__(self, json, api):
+        super(StatusCounts, self).__init__(json, api)
+
+
 class Build(_BaseEvergreenObject):
     """Representation of an Evergreen build."""
 
@@ -12,6 +17,10 @@ class Build(_BaseEvergreenObject):
         Create an instance of an evergreen task.
         """
         super(Build, self).__init__(json, api)
+
+    @property
+    def status_counts(self):
+        return StatusCounts(self.json['status_counts'], self._api)
 
     def get_tasks(self, fetch_all_executions=False):
         """

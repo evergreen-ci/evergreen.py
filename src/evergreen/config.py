@@ -11,7 +11,7 @@ EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
 
 DEFAULT_API_SERVER = 'http://evergreen.mongodb.com'
 CONFIG_FILE_LOCATIONS = [
-    os.path.join('.', '.evergreen.yml'),
+    # os.path.join('.', '.evergreen.yml'),
     os.path.expanduser(os.path.join('~', '.evergreen.yml')),
     os.path.expanduser(os.path.join('~', 'cli_bin', '.evergreen.yml')),
 ]

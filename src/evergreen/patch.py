@@ -23,5 +23,13 @@ class Patch(_BaseEvergreenObject):
         super(Patch, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_PATCH
 
+    def get_version(self):
+        """
+        Get version for this patch.
+
+        :return: Version object.
+        """
+        return self._api.version_by_id(self.version)
+
     def __str__(self):
         return '{}: {}'.format(self.patch_id, self.description)

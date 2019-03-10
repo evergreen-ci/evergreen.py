@@ -19,3 +19,10 @@ class TestBuild(object):
         mock_api = MagicMock()
         build = Build(sample_build, mock_api)
         assert mock_api.tasks_by_build.return_value == build.get_tasks()
+
+    def test_status_counts(self, sample_build):
+        build = Build(sample_build, None)
+        assert sample_build['status_counts']['succeeded'] == build.status_counts.succeeded
+        assert sample_build['status_counts']['failed'] == build.status_counts.failed
+        assert sample_build['status_counts']['started'] == build.status_counts.started
+        assert sample_build['status_counts']['timed_out'] == build.status_counts.timed_out
