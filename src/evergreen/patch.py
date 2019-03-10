@@ -22,3 +22,6 @@ class Patch(_BaseEvergreenObject):
         """
         super(Patch, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_PATCH
+
+    def __str__(self):
+        return '{}: {}'.format(self.patch_id, self.description)

@@ -56,6 +56,7 @@ def mocked_api():
     api.session = MagicMock()
     response_mock = MagicMock()
     response_mock.status_code = 200
+    response_mock.json.return_value = [{'create_time': "2019-03-10T02:43:49.330"}]
     api.session.get.return_value = response_mock
     return api
 

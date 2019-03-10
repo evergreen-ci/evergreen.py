@@ -23,3 +23,13 @@ def format_evergreen_datetime(when):
     :return: string evergreen can understand.
     """
     return when.strftime(EVG_DATE_INPUT_FORMAT)
+
+
+def evergreen_input_to_output(input_date):
+    """
+    Convert a date from evergreen to a date to send back to evergreen.
+
+    :param input_date: date to convert.
+    :return: date to send to evergreen.
+    """
+    return format_evergreen_datetime(parse_evergreen_datetime(input_date))
