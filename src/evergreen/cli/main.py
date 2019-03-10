@@ -25,6 +25,18 @@ def list_hosts(ctx):
 
 @cli.command()
 @click.pass_context
+@click.option('-p', '--project', required=True)
+@click.option('-l', '--limit', type=int)
+def list_patches(ctx, project, limit):
+    api = ctx.obj['api']
+    for i, p in enumerate(api.patches_by_project(project)):
+        click.echo(p)
+        if limit and i > limit:
+            break
+
+
+@cli.command()
+@click.pass_context
 def list_projects(ctx):
     api = ctx.obj['api']
     project_list = api.get_all_projects()

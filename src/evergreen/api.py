@@ -24,10 +24,12 @@ from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.task import Task
 from evergreen.stats import TestStats
+from evergreen.util import evergreen_input_to_output
 from evergreen.version import Version
 
 LOGGER = logging.getLogger(__name__)
 CACHE_SIZE = 5000
+DEFAULT_LIMIT = 100
 
 
 class _BaseEvergreenApi(object):
@@ -120,6 +122,27 @@ class _BaseEvergreenApi(object):
 
         return json_data
 
+    def _lazy_paginate_by_date(self, url, params=None):
+        """
+        Paginate based on date, the results are returned lazily.
+
+        :param url: URL to query.
+        :param params: Params to pass to url.
+        :return: A generator to get results from.
+        """
+        if not params:
+            params = {
+                'limit': DEFAULT_LIMIT,
+            }
+
+        while True:
+            data = self._call_api(url, params).json()
+            if not data:
+                break
+            for result in data:
+                yield result
+            params['start_at'] = evergreen_input_to_output(data[-1]['create_time'])
+
 
 class _HostApi(_BaseEvergreenApi):
     """API for hosts endpoints."""
@@ -193,8 +216,8 @@ class _ProjectApi(_BaseEvergreenApi):
         :return: List of recent patches.
         """
         url = self._create_url('/projects/{project_id}/patches'.format(project_id=project_id))
-        patches = self._paginate(url, params)
-        return [Patch(patch, self) for patch in patches]
+        patches = self._lazy_paginate_by_date(url, params)
+        return (Patch(patch, self) for patch in patches)
 
     def test_stats_by_project(self,
                               project_id,
@@ -329,7 +352,7 @@ class _PatchApi(_BaseEvergreenApi):
         :return: Patch queried for.
         """
         url = self._create_url('/patches/{patch_id}'.format(patch_id=patch_id))
-        return Patch(self._call_api(url, params), self)
+        return Patch(self._call_api(url, params).json(), self)
 
 
 class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi):

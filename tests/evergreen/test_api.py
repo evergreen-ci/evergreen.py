@@ -27,9 +27,10 @@ class TestProjectApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=None)
 
     def test_patches_by_project(self, mocked_api):
-        mocked_api.patches_by_project('project_id')
+        patches = mocked_api.patches_by_project('project_id')
+        next(patches)
         expected_url = mocked_api._create_url('/projects/project_id/patches')
-        mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+        mocked_api.session.get.assert_called_with(url=expected_url, params={'limit': 100})
 
     def test_test_stats_by_project(self, mocked_api):
         after_date = '2019-01-01'
