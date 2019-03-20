@@ -358,6 +358,7 @@ class _PatchApi(_BaseEvergreenApi):
 
 class _OldApi(_BaseEvergreenApi):
     """API for pre-v2 endpoints."""
+
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
         """Create an Evergreen Api object."""
         super(_OldApi, self).__init__(api_server, auth)
