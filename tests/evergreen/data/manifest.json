@@ -1,0 +1,22 @@
+{
+  "id": "mongodb_mongo_master_98e970f09d154da6190a0808cd846e566438a349",
+  "revision": "98e970f09d154da6190a0808cd846e566438a349",
+  "project": "mongodb-mongo-master",
+  "branch": "master",
+  "modules": {
+    "module1": {
+      "branch": "master",
+      "repo": "repo1",
+      "revision": "b498ae738aa622e22ll25e8a6e8b2ff0210a75a3",
+      "owner": "owner1",
+      "url": "https://api.github.com/repos/owner1/repo1/commits/b498ae738aa622e22ll25e8a6e8b2ff0210a75a3"
+    },
+    "module2": {
+      "branch": "develop",
+      "repo": "repo 2",
+      "revision": "b88a41e4aebcd4fb3ee32d3fd469cabfb1c8db60",
+      "owner": "repo2",
+      "url": "https://api.github.com/repos/repo2/module2/commits/b88a41e4aebcd4fb3ee32d3fd469cabfb1c8db60"
+    }
+  }
+}

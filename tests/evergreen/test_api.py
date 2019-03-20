@@ -75,6 +75,13 @@ class TestPatchApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=None)
 
 
+class TestOldApi(object):
+    def test_patch_by_id(self, mocked_api):
+        mocked_api.manifest('project_id', 'revision')
+        expected_url = mocked_api._create_old_url('plugin/manifest/get/project_id/revision')
+        mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+
+
 class TestCachedEvergreenApi(object):
     def test_build_by_id_is_cached(self, mocked_cached_api):
         build_id = 'some build id'

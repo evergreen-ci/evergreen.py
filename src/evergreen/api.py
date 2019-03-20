@@ -20,6 +20,7 @@ import requests
 from evergreen.build import Build
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config
 from evergreen.host import Host
+from evergreen.manifest import Manifest
 from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.task import Task
@@ -355,7 +356,36 @@ class _PatchApi(_BaseEvergreenApi):
         return Patch(self._call_api(url, params).json(), self)
 
 
-class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi):
+class _OldApi(_BaseEvergreenApi):
+    """API for pre-v2 endpoints."""
+
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """Create an Evergreen Api object."""
+        super(_OldApi, self).__init__(api_server, auth)
+
+    def _create_old_url(self, endpoint):
+        """
+        Build a url for an pre-v2 endpoint.
+
+        :param endpoint: endpoint to build url for.
+        :return: An string pointing to the given endpoint.
+        """
+        return '{api_server}/{endpoint}'.format(api_server=self._api_server, endpoint=endpoint)
+
+    def manifest(self, project_id, revision):
+        """
+        Get the manifest for the given revision.
+
+        :param project_id: Project the revision belongs to.
+        :param revision: Revision to get manifest of.
+        :return: Manifest of the given revision of the given project.
+        """
+        url = self._create_old_url('plugin/manifest/get/{project_id}/{revision}'.format(
+            project_id=project_id, revision=revision))
+        return Manifest(self._call_api(url).json(), self)
+
+
+class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _OldApi):
     """Access to the Evergreen API Server."""
 
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
