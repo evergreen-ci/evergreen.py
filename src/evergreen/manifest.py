@@ -7,6 +7,7 @@ class ManifestModule(_BaseEvergreenObject):
     """
     Represents a module in the evergreen manifest.
     """
+
     def __init__(self, name, json, api):
         """
         Create an instance of an evergreen manifest module.
@@ -22,6 +23,7 @@ class Manifest(_BaseEvergreenObject):
     """
     Representation of an evergreen manifest.
     """
+
     def __init__(self, json, api):
         """
         Create an instance of an evergreen version manifest.

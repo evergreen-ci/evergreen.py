@@ -369,8 +369,7 @@ class _OldApi(_BaseEvergreenApi):
         :param endpoint: endpoint to build url for.
         :return: An string pointing to the given endpoint.
         """
-        return '{api_server}/{endpoint}'.format(
-            api_server=self._api_server, endpoint=endpoint)
+        return '{api_server}/{endpoint}'.format(api_server=self._api_server, endpoint=endpoint)
 
     def manifest(self, project_id, revision):
         """
@@ -381,8 +380,7 @@ class _OldApi(_BaseEvergreenApi):
         :return: Manifest of the given revision of the given project.
         """
         url = self._create_old_url('plugin/manifest/get/{project_id}/{revision}'.format(
-            project_id=project_id, revision=revision
-        ))
+            project_id=project_id, revision=revision))
         return Manifest(self._call_api(url).json(), self)
 
 
