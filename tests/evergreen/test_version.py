@@ -3,6 +3,12 @@ from __future__ import absolute_import
 
 from datetime import datetime
 
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
+
+from evergreen.manifest import Manifest
 from evergreen.version import Version
 
 
@@ -18,3 +24,12 @@ class TestVersion(object):
     def test_build_variant_status(self, sample_version):
         version = Version(sample_version, None)
         assert len(sample_version['build_variants_status']) == len(version.build_variants_status)
+
+    def test_get_manifest(self, sample_version, sample_manifest):
+        mock_api = MagicMock()
+        mock_api.manifest.return_value = Manifest(sample_manifest, None)
+        version = Version(sample_version, mock_api)
+        manifest = version.get_manifest()
+
+        mock_api.manifest.assert_called_with(sample_version['project'], sample_version['revision'])
+        assert len(manifest.modules) == len(sample_manifest['modules'])

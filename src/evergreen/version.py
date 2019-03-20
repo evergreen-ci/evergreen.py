@@ -48,3 +48,11 @@ class Version(_BaseEvergreenObject):
         :return: Build object for variant.
         """
         return self._api.build_by_id(self.build_variants_map[build_variant])
+
+    def get_manifest(self):
+        """
+        Get the manifest for this version.
+
+        :return: Manifest for this version.
+        """
+        return self._api.manifest(self.project, self.revision)
