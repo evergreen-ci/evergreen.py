@@ -16,10 +16,11 @@ with open("README.md", "r") as fh:
 
 setup(
     name='evergreen.py',
-    version='0.1.7',
+    version='0.1.8',
     license='Apache License, Version 2.0',
     description='Python client for the Evergreen API',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='David Bradford',
     author_email='david.bradford@mongodb.com',
     url='https://github.com/evergreen-ci/evergreen.py',
