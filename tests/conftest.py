@@ -51,8 +51,14 @@ def sample_test_stats():
 
 @pytest.fixture()
 def sample_manifest():
-    """Return sample test_stats json."""
+    """Return sample manifest json."""
     return get_sample_json('manifest.json')
+
+
+@pytest.fixture()
+def sample_patch():
+    """Return sample patch json."""
+    return get_sample_json('patch.json')
 
 
 @pytest.fixture()
