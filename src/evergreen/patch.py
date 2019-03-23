@@ -81,8 +81,9 @@ class Patch(_BaseEvergreenObject):
         :return: variants tasks for this patch.
         """
         if not self._variants_tasks:
-            self._variants_tasks = [VariantsTasks(vt, self._api)
-                                    for vt in self.json['variants_tasks']]
+            self._variants_tasks = [
+                VariantsTasks(vt, self._api) for vt in self.json['variants_tasks']
+            ]
         return self._variants_tasks
 
     def task_list_for_variant(self, variant):
