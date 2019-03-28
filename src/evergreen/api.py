@@ -24,6 +24,7 @@ from evergreen.manifest import Manifest
 from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.task import Task
+from evergreen.tst import Tst
 from evergreen.stats import TestStats
 from evergreen.util import evergreen_input_to_output
 from evergreen.version import Version
@@ -356,6 +357,46 @@ class _PatchApi(_BaseEvergreenApi):
         return Patch(self._call_api(url, params).json(), self)
 
 
+class _TaskApi(_BaseEvergreenApi):
+    """API for task endpoints."""
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """Create an Evergreen Api object."""
+        super(_TaskApi, self).__init__(api_server, auth)
+
+    def task_by_id(self, task_id, fetch_all_executions=None):
+        """
+        Get a task by task_id.
+
+        :param task_id: Id of task to query for.
+        :param fetch_all_executions: Should all executions of the task be fetched.
+        :return: Task queried for.
+        """
+        params = None
+        if fetch_all_executions:
+            params = {
+                'fetch_all_executions': fetch_all_executions
+            }
+        url = self._create_url('/tasks/{task_id}'.format(task_id=task_id))
+        return Task(self._call_api(url, params).json(), self)
+
+    def tests_by_task(self, task_id, status=None, execution=None):
+        """
+        Get all tests for a given task.
+
+        :param task_id: Id of task to query for.
+        :param status: Limit results to given status.
+        :param execution: Retrieve the specified task execution (defaults to 0).
+        :return: List of tests for the specified task.
+        """
+        params = {}
+        if status:
+            params['status'] = status
+        if execution:
+            params['execution'] = execution
+        url = self._create_url('/tasks/{task_id}/tests'.format(task_id=task_id))
+        return [Tst(test, self) for test in self._paginate(url, params)]
+
+
 class _OldApi(_BaseEvergreenApi):
     """API for pre-v2 endpoints."""
 
@@ -385,7 +426,7 @@ class _OldApi(_BaseEvergreenApi):
         return Manifest(self._call_api(url).json(), self)
 
 
-class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _OldApi):
+class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _TaskApi, _OldApi):
     """Access to the Evergreen API Server."""
 
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):

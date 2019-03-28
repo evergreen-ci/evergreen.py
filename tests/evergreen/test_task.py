@@ -51,3 +51,8 @@ class TestTask(object):
         assert execution0.display_name == 'sharding_auth_gen'
 
         assert not task.get_execution(999)
+
+    def test_artifacts(self, sample_task):
+        task = Task(sample_task, None)
+        assert len(task.artifacts) == len(sample_task['artifacts'])
+        assert task.artifacts[0].name == sample_task['artifacts'][0]['name']

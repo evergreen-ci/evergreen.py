@@ -1,0 +1,14 @@
+{
+    "task_id": "mongodb_mongo_master_enterprise_rhel_62_64_bit_display_sharding_auth_audit_patch_43e089c8cea5d0d88b37ec59d3943d10bcbd0c9f_5c9bc43a2a60ed033dd22f93_19_03_27_18_43_07",
+    "status": "pass",
+    "test_file": "jstests/sharding/change_streams_primary_shard_unaware.js",
+    "logs": {
+      "url": "https://logkeeper.mongodb.org/build/64cc6707954cb51fbc01723fb2572118/test/5c9bcf9abe07c4556f0335bf",
+      "line_num": 0,
+      "url_raw": "https://logkeeper.mongodb.org/build/64cc6707954cb51fbc01723fb2572118/test/5c9bcf9abe07c4556f0335bf?raw=1",
+      "log_id": ""
+    },
+    "exit_code": 0,
+    "start_time": "2019-03-27T19:31:37.936Z",
+    "end_time": "2019-03-27T19:32:56.431Z"
+}
