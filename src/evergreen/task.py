@@ -17,6 +17,14 @@ _EVG_DATE_FIELDS_IN_TASK = frozenset([
 ])
 
 
+class Artifact(_BaseEvergreenObject):
+    """Representation of a task artifact from evergreen."""
+
+    def __init__(self, json, api):
+        """Create an instance of an evergreen task."""
+        super(Artifact, self).__init__(json, api)
+
+
 class Task(_BaseEvergreenObject):
     """Representation of an Evergreen task."""
 
@@ -26,6 +34,14 @@ class Task(_BaseEvergreenObject):
         """
         super(Task, self).__init__(json, api)
         self._date_fields = _EVG_DATE_FIELDS_IN_TASK
+
+    @property
+    def artifacts(self):
+        """
+        Retrieve the artifacts for the given task.
+        :return: List of artifacts.
+        """
+        return [Artifact(artifact, self._api) for artifact in self.json['artifacts']]
 
     def get_execution(self, execution):
         """

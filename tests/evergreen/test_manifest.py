@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-"""Unit tests for src/evergreen/host.py."""
+"""Unit tests for src/evergreen/manifest.py."""
 from __future__ import absolute_import
 
 from evergreen.manifest import Manifest

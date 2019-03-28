@@ -62,6 +62,12 @@ def sample_patch():
 
 
 @pytest.fixture()
+def sample_test():
+    """Return sample test json."""
+    return get_sample_json('test.json')
+
+
+@pytest.fixture()
 def mocked_api():
     """Return an Evergreen API with a mocked session."""
     api = EvergreenApi()

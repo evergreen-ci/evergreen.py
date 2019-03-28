@@ -75,6 +75,52 @@ class TestPatchApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=None)
 
 
+class TestTaskApi(object):
+    def test_task_by_id(self, mocked_api):
+        mocked_api.task_by_id('task_id')
+        expected_url = mocked_api._create_url('/tasks/task_id')
+        mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+
+    def test_task_by_id_with_fetch_executions(self, mocked_api):
+        mocked_api.task_by_id('task_id', fetch_all_executions=True)
+        expected_url = mocked_api._create_url('/tasks/task_id')
+        expected_params = {
+            'fetch_all_executions': True
+        }
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params)
+
+    def test_tests_by_task(self, mocked_api):
+        mocked_api.tests_by_task('task_id')
+        expected_url = mocked_api._create_url('/tasks/task_id/tests')
+        expected_params = {}
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params)
+
+    def test_tests_by_task_with_status(self, mocked_api):
+        mocked_api.tests_by_task('task_id', status='success')
+        expected_url = mocked_api._create_url('/tasks/task_id/tests')
+        expected_params = {
+            'status': 'success'
+        }
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params)
+
+    def test_tests_by_task_with_execution(self, mocked_api):
+        mocked_api.tests_by_task('task_id', execution=5)
+        expected_url = mocked_api._create_url('/tasks/task_id/tests')
+        expected_params = {
+            'execution': 5
+        }
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params)
+
+    def test_tests_by_task_with_status_and_execution(self, mocked_api):
+        mocked_api.tests_by_task('task_id', status='success', execution=5)
+        expected_url = mocked_api._create_url('/tasks/task_id/tests')
+        expected_params = {
+            'status': 'success',
+            'execution': 5
+        }
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params)
+
+
 class TestOldApi(object):
     def test_patch_by_id(self, mocked_api):
         mocked_api.manifest('project_id', 'revision')
