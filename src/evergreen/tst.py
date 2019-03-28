@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 from evergreen.base import _BaseEvergreenObject
 
-
 _EVG_DATE_FIELDS_IN_TEST = frozenset([
     'start_time',
     'end_time',

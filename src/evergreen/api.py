@@ -359,6 +359,7 @@ class _PatchApi(_BaseEvergreenApi):
 
 class _TaskApi(_BaseEvergreenApi):
     """API for task endpoints."""
+
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
         """Create an Evergreen Api object."""
         super(_TaskApi, self).__init__(api_server, auth)
@@ -373,9 +374,7 @@ class _TaskApi(_BaseEvergreenApi):
         """
         params = None
         if fetch_all_executions:
-            params = {
-                'fetch_all_executions': fetch_all_executions
-            }
+            params = {'fetch_all_executions': fetch_all_executions}
         url = self._create_url('/tasks/{task_id}'.format(task_id=task_id))
         return Task(self._call_api(url, params).json(), self)
 
