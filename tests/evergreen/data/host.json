@@ -1,6 +1,6 @@
 {
     "host_id": "kings.landing.10gen.cc",
-    "host_url": "kings.landing..10gen.cc",
+    "host_url": "kings.landing.10gen.cc",
     "distro": {
       "distro_id": "centos6-perf",
       "provider": "static",

@@ -2,11 +2,34 @@
 """Host representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.base import _BaseEvergreenObject
+from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+
+
+class Distro(_BaseEvergreenObject):
+    """Representation of a distro."""
+
+    distro_id = evg_attrib('distro_id')
+    provider = evg_attrib('provider')
+    image_id = evg_attrib('image_id')
+
+    def __init__(self, json, api):
+        """
+        Create an instance of a distro.
+
+        :param json: json of distro.
+        :param api: Evergreen API.
+        """
+        super(Distro, self).__init__(json, api)
 
 
 class RunningTask(_BaseEvergreenObject):
     """Representation of a running task."""
+
+    task_id = evg_attrib('task_id')
+    name = evg_attrib('name')
+    dispatch_time = evg_datetime_attrib('dispatch_time')
+    version_id = evg_attrib('version_id')
+    build_id = evg_attrib('build_id')
 
     def __init__(self, json, api):
         """
@@ -37,6 +60,15 @@ class RunningTask(_BaseEvergreenObject):
 class Host(_BaseEvergreenObject):
     """Representation of an Evergreen host."""
 
+    host_id = evg_attrib('host_id')
+    host_url = evg_attrib('host_url')
+    provisioned = evg_attrib('provisioned')
+    started_by = evg_attrib('started_by')
+    host_type = evg_attrib('host_type')
+    user = evg_attrib('user')
+    status = evg_attrib('status')
+    user_host = evg_attrib('user_host')
+
     def __init__(self, json, api):
         """
         Create an instance of an evergreen host.
@@ -46,6 +78,10 @@ class Host(_BaseEvergreenObject):
     @property
     def running_task(self):
         return RunningTask(self.json['running_task'], self._api)
+
+    @property
+    def distro(self):
+        return Distro(self.json['distro'], self._api)
 
     def get_build(self):
         """

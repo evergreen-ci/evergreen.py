@@ -2,6 +2,8 @@
 """Unit tests for src/evergreen/host.py."""
 from __future__ import absolute_import
 
+from datetime import datetime
+
 try:
     from unittest.mock import MagicMock
 except ImportError:
@@ -20,6 +22,7 @@ class TestHost(object):
         host = Host(sample_host, None)
         running_task = host.running_task
         assert running_task.task_id == sample_host['running_task']['task_id']
+        assert isinstance(running_task.dispatch_time, datetime)
 
     def test_get_build(self, sample_host):
         mock_api = MagicMock()
