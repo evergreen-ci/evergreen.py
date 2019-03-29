@@ -15,6 +15,7 @@ def evg_attrib(attrib_name, type_fn=None):
     :param attrib_name: name of attribute.
     :param type_fn: method to use to convert attribute by type.
     """
+
     def attrib_getter(instance):
         if type_fn:
             return type_fn(instance.json[attrib_name])
