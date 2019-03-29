@@ -82,3 +82,19 @@ class Version(_BaseEvergreenObject):
         :return: Manifest for this version.
         """
         return self._api.manifest(self.project, self.revision)
+
+    def get_builds(self):
+        """
+        Get all the builds that are a part of this version.
+
+        :return: List of build that are a part of this version.
+        """
+        return self._api.builds_by_version(self.version_id)
+
+    def is_patch(self):
+        """
+        Determine if this version from a patch build.
+
+        :return: True if this version is a patch build.
+        """
+        return not self.version_id.startswith(self.project.replace('-', '_'))

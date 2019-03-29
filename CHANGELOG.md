@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.11 - 2019-03-29
+- Improvements to version object.
+
 ## 0.1.10 - 2019-03-29
 - Add attributes to evergreen objects.
 
