@@ -2,7 +2,7 @@
 """Version representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.base import _BaseEvergreenObject
+from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
 _EVG_DATE_FIELDS_IN_VERSION = frozenset([
     'create_time',
@@ -12,14 +12,40 @@ _EVG_DATE_FIELDS_IN_VERSION = frozenset([
 
 
 class BuildVariantStatus(_BaseEvergreenObject):
+    """Representation of a Build Variants status."""
+
+    build_variant = evg_attrib('build_variant')
+    build_id = evg_attrib('build_id')
+
     def __init__(self, json, api):
+        """Create an instance of a Build Variants status."""
         super(BuildVariantStatus, self).__init__(json, api)
 
     def get_build(self):
+        """Get the build object for this build variants status."""
         return self._api.build_by_id(self.build_id)
 
 
 class Version(_BaseEvergreenObject):
+    """Representation of a Evergreen Version."""
+
+    version_id = evg_attrib('version_id')
+    create_time = evg_datetime_attrib('create_time')
+    start_time = evg_datetime_attrib('start_time')
+    finish_time = evg_datetime_attrib('finish_time')
+    revision = evg_attrib('revision')
+    order = evg_attrib('order')
+    project = evg_attrib('project')
+    author = evg_attrib('author')
+    author_email = evg_attrib('author_email')
+    message = evg_attrib('message')
+    status = evg_attrib('status')
+    repo = evg_attrib('repo')
+    branch = evg_attrib('branch')
+    errors = evg_attrib('errors')
+    warnings = evg_attrib('warnings')
+    ignored = evg_attrib('ignored')
+
     def __init__(self, json, api):
         """
         Create an instance of an evergreen version.

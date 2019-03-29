@@ -1,16 +1,18 @@
 from __future__ import absolute_import
 
-from evergreen.base import _BaseEvergreenObject
-
-_EVG_DATE_FIELDS_IN_PATCH = frozenset([
-    'create_time',
-    'start_time',
-    'finish_time',
-])
+from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
 
 class GithubPatchData(_BaseEvergreenObject):
     """Representation of github patch data in a patch object."""
+
+    pr_number = evg_attrib('pr_number')
+    base_owner = evg_attrib('base_owner')
+    base_repo = evg_attrib('base_repo')
+    head_owner = evg_attrib('head_owner')
+    head_repo = evg_attrib('head_repo')
+    head_hash = evg_attrib('head_hash')
+    author = evg_attrib('author')
 
     def __init__(self, json, api):
         """
@@ -24,6 +26,8 @@ class GithubPatchData(_BaseEvergreenObject):
 
 class VariantsTasks(_BaseEvergreenObject):
     """Representation of a variants tasks object."""
+
+    name = evg_attrib('name')
 
     def __init__(self, json, api):
         """
@@ -49,9 +53,24 @@ class VariantsTasks(_BaseEvergreenObject):
 
 
 class Patch(_BaseEvergreenObject):
-    """
-    Representation of an Evergreen patch.
-    """
+    """Representation of an Evergreen patch."""
+
+    patch_id = evg_attrib('patch_id')
+    description = evg_attrib('description')
+    project_id = evg_attrib('project_id')
+    branch = evg_attrib('branch')
+    git_hash = evg_attrib('git_hash')
+    patch_number = evg_attrib('patch_number')
+    author = evg_attrib('author')
+    version = evg_attrib('version')
+    status = evg_attrib('status')
+    create_time = evg_datetime_attrib('create_time')
+    start_time = evg_datetime_attrib('start_time')
+    finish_time = evg_datetime_attrib('finish_time')
+    builds = evg_attrib('builds')
+    tasks = evg_attrib('tasks')
+    activated = evg_attrib('activated')
+    alias = evg_attrib('alias')
 
     def __init__(self, json, api):
         """
@@ -60,7 +79,6 @@ class Patch(_BaseEvergreenObject):
         :param json: json representing patch.
         """
         super(Patch, self).__init__(json, api)
-        self._date_fields = _EVG_DATE_FIELDS_IN_PATCH
         self._variants_tasks = None
         self._variant_task_dict = None
 

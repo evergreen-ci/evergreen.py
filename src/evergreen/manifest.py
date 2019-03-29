@@ -1,12 +1,18 @@
 from __future__ import absolute_import
 
-from evergreen.base import _BaseEvergreenObject
+from evergreen.base import _BaseEvergreenObject, evg_attrib
 
 
 class ManifestModule(_BaseEvergreenObject):
     """
     Represents a module in the evergreen manifest.
     """
+
+    branch = evg_attrib('branch')
+    repo = evg_attrib('repo')
+    revision = evg_attrib('revision')
+    owner = evg_attrib('owner')
+    url = evg_attrib('url')
 
     def __init__(self, name, json, api):
         """
@@ -23,6 +29,11 @@ class Manifest(_BaseEvergreenObject):
     """
     Representation of an evergreen manifest.
     """
+
+    id = evg_attrib('id')
+    revision = evg_attrib('revision')
+    project = evg_attrib('project')
+    branch = evg_attrib('branch')
 
     def __init__(self, json, api):
         """

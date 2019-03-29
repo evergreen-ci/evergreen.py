@@ -56,3 +56,9 @@ class TestTask(object):
         task = Task(sample_task, None)
         assert len(task.artifacts) == len(sample_task['artifacts'])
         assert task.artifacts[0].name == sample_task['artifacts'][0]['name']
+
+    def test_logs(self, sample_task):
+        task = Task(sample_task, None)
+
+        assert isinstance(task.log_map, dict)
+        assert task.log_map['all_log'] == sample_task['logs']['all_log']
