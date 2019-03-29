@@ -27,5 +27,5 @@ if [ $rc -ne 0 ]; then
     exit 3
 fi
 
-twine upload --username $username --password $password
+twine upload --username $username --password $password dist/*
 exit $?

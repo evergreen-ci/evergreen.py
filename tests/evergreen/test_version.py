@@ -33,3 +33,16 @@ class TestVersion(object):
 
         mock_api.manifest.assert_called_with(sample_version['project'], sample_version['revision'])
         assert len(manifest.modules) == len(sample_manifest['modules'])
+
+    def test_is_patch(self, sample_version):
+        version = Version(sample_version, None)
+        assert not version.is_patch()
+
+        sample_version['version_id'] = '5c9e8453d6d80a457091d74e'
+        version = Version(sample_version, None)
+        assert version.is_patch()
+
+    def test_get_builds(self, sample_version):
+        mock_api = MagicMock()
+        version = Version(sample_version, mock_api)
+        assert version.get_builds() == mock_api.builds_by_version.return_value
