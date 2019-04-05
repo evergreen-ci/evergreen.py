@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.12 - 2019-04-05
+- Don't use current directory to search for evergreen config.
+
 ## 0.1.11 - 2019-03-29
 - Improvements to version object.
 
