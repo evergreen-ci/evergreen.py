@@ -102,6 +102,16 @@ class Task(_BaseEvergreenObject):
             self._logs_map = {key: value for key, value in self.json['logs'].items()}
         return self._logs_map
 
+    def retrieve_log(self, log_name, raw=False):
+        """
+        Retrieve the contents of the specified log.
+
+        :param log_name: Name of log to retrieve.
+        :param raw: Retrieve raw version of log.
+        :return: Contents of the specified log.
+        """
+        return self._api.retrieve_task_log(self.log_map[log_name], raw)
+
     @property
     def status_details(self):
         """

@@ -128,6 +128,16 @@ class TestOldApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=None)
 
 
+class TestLogApi(object):
+    def test_retrieve_log(self, mocked_api):
+        mocked_api.retrieve_task_log('log_url')
+        mocked_api.session.get.assert_called_with(url='log_url', params={})
+
+    def test_retrieve_log_with_raw(self, mocked_api):
+        mocked_api.retrieve_task_log('log_url', raw=True)
+        mocked_api.session.get.assert_called_with(url='log_url', params={'text': 'true'})
+
+
 class TestCachedEvergreenApi(object):
     def test_build_by_id_is_cached(self, mocked_cached_api):
         build_id = 'some build id'

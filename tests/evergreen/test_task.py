@@ -3,6 +3,11 @@ from datetime import datetime, timedelta
 
 import pytest
 
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
+
 from evergreen.task import Task, _EVG_DATE_FIELDS_IN_TASK
 
 
@@ -62,3 +67,16 @@ class TestTask(object):
 
         assert isinstance(task.log_map, dict)
         assert task.log_map['all_log'] == sample_task['logs']['all_log']
+
+    def test_retrieve_log(self, sample_task):
+        mock_api = MagicMock()
+        task = Task(sample_task, mock_api)
+        log = task.retrieve_log('task_log')
+        assert log == mock_api.retrieve_task_log.return_value
+
+    def test_retrieve_log_with_raw(self, sample_task):
+        mock_api = MagicMock()
+        task = Task(sample_task, mock_api)
+        log = task.retrieve_log('task_log', raw=True)
+        assert log == mock_api.retrieve_task_log.return_value
+        mock_api.retrieve_task_log.assert_called_with(task.log_map['task_log'], True)

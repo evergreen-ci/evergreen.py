@@ -425,7 +425,29 @@ class _OldApi(_BaseEvergreenApi):
         return Manifest(self._call_api(url).json(), self)
 
 
-class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _TaskApi, _OldApi):
+class _LogApi(_BaseEvergreenApi):
+    """API for accessing log files."""
+
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """Create an Evergreen Api object."""
+        super(_LogApi, self).__init__(api_server, auth)
+
+    def retrieve_task_log(self, log_url, raw=False):
+        """
+        Get the request log file from a task.
+
+        :param log_url: URL of log to retrieve.
+        :param raw: Retrieve the raw version of the log
+        :return: Contents of specified log file.
+        """
+        params = {}
+        if raw:
+            params['text'] = 'true'
+        return self._call_api(log_url, params=params).text
+
+
+class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _TaskApi, _OldApi,
+                   _LogApi):
     """Access to the Evergreen API Server."""
 
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
