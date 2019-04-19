@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.13 - 2019-04-18
+- Add endpoints to get task logs.
+
 ## 0.1.12 - 2019-04-05
 - Don't use current directory to search for evergreen config.
 
