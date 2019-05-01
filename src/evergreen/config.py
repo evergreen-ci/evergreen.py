@@ -16,6 +16,17 @@ CONFIG_FILE_LOCATIONS = [
 ]
 
 
+def read_evergreen_from_file(filename):
+    """
+    Read evergreen config from given filename.
+
+    :param filename: Filename to read config.
+    :return: Config read from file.
+    """
+    with open(filename, 'r') as fstream:
+        return yaml.safe_load(fstream)
+
+
 def read_evergreen_config():
     """
     Search known location for the evergreen config file.
@@ -23,8 +34,7 @@ def read_evergreen_config():
     :return: First found evergreen configuration.
     """
     for filename in [filename for filename in CONFIG_FILE_LOCATIONS if os.path.isfile(filename)]:
-        with open(filename, 'r') as fstream:
-            return yaml.safe_load(fstream)
+        return read_evergreen_from_file(filename)
 
     return None
 
