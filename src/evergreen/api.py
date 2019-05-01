@@ -18,7 +18,8 @@ except ImportError:
 import requests
 
 from evergreen.build import Build
-from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config
+from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config,\
+    read_evergreen_from_file
 from evergreen.host import Host
 from evergreen.manifest import Manifest
 from evergreen.patch import Patch
@@ -455,16 +456,21 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         super(EvergreenApi, self).__init__(api_server, auth)
 
     @classmethod
-    def get_api(cls, auth=None, use_config_file=False):
+    def get_api(cls, auth=None, use_config_file=False, config_file=None):
         """
         Get an evergreen api instance based on config file settings.
 
         :param auth: EvgAuth with authentication to use.
-        :param use_config_file: attempt to read auth from config file.
+        :param use_config_file: attempt to read auth from default config file.
+        :param config_file: config file with authentication information.
         :return: EvergreenApi instance.
         """
         if not auth and use_config_file:
             config = read_evergreen_config()
+            auth = get_auth_from_config(config)
+
+        if not auth and config_file:
+            config = read_evergreen_from_file(config_file)
             auth = get_auth_from_config(config)
 
         return cls(auth=auth)

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.14 - 2019-05-01
+- Support for specifying a config file.
+
 ## 0.1.13 - 2019-04-18
 - Add endpoints to get task logs.
 
