@@ -1,0 +1,11 @@
+[paths]
+source =
+    src
+    .tox/**/site-packages
+
+[run]
+branch = true
+source = 
+    evergreen
+    tests
+parallel = true
