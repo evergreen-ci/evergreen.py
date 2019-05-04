@@ -48,6 +48,16 @@ functions:
           pip freeze --local --requirement ${requirements_file} > pip.freeze
           diff ${requirements_file}.freeze pip.freeze
 
+  upload code coverage:
+    - command: shell.exec
+      params:
+        working_dir: src
+        script: |
+          set -o errexit
+          . venv/bin/activate
+
+          COVERALLS_REPO_TOKEN=${coveralls_repo_token} coveralls
+
 pre:
 - command: git.get_project
   params:
@@ -58,6 +68,7 @@ post:
 - command: attach.xunit_results
   params:
     file: src/junit-*.xml
+- func: upload code coverage
 
 tasks:
 - name: unit_tests
