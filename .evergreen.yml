@@ -68,7 +68,6 @@ post:
 - command: attach.xunit_results
   params:
     file: src/junit-*.xml
-- func: upload code coverage
 
 tasks:
 - name: unit_tests
@@ -81,6 +80,7 @@ tasks:
         . venv/bin/activate
 
         tox
+  - func: upload code coverage
 
 - name: yapf_src
   commands:
