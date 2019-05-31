@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.15 - 2019-05-31
+- Add endpoint to query commit-queue.
+
 ## 0.1.14 - 2019-05-01
 - Support for specifying a config file.
 

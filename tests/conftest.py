@@ -32,6 +32,12 @@ def sample_build():
 
 
 @pytest.fixture()
+def sample_commit_queue():
+    """Return sample commit_queue json."""
+    return get_sample_json('commit_queue.json')
+
+
+@pytest.fixture()
 def sample_task():
     """Return sample task json."""
     return get_sample_json('task.json')

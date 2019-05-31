@@ -18,6 +18,7 @@ except ImportError:
 import requests
 
 from evergreen.build import Build
+from evergreen.commitqueue import CommitQueue
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config,\
     read_evergreen_from_file
 from evergreen.host import Host
@@ -221,6 +222,16 @@ class _ProjectApi(_BaseEvergreenApi):
         url = self._create_url('/projects/{project_id}/patches'.format(project_id=project_id))
         patches = self._lazy_paginate_by_date(url, params)
         return (Patch(patch, self) for patch in patches)
+
+    def commit_queue_for_project(self, project_id):
+        """
+        Get the current commit queue for the specified project.
+
+        :param project_id: Id of project to query.
+        :return: Current commit queue for project.
+        """
+        url = self._create_url('/projects/{project_id}/commit_queue'.format(project_id=project_id))
+        return CommitQueue(self._paginate(url), self)
 
     def test_stats_by_project(self,
                               project_id,
