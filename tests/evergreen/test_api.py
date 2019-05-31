@@ -32,6 +32,11 @@ class TestProjectApi(object):
         expected_url = mocked_api._create_url('/projects/project_id/patches')
         mocked_api.session.get.assert_called_with(url=expected_url, params={'limit': 100})
 
+    def test_commit_queue_for_project(self, mocked_api):
+        mocked_api.commit_queue_for_project('project_id')
+        expected_url = mocked_api._create_url('/projects/project_id/commit_queue')
+        mocked_api.session.get.assert_called_with(url=expected_url, params=None)
+
     def test_test_stats_by_project(self, mocked_api):
         after_date = '2019-01-01'
         before_date = '2019-02-01'
