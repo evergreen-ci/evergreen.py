@@ -47,6 +47,15 @@ class TestTask(object):
         task = Task(sample_task, None)
         assert not task.wait_time()
 
+    def test_wait_time_once_unblocked(self, sample_task):
+        task = Task(sample_task, None)
+        assert timedelta(minutes=20) == task.wait_time_once_unblocked()
+
+    def test_missing_wait_time_once_unblocked(self, sample_task):
+        sample_task['scheduled_time'] = None
+        task = Task(sample_task, None)
+        assert not task.wait_time_once_unblocked()
+
     def test_get_execution(self, sample_task):
         task = Task(sample_task, None)
         execution1 = task.get_execution(1)
