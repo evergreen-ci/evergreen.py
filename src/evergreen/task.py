@@ -147,6 +147,17 @@ class Task(_BaseEvergreenObject):
             return self.start_time - self.ingest_time
         return None
 
+    def wait_time_once_unblocked(self):
+        """
+        Get the time taken until the task started running
+        once it is unblocked by task dependencies.
+
+        :return: Time taken until task started running.
+        """
+        if self.start_time and self.scheduled_time:
+            return self.start_time - self.scheduled_time
+        return None
+
     def is_success(self):
         """
         Whether task was successful.

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.16 - 2019-06-03
+- Add endpoint that returns the wait time between dependencies being fulfilled and start of task
+
 ## 0.1.15 - 2019-05-31
 - Add endpoint to query commit-queue.
 
