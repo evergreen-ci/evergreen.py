@@ -15,8 +15,41 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 'MongoDB (master)'
 ```
 
+### Command Line Application
 
-## Testing
+A command line application is included to explore the evergreen api data. It is called `evg-api`.
+
+```
+$ evg-api --json list-hosts
+{
+    "host_id": "host num 0",                                               
+    "host_url": "host.num.com",                                              
+    "distro": {
+        "distro_id": "ubuntu1804-build",
+        "provider": "static",
+        "image_id": ""
+    },
+    "provisioned": true,
+    "started_by": "mci",
+    "host_type": "",
+    "user": "mci-exec",
+    "status": "running",
+    "running_task": {
+        "task_id": null,
+        "name": null,
+        "dispatch_time": null,
+        "version_id": null,
+        "build_id": null
+    },
+    "user_host": false
+}
+...
+```
+
+
+## Contributors Guide
+
+### Testing
 
 Tox is being used for multiversion testing. Tests are run on python 2.7 and 3.6. You should have
 both of these installed locally. To run tests, install the requirements.txt and then run tox.
@@ -34,3 +67,8 @@ $ pytest --cov=src --cov-report=html
 ```
 
 This will generate an html coverage report in `htmlcov/` directory.
+
+### Merging
+
+Merges to master should be done by the evergreen [commit queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
+After a PR has been reviewed, add a comment with the text `evergreen merge` to merge the PR.

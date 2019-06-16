@@ -68,6 +68,12 @@ def sample_patch():
 
 
 @pytest.fixture()
+def sample_project():
+    """Return sample project json."""
+    return get_sample_json('project.json')
+
+
+@pytest.fixture()
 def sample_test():
     """Return sample test json."""
     return get_sample_json('test.json')
