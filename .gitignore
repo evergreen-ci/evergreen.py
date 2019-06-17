@@ -1,6 +1,6 @@
 .idea/
 
-.coverage
+.coverage*
 htmlcov/
 __pycache__
 junit-*.xml

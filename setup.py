@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='evergreen.py',
-    version='0.1.16',
+    version='0.2.0',
     license='Apache License, Version 2.0',
     description='Python client for the Evergreen API',
     long_description=long_description,
@@ -48,6 +48,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        evg_api=evergreen.cli.main:main
+        evg-api=evergreen.cli.main:main
     ''',
 )

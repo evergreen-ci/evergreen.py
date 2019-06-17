@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 - 2019-06-16
+- Change command line to evg-api.
+- Add support for yaml and json command line output.
+- Bug fixes.
+
 ## 0.1.16 - 2019-06-03
 - Add endpoint that returns the wait time between dependencies being fulfilled and start of task
 
