@@ -19,7 +19,7 @@ def evg_attrib(attrib_name, type_fn=None):
     def attrib_getter(instance):
         if type_fn:
             return type_fn(instance.json[attrib_name])
-        return instance.json[attrib_name]
+        return instance.json.get(attrib_name, None)
 
     return property(attrib_getter, doc='value of {}'.format(attrib_name))
 

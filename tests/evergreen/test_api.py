@@ -1,4 +1,11 @@
 
+class TestDistrosApi(object):
+    def test_all_distros(self, mocked_api):
+        mocked_api.all_distros()
+        mocked_api.session.get.assert_called_with(url=mocked_api._create_url('/distros'),
+                                                  params=None)
+
+
 class TestHostApi(object):
     def test_all_hosts(self, mocked_api):
         mocked_api.all_hosts()
