@@ -1,0 +1,79 @@
+{
+    "name": "amazon1-2018-build",
+    "user_spawn_allowed": true,
+    "provider": "ec2-auto",
+    "settings": {
+      "ami": "ami-063bfe68ca7d8d293",
+      "bid_price": 0.84,
+      "instance_type": "m4.4xlarge",
+      "is_vpc": true,
+      "key_name": "mci",
+      "mount_points": [
+        {
+          "device_name": "/dev/sdb",
+          "size": 300,
+          "virtual_name": ""
+        }
+      ],
+      "security_group": "sg-1a636869",
+      "security_group_ids": [
+        "sg-1a636869"
+      ],
+      "subnet_id": "subnet-dc868ef0",
+      "vpc_name": "production_dynamic_vpc"
+    },
+    "image_id": "ami-063bfe68ca7d8d293",
+    "arch": "linux_amd64",
+    "work_dir": "/data/mci",
+    "pool_size": 10,
+    "setup_as_sudo": true,
+    "setup": "#!/bin/bash\nset -o errexit\nset -o verbose\n\numount /dev/xvdb || true\n/sbin/mkfs.xfs -f /dev/xvdb\nmkdir -p /data\necho \"/dev/xvdb /data auto noatime 0 0\" | tee -a /etc/fstab\nmount /data\n\nchown -R ec2-user:ec2-user /data\n\necho \"github.com,207.97.227.239 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==\" | tee -a /home/ec2-user/.ssh/known_hosts\necho \"${github_private_key}\" | tee /home/ec2-user/.ssh/id_rsa\necho \"${github_public_key}\" | tee /home/ec2-user/.ssh/id_rsa.pub\nchmod 600 /home/ec2-user/.ssh/*\nchown -R ec2-user:ec2-user /data\nchown -R ec2-user:ec2-user /home/ec2-user/.ssh\n\n# /tmp will be a symlink to this\n# \nmkdir /data/tmp\nchmod 1777 /data/tmp",
+    "teardown": "",
+    "user": "ec2-user",
+    "bootstrap_method": "legacy-ssh",
+    "communication_method": "legacy-ssh",
+    "clone_method": "legacy-ssh",
+    "shell_path": "",
+    "curator_dir": "",
+    "client_dir": "",
+    "jasper_credentials_path": null,
+    "ssh_key": "mci",
+    "ssh_options": [
+      "StrictHostKeyChecking=no",
+      "BatchMode=yes",
+      "ConnectTimeout=10"
+    ],
+    "expansions": [
+      {
+        "key": "decompress",
+        "value": "tar zxvf"
+      },
+      {
+        "key": "ps",
+        "value": "ps aux"
+      },
+      {
+        "key": "kill_pid",
+        "value": "kill -- -$(ps opgid= %v)"
+      },
+      {
+        "key": "scons_prune_ratio",
+        "value": "0.8"
+      }
+    ],
+    "disabled": false,
+    "container_pool": "",
+    "planner_settings": {
+      "version": "legacy",
+      "minimum_hosts": 0,
+      "maximum_hosts": 0,
+      "target_time": 0,
+      "acceptable_host_idle_time": 0,
+      "group_versions": false,
+      "patch_zipper_factor": 0,
+      "task_ordering": ""
+    },
+    "finder_settings": {
+      "version": "legacy"
+    }
+  }

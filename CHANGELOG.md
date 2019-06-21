@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 - 2019-06-20
+- Add /distros support.
+
 ## 0.2.0 - 2019-06-16
 - Change command line to evg-api.
 - Add support for yaml and json command line output.

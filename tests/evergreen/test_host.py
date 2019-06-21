@@ -33,3 +33,8 @@ class TestHost(object):
         mock_api = MagicMock()
         host = Host(sample_host, mock_api)
         assert mock_api.version_by_id.return_value == host.get_version()
+
+    def test_missing_values(self, sample_host):
+        del sample_host['status']
+        host = Host(sample_host, None)
+        assert not host.status

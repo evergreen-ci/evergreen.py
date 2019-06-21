@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
 
-class Distro(_BaseEvergreenObject):
+class HostDistro(_BaseEvergreenObject):
     """Representation of a distro."""
 
     distro_id = evg_attrib('distro_id')
@@ -19,7 +19,7 @@ class Distro(_BaseEvergreenObject):
         :param json: json of distro.
         :param api: Evergreen API.
         """
-        super(Distro, self).__init__(json, api)
+        super(HostDistro, self).__init__(json, api)
 
 
 class RunningTask(_BaseEvergreenObject):
@@ -81,7 +81,7 @@ class Host(_BaseEvergreenObject):
 
     @property
     def distro(self):
-        return Distro(self.json['distro'], self._api)
+        return HostDistro(self.json['distro'], self._api)
 
     def get_build(self):
         """

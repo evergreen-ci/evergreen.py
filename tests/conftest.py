@@ -38,6 +38,18 @@ def sample_commit_queue():
 
 
 @pytest.fixture()
+def sample_aws_distro():
+    """Return sample aws distro json."""
+    return get_sample_json('distro_aws.json')
+
+
+@pytest.fixture()
+def sample_static_distro():
+    """Return sample static distro json."""
+    return get_sample_json('distro_static.json')
+
+
+@pytest.fixture()
 def sample_task():
     """Return sample task json."""
     return get_sample_json('task.json')

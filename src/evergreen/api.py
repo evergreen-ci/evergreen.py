@@ -21,6 +21,7 @@ from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config,\
     read_evergreen_from_file
+from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
 from evergreen.patch import Patch
@@ -146,6 +147,24 @@ class _BaseEvergreenApi(object):
             for result in data:
                 yield result
             params['start_at'] = evergreen_input_to_output(data[-1]['create_time'])
+
+
+class _DistrosApi(_BaseEvergreenApi):
+    """API for distros endpoints."""
+
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+        """Create an Evergreen Api object."""
+        super(_DistrosApi, self).__init__(api_server, auth)
+
+    def all_distros(self):
+        """
+        Get all distros in evergreen.
+
+        :return: List of all distros in evergreen.
+        """
+        url = self._create_url('/distros')
+        distro_list = self._paginate(url)
+        return [Distro(distro, self) for distro in distro_list]
 
 
 class _HostApi(_BaseEvergreenApi):
@@ -459,7 +478,7 @@ class _LogApi(_BaseEvergreenApi):
 
 
 class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _TaskApi, _OldApi,
-                   _LogApi):
+                   _LogApi, _DistrosApi):
     """Access to the Evergreen API Server."""
 
     def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
