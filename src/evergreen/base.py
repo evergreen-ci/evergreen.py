@@ -17,6 +17,9 @@ def evg_attrib(attrib_name, type_fn=None):
     """
 
     def attrib_getter(instance):
+        if attrib_name not in instance.json:
+            return None
+
         if type_fn:
             return type_fn(instance.json[attrib_name])
         return instance.json.get(attrib_name, None)

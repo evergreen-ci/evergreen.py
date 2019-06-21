@@ -3,12 +3,15 @@
 from __future__ import absolute_import
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+from evergreen.metrics.versionmetrics import VersionMetrics
 
-_EVG_DATE_FIELDS_IN_VERSION = frozenset([
-    'create_time',
-    'finish_time',
-    'start_time',
-])
+
+EVG_VERSION_STATUS_SUCCESS = 'success'
+EVG_VERSION_STATUS_FAILED = 'failed'
+COMPLETED_STATES = {
+    EVG_VERSION_STATUS_FAILED,
+    EVG_VERSION_STATUS_SUCCESS,
+}
 
 
 class BuildVariantStatus(_BaseEvergreenObject):
@@ -53,7 +56,6 @@ class Version(_BaseEvergreenObject):
         :param json: json representing version
         """
         super(Version, self).__init__(json, api)
-        self._date_fields = _EVG_DATE_FIELDS_IN_VERSION
 
         if 'build_variants_status' in self.json:
             self.build_variants_map = {
@@ -98,3 +100,33 @@ class Version(_BaseEvergreenObject):
         :return: True if this version is a patch build.
         """
         return not self.version_id.startswith(self.project.replace('-', '_'))
+
+    def is_completed(self):
+        """
+        Determine if this version has completed running tasks.
+
+        :return: True if version has completed.
+        """
+        return self.status in COMPLETED_STATES
+
+    def get_patch(self):
+        """
+        Get the patch information for this version.
+
+        :return: Patch for this version.
+        """
+        if self.is_patch():
+            return self._api.patch_by_id(self.version_id)
+        return None
+
+    def get_metrics(self):
+        """
+        Calculate the metrics for this version.
+
+        Metrics are only available on versions that have finished running.
+
+        :return: Metrics for this version.
+        """
+        if self.is_completed():
+            return VersionMetrics(self.version_id, self._api).calculate()
+        return None

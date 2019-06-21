@@ -2,6 +2,15 @@
 from __future__ import absolute_import
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+from evergreen.metrics.buildmetrics import BuildMetrics
+
+
+EVG_BUILD_STATUS_FAILED = 'failed'
+EVG_BUILD_STATUS_SUCCESS = 'success'
+COMPLETED_STATES = {
+    EVG_BUILD_STATUS_FAILED,
+    EVG_BUILD_STATUS_SUCCESS,
+}
 
 
 class StatusCounts(_BaseEvergreenObject):
@@ -60,4 +69,24 @@ class Build(_BaseEvergreenObject):
         :param fetch_all_executions:  fetch all executions for tasks.
         :return: List of all tasks.
         """
-        return self._api.tasks_by_build(self._id, fetch_all_executions)
+        return self._api.tasks_by_build(self.id, fetch_all_executions)
+
+    def is_completed(self):
+        """
+        Determine if this build has completed running tasks.
+
+        :return: True if build has completed running tasks.
+        """
+        return self.status in COMPLETED_STATES
+
+    def get_metrics(self):
+        """
+        Get metrics for the build.
+
+        Metrics are only available on build that have finished running..
+
+        :return: Metrics for the build.
+        """
+        if self.is_completed():
+            return BuildMetrics(self.id, self._api).calculate()
+        return None

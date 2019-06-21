@@ -6,6 +6,7 @@ from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
 EVG_SUCCESS_STATUS = 'success'
 EVG_SYSTEM_FAILURE_STATUS = 'system'
+EVG_UNDISPATCHED_STATUS = 'undispatched'
 
 _EVG_DATE_FIELDS_IN_TASK = frozenset([
     'create_time',
@@ -46,36 +47,39 @@ class StatusDetails(_BaseEvergreenObject):
 class Task(_BaseEvergreenObject):
     """Representation of an Evergreen task."""
 
-    task_id = evg_attrib('task_id')
-    project_id = evg_attrib('project_id')
-    create_time = evg_datetime_attrib('create_time')
-    dispatch_time = evg_datetime_attrib('dispatch_time')
-    scheduled_time = evg_datetime_attrib('scheduled_time')
-    start_time = evg_datetime_attrib('start_time')
-    finish_time = evg_datetime_attrib('finish_time')
-    ingest_time = evg_datetime_attrib('ingest_time')
-    version_id = evg_attrib('version_id')
-    revision = evg_attrib('revision')
-    priority = evg_attrib('priority')
     activated = evg_attrib('activated')
     activated_by = evg_attrib('activated_by')
     build_id = evg_attrib('build_id')
-    distro_id = evg_attrib('distro_id')
     build_variant = evg_attrib('build_variant')
+    create_time = evg_datetime_attrib('create_time')
     depends_on = evg_attrib('depends_on')
+    dispatch_time = evg_datetime_attrib('dispatch_time')
     display_name = evg_attrib('display_name')
-    host_id = evg_attrib('host_id')
-    restarts = evg_attrib('restarts')
-    execution = evg_attrib('execution')
-    order = evg_attrib('order')
-    status = evg_attrib('status')
-    time_taken_ms = evg_attrib('time_taken_ms')
-    expected_duration_ms = evg_attrib('expected_duration_ms')
+    display_only = evg_attrib('display_only')
+    distro_id = evg_attrib('distro_id')
     est_wait_to_start_ms = evg_attrib('est_wait_to_start_ms')
     estimated_cost = evg_attrib('estimated_cost')
+    execution = evg_attrib('execution')
+    expected_duration_ms = evg_attrib('expected_duration_ms')
+    finish_time = evg_datetime_attrib('finish_time')
     generate_task = evg_attrib('generate_task')
     generated_by = evg_attrib('generated_by')
-    display_only = evg_attrib('display_only')
+    host_id = evg_attrib('host_id')
+    ingest_time = evg_datetime_attrib('ingest_time')
+    mainline = evg_attrib('mainline')
+    order = evg_attrib('order')
+    project_id = evg_attrib('project_id')
+    priority = evg_attrib('priority')
+    restarts = evg_attrib('restarts')
+    revision = evg_attrib('revision')
+    scheduled_time = evg_datetime_attrib('scheduled_time')
+    start_time = evg_datetime_attrib('start_time')
+    status = evg_attrib('status')
+    task_group = evg_attrib('task_group')
+    task_group_max_hosts = evg_attrib('task_group_max_hosts')
+    task_id = evg_attrib('task_id')
+    time_taken_ms = evg_attrib('time_taken_ms')
+    version_id = evg_attrib('version_id')
 
     def __init__(self, json, api):
         """
@@ -165,6 +169,14 @@ class Task(_BaseEvergreenObject):
         :return: True if task was successful.
         """
         return self.status == EVG_SUCCESS_STATUS
+
+    def is_undispatched(self):
+        """
+        Whether the task was undispatched.
+
+        :return: True is task was undispatched.
+        """
+        return self.status == EVG_UNDISPATCHED_STATUS
 
     def is_system_failure(self):
         """
