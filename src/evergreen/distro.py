@@ -5,7 +5,16 @@ from __future__ import absolute_import
 from evergreen.base import _BaseEvergreenObject, evg_attrib
 
 
+AWS_AUTO_PROVIDER = 'ec2-auto'
+AWS_ON_DEMAND_PROVIDER = 'ec2-ondemand'
+DOCKER_PROVIDER = 'docker'
+STATIC_PROVIDER = 'static'
+
+
 class MountPoint(_BaseEvergreenObject):
+    """
+    Representation of Mount Point in distro settings.
+    """
     device_name = evg_attrib('device_name')
     size = evg_attrib('size')
     virtual_name = evg_attrib('virtual_name')
@@ -20,15 +29,64 @@ class MountPoint(_BaseEvergreenObject):
         super(MountPoint, self).__init__(json, api)
 
 
-class DistroSettings(_BaseEvergreenObject):
+class StaticDistroSettings(_BaseEvergreenObject):
+    """
+    Representation of Evergreen static distro settings.
+    """
+    def __init__(self, json, api):
+        """
+        Create an instance of the distro settings for static images.
+
+        :param json: Json of distro settings.
+        :param api: Evergreen API.
+        """
+        super(StaticDistroSettings, self).__init__(json, api)
+
+    @property
+    def hosts(self):
+        """
+        Retrieves Hosts of static distro.
+
+        :return: hosts of static distro.
+        """
+        if 'hosts' in self.json:
+            return [host['name'] for host in self.json['hosts']]
+        return []
+
+
+class DockerDistroSettings(_BaseEvergreenObject):
+    """
+    Representation of docker distro settings.
+    """
+    image_url = evg_attrib('image_url')
+
+    def __init__(self, json, api):
+        """
+        Create an instance of the distro settings for docker.
+
+        :param json: Json of distro settings.
+        :param api: Evergreen API.
+        """
+        super(DockerDistroSettings, self).__init__(json, api)
+
+
+class AwsDistroSettings(_BaseEvergreenObject):
+    """
+    Representation of AWS Distro Settings.
+    """
     ami = evg_attrib('ami')
+    aws_access_key_id = evg_attrib('aws_access_key_id')
+    aws_access_secret_id = evg_attrib('aws_access_secret_id')
     bid_price = evg_attrib('bid_price')
     instance_type = evg_attrib('instance_type')
+    ipv6 = evg_attrib('ipv6')
     is_vpc = evg_attrib('is_vpc')
     key_name = evg_attrib('key_name')
+    region = evg_attrib('region')
     security_group = evg_attrib('security_group')
     security_group_ids = evg_attrib('security_group_ids')
     subnet_id = evg_attrib('subnet_id')
+    user_data = evg_attrib('user_data')
     vpc_name = evg_attrib('vpc_name')
 
     def __init__(self, json, api):
@@ -38,7 +96,7 @@ class DistroSettings(_BaseEvergreenObject):
         :param json: Json of the distro settings.
         :param api: Evergreen API.
         """
-        super(DistroSettings, self).__init__(json, api)
+        super(AwsDistroSettings, self).__init__(json, api)
 
     @property
     def mount_points(self):
@@ -53,6 +111,9 @@ class DistroSettings(_BaseEvergreenObject):
 
 
 class PlannerSettings(_BaseEvergreenObject):
+    """
+    Representation of planner settings.
+    """
     version = evg_attrib('version')
     minimum_hosts = evg_attrib('minimum_hosts')
     maximum_hosts = evg_attrib('maximum_hosts')
@@ -73,6 +134,9 @@ class PlannerSettings(_BaseEvergreenObject):
 
 
 class FinderSettings(_BaseEvergreenObject):
+    """
+    Representation of finder settings.
+    """
     version = evg_attrib('version')
 
     def __init__(self, json, api):
@@ -86,6 +150,16 @@ class FinderSettings(_BaseEvergreenObject):
 
 
 class Distro(_BaseEvergreenObject):
+    """
+    Representation of an Evergreen Distro.
+    """
+    _PROVIDER_MAP = {
+        AWS_ON_DEMAND_PROVIDER: AwsDistroSettings,
+        AWS_AUTO_PROVIDER: AwsDistroSettings,
+        DOCKER_PROVIDER: DockerDistroSettings,
+        STATIC_PROVIDER: StaticDistroSettings,
+    }
+
     name = evg_attrib('name')
     user_spawn_allowed = evg_attrib('user_spawn_allowed')
     provider = evg_attrib('provider')
@@ -127,7 +201,9 @@ class Distro(_BaseEvergreenObject):
         :return: settings for distro.
         """
         if 'settings' in self.json:
-            return DistroSettings(self.json['settings'], self._api)
+            if self.provider in self._PROVIDER_MAP:
+                return self._PROVIDER_MAP[self.provider](self.json['settings'], self._api)
+            return self.json['settings']
         return None
 
     @property
@@ -143,8 +219,18 @@ class Distro(_BaseEvergreenObject):
 
     @property
     def planner_settings(self):
+        """
+        Retrieve planner settings for distro.
+
+        :return: planner settings.
+        """
         return PlannerSettings(self.json['planner_settings'], self._api)
 
     @property
     def finder_settings(self):
+        """
+        Retrieve finder settings for distro.
+
+        :return: finder settings.
+        """
         return FinderSettings(self.json['finder_settings'], self._api)

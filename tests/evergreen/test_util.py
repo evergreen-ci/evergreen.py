@@ -5,7 +5,7 @@ import evergreen.util as under_test
 SAMPLE_DATE_STRING = "2019-02-13T14:55:37.000Z"
 
 
-class TestParseEvergreenDateTime:
+class TestParseEvergreenDateTime(object):
     def test_no_datetime(self):
         assert not under_test.parse_evergreen_datetime(None)
 
@@ -16,7 +16,7 @@ class TestParseEvergreenDateTime:
         assert now == under_test.parse_evergreen_datetime(now_str)
 
 
-class TestFormatEvergreenDatetime:
+class TestFormatEvergreenDatetime(object):
     def test_date_is_formatted(self):
         now = datetime.now()
 
@@ -25,7 +25,7 @@ class TestFormatEvergreenDatetime:
         assert isinstance(now_str, str)
 
 
-class TestParseEvergreenDate:
+class TestParseEvergreenDate(object):
     def test_no_date(self):
         assert not under_test.parse_evergreen_date(None)
 

@@ -1,0 +1,71 @@
+ {
+    "name": "ubuntu1604-power8-test",
+    "user_spawn_allowed": false,
+    "provider": "static",
+    "settings": {
+      "hosts": [
+        {
+          "name": "ubuntu1604-ppc-2.pic.build.10gen.cc"
+        },
+        {
+          "name": "ubuntu1604-ppc-3.pic.build.10gen.cc"
+        },
+        {
+          "name": "ubuntu1604-ppc-5.pic.build.10gen.cc"
+        },
+        {
+          "name": "ubuntu1604-ppc-6.pic.build.10gen.cc"
+        }
+      ]
+    },
+    "image_id": null,
+    "arch": "linux_ppc64le",
+    "work_dir": "/data/mci",
+    "pool_size": 0,
+    "setup_as_sudo": false,
+    "setup": "",
+    "teardown": "",
+    "user": "mci-exec",
+    "bootstrap_method": "legacy-ssh",
+    "communication_method": "legacy-ssh",
+    "clone_method": "legacy-ssh",
+    "shell_path": "",
+    "curator_dir": "",
+    "client_dir": "",
+    "jasper_credentials_path": null,
+    "ssh_key": "mci",
+    "ssh_options": [
+      "StrictHostKeyChecking=no",
+      "BatchMode=yes",
+      "ConnectTimeout=10"
+    ],
+    "expansions": [
+      {
+        "key": "decompress",
+        "value": "tar xzvf"
+      },
+      {
+        "key": "ps",
+        "value": "ps aux"
+      },
+      {
+        "key": "kill_pid",
+        "value": "kill -- -$(ps opgid= %v)"
+      }
+    ],
+    "disabled": false,
+    "container_pool": "",
+    "planner_settings": {
+      "version": "legacy",
+      "minimum_hosts": 0,
+      "maximum_hosts": 0,
+      "target_time": 0,
+      "acceptable_host_idle_time": 0,
+      "group_versions": null,
+      "patch_zipper_factor": 0,
+      "task_ordering": ""
+    },
+    "finder_settings": {
+      "version": "legacy"
+    }
+  }
