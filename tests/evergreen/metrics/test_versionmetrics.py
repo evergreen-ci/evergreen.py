@@ -2,6 +2,8 @@
 """Unit tests for src/evergreen/metrics/versionmetrics.py."""
 from __future__ import absolute_import
 
+from datetime import datetime, timedelta
+
 try:
     from unittest.mock import MagicMock
 except ImportError:
@@ -14,6 +16,7 @@ import evergreen.metrics.versionmetrics as under_test
 
 
 def mock_build_metrics():
+    now = datetime.now()
     build_metrics = MagicMock()
     build_metrics.total_processing_time = 0
     build_metrics.success_count = 0
@@ -21,6 +24,9 @@ def mock_build_metrics():
     build_metrics.timed_out_count = 0
     build_metrics.system_failure_count = 0
     build_metrics.estimated_build_costs = 0
+    build_metrics.create_time = now
+    build_metrics.start_time = now + timedelta(minutes=30)
+    build_metrics.end_time = now + timedelta(minutes=60)
 
     return build_metrics
 
@@ -33,6 +39,12 @@ class TestVersionMetrics(object):
         assert version_metrics.total_processing_time == 0
         assert version_metrics.task_success_count == 0
         assert version_metrics.estimated_cost == 0
+
+        assert not version_metrics.create_time
+        assert not version_metrics.start_time
+        assert not version_metrics.end_time
+        assert not version_metrics.makespan
+        assert not version_metrics.wait_time
 
     def test_multiple_builds(self, sample_task, sample_build):
         n_tasks = 5
@@ -109,6 +121,60 @@ class TestVersionMetrics(object):
         assert version_metrics.task_failure_count == 0
         assert version_metrics.task_system_failure_count == build_metrics.system_failure_count
         assert version_metrics.task_timeout_count == 0
+
+    def test_dict_format(self, sample_task):
+        build_metrics = mock_build_metrics()
+        build_metrics.system_failure_count = 5
+        build_mock = MagicMock()
+        build_mock.get_metrics.return_value = build_metrics
+        version_id = 'version_id'
+        version_metrics = under_test.VersionMetrics(version_id, None)
+        version_metrics._count_build(build_mock)
+
+        ver_dict = version_metrics.as_dict()
+        assert ver_dict['version'] == version_id
+        assert 'build_metrics' not in ver_dict
+
+    def test_dict_format_with_children(self):
+        build_metrics = mock_build_metrics()
+        build_metrics.system_failure_count = 5
+        build_mock = MagicMock()
+        build_mock.get_metrics.return_value = build_metrics
+        version_id = 'version_id'
+        version_metrics = under_test.VersionMetrics(version_id, None)
+        version_metrics._count_build(build_mock)
+
+        ver_dict = version_metrics.as_dict(include_children=True)
+        assert ver_dict['version'] == version_id
+        assert len(ver_dict['build_metrics']) == 1
+        assert ver_dict['build_metrics'][0] == build_metrics.as_dict.return_value
+
+    def test_string_format(self):
+        build_metrics = mock_build_metrics()
+        build_metrics.system_failure_count = 5
+        build_mock = MagicMock()
+        build_mock.get_metrics.return_value = build_metrics
+        version_id = 'version_id'
+        version_metrics = under_test.VersionMetrics(version_id, None)
+        version_metrics._count_build(build_mock)
+
+        assert version_id in str(version_metrics)
+
+    def test_no_time(self):
+        build_metrics = mock_build_metrics()
+        build_metrics.create_time = None
+        build_metrics.start_time = None
+        build_metrics.end_time = None
+        build_mock = MagicMock()
+        build_mock.get_metrics.return_value = build_metrics
+        version_id = 'version_id'
+        version_metrics = under_test.VersionMetrics(version_id, None)
+        version_metrics._count_build(build_mock)
+
+        assert not version_metrics.create_time
+        assert not version_metrics.start_time
+        assert not version_metrics.end_time
+        assert version_id in str(version_metrics)
 
 
 class TestPercentTasks(object):

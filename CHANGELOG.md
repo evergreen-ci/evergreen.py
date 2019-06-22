@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.3 - 2019-06-22
+- Better metrics support.
+
 ## 0.2.2 - 2019-06-21
 - Add metrics.
 - Add network timeout support.

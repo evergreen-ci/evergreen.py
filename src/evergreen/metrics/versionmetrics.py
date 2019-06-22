@@ -24,6 +24,12 @@ class VersionMetrics(object):
         self.task_system_failure_count = 0
         self.estimated_cost = 0
 
+        self._create_times = []
+        self._start_times = []
+        self._finish_times = []
+
+        self.build_metrics = []
+
     def calculate(self):
         """
         Calculate metrics for the given build.
@@ -35,6 +41,61 @@ class VersionMetrics(object):
             self._count_build(build)
 
         return self
+
+    @property
+    def create_time(self):
+        """
+        Time the first task of the version was created.
+
+        :return: Time first task was created.
+        """
+        if self._create_times:
+            return min(self._create_times)
+        return None
+
+    @property
+    def start_time(self):
+        """
+        Time first task of version was started.
+
+        :return: Time first task was started.
+        """
+        if self._start_times:
+            return min(self._start_times)
+        return None
+
+    @property
+    def end_time(self):
+        """
+        Time last task of version was completed.
+
+        :return: Time last task was completed.
+        """
+        if self._finish_times:
+            return max(self._finish_times)
+        return None
+
+    @property
+    def makespan(self):
+        """
+        Wall clock duration of version.
+
+        :return: Duration of version in seconds.
+        """
+        if self.start_time and self.end_time:
+            return (self.end_time - self.start_time).total_seconds()
+        return None
+
+    @property
+    def wait_time(self):
+        """
+        Wall clock duration until version was started.
+
+        :return: Duration until version was started in seconds.
+        """
+        if self.start_time and self.create_time:
+            return (self.start_time - self.create_time).total_seconds()
+        return None
 
     @property
     def total_tasks(self):
@@ -96,6 +157,7 @@ class VersionMetrics(object):
         :param build: Build to add.
         """
         build_metrics = build.get_metrics()
+        self.build_metrics.append(build_metrics)
 
         self.total_processing_time += build_metrics.total_processing_time
         self.task_success_count += build_metrics.success_count
@@ -103,3 +165,79 @@ class VersionMetrics(object):
         self.task_timeout_count += build_metrics.timed_out_count
         self.task_system_failure_count += build_metrics.system_failure_count
         self.estimated_cost += build_metrics.estimated_build_costs
+
+        if build_metrics.create_time:
+            self._create_times.append(build_metrics.create_time)
+
+        if build_metrics.start_time:
+            self._start_times.append(build_metrics.start_time)
+
+        if build_metrics.end_time:
+            self._finish_times.append(build_metrics.end_time)
+
+    def as_dict(self, include_children=False):
+        """
+        Provide a dictionary representation.
+
+        :param include_children: Include child build tasks in dictionary.
+        :return: Dictionary of metrics.
+        """
+        metric = {
+            'version': self._version_id,
+            'total_processing_time': self.total_processing_time,
+            'task_total': self.total_tasks,
+            'task_success_count': self.task_success_count,
+            'task_pct_success': self.pct_tasks_success,
+            'task_failure_count': self.task_failure_count,
+            'task_pct_failed': self.pct_tasks_failure,
+            'task_timeout_count': self.task_timeout_count,
+            'task_system_failure_count': self.task_system_failure_count,
+            'estimated_cost': self.estimated_cost,
+        }
+
+        if include_children:
+            metric['build_metrics'] = [bm.as_dict(include_children) for bm in self.build_metrics]
+
+        return metric
+
+    def __str__(self):
+        """
+        Create string version of metrics.
+
+        :return: String version of metrics.
+        """
+        process_time_min = self.total_processing_time / 60 if self.total_processing_time else 0
+        makespan = self.makespan if self.makespan else 0
+        makespan_min = self.makespan / 60 if self.makespan else 0
+        waittime = self.wait_time if self.wait_time else 0
+        waittime_min = self.wait_time / 60 if self.wait_time else 0
+
+        return """Version Id: {version}
+        Total Processing Time: {total_processing_time:.2f}s ({total_processing_time_min:.2f}m)
+        Makespan: {makespan:.2f}s ({makespan_min:.2f}m)
+        Wait Time: {waittime:.2f}s ({waittime_min:.2f}m)
+        Total Tasks: {task_total}
+        Successful Tasks: {task_success_count} ({task_pct_success:.2%})
+        Failed Tasks: {task_failure_count} ({task_pct_failed:.2%})
+        Timed Out Tasks: {task_timeout_count} ({task_pct_timed_out:.2%})
+        System Failure Tasks: {task_system_failure_count} ({task_pct_system_failure:.2%})
+        Estimated Cost: {estimated_cost:.3f}
+        """.format(
+            version=self._version_id,
+            total_processing_time=self.total_processing_time,
+            total_processing_time_min=process_time_min,
+            makespan=makespan,
+            makespan_min=makespan_min,
+            waittime=waittime,
+            waittime_min=waittime_min,
+            task_total=self.total_tasks,
+            task_success_count=self.task_success_count,
+            task_pct_success=self.pct_tasks_success,
+            task_failure_count=self.task_failure_count,
+            task_pct_failed=self.pct_tasks_failure,
+            task_timeout_count=self.task_timeout_count,
+            task_pct_timed_out=self.pct_tasks_timeout,
+            task_system_failure_count=self.task_system_failure_count,
+            task_pct_system_failure=self.pct_tasks_system_failure,
+            estimated_cost=self.estimated_cost
+        ).rstrip()
