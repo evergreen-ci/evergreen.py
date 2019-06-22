@@ -20,7 +20,7 @@ import requests
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config,\
-    read_evergreen_from_file
+    read_evergreen_from_file, DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
@@ -40,13 +40,14 @@ DEFAULT_LIMIT = 100
 class _BaseEvergreenApi(object):
     """Base methods for building API objects."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """
         Create a _BaseEvergreenApi object.
 
         :param api_server: URI of Evergreen API server.
         :param auth: EvgAuth object with auth information.
         """
+        self._timeout = timeout
         self._api_server = api_server
         self.session = requests.Session()
         adapter = requests.adapters.HTTPAdapter()
@@ -90,7 +91,7 @@ class _BaseEvergreenApi(object):
         :return: response from api server.
         """
         start_time = time.time()
-        response = self.session.get(url=url, params=params)
+        response = self.session.get(url=url, params=params, timeout=self._timeout)
         self._log_api_call_time(response, start_time)
 
         self._raise_for_status(response)
@@ -152,9 +153,9 @@ class _BaseEvergreenApi(object):
 class _DistrosApi(_BaseEvergreenApi):
     """API for distros endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_DistrosApi, self).__init__(api_server, auth)
+        super(_DistrosApi, self).__init__(api_server, auth, timeout)
 
     def all_distros(self):
         """
@@ -170,9 +171,9 @@ class _DistrosApi(_BaseEvergreenApi):
 class _HostApi(_BaseEvergreenApi):
     """API for hosts endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_HostApi, self).__init__(api_server, auth)
+        super(_HostApi, self).__init__(api_server, auth, timeout)
 
     def all_hosts(self, status=None):
         """
@@ -193,9 +194,9 @@ class _HostApi(_BaseEvergreenApi):
 class _ProjectApi(_BaseEvergreenApi):
     """API for project endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_ProjectApi, self).__init__(api_server, auth)
+        super(_ProjectApi, self).__init__(api_server, auth, timeout)
 
     def all_projects(self):
         """
@@ -308,9 +309,9 @@ class _ProjectApi(_BaseEvergreenApi):
 class _BuildApi(_BaseEvergreenApi):
     """API for build endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_BuildApi, self).__init__(api_server, auth)
+        super(_BuildApi, self).__init__(api_server, auth, timeout)
 
     def build_by_id(self, build_id):
         """
@@ -342,9 +343,9 @@ class _BuildApi(_BaseEvergreenApi):
 class _VersionApi(_BaseEvergreenApi):
     """API for version endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_VersionApi, self).__init__(api_server, auth)
+        super(_VersionApi, self).__init__(api_server, auth, timeout)
 
     def version_by_id(self, version_id):
         """
@@ -372,9 +373,9 @@ class _VersionApi(_BaseEvergreenApi):
 class _PatchApi(_BaseEvergreenApi):
     """API for patch endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_PatchApi, self).__init__(api_server, auth)
+        super(_PatchApi, self).__init__(api_server, auth, timeout)
 
     def patch_by_id(self, patch_id, params=None):
         """
@@ -391,9 +392,9 @@ class _PatchApi(_BaseEvergreenApi):
 class _TaskApi(_BaseEvergreenApi):
     """API for task endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_TaskApi, self).__init__(api_server, auth)
+        super(_TaskApi, self).__init__(api_server, auth, timeout)
 
     def task_by_id(self, task_id, fetch_all_executions=None):
         """
@@ -430,9 +431,9 @@ class _TaskApi(_BaseEvergreenApi):
 class _OldApi(_BaseEvergreenApi):
     """API for pre-v2 endpoints."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_OldApi, self).__init__(api_server, auth)
+        super(_OldApi, self).__init__(api_server, auth, timeout)
 
     def _create_old_url(self, endpoint):
         """
@@ -459,9 +460,9 @@ class _OldApi(_BaseEvergreenApi):
 class _LogApi(_BaseEvergreenApi):
     """API for accessing log files."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(_LogApi, self).__init__(api_server, auth)
+        super(_LogApi, self).__init__(api_server, auth, timeout)
 
     def retrieve_task_log(self, log_url, raw=False):
         """
@@ -481,18 +482,20 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
                    _LogApi, _DistrosApi):
     """Access to the Evergreen API Server."""
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(EvergreenApi, self).__init__(api_server, auth)
+        super(EvergreenApi, self).__init__(api_server, auth, timeout=timeout)
 
     @classmethod
-    def get_api(cls, auth=None, use_config_file=False, config_file=None):
+    def get_api(cls, auth=None, use_config_file=False, config_file=None,
+                timeout=DEFAULT_NETWORK_TIMEOUT_SEC):
         """
         Get an evergreen api instance based on config file settings.
 
         :param auth: EvgAuth with authentication to use.
         :param use_config_file: attempt to read auth from default config file.
         :param config_file: config file with authentication information.
+        :param timeout: Network timeout.
         :return: EvergreenApi instance.
         """
         if not auth and use_config_file:
@@ -503,7 +506,7 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
             config = read_evergreen_from_file(config_file)
             auth = get_auth_from_config(config)
 
-        return cls(auth=auth)
+        return cls(auth=auth, timeout=timeout)
 
 
 class CachedEvergreenApi(EvergreenApi):
@@ -511,9 +514,9 @@ class CachedEvergreenApi(EvergreenApi):
     Access to the Evergreen API server that caches certain calls.
     """
 
-    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None):
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
         """Create an Evergreen Api object."""
-        super(CachedEvergreenApi, self).__init__(api_server, auth)
+        super(CachedEvergreenApi, self).__init__(api_server, auth, timeout)
 
     @lru_cache(maxsize=CACHE_SIZE)
     def build_by_id(self, build_id):

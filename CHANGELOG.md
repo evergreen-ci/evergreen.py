@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 - 2019-06-21
+- Add metrics.
+- Add network timeout support.
+
 ## 0.2.1 - 2019-06-20
 - Add /distros support.
 

@@ -89,3 +89,15 @@ class TestTask(object):
         log = task.retrieve_log('task_log', raw=True)
         assert log == mock_api.retrieve_task_log.return_value
         mock_api.retrieve_task_log.assert_called_with(task.log_map['task_log'], True)
+
+    def test_successful_task_is_not_undispatched(self, sample_task):
+        sample_task['status'] = 'success'
+        task = Task(sample_task, None)
+
+        assert not task.is_undispatched()
+
+    def test_undispatched_task_is_undispatched(self, sample_task):
+        sample_task['status'] = 'undispatched'
+        task = Task(sample_task, None)
+
+        assert task.is_undispatched()

@@ -9,6 +9,7 @@ import yaml
 
 EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
 
+DEFAULT_NETWORK_TIMEOUT_SEC = 5 * 60
 DEFAULT_API_SERVER = 'https://evergreen.mongodb.com'
 CONFIG_FILE_LOCATIONS = [
     os.path.expanduser(os.path.join('~', '.evergreen.yml')),
