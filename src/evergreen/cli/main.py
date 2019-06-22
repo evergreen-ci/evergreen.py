@@ -100,5 +100,49 @@ def test_stats(ctx, after_date, before_date, project, distros, group_by, group_n
     click.echo(fmt_output(fmt, test_stats))
 
 
+@cli.command()
+@click.pass_context
+@click.option('-v', '--version', 'version_id', required=True)
+@click.option('--builds', is_flag=True, default=False, help='Include builds of version in output')
+def version_stats(ctx, version_id, builds):
+    """
+    Collect stats for the given evergreen version.
+
+    :param ctx: Command context.
+    :param version_id: Id of version to analyze.
+    :param builds: Include builds of version in output.
+    """
+    api = ctx.obj['api']
+    fmt = ctx.obj['format']
+
+    version = api.version_by_id(version_id)
+    if fmt == DisplayFormat.human:
+        click.echo(version.get_metrics())
+    else:
+        click.echo(fmt_output(fmt, version.get_metrics().as_dict(include_children=builds)))
+
+
+@cli.command()
+@click.pass_context
+@click.option('-b', '--build', 'build_id', required=True)
+@click.option('--tasks', is_flag=True, default=False, help='Include tasks of build in output')
+def build_stats(ctx, build_id, tasks):
+    """
+    Collect stats for the given evergreen build.
+
+    :param ctx: Command context.
+    :param build_id: Id of build to analyze.
+    :param tasks: If true include tasks in output.
+    """
+    api = ctx.obj['api']
+    fmt = ctx.obj['format']
+
+    build = api.build_by_id(build_id)
+    if fmt == DisplayFormat.human:
+        click.echo(build.get_metrics())
+    else:
+        click.echo(fmt_output(fmt, build.get_metrics().as_dict(include_children=tasks)))
+
+
 def main():
     return cli(obj={})
