@@ -7,15 +7,13 @@ from __future__ import division
 class VersionMetrics(object):
     """Metrics about an evergreen version."""
 
-    def __init__(self, version_id, api):
+    def __init__(self, version):
         """
         Create an instance of version metrics.
 
-        :param version_id: Id of version to analyze.
-        :param api: Evergreen API.
+        :param version: Version to analyze.
         """
-        self._version_id = version_id
-        self._api = api
+        self.version = version
 
         self.total_processing_time = 0
         self.task_success_count = 0
@@ -29,6 +27,7 @@ class VersionMetrics(object):
         self._finish_times = []
 
         self.build_metrics = []
+        self.build_list = None
 
     def calculate(self):
         """
@@ -36,8 +35,8 @@ class VersionMetrics(object):
 
         :returns: self.
         """
-        build_list = self._api.builds_by_version(self._version_id)
-        for build in build_list:
+        self.build_list = self.version.get_builds()
+        for build in self.build_list:
             self._count_build(build)
 
         return self
@@ -183,7 +182,7 @@ class VersionMetrics(object):
         :return: Dictionary of metrics.
         """
         metric = {
-            'version': self._version_id,
+            'version': self.version.version_id,
             'total_processing_time': self.total_processing_time,
             'task_total': self.total_tasks,
             'task_success_count': self.task_success_count,
@@ -223,7 +222,7 @@ class VersionMetrics(object):
         System Failure Tasks: {task_system_failure_count} ({task_pct_system_failure:.2%})
         Estimated Cost: {estimated_cost:.3f}
         """.format(
-            version=self._version_id,
+            version=self.version.version_id,
             total_processing_time=self.total_processing_time,
             total_processing_time_min=process_time_min,
             makespan=makespan,

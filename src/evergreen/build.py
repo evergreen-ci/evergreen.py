@@ -88,5 +88,5 @@ class Build(_BaseEvergreenObject):
         :return: Metrics for the build.
         """
         if self.is_completed():
-            return BuildMetrics(self.id, self._api).calculate()
+            return BuildMetrics(self).calculate()
         return None

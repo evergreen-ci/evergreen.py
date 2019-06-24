@@ -9,21 +9,18 @@ try:
 except ImportError:
     from mock import MagicMock
 
-from evergreen.task import Task
-from evergreen.build import Build
-
 import evergreen.metrics.versionmetrics as under_test
 
 
-def mock_build_metrics():
+def mock_build_metrics(success_count=0, cost=0):
     now = datetime.now()
     build_metrics = MagicMock()
     build_metrics.total_processing_time = 0
-    build_metrics.success_count = 0
+    build_metrics.success_count = success_count
     build_metrics.failure_count = 0
     build_metrics.timed_out_count = 0
     build_metrics.system_failure_count = 0
-    build_metrics.estimated_build_costs = 0
+    build_metrics.estimated_build_costs = cost
     build_metrics.create_time = now
     build_metrics.start_time = now + timedelta(minutes=30)
     build_metrics.end_time = now + timedelta(minutes=60)
@@ -31,10 +28,26 @@ def mock_build_metrics():
     return build_metrics
 
 
+def create_mock_build(bm_list=None):
+    mock_build = MagicMock()
+    mock_build.get_metrics.return_value = bm_list
+    return mock_build
+
+
+def create_mock_build_list(n, bm_list=None):
+    return [create_mock_build(bm_list) for _ in range(n)]
+
+
+def create_mock_version(builds=None):
+    mock_version = MagicMock(version_id='version_id')
+    mock_version.get_builds.return_value = builds if builds else []
+    return mock_version
+
+
 class TestVersionMetrics(object):
     def test_with_no_builds(self):
-        mock_api = MagicMock(builds_by_version=lambda _: [])
-        version_metrics = under_test.VersionMetrics('version_id', mock_api).calculate()
+        mock_version = create_mock_version()
+        version_metrics = under_test.VersionMetrics(mock_version).calculate()
 
         assert version_metrics.total_processing_time == 0
         assert version_metrics.task_success_count == 0
@@ -49,13 +62,11 @@ class TestVersionMetrics(object):
     def test_multiple_builds(self, sample_task, sample_build):
         n_tasks = 5
         n_builds = 3
-        mock_api = MagicMock()
-        build_list = [Build(sample_build, mock_api) for _ in range(n_builds)]
-        mock_api.builds_by_version.return_value = build_list
-        task_list = [Task(sample_task, None) for _ in range(n_tasks)]
-        mock_api.tasks_by_build.return_value = task_list
+        mock_build_metric = mock_build_metrics(n_tasks, sample_task['estimated_cost'] * n_tasks)
+        build_list = create_mock_build_list(n_builds, mock_build_metric)
+        mock_version = create_mock_version(build_list)
 
-        version_metrics = under_test.VersionMetrics('version_id', mock_api).calculate()
+        version_metrics = under_test.VersionMetrics(mock_version).calculate()
 
         total_tasks = n_tasks * n_builds
         assert version_metrics.task_success_count == total_tasks
@@ -71,8 +82,9 @@ class TestVersionMetrics(object):
         build_metrics.success_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_metrics = under_test.VersionMetrics('version_id', None)
+        mock_version = create_mock_version()
 
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         assert version_metrics.task_success_count == build_metrics.success_count
@@ -85,8 +97,9 @@ class TestVersionMetrics(object):
         build_metrics.failure_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_metrics = under_test.VersionMetrics('version_id', None)
+        mock_version = create_mock_version()
 
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         assert version_metrics.task_success_count == 0
@@ -99,8 +112,9 @@ class TestVersionMetrics(object):
         build_metrics.timed_out_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_metrics = under_test.VersionMetrics('version_id', None)
+        mock_version = create_mock_version()
 
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         assert version_metrics.task_success_count == 0
@@ -113,8 +127,9 @@ class TestVersionMetrics(object):
         build_metrics.system_failure_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_metrics = under_test.VersionMetrics('version_id', None)
+        mock_version = create_mock_version()
 
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         assert version_metrics.task_success_count == 0
@@ -127,12 +142,13 @@ class TestVersionMetrics(object):
         build_metrics.system_failure_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_id = 'version_id'
-        version_metrics = under_test.VersionMetrics(version_id, None)
+        mock_version = create_mock_version()
+
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         ver_dict = version_metrics.as_dict()
-        assert ver_dict['version'] == version_id
+        assert ver_dict['version'] == mock_version.version_id
         assert 'build_metrics' not in ver_dict
 
     def test_dict_format_with_children(self):
@@ -140,12 +156,13 @@ class TestVersionMetrics(object):
         build_metrics.system_failure_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_id = 'version_id'
-        version_metrics = under_test.VersionMetrics(version_id, None)
+        mock_version = create_mock_version()
+
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         ver_dict = version_metrics.as_dict(include_children=True)
-        assert ver_dict['version'] == version_id
+        assert ver_dict['version'] == mock_version.version_id
         assert len(ver_dict['build_metrics']) == 1
         assert ver_dict['build_metrics'][0] == build_metrics.as_dict.return_value
 
@@ -154,11 +171,12 @@ class TestVersionMetrics(object):
         build_metrics.system_failure_count = 5
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_id = 'version_id'
-        version_metrics = under_test.VersionMetrics(version_id, None)
+        mock_version = create_mock_version()
+
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
-        assert version_id in str(version_metrics)
+        assert mock_version.version_id in str(version_metrics)
 
     def test_no_time(self):
         build_metrics = mock_build_metrics()
@@ -167,24 +185,27 @@ class TestVersionMetrics(object):
         build_metrics.end_time = None
         build_mock = MagicMock()
         build_mock.get_metrics.return_value = build_metrics
-        version_id = 'version_id'
-        version_metrics = under_test.VersionMetrics(version_id, None)
+        mock_version = create_mock_version()
+
+        version_metrics = under_test.VersionMetrics(mock_version)
         version_metrics._count_build(build_mock)
 
         assert not version_metrics.create_time
         assert not version_metrics.start_time
         assert not version_metrics.end_time
-        assert version_id in str(version_metrics)
+        assert mock_version.version_id in str(version_metrics)
 
 
 class TestPercentTasks(object):
     def test_percent_of_zero_tasks_is_zero(self):
-        build_metrics = under_test.VersionMetrics('version_id', None)
+        mock_version = create_mock_version()
+        build_metrics = under_test.VersionMetrics(mock_version)
 
         assert build_metrics._percent_tasks(5) == 0
 
     def test_percent_of_non_zero_works(self):
-        build_metrics = under_test.VersionMetrics('version_id', None)
+        mock_version = create_mock_version()
+        build_metrics = under_test.VersionMetrics(mock_version)
         build_metrics.task_success_count = 10
 
         assert build_metrics._percent_tasks(5) == 0.5

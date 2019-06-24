@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0 - 2019-06-24
+- Simplified Metrics API.
+
 ## 0.2.3 - 2019-06-22
 - Better metrics support.
 
