@@ -12,10 +12,16 @@ from evergreen.task import Task
 import evergreen.metrics.buildmetrics as under_test
 
 
+def create_mock_build(task_list=None):
+    mock_build = MagicMock(id="build_id")
+    mock_build.get_tasks.return_value = task_list if task_list else []
+    return mock_build
+
+
 class TestBuildMetrics(object):
     def test_build_metrics_empty_for_no_builds(self):
-        mock_api = MagicMock(tasks_by_build=lambda _: [])
-        build_metrics = under_test.BuildMetrics('build_id', mock_api).calculate()
+        mock_build = create_mock_build()
+        build_metrics = under_test.BuildMetrics(mock_build).calculate()
 
         assert build_metrics.total_tasks == 0
         assert build_metrics.total_processing_time == 0
@@ -34,8 +40,9 @@ class TestBuildMetrics(object):
     def test_various_tasks(self, sample_task):
         n_tasks = 5
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
-        mock_api = MagicMock(tasks_by_build=lambda _: task_list)
-        build_metrics = under_test.BuildMetrics('build_id', mock_api).calculate()
+        mock_build = create_mock_build(task_list)
+
+        build_metrics = under_test.BuildMetrics(mock_build).calculate()
 
         assert build_metrics.total_tasks == n_tasks
         assert build_metrics.pct_tasks_success == 1
@@ -46,7 +53,9 @@ class TestBuildMetrics(object):
     def test_adding_successful_task(self, sample_task):
         sample_task['status'] = 'success'
         task = Task(sample_task, None)
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
         assert build_metrics.undispatched_count == 0
@@ -61,7 +70,9 @@ class TestBuildMetrics(object):
     def test_adding_undispatched_task(self, sample_task):
         sample_task['status'] = 'undispatched'
         task = Task(sample_task, None)
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
         assert build_metrics.undispatched_count == 1
@@ -72,7 +83,9 @@ class TestBuildMetrics(object):
     def test_adding_failed_task(self, sample_task):
         sample_task['status'] = 'failed'
         task = Task(sample_task, None)
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
         assert build_metrics.undispatched_count == 0
@@ -89,7 +102,9 @@ class TestBuildMetrics(object):
         sample_task['status_details']['type'] = 'system'
         sample_task['status_details']['timed_out'] = True
         task = Task(sample_task, None)
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
         assert build_metrics.undispatched_count == 0
@@ -104,7 +119,9 @@ class TestBuildMetrics(object):
     def test_adding_task_without_ingest_time(self, sample_task):
         del sample_task['ingest_time']
         task = Task(sample_task, None)
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
         assert build_metrics.undispatched_count == 0
@@ -117,55 +134,56 @@ class TestBuildMetrics(object):
 
     def test_dict_format(self, sample_task):
         task = Task(sample_task, None)
-        build_id = 'build_id'
-        build_metrics = under_test.BuildMetrics(build_id, None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
         bm_dict = build_metrics.as_dict()
-        assert bm_dict['build'] == build_id
+        assert bm_dict['build'] == mock_build.id
         assert 'tasks' not in bm_dict
 
     def test_dict_format_with_children(self, sample_task):
         task = Task(sample_task, None)
-        build_id = 'build_id'
-        mock_api = MagicMock()
-        mock_api.tasks_by_build.return_value = [task]
-        build_metrics = under_test.BuildMetrics(build_id, mock_api)
+        mock_build = create_mock_build([task])
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics.calculate()
 
         bm_dict = build_metrics.as_dict(include_children=True)
-        assert bm_dict['build'] == build_id
+        assert bm_dict['build'] == mock_build.id
         assert len(bm_dict['tasks']) == 1
         assert bm_dict['tasks'][0]['task_id'] == task.task_id
 
     def test_string_format(self, sample_task):
         task = Task(sample_task, None)
-        build_id = 'build_id'
-        build_metrics = under_test.BuildMetrics(build_id, None)
+        mock_build = create_mock_build([task])
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics._count_task(task)
 
-        assert build_id in str(build_metrics)
+        assert mock_build.id in str(build_metrics)
 
     def test_display_tasks_are_filtered(self, sample_task):
         sample_task['display_only'] = True
         task = Task(sample_task, None)
-        build_id = 'build_id'
-        mock_api = MagicMock()
-        mock_api.tasks_by_build.return_value = [task]
-        build_metrics = under_test.BuildMetrics(build_id, mock_api)
+        mock_build = create_mock_build([task])
+
+        build_metrics = under_test.BuildMetrics(mock_build)
         build_metrics.calculate()
 
-        assert len(build_metrics.task_list) == 0
+        assert len(build_metrics.task_list) == 1
+        assert build_metrics.total_tasks == 0
 
 
 class TestPercentTasks(object):
     def test_percent_of_zero_tasks_is_zero(self):
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        build_metrics = under_test.BuildMetrics('build')
 
         assert build_metrics._percent_tasks(5) == 0
 
     def test_percent_of_non_zero_works(self):
-        build_metrics = under_test.BuildMetrics('build_id', None)
+        build_metrics = under_test.BuildMetrics('build')
         build_metrics.success_count = 10
 
         assert build_metrics._percent_tasks(5) == 0.5

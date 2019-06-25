@@ -128,5 +128,5 @@ class Version(_BaseEvergreenObject):
         :return: Metrics for this version.
         """
         if self.is_completed():
-            return VersionMetrics(self.version_id, self._api).calculate()
+            return VersionMetrics(self).calculate()
         return None

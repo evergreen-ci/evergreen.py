@@ -7,15 +7,13 @@ from __future__ import division
 class BuildMetrics(object):
     """Metrics about an evergreen build."""
 
-    def __init__(self, build_id, api):
+    def __init__(self, build):
         """
         Create an instance of build metrics.
 
-        :param build_id: Id of build to analyze.
-        :param api: Evergreen API.
+        :param build: Build to analyze.
         """
-        self._build_id = build_id
-        self._api = api
+        self.build = build
 
         self.success_count = 0
         self.failure_count = 0
@@ -38,11 +36,9 @@ class BuildMetrics(object):
 
         :returns: self.
         """
-        task_list = self._api.tasks_by_build(self._build_id)
+        self.task_list = self.build.get_tasks()
         # Filter out display tasks because they should be used for metrics.
-        self.task_list = [task for task in task_list if not task.display_only]
-
-        for task in self.task_list:
+        for task in [task for task in self.task_list if not task.display_only]:
             self._count_task(task)
 
         return self
@@ -203,7 +199,7 @@ class BuildMetrics(object):
         :return: Dictionary of metrics.
         """
         metric = {
-            'build': self._build_id,
+            'build': self.build.id,
             'total_processing_time': self.total_processing_time,
             'makespan': self.makespan.total_seconds(),
             'wait_time': self.wait_time.total_seconds(),
@@ -242,7 +238,7 @@ class BuildMetrics(object):
         System Failure Tasks: {system_failure_count} ({system_failure_pct:.2%})
         Estimated Build Costs: {est_build_costs:.3f}
         """.format(
-            build_id=self._build_id,
+            build_id=self.build.id,
             total_processing_time=self.total_processing_time,
             total_processing_time_min=(self.total_processing_time / 60),
             makespan=(self.makespan.total_seconds()),
