@@ -101,3 +101,21 @@ class TestTask(object):
         task = Task(sample_task, None)
 
         assert task.is_undispatched()
+
+    def test_active_task(self, sample_task):
+        sample_task['finish_time'] = None
+        task = Task(sample_task, None)
+
+        assert task.is_active()
+
+    def test_inactive_task_not_scheduled(self, sample_task):
+        sample_task['finish_time'] = None
+        sample_task['scheduled_time'] = None
+        task = Task(sample_task, None)
+
+        assert not task.is_active()
+
+    def test_inactive_task_finished(self, sample_task):
+        task = Task(sample_task, None)
+
+        assert not task.is_active()

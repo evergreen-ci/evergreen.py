@@ -79,14 +79,16 @@ class Build(_BaseEvergreenObject):
         """
         return self.status in COMPLETED_STATES
 
-    def get_metrics(self):
+    def get_metrics(self, task_filter_fn=None):
         """
         Get metrics for the build.
 
         Metrics are only available on build that have finished running..
 
+        :param task_filter_fn: function to filter tasks included for metrics, should accept a task
+                               argument.
         :return: Metrics for the build.
         """
         if self.is_completed():
-            return BuildMetrics(self).calculate()
+            return BuildMetrics(self).calculate(task_filter_fn)
         return None

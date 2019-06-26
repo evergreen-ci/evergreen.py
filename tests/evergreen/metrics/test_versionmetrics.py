@@ -85,7 +85,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         assert version_metrics.task_success_count == build_metrics.success_count
         assert version_metrics.task_failure_count == 0
@@ -100,7 +100,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         assert version_metrics.task_success_count == 0
         assert version_metrics.task_failure_count == build_metrics.failure_count
@@ -115,7 +115,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         assert version_metrics.task_success_count == 0
         assert version_metrics.task_failure_count == 0
@@ -130,7 +130,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         assert version_metrics.task_success_count == 0
         assert version_metrics.task_failure_count == 0
@@ -145,7 +145,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         ver_dict = version_metrics.as_dict()
         assert ver_dict['version'] == mock_version.version_id
@@ -159,7 +159,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         ver_dict = version_metrics.as_dict(include_children=True)
         assert ver_dict['version'] == mock_version.version_id
@@ -174,7 +174,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         assert mock_version.version_id in str(version_metrics)
 
@@ -188,7 +188,7 @@ class TestVersionMetrics(object):
         mock_version = create_mock_version()
 
         version_metrics = under_test.VersionMetrics(mock_version)
-        version_metrics._count_build(build_mock)
+        version_metrics._count_build(build_mock, None)
 
         assert not version_metrics.create_time
         assert not version_metrics.start_time
