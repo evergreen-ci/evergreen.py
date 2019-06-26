@@ -197,3 +197,11 @@ class Task(_BaseEvergreenObject):
         if not self.is_success() and self.status_details and self.status_details.timed_out:
             return self.status_details.timed_out
         return False
+
+    def is_active(self):
+        """
+        Determine if the given task is active.
+
+        :return: True if task is active.
+        """
+        return self.scheduled_time and not self.finish_time

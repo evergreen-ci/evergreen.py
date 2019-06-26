@@ -119,14 +119,16 @@ class Version(_BaseEvergreenObject):
             return self._api.patch_by_id(self.version_id)
         return None
 
-    def get_metrics(self):
+    def get_metrics(self, task_filter_fn=None):
         """
         Calculate the metrics for this version.
 
         Metrics are only available on versions that have finished running.
 
+        :param task_filter_fn: function to filter tasks included for metrics, should accept a task
+                               argument.
         :return: Metrics for this version.
         """
         if self.is_completed():
-            return VersionMetrics(self).calculate()
+            return VersionMetrics(self).calculate(task_filter_fn)
         return None

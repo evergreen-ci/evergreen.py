@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1 - 2019-06-26
+- Add task filter for metrics.
+
 ## 0.3.0 - 2019-06-24
 - Simplified Metrics API.
 

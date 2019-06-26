@@ -7,7 +7,10 @@ try:
 except ImportError:
     from mock import MagicMock
 
+import pytest
+
 from evergreen.task import Task
+from evergreen.errors.exceptions import ActiveTaskMetricsException
 
 import evergreen.metrics.buildmetrics as under_test
 
@@ -174,6 +177,28 @@ class TestBuildMetrics(object):
 
         assert len(build_metrics.task_list) == 1
         assert build_metrics.total_tasks == 0
+
+    def test_task_filter(self, sample_task):
+        n_tasks = 5
+        task_list = [Task(sample_task, None) for _ in range(n_tasks)]
+        sample_task_2 = sample_task.copy()
+        filter_task_name = 'filter me'
+        sample_task_2['display_name'] = filter_task_name
+        task_list_2 = [Task(sample_task_2, None) for _ in range(n_tasks)]
+        mock_build = create_mock_build(task_list + task_list_2)
+
+        build_metrics = under_test.BuildMetrics(mock_build)
+        build_metrics.calculate(lambda t: filter_task_name not in t.display_name)
+        assert build_metrics.total_tasks == n_tasks
+
+    def test_in_progress_task(self, sample_task):
+        sample_task['finish_time'] = None
+        task = Task(sample_task, None)
+        mock_build = create_mock_build()
+
+        build_metrics = under_test.BuildMetrics(mock_build)
+        with pytest.raises(ActiveTaskMetricsException):
+            build_metrics._count_task(task)
 
 
 class TestPercentTasks(object):

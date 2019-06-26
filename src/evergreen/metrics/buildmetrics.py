@@ -3,6 +3,8 @@
 from __future__ import absolute_import
 from __future__ import division
 
+from evergreen.errors.exceptions import ActiveTaskMetricsException
+
 
 class BuildMetrics(object):
     """Metrics about an evergreen build."""
@@ -30,15 +32,25 @@ class BuildMetrics(object):
 
         self.task_list = None
 
-    def calculate(self):
+    def calculate(self, task_filter_fn=None):
         """
         Calculate metrics for the given build.
 
+        :param task_filter_fn: function to filter tasks included for metrics, should accept a task
+                               argument.
         :returns: self.
         """
-        self.task_list = self.build.get_tasks()
-        # Filter out display tasks because they should be used for metrics.
-        for task in [task for task in self.task_list if not task.display_only]:
+        all_tasks = self.build.get_tasks()
+        filtered_task_list = all_tasks
+        if task_filter_fn:
+            filtered_task_list = [task for task in filtered_task_list if task_filter_fn(task)]
+
+        self.task_list = filtered_task_list
+
+        # We want to track display tasks, but not use them for metrics since they are just
+        # containers to other tasks.
+        filtered_task_list = [task for task in self.task_list if not task.display_only]
+        for task in filtered_task_list:
             self._count_task(task)
 
         return self
@@ -171,6 +183,9 @@ class BuildMetrics(object):
             self.undispatched_count += 1
             return  # An 'undispatched' task has no useful stats.
 
+        if task.is_active():
+            raise ActiveTaskMetricsException(task, 'Task in progress during metrics collection')
+
         if task.is_success():
             self.success_count += 1
         else:
@@ -185,8 +200,11 @@ class BuildMetrics(object):
         else:
             self._create_times.append(task.start_time)
 
-        self._finish_times.append(task.finish_time)
-        self._start_times.append(task.start_time)
+        if task.start_time:
+            self._finish_times.append(task.finish_time)
+
+        if task.start_time:
+            self._start_times.append(task.start_time)
 
         self.estimated_build_costs += task.estimated_cost
         self.total_processing_time += task.time_taken_ms / 1000

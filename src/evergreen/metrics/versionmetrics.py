@@ -29,15 +29,17 @@ class VersionMetrics(object):
         self.build_metrics = []
         self.build_list = None
 
-    def calculate(self):
+    def calculate(self, task_filter_fn=None):
         """
         Calculate metrics for the given build.
 
+        :param task_filter_fn: function to filter tasks included for metrics, should accept a task
+                               argument.
         :returns: self.
         """
         self.build_list = self.version.get_builds()
         for build in self.build_list:
-            self._count_build(build)
+            self._count_build(build, task_filter_fn)
 
         return self
 
@@ -149,13 +151,15 @@ class VersionMetrics(object):
 
         return n_tasks / self.total_tasks
 
-    def _count_build(self, build):
+    def _count_build(self, build, task_filter_fn):
         """
         Add stats for the given build to the metrics.
 
+        :param task_filter_fn: function to filter tasks included for metrics, should accept a task
+                               argument.
         :param build: Build to add.
         """
-        build_metrics = build.get_metrics()
+        build_metrics = build.get_metrics(task_filter_fn)
         self.build_metrics.append(build_metrics)
 
         self.total_processing_time += build_metrics.total_processing_time
