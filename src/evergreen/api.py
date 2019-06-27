@@ -8,7 +8,7 @@ import time
 try:
     from json.decoder import JSONDecodeError
 except ImportError:
-    JSONDecodeError = ValueError
+    JSONDecodeError = ValueError  # JSONDecodeError doesn't exist in python 2, ValueError is used.
 
 try:
     from urlparse import urlparse
