@@ -1,6 +1,9 @@
-from json.decoder import JSONDecodeError
 import os
-from unittest.mock import MagicMock
+import sys
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
 
 import pytest
 from requests.exceptions import HTTPError
@@ -8,8 +11,17 @@ from tenacity import RetryError
 
 import evergreen.api as under_test
 
+try:
+    from json.decoder import JSONDecodeError
+except ImportError:  # This doesn't exist in python 2.
+    pass
+
 
 class TestRaiseForStatus(object):
+    @pytest.mark.skipif(
+        sys.version_info.major == 2,
+        reason='JSONDecodeError is not used in python2'
+    )
     def test_non_json_error(self, mocked_api):
         mocked_response = MagicMock()
         mocked_response.json.side_effect = JSONDecodeError('json error', '', 0)

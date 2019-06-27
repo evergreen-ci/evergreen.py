@@ -2,9 +2,13 @@
 """API for interacting with evergreen."""
 from __future__ import absolute_import
 
-from json.decoder import JSONDecodeError
 import logging
 import time
+
+try:
+    from json.decoder import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
 
 try:
     from urlparse import urlparse
