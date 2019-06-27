@@ -68,6 +68,13 @@ $ pytest --cov=src --cov-report=html
 
 This will generate an html coverage report in `htmlcov/` directory.
 
+There are a few tests that are slow running. These tests are not run by default, but can be included
+by setting the env variable RUN_SLOW_TESTS to any value.
+
+```
+$ RUN_SLOW_TEST=1 pytest
+```
+
 ### Merging
 
 Merges to master should be done by the evergreen [commit queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
