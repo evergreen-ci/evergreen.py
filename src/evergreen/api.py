@@ -2,6 +2,7 @@
 """API for interacting with evergreen."""
 from __future__ import absolute_import
 
+from json.decoder import JSONDecodeError
 import logging
 import time
 
@@ -16,6 +17,7 @@ except ImportError:
     from backports.functools_lru_cache import lru_cache
 
 import requests
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
@@ -35,6 +37,9 @@ from evergreen.version import Version
 LOGGER = logging.getLogger(__name__)
 CACHE_SIZE = 5000
 DEFAULT_LIMIT = 100
+MAX_RETRIES = 3
+START_WAIT_TIME_SEC = 2
+MAX_WAIT_TIME_SEC = 5
 
 
 class _BaseEvergreenApi(object):
@@ -104,8 +109,12 @@ class _BaseEvergreenApi(object):
 
         :param response: response from evergreen api.
         """
-        if response.status_code >= 400 and 'error' in response.json():
-            raise requests.exceptions.HTTPError(response.json()['error'], response=response)
+        try:
+            json_data = response.json()
+            if response.status_code >= 400 and 'error' in json_data:
+                raise requests.exceptions.HTTPError(json_data['error'], response=response)
+        except JSONDecodeError:
+            pass
 
         response.raise_for_status()
 
@@ -548,3 +557,24 @@ class CachedEvergreenApi(EvergreenApi):
         ]
         for fn in cached_functions:
             fn.cache_clear()
+
+
+class RetryingEvergreenApi(EvergreenApi):
+    """An Evergreen Api that retries failed calls."""
+
+    def __init__(self, api_server=DEFAULT_API_SERVER, auth=None, timeout=None):
+        """Create an Evergreen Api object."""
+        super(RetryingEvergreenApi, self).__init__(api_server, auth, timeout)
+
+    @retry(retry=retry_if_exception_type(requests.exceptions.HTTPError),
+           stop=stop_after_attempt(MAX_RETRIES),
+           wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC))
+    def _call_api(self, url, params=None):
+        """
+        Call into the evergreen api.
+
+        :param url: Url to call.
+        :param params: Parameters to pass to api.
+        :return: Result from calling API.
+        """
+        return super(RetryingEvergreenApi, self)._call_api(url, params)

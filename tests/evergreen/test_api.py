@@ -1,3 +1,41 @@
+from json.decoder import JSONDecodeError
+import os
+from unittest.mock import MagicMock
+
+import pytest
+from requests.exceptions import HTTPError
+from tenacity import RetryError
+
+import evergreen.api as under_test
+
+
+class TestRaiseForStatus(object):
+    def test_non_json_error(self, mocked_api):
+        mocked_response = MagicMock()
+        mocked_response.json.side_effect = JSONDecodeError('json error', '', 0)
+        mocked_response.status_code = 500
+        mocked_response.raise_for_status.side_effect = HTTPError()
+        mocked_api.session.get.return_value = mocked_response
+
+        with pytest.raises(HTTPError):
+            mocked_api.version_by_id('version_id')
+
+        mocked_response.raise_for_status.assert_called_once()
+
+    def test_json_errors_are_passed_through(self, mocked_api):
+        error_msg = 'the error'
+        mocked_response = MagicMock()
+        mocked_response.json.return_value = {'error': error_msg}
+        mocked_response.status_code = 500
+        mocked_response.raise_for_status.side_effect = HTTPError()
+        mocked_api.session.get.return_value = mocked_response
+
+        with pytest.raises(HTTPError) as excinfo:
+            mocked_api.version_by_id('version_id')
+
+        assert error_msg in str(excinfo.value)
+        mocked_response.raise_for_status.assert_not_called()
+
 
 class TestDistrosApi(object):
     def test_all_distros(self, mocked_api):
@@ -185,3 +223,46 @@ class TestCachedEvergreenApi(object):
         assert mocked_cached_api.build_by_id(build_id)
         assert mocked_cached_api.version_by_id(version_id)
         assert mocked_cached_api.session.get.call_count == 4
+
+
+class TestRetryingEvergreenApi(object):
+    def test_no_retries_on_success(self, mocked_retrying_api):
+        version_id = 'version id'
+
+        mocked_retrying_api.version_by_id(version_id)
+        assert mocked_retrying_api.session.get.call_count == 1
+
+    @pytest.mark.skipif(
+        not os.environ.get('RUN_SLOW_TESTS'),
+        reason='Slow running test due to retries'
+    )
+    def test_three_retries_on_failure(self, mocked_retrying_api):
+        version_id = 'version id'
+        mocked_retrying_api.session.get.side_effect = HTTPError()
+
+        with pytest.raises(RetryError):
+            mocked_retrying_api.version_by_id(version_id)
+
+        assert mocked_retrying_api.session.get.call_count == under_test.MAX_RETRIES
+
+    @pytest.mark.skipif(
+        not os.environ.get('RUN_SLOW_TESTS'),
+        reason='Slow running test due to retries'
+    )
+    def test_pass_on_retries_after_failure(self, mocked_retrying_api):
+        version_id = 'version id'
+        successful_response = mocked_retrying_api.session.get.return_value
+        mocked_retrying_api.session.get.side_effect = [HTTPError(), successful_response]
+
+        mocked_retrying_api.version_by_id(version_id)
+
+        assert mocked_retrying_api.session.get.call_count == 2
+
+    def test_no_retries_on_non_http_errors(self, mocked_retrying_api):
+        version_id = 'version id'
+        mocked_retrying_api.session.get.side_effect = ValueError('Unexpected Failure')
+
+        with pytest.raises(ValueError):
+            mocked_retrying_api.version_by_id(version_id)
+
+        assert mocked_retrying_api.session.get.call_count == 1

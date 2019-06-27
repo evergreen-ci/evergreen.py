@@ -7,7 +7,7 @@ import os
 
 import pytest
 
-from evergreen.api import EvergreenApi, CachedEvergreenApi
+from evergreen.api import EvergreenApi, CachedEvergreenApi, RetryingEvergreenApi
 
 
 SAMPLE_DATA_PATH = os.path.join('tests', 'evergreen', 'data')
@@ -107,6 +107,17 @@ def mocked_api():
 def mocked_cached_api():
     """Return an Evergreen API with a mocked session."""
     api = CachedEvergreenApi()
+    api.session = MagicMock()
+    response_mock = MagicMock()
+    response_mock.status_code = 200
+    api.session.get.return_value = response_mock
+    return api
+
+
+@pytest.fixture()
+def mocked_retrying_api():
+    """Return an Evergreen API with a mocked session."""
+    api = RetryingEvergreenApi()
     api.session = MagicMock()
     response_mock = MagicMock()
     response_mock.status_code = 200
