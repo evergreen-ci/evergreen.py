@@ -3,7 +3,7 @@
 A client library for the Evergreen API written in python. Currently supports the V2 version of
 the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage .
 
-[![Coverage Status](https://coveralls.io/repos/github/evergreen-ci/evergreen.py/badge.svg?branch=master)](https://coveralls.io/github/evergreen-ci/evergreen.py?branch=master)
+![PyPI](https://img.shields.io/pypi/v/evergreen.py.svg) [![Coverage Status](https://coveralls.io/repos/github/evergreen-ci/evergreen.py/badge.svg?branch=master)](https://coveralls.io/github/evergreen-ci/evergreen.py?branch=master)
 
 ## Usage
 
@@ -22,8 +22,8 @@ A command line application is included to explore the evergreen api data. It is 
 ```
 $ evg-api --json list-hosts
 {
-    "host_id": "host num 0",                                               
-    "host_url": "host.num.com",                                              
+    "host_id": "host num 0",
+    "host_url": "host.num.com",
     "distro": {
         "distro_id": "ubuntu1804-build",
         "provider": "static",
