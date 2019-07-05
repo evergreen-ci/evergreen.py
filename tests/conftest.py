@@ -10,7 +10,8 @@ import pytest
 from evergreen.api import EvergreenApi, CachedEvergreenApi, RetryingEvergreenApi
 
 
-SAMPLE_DATA_PATH = os.path.join('tests', 'evergreen', 'data')
+TESTS_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+SAMPLE_DATA_PATH = os.path.join(TESTS_DIRECTORY, 'evergreen', 'data')
 
 
 def get_sample_json(file):
