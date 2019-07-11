@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.5 - 2019-07-11
+- Account for undispatched builds.
+
 ## 0.3.4 - 2019-07-11
 - Check builds are activated for metrics.
 
