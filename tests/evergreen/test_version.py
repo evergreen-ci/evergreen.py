@@ -86,7 +86,7 @@ class TestVersion(object):
         assert version.is_completed()
 
     def test_get_metrics_uncompleted(self, sample_version):
-        sample_version['status'] = 'started'
+        sample_version['status'] = 'created'
         version = Version(sample_version, None)
 
         assert not version.get_metrics()

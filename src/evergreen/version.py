@@ -8,6 +8,8 @@ from evergreen.metrics.versionmetrics import VersionMetrics
 
 EVG_VERSION_STATUS_SUCCESS = 'success'
 EVG_VERSION_STATUS_FAILED = 'failed'
+EVG_VERSION_STATUS_CREATED = 'created'
+
 COMPLETED_STATES = {
     EVG_VERSION_STATUS_FAILED,
     EVG_VERSION_STATUS_SUCCESS,
@@ -129,6 +131,6 @@ class Version(_BaseEvergreenObject):
                                argument.
         :return: Metrics for this version.
         """
-        if self.is_completed():
+        if self.status != EVG_VERSION_STATUS_CREATED:
             return VersionMetrics(self).calculate(task_filter_fn)
         return None

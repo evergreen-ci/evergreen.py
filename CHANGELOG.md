@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.3 - 2019-07-11
+- Relax version metrics check.
+
 ## 0.3.2 - 2019-06-27
 - Add a retrying API.
 
