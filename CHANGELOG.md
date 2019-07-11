@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.6 - 2019-07-11
+- Watch for empty builds.
+
 ## 0.3.5 - 2019-07-11
 - Account for undispatched builds.
 

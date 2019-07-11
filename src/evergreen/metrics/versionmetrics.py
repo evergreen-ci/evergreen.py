@@ -161,7 +161,7 @@ class VersionMetrics(object):
         """
         if build.activated:
             # If all tasks have been undispatched there is no data.
-            if build.status_counts.undispatched == len(build.tasks):
+            if not build.tasks or build.status_counts.undispatched == len(build.tasks):
                 return
 
             build_metrics = build.get_metrics(task_filter_fn)
