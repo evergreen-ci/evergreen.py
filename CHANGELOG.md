@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.7 - 2019-07-11
+- Better handle builds complete.
+
 ## 0.3.6 - 2019-07-11
 - Watch for empty builds.
 

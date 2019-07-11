@@ -29,7 +29,7 @@ class TestBuild(object):
         assert sample_build['status_counts']['timed_out'] == build.status_counts.timed_out
 
     def test_get_metrics_not_completed(self, sample_build):
-        sample_build['status'] = 'running'
+        sample_build['status'] = 'created'
         build = Build(sample_build, None)
 
         assert not build.get_metrics()

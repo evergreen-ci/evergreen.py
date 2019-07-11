@@ -7,6 +7,8 @@ from evergreen.metrics.buildmetrics import BuildMetrics
 
 EVG_BUILD_STATUS_FAILED = 'failed'
 EVG_BUILD_STATUS_SUCCESS = 'success'
+EVG_BUILD_STATUS_CREATED = 'created'
+
 COMPLETED_STATES = {
     EVG_BUILD_STATUS_FAILED,
     EVG_BUILD_STATUS_SUCCESS,
@@ -89,6 +91,6 @@ class Build(_BaseEvergreenObject):
                                argument.
         :return: Metrics for the build.
         """
-        if self.is_completed():
+        if self.status != EVG_BUILD_STATUS_CREATED:
             return BuildMetrics(self).calculate(task_filter_fn)
         return None
