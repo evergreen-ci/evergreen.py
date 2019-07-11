@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.4 - 2019-07-11
+- Check builds are activated for metrics.
+
 ## 0.3.3 - 2019-07-11
 - Relax version metrics check.
 

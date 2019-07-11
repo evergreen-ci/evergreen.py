@@ -159,24 +159,25 @@ class VersionMetrics(object):
                                argument.
         :param build: Build to add.
         """
-        build_metrics = build.get_metrics(task_filter_fn)
-        self.build_metrics.append(build_metrics)
+        if build.activated:
+            build_metrics = build.get_metrics(task_filter_fn)
+            self.build_metrics.append(build_metrics)
 
-        self.total_processing_time += build_metrics.total_processing_time
-        self.task_success_count += build_metrics.success_count
-        self.task_failure_count += build_metrics.failure_count
-        self.task_timeout_count += build_metrics.timed_out_count
-        self.task_system_failure_count += build_metrics.system_failure_count
-        self.estimated_cost += build_metrics.estimated_build_costs
+            self.total_processing_time += build_metrics.total_processing_time
+            self.task_success_count += build_metrics.success_count
+            self.task_failure_count += build_metrics.failure_count
+            self.task_timeout_count += build_metrics.timed_out_count
+            self.task_system_failure_count += build_metrics.system_failure_count
+            self.estimated_cost += build_metrics.estimated_build_costs
 
-        if build_metrics.create_time:
-            self._create_times.append(build_metrics.create_time)
+            if build_metrics.create_time:
+                self._create_times.append(build_metrics.create_time)
 
-        if build_metrics.start_time:
-            self._start_times.append(build_metrics.start_time)
+            if build_metrics.start_time:
+                self._start_times.append(build_metrics.start_time)
 
-        if build_metrics.end_time:
-            self._finish_times.append(build_metrics.end_time)
+            if build_metrics.end_time:
+                self._finish_times.append(build_metrics.end_time)
 
     def as_dict(self, include_children=False):
         """

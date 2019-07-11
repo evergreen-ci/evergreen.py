@@ -41,7 +41,7 @@ class Build(_BaseEvergreenObject):
     git_hash = evg_attrib('git_hash')
     build_variant = evg_attrib('build_variant')
     status = evg_attrib('status')
-    activated = evg_attrib('status')
+    activated = evg_attrib('activated')
     activated_by = evg_attrib('activated_by')
     activated_time = evg_datetime_attrib('activated_time')
     order = evg_attrib('order')
