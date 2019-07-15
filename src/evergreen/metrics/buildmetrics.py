@@ -3,7 +3,11 @@
 from __future__ import absolute_import
 from __future__ import division
 
+from structlog import get_logger
+
 from evergreen.errors.exceptions import ActiveTaskMetricsException
+
+LOGGER = get_logger(__name__)
 
 
 class BuildMetrics(object):
@@ -184,6 +188,7 @@ class BuildMetrics(object):
             return  # An 'undispatched' task has no useful stats.
 
         if task.is_active():
+            LOGGER.warning('Active task found during metrics collection', task_id=task.task_id)
             raise ActiveTaskMetricsException(task, 'Task in progress during metrics collection')
 
         if task.is_success():

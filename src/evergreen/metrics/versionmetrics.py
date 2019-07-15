@@ -3,6 +3,10 @@
 from __future__ import absolute_import
 from __future__ import division
 
+from structlog import get_logger
+
+LOGGER = get_logger(__name__)
+
 
 class VersionMetrics(object):
     """Metrics about an evergreen version."""
@@ -159,9 +163,12 @@ class VersionMetrics(object):
                                argument.
         :param build: Build to add.
         """
+        log = LOGGER.bind(build_id=build.id)
         if build.activated:
+            log.debug('Processing metrics for build')
             # If all tasks have been undispatched there is no data.
             if not build.tasks or build.status_counts.undispatched == len(build.tasks):
+                log.warning('Build had no tasks or all tasks undispatched')
                 return
 
             build_metrics = build.get_metrics(task_filter_fn)
