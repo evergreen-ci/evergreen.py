@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='evergreen.py',
-    version='0.3.7',
+    version='0.3.8',
     license='Apache License, Version 2.0',
     description='Python client for the Evergreen API',
     long_description=long_description,
@@ -41,11 +41,12 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
     install_requires=[
-        'backports.functools_lru_cache==1.5;python_version<"3.3"',
-        'Click==7.0',
-        'PyYAML==5.1',
-        'requests==2.21.0',
-        'tenacity==5.0.4',
+        'backports.functools_lru_cache ~= 1.5;python_version<"3.3"',
+        'Click ~= 7.0',
+        'PyYAML ~= 5.1',
+        'requests ~= 2.21.0',
+        'structlog ~= 19.1.0',
+        'tenacity ~= 5.0.4',
     ],
     entry_points='''
         [console_scripts]

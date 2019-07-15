@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.8 - 2019-07-15
+- Improved logging with structlog.
+
 ## 0.3.7 - 2019-07-11
 - Better handle builds complete.
 

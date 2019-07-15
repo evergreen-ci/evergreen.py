@@ -21,6 +21,8 @@ except ImportError:
     from backports.functools_lru_cache import lru_cache
 
 import requests
+import structlog
+from structlog.stdlib import LoggerFactory
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 from evergreen.build import Build
@@ -38,7 +40,9 @@ from evergreen.stats import TestStats
 from evergreen.util import evergreen_input_to_output
 from evergreen.version import Version
 
-LOGGER = logging.getLogger(__name__)
+structlog.configure(logger_factory=LoggerFactory())
+LOGGER = structlog.getLogger(__name__)
+
 CACHE_SIZE = 5000
 DEFAULT_LIMIT = 100
 MAX_RETRIES = 3
@@ -87,9 +91,9 @@ class _BaseEvergreenApi(object):
         """
         duration = round(time.time() - start_time, 2)
         if duration > 10:
-            LOGGER.info('Request %s took %fs', response.request.url, duration)
+            LOGGER.info('Request completed.', url=response.request.url, duration=duration)
         else:
-            LOGGER.debug('Request %s took %fs', response.request.url, duration)
+            LOGGER.debug('Request completed.', url=response.request.url, duration=duration)
 
     def _call_api(self, url, params=None):
         """
