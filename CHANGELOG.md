@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.9 - 2019-07-15
+- Update requests version.
+
 ## 0.3.8 - 2019-07-15
 - Improved logging with structlog.
 
