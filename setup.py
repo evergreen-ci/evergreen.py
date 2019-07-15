@@ -44,7 +44,7 @@ setup(
         'backports.functools_lru_cache ~= 1.5;python_version<"3.3"',
         'Click ~= 7.0',
         'PyYAML ~= 5.1',
-        'requests ~= 2.21.0',
+        'requests ~= 2.22.0',
         'structlog ~= 19.1.0',
         'tenacity ~= 5.0.4',
     ],
