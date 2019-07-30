@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='evergreen.py',
-    version='0.3.9',
+    version='0.4.0',
     license='Apache License, Version 2.0',
     description='Python client for the Evergreen API',
     long_description=long_description,

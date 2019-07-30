@@ -93,7 +93,7 @@ class TestProjectApi(object):
 
     def test_commit_queue_for_project(self, mocked_api):
         mocked_api.commit_queue_for_project('project_id')
-        expected_url = mocked_api._create_url('/projects/project_id/commit_queue')
+        expected_url = mocked_api._create_url('/commit_queue/project_id')
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
 
     def test_test_stats_by_project(self, mocked_api):

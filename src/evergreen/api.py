@@ -266,7 +266,7 @@ class _ProjectApi(_BaseEvergreenApi):
         :param project_id: Id of project to query.
         :return: Current commit queue for project.
         """
-        url = self._create_url('/projects/{project_id}/commit_queue'.format(project_id=project_id))
+        url = self._create_url('/commit_queue/{project_id}'.format(project_id=project_id))
         return CommitQueue(self._paginate(url), self)
 
     def test_stats_by_project(self,
