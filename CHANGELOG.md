@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0 - 2019-07-30
+- Use new commit_queue endpoints.
+
 ## 0.3.9 - 2019-07-15
 - Update requests version.
 
