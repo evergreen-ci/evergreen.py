@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.0 - 2019-08-14
+- Use new signal_processing supporting endpoints.
+
 ## 0.4.0 - 2019-07-30
 - Use new commit_queue endpoints.
 

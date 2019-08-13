@@ -4,6 +4,9 @@ from __future__ import absolute_import
 
 import time
 
+from evergreen.performance_results import PerformanceResults
+from evergreen.project_history import ProjectHistory
+
 try:
     from json.decoder import JSONDecodeError
 except ImportError:
@@ -349,8 +352,9 @@ class _ProjectApi(_BaseEvergreenApi):
         :param statuses: the types of statuses to get tasks for.
         :return: The list of matching tasks.
         """
-        url = self._create_url("projects/{project_id}/versions/tasks".format(project_id=project_id))
-        params = {status: statuses} if statuses else None
+        url = self._create_url(
+            "/projects/{project_id}/versions/tasks".format(project_id=project_id))
+        params = {'status': statuses} if statuses else None
         return [Task(json, self) for json in self._paginate(url, params)]
 
     def project_history(self, project_id):
@@ -360,8 +364,8 @@ class _ProjectApi(_BaseEvergreenApi):
         :param project_id: The project's id.
         :return: The project's history
         """
-        url = self._create_v1_url("projects/{project_id}/versions".format(project_id=project_id))
-        return self._paginate(url)
+        url = self._create_v1_url("/projects/{project_id}/versions".format(project_id=project_id))
+        return ProjectHistory(self._paginate(url), self)
 
 
 class _BuildApi(_BaseEvergreenApi):
@@ -493,12 +497,20 @@ class _TaskApi(_BaseEvergreenApi):
         :return: Contents of 'perf.json'
         """
         url = self._create_plugin_url('/task/{task_id}/perf'.format(task_id=task_id))
-        return self._paginate(url)
+        return PerformanceResults(self._paginate(url), self)
 
-    def performance_history_by_task_id_and_name(self, task_d, task_name):
+    def performance_results_by_task_name(self, task_id, task_name):
+        """
+        Get the 'perf.json' performance results for a given task_id and task_name
+
+        :param task_id: Id of task to query for.
+        :param task_name: Name of task to query for.
+        :return: Contents of 'perf.json'
+        """
         url = '{api_server}/api/2/task/{task_id}/json/history/{task_name}/perf'.format(
             api_server=self._api_server, task_id=task_id, task_name=task_name)
-        return self._paginate(url)
+        return [PerformanceResults(result, self) for result in self._paginate(url)]
+
 
 class _OldApi(_BaseEvergreenApi):
     """API for pre-v2 endpoints."""

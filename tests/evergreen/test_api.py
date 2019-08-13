@@ -1,5 +1,8 @@
 import os
 import sys
+
+from evergreen.config import DEFAULT_API_SERVER
+
 try:
     from unittest.mock import MagicMock
 except ImportError:
@@ -108,6 +111,22 @@ class TestProjectApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params,
                                                   timeout=None)
 
+    def test_tasks_by_project(self, mocked_api):
+        mocked_api.tasks_by_project('project_id')
+        expected_url = mocked_api._create_url('/projects/project_id/versions/tasks')
+        mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+
+    def test_tasks_by_project_with_statuses(self, mocked_api):
+        mocked_api.tasks_by_project('project_id', statuses=['status1'])
+        expected_url = mocked_api._create_url('/projects/project_id/versions/tasks')
+        mocked_api.session.get.assert_called_with(url=expected_url, params={'status': ['status1']},
+                                                  timeout=None)
+
+    def test_project_history(self, mocked_api):
+        mocked_api.project_history('project_id')
+        expected_url = mocked_api._create_v1_url("/projects/project_id/versions")
+        mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+
 
 class TestBuildApi(object):
     def test_build_by_id(self, mocked_api):
@@ -187,6 +206,21 @@ class TestTaskApi(object):
             'status': 'success',
             'execution': 5
         }
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params,
+                                                  timeout=None)
+
+    def test_performance_results_by_task(self, mocked_api):
+        mocked_api.performance_results_by_task('task_id')
+        expected_url = mocked_api._create_plugin_url('/task/task_id/perf')
+        expected_params = None
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params,
+                                                  timeout=None)
+
+    def test_performance_results_by_task_name(self, mocked_api):
+        mocked_api.performance_results_by_task_name('task_id', 'task_name')
+        expected_url = '{api_server}/api/2/task/task_id/json/history/task_name/perf'.format(
+            api_server=DEFAULT_API_SERVER)
+        expected_params = None
         mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params,
                                                   timeout=None)
 
