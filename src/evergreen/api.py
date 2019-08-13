@@ -72,12 +72,22 @@ class _BaseEvergreenApi(object):
 
     def _create_url(self, endpoint):
         """
-        Format the a call to an endpoint.
+        Format the a call to a v2 REST API endpoint.
 
         :param endpoint: endpoint to call.
         :return: Full url to get endpoint.
         """
         return '{api_server}/rest/v2{endpoint}'.format(
+            api_server=self._api_server, endpoint=endpoint)
+
+    def _create_plugin_url(self, endpoint):
+        """
+        Format the a call to a plugin endpoint.
+
+        :param endpoint: endpoint to call.
+        :return: Full url to get endpoint.
+        """
+        return '{api_server}/plugin/json{endpoint}'.format(
             api_server=self._api_server, endpoint=endpoint)
 
     @staticmethod
@@ -442,6 +452,16 @@ class _TaskApi(_BaseEvergreenApi):
             params['execution'] = execution
         url = self._create_url('/tasks/{task_id}/tests'.format(task_id=task_id))
         return [Tst(test, self) for test in self._paginate(url, params)]
+
+    def performance_results_by_task(self, task_id):
+        """
+        Get the 'perf.json' performance results for a given task_id
+
+        :param task_id: Id of task to query for.
+        :return: Contents of 'perf.json'
+        """
+        url = self._create_plugin_url('/task/{task_id}/perf'.format(task_id=task_id))
+        return self._paginate(url)
 
 
 class _OldApi(_BaseEvergreenApi):
