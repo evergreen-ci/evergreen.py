@@ -26,7 +26,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
-from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config,\
+from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config, \
     read_evergreen_from_file, DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.distro import Distro
 from evergreen.host import Host
@@ -78,6 +78,16 @@ class _BaseEvergreenApi(object):
         :return: Full url to get endpoint.
         """
         return '{api_server}/rest/v2{endpoint}'.format(
+            api_server=self._api_server, endpoint=endpoint)
+
+    def _create_v1_url(self, endpoint):
+        """
+        Format the a call to a v1 REST API endpoint.
+
+        :param endpoint: endpoint to call.
+        :return: Full url to get endpoint.
+        """
+        return '{api_server}/rest/v1{endpoint}'.format(
             api_server=self._api_server, endpoint=endpoint)
 
     def _create_plugin_url(self, endpoint):
@@ -331,6 +341,28 @@ class _ProjectApi(_BaseEvergreenApi):
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]
 
+    def tasks_by_project(self, project_id, statuses=None):
+        """
+        Get all the tasks for a project.
+
+        :param project_id: The project's id.
+        :param statuses: the types of statuses to get tasks for.
+        :return: The list of matching tasks.
+        """
+        url = self._create_url("projects/{project_id}/versions/tasks".format(project_id=project_id))
+        params = {status: statuses} if statuses else None
+        return [Task(json, self) for json in self._paginate(url, params)]
+
+    def project_history(self, project_id):
+        """
+        Get a project's history
+
+        :param project_id: The project's id.
+        :return: The project's history
+        """
+        url = self._create_v1_url("projects/{project_id}/versions".format(project_id=project_id))
+        return self._paginate(url)
+
 
 class _BuildApi(_BaseEvergreenApi):
     """API for build endpoints."""
@@ -463,6 +495,10 @@ class _TaskApi(_BaseEvergreenApi):
         url = self._create_plugin_url('/task/{task_id}/perf'.format(task_id=task_id))
         return self._paginate(url)
 
+    def performance_history_by_task_id_and_name(self, task_d, task_name):
+        url = '{api_server}/api/2/task/{task_id}/json/history/{task_name}/perf'.format(
+            api_server=self._api_server, task_id=task_id, task_name=task_name)
+        return self._paginate(url)
 
 class _OldApi(_BaseEvergreenApi):
     """API for pre-v2 endpoints."""
