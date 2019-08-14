@@ -49,6 +49,41 @@ class TestRaiseForStatus(object):
         mocked_response.raise_for_status.assert_not_called()
 
 
+class TestLazyPagination(object):
+    def test_with_no_next(self, mocked_api):
+        returned_items = ['item 1', 'item 2', 'item 3']
+        mocked_api.session.get.return_value.json.return_value = returned_items
+
+        results = mocked_api._lazy_paginate('http://url')
+
+        result_count = 0
+        for result in results:
+            assert result in returned_items
+            result_count += 1
+
+        assert len(returned_items) == result_count
+
+    def test_next_in_response(self, mocked_api):
+        returned_items = ['item 1', 'item 2', 'item 3']
+        next_url = 'http://url_to_next'
+        mocked_api.session.get.return_value.json.return_value = returned_items
+        mocked_api.session.get.return_value.links = {
+            'next': {
+                'url': next_url
+            }
+        }
+
+        results = mocked_api._lazy_paginate('http://url')
+
+        items_to_check = len(returned_items) * 3
+        for i, result in enumerate(results):
+            assert result in returned_items
+            if i > items_to_check:
+                break
+
+        assert i > items_to_check
+
+
 class TestDistrosApi(object):
     def test_all_distros(self, mocked_api):
         mocked_api.all_distros()
@@ -83,6 +118,16 @@ class TestProjectApi(object):
         mocked_api.recent_version_by_project('project_id')
         expected_url = mocked_api._create_url('/projects/project_id/recent_versions')
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+
+    def test_version_by_project(self, mocked_api):
+        returned_versions = mocked_api.versions_by_project('project_id')
+        expected_url = mocked_api._create_url('/projects/project_id/versions')
+        expected_params = {
+            'requester': 'gitter_request'
+        }
+        next(returned_versions)
+        mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params,
+                                                  timeout=None)
 
     def test_patches_by_project(self, mocked_api):
         patches = mocked_api.patches_by_project('project_id')

@@ -77,6 +77,24 @@ def list_projects(ctx):
 
 @cli.command()
 @click.pass_context
+@click.option('--project', required=True)
+@click.option('--limit', type=int)
+def list_versions(ctx, project, limit):
+    api = ctx.obj['api']
+    fmt = ctx.obj['format']
+    version_list = api.versions_by_project(project)
+    versions_to_display = []
+    for i, version in enumerate(version_list):
+        if i > limit:
+            break
+
+        versions_to_display.append(version)
+
+    click.echo(fmt_output(fmt, versions_to_display))
+
+
+@cli.command()
+@click.pass_context
 @click.option('-a', '--after-date', required=True)
 @click.option('-b', '--before-date', required=True)
 @click.option('-p', '--project', required=True)
