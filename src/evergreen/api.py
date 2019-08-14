@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 import time
+from datetime import datetime, timedelta
 
 from evergreen.performance_results import PerformanceData
 from evergreen.project_history import ProjectHistory
@@ -38,8 +39,9 @@ from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.task import Task
 from evergreen.tst import Tst
-from evergreen.stats import TestStats
-from evergreen.util import evergreen_input_to_output
+from evergreen.stats import TestStats, TaskStats
+from evergreen.task_reliability import TaskReliability
+from evergreen.util import evergreen_input_to_output, format_evergreen_datetime
 from evergreen.version import Version
 
 structlog.configure(logger_factory=LoggerFactory())
@@ -344,6 +346,7 @@ class _ProjectApi(_BaseEvergreenApi):
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]
 
+
     def tasks_by_project(self, project_id, statuses=None):
         """
         Get all the tasks for a project.
@@ -366,6 +369,107 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_v1_url("/projects/{project_id}/versions".format(project_id=project_id))
         return ProjectHistory(self._paginate(url), self)
+      
+    def task_stats_by_project(self,
+                              project_id,
+                              after_date,
+                              before_date,
+                              group_num_days=None,
+                              requesters=None,
+                              tasks=None,
+                              variants=None,
+                              distros=None,
+                              group_by=None,
+                              sort=None):
+        """
+        Get task stats by project id.
+
+        :param project_id: Id of patch to query for.
+        :param after_date: Collect stats after this date.
+        :param before_date: Collect stats before this date.
+        :param group_num_days: Aggregate statistics to this size.
+        :param requesters: Filter by requestors (mainline, patch, trigger, or adhoc).
+        :param tasks: Only include specified tasks.
+        :param variants: Only include specified variants.
+        :param distros: Only include specified distros.
+        :param group_by: How to group results (test_task_variant, test_task, or test)
+        :param sort: How to sort results (earliest or latest).
+        :return: Patch queried for.
+        """
+        params = {
+            'after_date': after_date,
+            'before_date': before_date,
+        }
+        if group_num_days:
+            params['group_num_days'] = group_num_days
+        if requesters:
+            params['requesters'] = requesters
+        if tasks:
+            params['tasks'] = tasks
+        if variants:
+            params['variants'] = variants
+        if distros:
+            params['distros'] = distros
+        if group_by:
+            params['group_by'] = group_by
+        if sort:
+            params['sort'] = sort
+        url = self._create_url('/projects/{project_id}/task_stats'.format(project_id=project_id))
+        task_stats_list = self._paginate(url, params)
+        return [TaskStats(task_stat, self) for task_stat in task_stats_list]
+
+    def task_reliability_by_project(self,
+                                    project_id,
+                                    after_date=None,
+                                    before_date=None,
+                                    group_num_days=None,
+                                    requesters=None,
+                                    tasks=None,
+                                    variants=None,
+                                    distros=None,
+                                    group_by=None,
+                                    sort=None):
+        """
+        Get task reliability scores.
+
+        :param project_id: Id of patch to query for.
+        :param after_date: Collect stats after this date.
+        :param before_date: Collect stats before this date, defaults to nothing.
+        :param group_num_days: Aggregate statistics to this size.
+        :param requesters: Filter by requesters (mainline, patch, trigger, or adhoc).
+        :param tasks: Only include specified tasks.
+        :param variants: Only include specified variants.
+        :param distros: Only include specified distros.
+        :param group_by: How to group results (test_task_variant, test_task, or test)
+        :param sort: How to sort results (earliest or latest).
+        :return: Patch queried for.
+        """
+        if after_date is None:
+            date = datetime.utcnow() - timedelta(days=180)
+            after_date = format_evergreen_datetime(date)
+
+        params = {'after_date': after_date}
+        if before_date:
+            params['before_date'] = before_date
+        if group_num_days:
+            params['group_num_days'] = group_num_days
+        if requesters:
+            params['requesters'] = requesters
+        if tasks:
+            params['tasks'] = tasks
+        if variants:
+            params['variants'] = variants
+        if distros:
+            params['distros'] = distros
+        if group_by:
+            params['group_by'] = group_by
+        if sort:
+            params['sort'] = sort
+        url = self._create_url('/projects/{project_id}/task_reliability'.format(
+            project_id=project_id))
+        task_reliability_scores = self._paginate(url, params)
+        return [TaskReliability(task_reliability, self)
+                for task_reliability in task_reliability_scores]
 
 
 class _BuildApi(_BaseEvergreenApi):
@@ -582,15 +686,18 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
         """
+        kwargs = {'auth': auth, 'timeout': timeout}
         if not auth and use_config_file:
             config = read_evergreen_config()
             auth = get_auth_from_config(config)
+            if auth:
+                kwargs['auth'] = auth
 
-        if not auth and config_file:
-            config = read_evergreen_from_file(config_file)
-            auth = get_auth_from_config(config)
+            # If there is a value for api_server_host, then use it.
+            if 'evergreen' in config and config['evergreen'].get('api_server_host', None):
+                kwargs['api_server'] = config['evergreen']['api_server_host']
 
-        return cls(auth=auth, timeout=timeout)
+        return cls(**kwargs)
 
 
 class CachedEvergreenApi(EvergreenApi):

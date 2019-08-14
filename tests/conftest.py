@@ -69,6 +69,18 @@ def sample_test_stats():
 
 
 @pytest.fixture()
+def sample_task_stats():
+    """Return sample task_stats json."""
+    return get_sample_json('task_stats.json')
+
+
+@pytest.fixture()
+def sample_task_reliability():
+    """Return sample task_reliability json."""
+    return get_sample_json('task_reliability.json')
+
+
+@pytest.fixture()
 def sample_manifest():
     """Return sample manifest json."""
     return get_sample_json('manifest.json')

@@ -1,7 +1,11 @@
 # Changelog
-
-## 0.5.0 - 2019-08-14
+## 0.5.0 - 2019-08-15
 - Use new signal_processing supporting endpoints.
+
+## 0.4.1 - 2019-08-14
+- Add task stats support.
+- Add task reliability support.
+- Support reading api_server_host from .evergreen.yml.
 
 ## 0.4.0 - 2019-07-30
 - Use new commit_queue endpoints.
