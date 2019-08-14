@@ -1,0 +1,15 @@
+{
+        "num_success": 13,
+        "num_timeout": 0,
+        "variant": "amazon",
+        "num_failed": 0,
+        "avg_duration_success": 1083.4402672074616,
+        "num_system_failed": 0,
+        "num_test_failed": 0,
+        "success_rate": 0.78,
+        "task_name": "compile",
+        "date": "2019-04-11",
+        "num_setup_failed": 0,
+        "num_total": 13,
+        "distro": "amazon1-2018-build"
+    }

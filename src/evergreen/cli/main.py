@@ -93,11 +93,59 @@ def test_stats(ctx, after_date, before_date, project, distros, group_by, group_n
     api = ctx.obj['api']
     fmt = ctx.obj['format']
 
-    test_stat_list = api.test_stats_by_project(project, after_date, before_date, group_num_days,
+    task_stat_list = api.test_stats_by_project(project, after_date, before_date, group_num_days,
                                                requesters, tests, tasks, variants, distros,
                                                group_by, sort)
-    test_stats = [t.json for t in test_stat_list]
-    click.echo(fmt_output(fmt, test_stats))
+    test_statistics = [t.json for t in task_stat_list]
+    click.echo(fmt_output(fmt, test_statistics))
+
+
+@cli.command()
+@click.pass_context
+@click.option('-a', '--after-date', required=True)
+@click.option('-b', '--before-date', required=True)
+@click.option('-p', '--project', required=True)
+@click.option('-d', '--distros', multiple=True)
+@click.option('--group-by')
+@click.option('-g', '--group-num-days')
+@click.option('-r', '--requesters', multiple=True)
+@click.option('-s', '--sort')
+@click.option('-t', '--tasks', multiple=True)
+@click.option('-v', '--variants', multiple=True)
+def task_stats(ctx, after_date, before_date, project, distros, group_by, group_num_days, requesters,
+               sort, tasks, variants):
+    api = ctx.obj['api']
+    fmt = ctx.obj['format']
+
+    task_stat_list = api.task_stats_by_project(project, after_date, before_date, group_num_days,
+                                               requesters, tasks, variants, distros,
+                                               group_by, sort)
+    task_statistics = [t.json for t in task_stat_list]
+    click.echo(fmt_output(fmt, task_statistics))
+
+
+@cli.command()
+@click.pass_context
+@click.option('-a', '--after-date')
+@click.option('-b', '--before-date')
+@click.option('-p', '--project', required=True)
+@click.option('-d', '--distros', multiple=True)
+@click.option('--group-by')
+@click.option('-g', '--group-num-days', default=30)
+@click.option('-r', '--requesters', multiple=True)
+@click.option('-s', '--sort')
+@click.option('-t', '--tasks', multiple=True, required=True)
+@click.option('-v', '--variants', multiple=True)
+def task_reliability(ctx, after_date, before_date, project, distros, group_by, group_num_days,
+                     requesters, sort, tasks, variants):
+    api = ctx.obj['api']
+    fmt = ctx.obj['format']
+
+    task_reliability_list = api.task_reliability_by_project(project, after_date, before_date,
+                                                            group_num_days, requesters, tasks,
+                                                            variants, distros, group_by, sort)
+    task_reliability_scores = [t.json for t in task_reliability_list]
+    click.echo(fmt_output(fmt, task_reliability_scores))
 
 
 @cli.command()
