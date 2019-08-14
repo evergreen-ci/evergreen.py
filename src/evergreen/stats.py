@@ -10,6 +10,7 @@ class TestStats(_BaseEvergreenObject):
 
     test_file = evg_attrib('test_file')
     task_name = evg_attrib('task_name')
+    test_name = evg_attrib('test_name')
     variant = evg_attrib('variant')
     distro = evg_attrib('distro')
     evg_date_attrib('date')
@@ -24,3 +25,24 @@ class TestStats(_BaseEvergreenObject):
         :param json: json version of object.
         """
         super(TestStats, self).__init__(json, api)
+
+
+class TaskStats(_BaseEvergreenObject):
+    """Representation of an Evergreen task stats object."""
+
+    test_file = evg_attrib('test_file')
+    task_name = evg_attrib('task_name')
+    variant = evg_attrib('variant')
+    distro = evg_attrib('distro')
+    evg_date_attrib('date')
+    num_pass = evg_attrib('num_pass')
+    num_fail = evg_attrib('num_fail')
+    avg_duration_pass = evg_attrib('avg_duration_pass')
+
+    def __init__(self, json, api):
+        """
+        Create an instance of a test stats object.
+
+        :param json: json version of object.
+        """
+        super(TaskStats, self).__init__(json, api)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1 - 2019-08-14
+- Add task stats support.
+- Add task reliability support.
+- Support reading api_server_host from .evergreen.yml.
+- Change the default order of .evergreen.yml lookup.
+
 ## 0.4.0 - 2019-07-30
 - Use new commit_queue endpoints.
 
