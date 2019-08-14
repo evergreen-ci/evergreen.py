@@ -38,7 +38,7 @@ from evergreen.task import Task
 from evergreen.tst import Tst
 from evergreen.stats import TestStats, TaskStats
 from evergreen.task_reliability import TaskReliability
-from evergreen.util import evergreen_input_to_output
+from evergreen.util import evergreen_input_to_output, format_evergreen_datetime
 from evergreen.version import Version
 
 structlog.configure(logger_factory=LoggerFactory())
@@ -399,7 +399,7 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         if after_date is None:
             date = datetime.utcnow() - timedelta(days=180)
-            after_date = date.strftime('%Y-%m-%d')
+            after_date = format_evergreen_datetime(date)
 
         params = {'after_date': after_date}
         if before_date:
