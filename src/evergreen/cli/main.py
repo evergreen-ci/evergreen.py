@@ -93,10 +93,10 @@ def test_stats(ctx, after_date, before_date, project, distros, group_by, group_n
     api = ctx.obj['api']
     fmt = ctx.obj['format']
 
-    task_stat_list = api.test_stats_by_project(project, after_date, before_date, group_num_days,
+    test_stat_list = api.test_stats_by_project(project, after_date, before_date, group_num_days,
                                                requesters, tests, tasks, variants, distros,
                                                group_by, sort)
-    test_statistics = [t.json for t in task_stat_list]
+    test_statistics = [t.json for t in test_stat_list]
     click.echo(fmt_output(fmt, test_statistics))
 
 
