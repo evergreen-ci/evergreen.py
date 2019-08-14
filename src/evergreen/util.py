@@ -2,6 +2,7 @@
 from datetime import datetime
 
 EVG_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
+EVG_SHORT_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 EVG_DATE_FORMAT = '%Y-%m-%d'
 EVG_DATE_INPUT_FORMAT = '"%Y-%m-%dT%H:%M:%S.000Z"'
 
@@ -16,6 +17,18 @@ def parse_evergreen_datetime(evg_date):
     if not evg_date:
         return None
     return datetime.strptime(evg_date, EVG_DATETIME_FORMAT)
+
+
+def parse_evergreen_short_datetime(evg_date):
+    """
+    Convert an evergreen datetime string into a datetime object.
+
+    :param evg_date: String to convert to a datetime.
+    :return datetime version of date.
+    """
+    if not evg_date:
+        return None
+    return datetime.strptime(evg_date, EVG_SHORT_DATETIME_FORMAT)
 
 
 def format_evergreen_datetime(when):

@@ -2,47 +2,61 @@
 """Task representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.util import parse_evergreen_datetime, parse_evergreen_date
+from evergreen.util import parse_evergreen_datetime, parse_evergreen_date, \
+    parse_evergreen_short_datetime
 
 
-def evg_attrib(attrib_name, type_fn=None):
+def evg_attrib(attrib_name, type_fn=None, default=None):
     """
     Create an attribute for the given evergreen property.
 
     This creates an attribute for the class that looks up the value via json. It is used to
     allow editors to show what attributes are available for a given evergreen object.
 
+    :param default: Default value if missing.
     :param attrib_name: name of attribute.
     :param type_fn: method to use to convert attribute by type.
     """
 
     def attrib_getter(instance):
         if attrib_name not in instance.json:
-            return None
+            return default
 
         if type_fn:
             return type_fn(instance.json[attrib_name])
-        return instance.json.get(attrib_name, None)
+        return instance.json.get(attrib_name, default)
 
     return property(attrib_getter, doc='value of {}'.format(attrib_name))
 
 
-def evg_datetime_attrib(attrib_name):
+def evg_datetime_attrib(attrib_name, default=None):
     """
     Create a datetime attribute for the given evergreen property.
 
+    :param default: Default value if missing.
     :param attrib_name: Name of attribute.
     """
-    return evg_attrib(attrib_name, parse_evergreen_datetime)
+    return evg_attrib(attrib_name, parse_evergreen_datetime, default=default)
 
 
-def evg_date_attrib(attrib_name):
+def evg_short_datetime_attrib(attrib_name, default=None):
+    """
+    Create a shortened datetime attribute for the given evergreen property.
+
+    :param default: Default value if missing.
+    :param attrib_name: Name of attribute.
+    """
+    return evg_attrib(attrib_name, parse_evergreen_short_datetime, default=default)
+
+
+def evg_date_attrib(attrib_name, default=None):
     """
     Create a date attribute for the given evergreen property.
 
+    :param default: Default value if missing.
     :param attrib_name: Name of attribute.
     """
-    return evg_attrib(attrib_name, parse_evergreen_date)
+    return evg_attrib(attrib_name, parse_evergreen_date, default=default)
 
 
 class _BaseEvergreenObject(object):

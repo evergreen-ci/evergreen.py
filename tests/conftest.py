@@ -124,3 +124,15 @@ def mocked_retrying_api():
     response_mock.status_code = 200
     api.session.get.return_value = response_mock
     return api
+
+
+@pytest.fixture()
+def sample_performance_results():
+    """Return sample performance results."""
+    return get_sample_json('performance_results.json')
+
+
+@pytest.fixture()
+def sample_project_history():
+    """Return sample project history."""
+    return get_sample_json('project_history.json')

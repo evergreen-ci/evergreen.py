@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import time
 
-from evergreen.performance_results import PerformanceResults
+from evergreen.performance_results import PerformanceData
 from evergreen.project_history import ProjectHistory
 
 try:
@@ -497,7 +497,7 @@ class _TaskApi(_BaseEvergreenApi):
         :return: Contents of 'perf.json'
         """
         url = self._create_plugin_url('/task/{task_id}/perf'.format(task_id=task_id))
-        return PerformanceResults(self._paginate(url), self)
+        return PerformanceData(self._paginate(url), self)
 
     def performance_results_by_task_name(self, task_id, task_name):
         """
@@ -509,7 +509,7 @@ class _TaskApi(_BaseEvergreenApi):
         """
         url = '{api_server}/api/2/task/{task_id}/json/history/{task_name}/perf'.format(
             api_server=self._api_server, task_id=task_id, task_name=task_name)
-        return [PerformanceResults(result, self) for result in self._paginate(url)]
+        return [PerformanceData(result, self) for result in self._paginate(url)]
 
 
 class _OldApi(_BaseEvergreenApi):
