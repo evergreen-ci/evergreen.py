@@ -31,7 +31,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config, \
-    read_evergreen_from_file, DEFAULT_NETWORK_TIMEOUT_SEC
+    DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
@@ -346,7 +346,6 @@ class _ProjectApi(_BaseEvergreenApi):
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]
 
-
     def tasks_by_project(self, project_id, statuses=None):
         """
         Get all the tasks for a project.
@@ -369,7 +368,7 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_v1_url("/projects/{project_id}/versions".format(project_id=project_id))
         return ProjectHistory(self._paginate(url), self)
-      
+
     def task_stats_by_project(self,
                               project_id,
                               after_date,
