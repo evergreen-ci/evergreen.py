@@ -19,13 +19,13 @@ class TestProjectHistory(object):
         assert version.message == version_json['message']
 
         build = version.builds[0]
-        build_json_key, build_json = version_json['builds'].items()[0]
+        build_json_key, build_json = list(version_json['builds'].items())[0]
 
         assert build.build_id == build_json['build_id']
         assert build.build_name == build_json_key
 
         task = build.tasks[0]
-        task_json_key, task_json = build_json['tasks'].items()[0]
+        task_json_key, task_json = list(build_json['tasks'].items())[0]
 
         assert task.task_name == task_json_key
         assert task.status == task_json['status']

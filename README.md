@@ -53,7 +53,7 @@ $ evg-api --json list-hosts
 
 Tox is being used for multiversion testing. Tests are run on python 2.7 and 3.6. You should have
 both of these installed locally. To run tests, install the requirements.txt and then run tox.
-
+    
 ```
 $ pip install -r requirements.txt
 $ tox
