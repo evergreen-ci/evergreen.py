@@ -2,6 +2,9 @@
 ## 0.5.0 - 2019-08-15
 - Use new signal_processing supporting endpoints.
 
+## 0.5.0 - 2019-08-14
+- Add lazy versions by project endpoint.
+
 ## 0.4.1 - 2019-08-14
 - Add task stats support.
 - Add task reliability support.
