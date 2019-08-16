@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from enum import Enum
+from itertools import islice
 import json
 import yaml
 
@@ -73,6 +74,19 @@ def list_projects(ctx):
     project_list = api.all_projects()
     projects = [project.json for project in project_list]
     click.echo(fmt_output(fmt, projects))
+
+
+@cli.command()
+@click.pass_context
+@click.option('--project', required=True)
+@click.option('--limit', type=int)
+def list_versions(ctx, project, limit):
+    api = ctx.obj['api']
+    fmt = ctx.obj['format']
+    version_list = api.versions_by_project(project)
+    versions_to_display = [version for version in islice(version_list, None, limit)]
+
+    click.echo(fmt_output(fmt, versions_to_display))
 
 
 @cli.command()

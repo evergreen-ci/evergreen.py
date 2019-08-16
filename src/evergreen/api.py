@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 import time
 from datetime import datetime, timedelta
+from enum import Enum
 
 try:
     from json.decoder import JSONDecodeError
@@ -49,6 +50,8 @@ DEFAULT_LIMIT = 100
 MAX_RETRIES = 3
 START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
+
+Requester = Enum('Requester', 'PATCH_REQUEST GITTER_REQUEST GITHUB_PULL_REQUEST MERGE_TEST AD_HOC')
 
 
 class _BaseEvergreenApi(object):
@@ -145,6 +148,32 @@ class _BaseEvergreenApi(object):
                 json_data.extend(response.json())
 
         return json_data
+
+    def _lazy_paginate(self, url, params=None):
+        """
+        Lazy paginate, the results are returned lazily.
+
+        :param url: URL to query.
+        :param params: Params to pass to url.
+        :return: A generator to get results from.
+        """
+        if not params:
+            params = {
+                'limit': DEFAULT_LIMIT,
+            }
+
+        next_url = url
+        while True:
+            response = self._call_api(next_url, params)
+            json_response = response.json()
+            if not json_response:
+                break
+            for result in json_response:
+                yield result
+            if 'next' not in response.links:
+                break
+
+            next_url = response.links['next']['url']
 
     def _lazy_paginate_by_date(self, url, params=None):
         """
@@ -248,6 +277,21 @@ class _ProjectApi(_BaseEvergreenApi):
             '/projects/{project_id}/recent_versions'.format(project_id=project_id))
         version_list = self._paginate(url, params)
         return [Version(version, self) for version in version_list]
+
+    def versions_by_project(self, project_id, requester=Requester.GITTER_REQUEST):
+        """
+        Get the versions created in the specified project.
+
+        :param project_id: Id of project to query.
+        :param requester: Type of versions to query.
+        :return: Generator of versions.
+        """
+        url = self._create_url('/projects/{project_id}/versions'.format(project_id=project_id))
+        params = {
+            'requester': requester.name.lower()
+        }
+        version_list = self._lazy_paginate(url, params)
+        return (Version(version, self) for version in version_list)
 
     def patches_by_project(self, project_id, params=None):
         """
