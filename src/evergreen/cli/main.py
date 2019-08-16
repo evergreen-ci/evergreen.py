@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from enum import Enum
+from itertools import islice
 import json
 import yaml
 
@@ -83,12 +84,7 @@ def list_versions(ctx, project, limit):
     api = ctx.obj['api']
     fmt = ctx.obj['format']
     version_list = api.versions_by_project(project)
-    versions_to_display = []
-    for i, version in enumerate(version_list):
-        if i > limit:
-            break
-
-        versions_to_display.append(version)
+    versions_to_display = [version for version in islice(version_list, None, limit)]
 
     click.echo(fmt_output(fmt, versions_to_display))
 

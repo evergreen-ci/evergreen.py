@@ -51,7 +51,7 @@ MAX_RETRIES = 3
 START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
 
-Requester = Enum('Requester', 'patch_request gitter_request github_pull_request merge_test ad_hoc')
+Requester = Enum('Requester', 'PATCH_REQUEST GITTER_REQUEST GITHUB_PULL_REQUEST MERGE_TEST AD_HOC')
 
 
 class _BaseEvergreenApi(object):
@@ -165,9 +165,10 @@ class _BaseEvergreenApi(object):
         next_url = url
         while True:
             response = self._call_api(next_url, params)
-            if not response.json():
+            json_response = response.json()
+            if not json_response:
                 break
-            for result in response.json():
+            for result in json_response:
                 yield result
             if 'next' not in response.links:
                 break
@@ -277,7 +278,7 @@ class _ProjectApi(_BaseEvergreenApi):
         version_list = self._paginate(url, params)
         return [Version(version, self) for version in version_list]
 
-    def versions_by_project(self, project_id, requester=Requester.gitter_request):
+    def versions_by_project(self, project_id, requester=Requester.GITTER_REQUEST):
         """
         Get the versions created in the specified project.
 
@@ -287,7 +288,7 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url('/projects/{project_id}/versions'.format(project_id=project_id))
         params = {
-            'requester': requester.name
+            'requester': requester.name.lower()
         }
         version_list = self._lazy_paginate(url, params)
         return (Version(version, self) for version in version_list)
