@@ -22,7 +22,7 @@ class TestResult(_BaseEvergreenObject):
 
 class TestRun(_BaseEvergreenObject):
     """Representation of a test run from Evergreen."""
-    workload = evg_attrib('workload', default='microbenchmarks')
+    workload = evg_attrib('workload')
     test_name = evg_attrib('name')
 
     def __init__(self, test_result, api, parent):
@@ -86,7 +86,7 @@ class PerformanceData(_BaseEvergreenObject):
     task_id = evg_attrib('task_id')
     variant = evg_attrib('variant')
     version_id = evg_attrib('version_id')
-    revision = evg_attrib('revision', default='patch_build')
+    revision = evg_attrib('revision')
     order = evg_attrib('order')
     tag = evg_attrib('tag')
     create_time = evg_short_datetime_attrib('create_time')
