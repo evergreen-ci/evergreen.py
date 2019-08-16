@@ -41,10 +41,9 @@ class TestRun(_BaseEvergreenObject):
         # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
         # while sys-perf stores it in the outer 'results' field.
         self.start = parse_evergreen_datetime(
-            test_result['start'] if 'start' in test_result else test_result['results'][
-                'start'])
+            test_result.get('start', test_result['results']['start']))
         self.end = parse_evergreen_datetime(
-            test_result['end'] if 'end' in test_result else test_result['results']['end'])
+            test_result.get('end', test_result['results']['end']))
         # Microbenchmarks does not produce a 'workload' field. We need to fill in the 'workload'
         # field for microbenchmark points in order to query on 'workload'.
         self.maximum_thread_level, self.maximum_operations_per_second = _get_max_ops_per_sec(
