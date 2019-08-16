@@ -1,5 +1,5 @@
 # Changelog
-## 0.5.0 - 2019-08-15
+## 0.6.0 - 2019-08-15
 - Use new signal_processing supporting endpoints.
 
 ## 0.5.0 - 2019-08-14
