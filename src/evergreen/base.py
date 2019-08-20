@@ -2,7 +2,8 @@
 """Task representation of evergreen."""
 from __future__ import absolute_import
 
-from evergreen.util import parse_evergreen_datetime, parse_evergreen_date
+from evergreen.util import parse_evergreen_datetime, parse_evergreen_date, \
+    parse_evergreen_short_datetime
 
 
 def evg_attrib(attrib_name, type_fn=None):
@@ -34,6 +35,15 @@ def evg_datetime_attrib(attrib_name):
     :param attrib_name: Name of attribute.
     """
     return evg_attrib(attrib_name, parse_evergreen_datetime)
+
+
+def evg_short_datetime_attrib(attrib_name):
+    """
+    Create a shortened datetime attribute for the given evergreen property.
+
+    :param attrib_name: Name of attribute.
+    """
+    return evg_attrib(attrib_name, parse_evergreen_short_datetime)
 
 
 def evg_date_attrib(attrib_name):

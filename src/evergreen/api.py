@@ -6,6 +6,9 @@ import time
 from datetime import datetime, timedelta
 from enum import Enum
 
+from evergreen.performance_results import PerformanceData
+from evergreen.project_history import ProjectHistory
+
 try:
     from json.decoder import JSONDecodeError
 except ImportError:
@@ -28,7 +31,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
-from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config,\
+from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config, \
     DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.distro import Distro
 from evergreen.host import Host
@@ -77,12 +80,32 @@ class _BaseEvergreenApi(object):
 
     def _create_url(self, endpoint):
         """
-        Format the a call to an endpoint.
+        Format the a call to a v2 REST API endpoint.
 
         :param endpoint: endpoint to call.
         :return: Full url to get endpoint.
         """
         return '{api_server}/rest/v2{endpoint}'.format(
+            api_server=self._api_server, endpoint=endpoint)
+
+    def _create_v1_url(self, endpoint):
+        """
+        Format the a call to a v1 REST API endpoint.
+
+        :param endpoint: endpoint to call.
+        :return: Full url to get endpoint.
+        """
+        return '{api_server}/rest/v1{endpoint}'.format(
+            api_server=self._api_server, endpoint=endpoint)
+
+    def _create_plugin_url(self, endpoint):
+        """
+        Format the a call to a plugin endpoint.
+
+        :param endpoint: endpoint to call.
+        :return: Full url to get endpoint.
+        """
+        return '{api_server}/plugin/json{endpoint}'.format(
             api_server=self._api_server, endpoint=endpoint)
 
     @staticmethod
@@ -367,6 +390,29 @@ class _ProjectApi(_BaseEvergreenApi):
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]
 
+    def tasks_by_project(self, project_id, statuses=None):
+        """
+        Get all the tasks for a project.
+
+        :param project_id: The project's id.
+        :param statuses: the types of statuses to get tasks for.
+        :return: The list of matching tasks.
+        """
+        url = self._create_url(
+            "/projects/{project_id}/versions/tasks".format(project_id=project_id))
+        params = {'status': statuses} if statuses else None
+        return [Task(json, self) for json in self._paginate(url, params)]
+
+    def project_history(self, project_id):
+        """
+        Get a project's history
+
+        :param project_id: The project's id.
+        :return: The project's history
+        """
+        url = self._create_v1_url("/projects/{project_id}/versions".format(project_id=project_id))
+        return ProjectHistory(self._paginate(url), self)
+
     def task_stats_by_project(self,
                               project_id,
                               after_date,
@@ -589,6 +635,28 @@ class _TaskApi(_BaseEvergreenApi):
             params['execution'] = execution
         url = self._create_url('/tasks/{task_id}/tests'.format(task_id=task_id))
         return [Tst(test, self) for test in self._paginate(url, params)]
+
+    def performance_results_by_task(self, task_id):
+        """
+        Get the 'perf.json' performance results for a given task_id
+
+        :param task_id: Id of task to query for.
+        :return: Contents of 'perf.json'
+        """
+        url = self._create_plugin_url('/task/{task_id}/perf'.format(task_id=task_id))
+        return PerformanceData(self._paginate(url), self)
+
+    def performance_results_by_task_name(self, task_id, task_name):
+        """
+        Get the 'perf.json' performance results for a given task_id and task_name
+
+        :param task_id: Id of task to query for.
+        :param task_name: Name of task to query for.
+        :return: Contents of 'perf.json'
+        """
+        url = '{api_server}/api/2/task/{task_id}/json/history/{task_name}/perf'.format(
+            api_server=self._api_server, task_id=task_id, task_name=task_name)
+        return [PerformanceData(result, self) for result in self._paginate(url)]
 
 
 class _OldApi(_BaseEvergreenApi):

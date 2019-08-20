@@ -1,4 +1,6 @@
 # Changelog
+## 0.6.0 - 2019-08-20
+- Use new signal_processing supporting endpoints.
 
 ## 0.5.0 - 2019-08-14
 - Add lazy versions by project endpoint.
@@ -7,7 +9,6 @@
 - Add task stats support.
 - Add task reliability support.
 - Support reading api_server_host from .evergreen.yml.
-- Change the default order of .evergreen.yml lookup.
 
 ## 0.4.0 - 2019-07-30
 - Use new commit_queue endpoints.
