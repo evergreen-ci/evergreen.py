@@ -9,7 +9,7 @@ from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_short_datetime_
 from evergreen.util import parse_evergreen_datetime
 
 
-class TestResult(_BaseEvergreenObject):
+class PerformanceTestResult(_BaseEvergreenObject):
     """Representation of a test result from Evergreen."""
     thread_level = evg_attrib('thread_level')
     operations_per_second = evg_attrib('ops_per_sec_values')
@@ -17,26 +17,17 @@ class TestResult(_BaseEvergreenObject):
 
     def __init__(self, json, api):
         """Create an instance of a test result."""
-        super(TestResult, self).__init__(json, api)
+        super(PerformanceTestResult, self).__init__(json, api)
 
 
-class TestRun(_BaseEvergreenObject):
+class PerformanceTestRun(_BaseEvergreenObject):
     """Representation of a test run from Evergreen."""
     workload = evg_attrib('workload')
     test_name = evg_attrib('name')
 
-    def __init__(self, test_result, api, parent):
+    def __init__(self, test_result, api):
         """Create an instance of a test run."""
-        super(TestRun, self).__init__(test_result, api)
-        if parent:
-            self.project_id = parent.project_id
-            self.task_name = parent.task_name
-            self.task_id = parent.task_id
-            self.variant = parent.variant
-            self.version_id = parent.version_id
-            self.revision = parent.revision
-            self.order = parent.order
-            self.create_time = parent.create_time
+        super(PerformanceTestRun, self).__init__(test_result, api)
 
         # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
         # while sys-perf stores it in the outer 'results' field.
@@ -56,7 +47,7 @@ class TestRun(_BaseEvergreenObject):
         return _get_performance_results(self.json, self._api)
 
 
-class TestBatch(_BaseEvergreenObject):
+class PerformanceTestBatch(_BaseEvergreenObject):
     """Representation of a batch of tests from Evergreen."""
     start = evg_datetime_attrib('start')
     end = evg_datetime_attrib('end')
@@ -65,12 +56,12 @@ class TestBatch(_BaseEvergreenObject):
 
     def __init__(self, json, api, parent):
         """Create an instance of a batch of tests"""
-        super(TestBatch, self).__init__(json, api)
+        super(PerformanceTestBatch, self).__init__(json, api)
         self.parent = parent
 
     @property
     def test_runs(self):
-        return [TestRun(item, self._api, self.parent) for item in self.json['results']]
+        return [PerformanceTestRun(item, self._api) for item in self.json['results']]
 
     def test_runs_matching(self, tests):
         return [item for item in self.test_runs if
@@ -96,7 +87,7 @@ class PerformanceData(_BaseEvergreenObject):
 
     @property
     def test_batch(self):
-        return TestBatch(self.json['data'], self._api, self)
+        return PerformanceTestBatch(self.json['data'], self._api, self)
 
 
 def _get_performance_results(test_result, api):
@@ -130,7 +121,7 @@ def _get_performance_results(test_result, api):
             this_result = copy.deepcopy(result)
             this_result.pop('error_values', None)
             this_result.update({'thread_level': thread_level})
-            test_result = TestResult(this_result, api)
+            test_result = PerformanceTestResult(this_result, api)
             thread_levels.append(test_result)
     return sorted(thread_levels, key=lambda k: k.thread_level)
 

@@ -34,15 +34,6 @@ class TestPerformanceResults(object):
         test_run = test_batch.test_runs[0]
         test_run_json = test_batch_json['results'][0]
 
-        assert test_run.project_id == performance_data.project_id
-        assert test_run.task_name == performance_data.task_name
-        assert test_run.task_id == performance_data.task_id
-        assert test_run.variant == performance_data.variant
-        assert test_run.version_id == performance_data.version_id
-        assert test_run.revision == performance_data.revision
-        assert test_run.order == performance_data.order
-        assert test_run.create_time == performance_data.create_time
-
         assert test_run.start == parse_evergreen_datetime(
             test_run_json['start'] if 'start' in test_run_json else test_run_json['results'][
                 'start'])
