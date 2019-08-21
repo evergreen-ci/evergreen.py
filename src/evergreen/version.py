@@ -59,7 +59,7 @@ class Version(_BaseEvergreenObject):
         """
         super(Version, self).__init__(json, api)
 
-        if 'build_variants_status' in self.json:
+        if 'build_variants_status' in self.json and self.json['build_variants_status']:
             self.build_variants_map = {
                 bvs['build_variant']: bvs['build_id']
                 for bvs in self.json['build_variants_status']
@@ -67,6 +67,8 @@ class Version(_BaseEvergreenObject):
 
     @property
     def build_variants_status(self):
+        if 'build_variants_status' not in self.json or not self.json['build_variants_status']:
+            return []
         build_variants_status = self.json['build_variants_status']
         return [BuildVariantStatus(bvs, self._api) for bvs in build_variants_status]
 

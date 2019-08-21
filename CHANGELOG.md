@@ -1,4 +1,8 @@
 # Changelog
+
+## 0.6.1 - 2019-08-21
+- Handle versions with empty`build_variants_status`.
+
 ## 0.6.0 - 2019-08-20
 - Use new signal_processing supporting endpoints.
 
