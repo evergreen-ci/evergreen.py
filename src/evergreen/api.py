@@ -697,13 +697,13 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         super(EvergreenApi, self).__init__(api_server, auth, timeout=timeout)
 
     @classmethod
-    def get_api(cls, auth=None, use_default_config_file=False, config_file=None,
+    def get_api(cls, auth=None, use_config_file=False, config_file=None,
                 timeout=DEFAULT_NETWORK_TIMEOUT_SEC):
         """
         Get an evergreen api instance based on config file settings.
 
         :param auth: EvgAuth with authentication to use.
-        :param use_default_config_file: attempt to read auth from default config file.
+        :param use_config_file: attempt to read auth from default config file.
         :param config_file: config file with authentication information.
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
@@ -711,7 +711,7 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         kwargs = {'auth': auth, 'timeout': timeout}
         if not auth:
             config = None
-            if use_default_config_file:
+            if use_config_file:
                 config = read_evergreen_config()
             elif config_file is not None:
                 config = read_evergreen_from_file(config_file)

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.2 - 2019-08-22
+- Handle passed config file
+- Remove broken project history API
+
 ## 0.6.1 - 2019-08-21
 - Handle versions with empty`build_variants_status`.
 

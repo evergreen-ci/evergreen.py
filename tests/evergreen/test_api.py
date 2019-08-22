@@ -39,7 +39,7 @@ class TestConfiguration(object):
         EvergreenApi.__init__ = MagicMock()
         EvergreenApi.__init__.return_value = None
         mock_read_evergreen_config.return_value = sample_evergreen_configuration
-        EvergreenApi.get_api(use_default_config_file=True)
+        EvergreenApi.get_api(use_config_file=True)
         EvergreenApi.__init__.assert_called_once_with(auth=sample_evergreen_auth,
                                                       timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
 

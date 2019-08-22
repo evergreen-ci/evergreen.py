@@ -38,7 +38,7 @@ def fmt_output(fmt, data):
 @click.pass_context
 def cli(ctx, display_format):
     ctx.ensure_object(dict)
-    ctx.obj['api'] = EvergreenApi.get_api(use_default_config_file=True)
+    ctx.obj['api'] = EvergreenApi.get_api(use_config_file=True)
     ctx.obj['format'] = display_format
 
 
