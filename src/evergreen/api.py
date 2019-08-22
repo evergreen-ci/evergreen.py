@@ -31,7 +31,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config, \
-    DEFAULT_NETWORK_TIMEOUT_SEC
+    DEFAULT_NETWORK_TIMEOUT_SEC, read_evergreen_from_file
 from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
@@ -697,27 +697,33 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         super(EvergreenApi, self).__init__(api_server, auth, timeout=timeout)
 
     @classmethod
-    def get_api(cls, auth=None, use_config_file=False, config_file=None,
+    def get_api(cls, auth=None, use_default_config_file=False, config_file=None,
                 timeout=DEFAULT_NETWORK_TIMEOUT_SEC):
         """
         Get an evergreen api instance based on config file settings.
 
         :param auth: EvgAuth with authentication to use.
-        :param use_config_file: attempt to read auth from default config file.
+        :param use_default_config_file: attempt to read auth from default config file.
         :param config_file: config file with authentication information.
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
         """
         kwargs = {'auth': auth, 'timeout': timeout}
-        if not auth and use_config_file:
-            config = read_evergreen_config()
-            auth = get_auth_from_config(config)
-            if auth:
-                kwargs['auth'] = auth
+        if not auth:
+            config = None
+            if use_default_config_file:
+                config = read_evergreen_config()
+            elif config_file is not None:
+                config = read_evergreen_from_file(config_file)
 
-            # If there is a value for api_server_host, then use it.
-            if 'evergreen' in config and config['evergreen'].get('api_server_host', None):
-                kwargs['api_server'] = config['evergreen']['api_server_host']
+            if config is not None:
+                auth = get_auth_from_config(config)
+                if auth:
+                    kwargs['auth'] = auth
+
+                # If there is a value for api_server_host, then use it.
+                if 'evergreen' in config and config['evergreen'].get('api_server_host', None):
+                    kwargs['api_server'] = config['evergreen']['api_server_host']
 
         return cls(**kwargs)
 

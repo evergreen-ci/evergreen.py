@@ -1,4 +1,9 @@
 import json
+
+import yaml
+
+from evergreen.config import EvgAuth
+
 try:
     from unittest.mock import MagicMock
 except ImportError:
@@ -18,6 +23,12 @@ def get_sample_json(file):
     """Read json data from the specified sample file."""
     with open(os.path.join(SAMPLE_DATA_PATH, file), 'r') as file_data:
         return json.load(file_data)
+
+
+def get_sample_yaml(file):
+    """Read yml data from the specified sample file."""
+    with open(os.path.join(SAMPLE_DATA_PATH, file), 'r') as file_data:
+        return yaml.safe_load(file_data)
 
 
 @pytest.fixture()
@@ -142,3 +153,15 @@ def mocked_retrying_api():
 def sample_performance_results():
     """Return sample performance results."""
     return get_sample_json('performance_results.json')
+
+
+@pytest.fixture()
+def sample_evergreen_configuration():
+    """Return sample evergreen configuration"""
+    return get_sample_yaml('evergreen_config.yml')
+
+
+@pytest.fixture()
+def sample_evergreen_auth(sample_evergreen_configuration):
+    """Return sample evergreen configuration"""
+    return EvgAuth(sample_evergreen_configuration['user'], sample_evergreen_configuration['api_key'])
