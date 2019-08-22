@@ -1,7 +1,7 @@
 import os
 import sys
 
-from evergreen.config import DEFAULT_API_SERVER, EvgAuth, DEFAULT_NETWORK_TIMEOUT_SEC
+from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
 
 try:
     from unittest.mock import MagicMock
@@ -13,7 +13,6 @@ from requests.exceptions import HTTPError
 from tenacity import RetryError
 
 import evergreen.api as under_test
-from evergreen.api import EvergreenApi
 
 try:
     from json.decoder import JSONDecodeError
@@ -26,32 +25,32 @@ def ns(relative):
 
 
 class TestConfiguration(object):
-    def test_uses_passed_auth(self, sample_evergreen_auth):
-        EvergreenApi.__init__ = MagicMock()
-        EvergreenApi.__init__.return_value = None
-        EvergreenApi.get_api(auth=sample_evergreen_auth)
-        EvergreenApi.__init__.assert_called_once_with(auth=sample_evergreen_auth,
-                                                      timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
+
+    def test_uses_passed_auth(self, sample_evergreen_auth, mocked_init_evergreen_api_class):
+        mocked_init_evergreen_api_class.get_api(auth=sample_evergreen_auth)
+        mocked_init_evergreen_api_class.__init__.assert_called_once_with(
+            auth=sample_evergreen_auth,
+            timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
 
     @patch(ns('read_evergreen_config'))
     def test_uses_default_config_file(self, mock_read_evergreen_config,
-                                      sample_evergreen_configuration, sample_evergreen_auth):
-        EvergreenApi.__init__ = MagicMock()
-        EvergreenApi.__init__.return_value = None
+                                      sample_evergreen_configuration, sample_evergreen_auth,
+                                      mocked_init_evergreen_api_class):
         mock_read_evergreen_config.return_value = sample_evergreen_configuration
-        EvergreenApi.get_api(use_config_file=True)
-        EvergreenApi.__init__.assert_called_once_with(auth=sample_evergreen_auth,
-                                                      timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
+        mocked_init_evergreen_api_class.get_api(use_config_file=True)
+        mocked_init_evergreen_api_class.__init__.assert_called_once_with(
+            auth=sample_evergreen_auth,
+            timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
 
     @patch(ns('read_evergreen_from_file'))
     def test_uses_passed_config_file(self, read_evergreen_from_file,
-                                      sample_evergreen_configuration, sample_evergreen_auth):
-        EvergreenApi.__init__ = MagicMock()
-        EvergreenApi.__init__.return_value = None
+                                     sample_evergreen_configuration, sample_evergreen_auth,
+                                     mocked_init_evergreen_api_class):
         read_evergreen_from_file.return_value = sample_evergreen_configuration
-        EvergreenApi.get_api(config_file='config.yml')
-        EvergreenApi.__init__.assert_called_once_with(auth=sample_evergreen_auth,
-                                                      timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
+        mocked_init_evergreen_api_class.get_api(config_file='config.yml')
+        mocked_init_evergreen_api_class.__init__.assert_called_once_with(
+            auth=sample_evergreen_auth,
+            timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
 
 
 class TestRaiseForStatus(object):
