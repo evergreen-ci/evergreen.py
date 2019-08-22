@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 
 from evergreen.performance_results import PerformanceData
-from evergreen.project_history import ProjectHistory
 
 try:
     from json.decoder import JSONDecodeError
@@ -86,16 +85,6 @@ class _BaseEvergreenApi(object):
         :return: Full url to get endpoint.
         """
         return '{api_server}/rest/v2{endpoint}'.format(
-            api_server=self._api_server, endpoint=endpoint)
-
-    def _create_v1_url(self, endpoint):
-        """
-        Format the a call to a v1 REST API endpoint.
-
-        :param endpoint: endpoint to call.
-        :return: Full url to get endpoint.
-        """
-        return '{api_server}/rest/v1{endpoint}'.format(
             api_server=self._api_server, endpoint=endpoint)
 
     def _create_plugin_url(self, endpoint):
@@ -402,16 +391,6 @@ class _ProjectApi(_BaseEvergreenApi):
             "/projects/{project_id}/versions/tasks".format(project_id=project_id))
         params = {'status': statuses} if statuses else None
         return [Task(json, self) for json in self._paginate(url, params)]
-
-    def project_history(self, project_id):
-        """
-        Get a project's history
-
-        :param project_id: The project's id.
-        :return: The project's history
-        """
-        url = self._create_v1_url("/projects/{project_id}/versions".format(project_id=project_id))
-        return ProjectHistory(self._paginate(url), self)
 
     def task_stats_by_project(self,
                               project_id,

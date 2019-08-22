@@ -167,11 +167,6 @@ class TestProjectApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params={'status': ['status1']},
                                                   timeout=None)
 
-    def test_project_history(self, mocked_api):
-        mocked_api.project_history('project_id')
-        expected_url = mocked_api._create_v1_url("/projects/project_id/versions")
-        mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
-
 
 class TestBuildApi(object):
     def test_build_by_id(self, mocked_api):
