@@ -26,31 +26,28 @@ def ns(relative):
 
 class TestConfiguration(object):
 
-    def test_uses_passed_auth(self, sample_evergreen_auth, mocked_init_evergreen_api_class):
-        mocked_init_evergreen_api_class.get_api(auth=sample_evergreen_auth)
-        mocked_init_evergreen_api_class.__init__.assert_called_once_with(
-            auth=sample_evergreen_auth,
-            timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
+    def test_uses_passed_auth(self, sample_evergreen_auth):
+        kwargs = under_test.EvergreenApi._setup_kwargs(auth=sample_evergreen_auth)
+        assert kwargs['auth'] == sample_evergreen_auth
+        assert kwargs['timeout'] == DEFAULT_NETWORK_TIMEOUT_SEC
 
     @patch(ns('read_evergreen_config'))
     def test_uses_default_config_file(self, mock_read_evergreen_config,
-                                      sample_evergreen_configuration, sample_evergreen_auth,
-                                      mocked_init_evergreen_api_class):
+                                      sample_evergreen_configuration, sample_evergreen_auth):
         mock_read_evergreen_config.return_value = sample_evergreen_configuration
-        mocked_init_evergreen_api_class.get_api(use_config_file=True)
-        mocked_init_evergreen_api_class.__init__.assert_called_once_with(
-            auth=sample_evergreen_auth,
-            timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
+        kwargs = under_test.EvergreenApi._setup_kwargs(use_config_file=True)
+        mock_read_evergreen_config.assert_called_once()
+        assert kwargs['auth'] == sample_evergreen_auth
+        assert kwargs['timeout'] == DEFAULT_NETWORK_TIMEOUT_SEC
 
     @patch(ns('read_evergreen_from_file'))
     def test_uses_passed_config_file(self, read_evergreen_from_file,
-                                     sample_evergreen_configuration, sample_evergreen_auth,
-                                     mocked_init_evergreen_api_class):
+                                     sample_evergreen_configuration, sample_evergreen_auth):
         read_evergreen_from_file.return_value = sample_evergreen_configuration
-        mocked_init_evergreen_api_class.get_api(config_file='config.yml')
-        mocked_init_evergreen_api_class.__init__.assert_called_once_with(
-            auth=sample_evergreen_auth,
-            timeout=DEFAULT_NETWORK_TIMEOUT_SEC)
+        kwargs = under_test.EvergreenApi._setup_kwargs(config_file='config.yml')
+        read_evergreen_from_file.assert_called_once_with('config.yml')
+        assert kwargs['auth'] == sample_evergreen_auth
+        assert kwargs['timeout'] == DEFAULT_NETWORK_TIMEOUT_SEC
 
 
 class TestRaiseForStatus(object):

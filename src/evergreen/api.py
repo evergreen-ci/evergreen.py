@@ -708,24 +708,29 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
         """
-        kwargs = {'auth': auth, 'timeout': timeout}
-        if not auth:
-            config = None
-            if use_config_file:
-                config = read_evergreen_config()
-            elif config_file is not None:
-                config = read_evergreen_from_file(config_file)
-
-            if config is not None:
-                auth = get_auth_from_config(config)
-                if auth:
-                    kwargs['auth'] = auth
-
-                # If there is a value for api_server_host, then use it.
-                if 'evergreen' in config and config['evergreen'].get('api_server_host', None):
-                    kwargs['api_server'] = config['evergreen']['api_server_host']
-
+        kwargs = EvergreenApi._setup_kwargs(timeout, auth, use_config_file, config_file)
         return cls(**kwargs)
+
+    @staticmethod
+    def _setup_kwargs(auth=None, use_config_file=False,
+                      config_file=None, timeout=DEFAULT_NETWORK_TIMEOUT_SEC):
+        kwargs = {'auth': auth, 'timeout': timeout}
+        config = None
+        if use_config_file:
+            config = read_evergreen_config()
+        elif config_file is not None:
+            config = read_evergreen_from_file(config_file)
+
+        if config is not None:
+            auth = get_auth_from_config(config)
+            if auth:
+                kwargs['auth'] = auth
+
+            # If there is a value for api_server_host, then use it.
+            if 'evergreen' in config and config['evergreen'].get('api_server_host', None):
+                kwargs['api_server'] = config['evergreen']['api_server_host']
+
+        return kwargs
 
 
 class CachedEvergreenApi(EvergreenApi):

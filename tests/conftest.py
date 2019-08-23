@@ -165,14 +165,3 @@ def sample_evergreen_auth(sample_evergreen_configuration):
     """Return sample evergreen configuration"""
     return EvgAuth(sample_evergreen_configuration['user'],
                    sample_evergreen_configuration['api_key'])
-
-
-@pytest.fixture()
-def mocked_init_evergreen_api_class():
-    """Return an evergreen api class with it's init method mocked"""
-
-    class MockEvergreenApi(EvergreenApi):
-        __init__ = MagicMock()
-        __init__.return_value = None
-
-    return MockEvergreenApi
