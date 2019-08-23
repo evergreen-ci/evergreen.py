@@ -42,6 +42,7 @@ setup(
     ],
     install_requires=[
         'backports.functools_lru_cache ~= 1.5;python_version<"3.3"',
+        'enum34 ~= 1.1.6;python_version<"3.3"',
         'Click ~= 7.0',
         'PyYAML ~= 5.1',
         'requests ~= 2.22.0',
