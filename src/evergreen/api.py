@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from enum import Enum
 
 from evergreen.performance_results import PerformanceData
-from evergreen.project_history import ProjectHistory
 
 try:
     from json.decoder import JSONDecodeError
@@ -32,7 +31,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import read_evergreen_config, DEFAULT_API_SERVER, get_auth_from_config, \
-    DEFAULT_NETWORK_TIMEOUT_SEC
+    DEFAULT_NETWORK_TIMEOUT_SEC, read_evergreen_from_file
 from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
@@ -86,16 +85,6 @@ class _BaseEvergreenApi(object):
         :return: Full url to get endpoint.
         """
         return '{api_server}/rest/v2{endpoint}'.format(
-            api_server=self._api_server, endpoint=endpoint)
-
-    def _create_v1_url(self, endpoint):
-        """
-        Format the a call to a v1 REST API endpoint.
-
-        :param endpoint: endpoint to call.
-        :return: Full url to get endpoint.
-        """
-        return '{api_server}/rest/v1{endpoint}'.format(
             api_server=self._api_server, endpoint=endpoint)
 
     def _create_plugin_url(self, endpoint):
@@ -402,16 +391,6 @@ class _ProjectApi(_BaseEvergreenApi):
             "/projects/{project_id}/versions/tasks".format(project_id=project_id))
         params = {'status': statuses} if statuses else None
         return [Task(json, self) for json in self._paginate(url, params)]
-
-    def project_history(self, project_id):
-        """
-        Get a project's history
-
-        :param project_id: The project's id.
-        :return: The project's history
-        """
-        url = self._create_v1_url("/projects/{project_id}/versions".format(project_id=project_id))
-        return ProjectHistory(self._paginate(url), self)
 
     def task_stats_by_project(self,
                               project_id,
@@ -729,9 +708,22 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
         """
+        kwargs = EvergreenApi._setup_kwargs(timeout=timeout, auth=auth,
+                                            use_config_file=use_config_file,
+                                            config_file=config_file)
+        return cls(**kwargs)
+
+    @staticmethod
+    def _setup_kwargs(auth=None, use_config_file=False,
+                      config_file=None, timeout=DEFAULT_NETWORK_TIMEOUT_SEC):
         kwargs = {'auth': auth, 'timeout': timeout}
-        if not auth and use_config_file:
+        config = None
+        if use_config_file:
             config = read_evergreen_config()
+        elif config_file is not None:
+            config = read_evergreen_from_file(config_file)
+
+        if config is not None:
             auth = get_auth_from_config(config)
             if auth:
                 kwargs['auth'] = auth
@@ -740,7 +732,7 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
             if 'evergreen' in config and config['evergreen'].get('api_server_host', None):
                 kwargs['api_server'] = config['evergreen']['api_server_host']
 
-        return cls(**kwargs)
+        return kwargs
 
 
 class CachedEvergreenApi(EvergreenApi):

@@ -1,0 +1,4 @@
+user: "evergreen_user"
+api_key: "evergreen_api_key"
+api_server_host: "https://evergreen.mongodb.com/api"
+ui_server_host: "https://evergreen.mongodb.com"

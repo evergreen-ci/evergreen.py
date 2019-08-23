@@ -1,12 +1,12 @@
 import os
 import sys
 
-from evergreen.config import DEFAULT_API_SERVER
+from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
 
 try:
-    from unittest.mock import MagicMock
+    from unittest.mock import MagicMock, patch
 except ImportError:
-    from mock import MagicMock
+    from mock import MagicMock, patch
 
 import pytest
 from requests.exceptions import HTTPError
@@ -18,6 +18,36 @@ try:
     from json.decoder import JSONDecodeError
 except ImportError:  # This doesn't exist in python 2.
     pass
+
+
+def ns(relative):
+    return "evergreen.api." + relative
+
+
+class TestConfiguration(object):
+
+    def test_uses_passed_auth(self, sample_evergreen_auth):
+        kwargs = under_test.EvergreenApi._setup_kwargs(auth=sample_evergreen_auth)
+        assert kwargs['auth'] == sample_evergreen_auth
+        assert kwargs['timeout'] == DEFAULT_NETWORK_TIMEOUT_SEC
+
+    @patch(ns('read_evergreen_config'))
+    def test_uses_default_config_file(self, mock_read_evergreen_config,
+                                      sample_evergreen_configuration, sample_evergreen_auth):
+        mock_read_evergreen_config.return_value = sample_evergreen_configuration
+        kwargs = under_test.EvergreenApi._setup_kwargs(use_config_file=True)
+        mock_read_evergreen_config.assert_called_once()
+        assert kwargs['auth'] == sample_evergreen_auth
+        assert kwargs['timeout'] == DEFAULT_NETWORK_TIMEOUT_SEC
+
+    @patch(ns('read_evergreen_from_file'))
+    def test_uses_passed_config_file(self, read_evergreen_from_file,
+                                     sample_evergreen_configuration, sample_evergreen_auth):
+        read_evergreen_from_file.return_value = sample_evergreen_configuration
+        kwargs = under_test.EvergreenApi._setup_kwargs(config_file='config.yml')
+        read_evergreen_from_file.assert_called_once_with('config.yml')
+        assert kwargs['auth'] == sample_evergreen_auth
+        assert kwargs['timeout'] == DEFAULT_NETWORK_TIMEOUT_SEC
 
 
 class TestRaiseForStatus(object):
@@ -166,11 +196,6 @@ class TestProjectApi(object):
         expected_url = mocked_api._create_url('/projects/project_id/versions/tasks')
         mocked_api.session.get.assert_called_with(url=expected_url, params={'status': ['status1']},
                                                   timeout=None)
-
-    def test_project_history(self, mocked_api):
-        mocked_api.project_history('project_id')
-        expected_url = mocked_api._create_v1_url("/projects/project_id/versions")
-        mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
 
 
 class TestBuildApi(object):
