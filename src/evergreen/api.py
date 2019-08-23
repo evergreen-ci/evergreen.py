@@ -708,7 +708,9 @@ class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _Ta
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
         """
-        kwargs = EvergreenApi._setup_kwargs(timeout, auth, use_config_file, config_file)
+        kwargs = EvergreenApi._setup_kwargs(timeout=timeout, auth=auth,
+                                            use_config_file=use_config_file,
+                                            config_file=config_file)
         return cls(**kwargs)
 
     @staticmethod
