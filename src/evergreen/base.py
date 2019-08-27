@@ -76,3 +76,11 @@ class _BaseEvergreenObject(object):
                 return parse_evergreen_datetime(self.json[item])
             return self.json[item]
         raise AttributeError('Unknown attribute {0}'.format(item))
+
+    def __eq__(self, other):
+        if isinstance(other, _BaseEvergreenObject):
+            return self.json == other.json
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
