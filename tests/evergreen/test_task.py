@@ -20,7 +20,7 @@ class TestTask(object):
     def test_getting_attributes(self, sample_task):
         task = Task(sample_task, None)
         assert sample_task['task_id'] == task.task_id
-        with pytest.raises(TypeError):
+        with pytest.raises(AttributeError):
             task.not_really_an_attribute
 
     def test_status_attributes(self, sample_task):

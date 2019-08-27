@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.3 - 2019-08-27
+- Supported multiprocessing use cases by implementing pickle support
+
 ## 0.6.2 - 2019-08-22
 - Handle passed config file
 - Remove broken project history API

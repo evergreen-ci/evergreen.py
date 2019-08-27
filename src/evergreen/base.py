@@ -71,8 +71,16 @@ class _BaseEvergreenObject(object):
 
     def __getattr__(self, item):
         """Lookup an attribute if it exists."""
-        if item in self.json:
+        if item != 'json' and item in self.json:
             if self._is_field_a_date(item):
                 return parse_evergreen_datetime(self.json[item])
             return self.json[item]
-        raise TypeError('Unknown attribute {0}'.format(item))
+        raise AttributeError('Unknown attribute {0}'.format(item))
+
+    def __eq__(self, other):
+        if isinstance(other, _BaseEvergreenObject):
+            return self.json == other.json
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
