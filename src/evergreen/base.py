@@ -76,3 +76,11 @@ class _BaseEvergreenObject(object):
                 return parse_evergreen_datetime(self.json[item])
             return self.json[item]
         raise TypeError('Unknown attribute {0}'.format(item))
+
+    # The below are for pickle support; without them, __getattr__ calls create an
+    # infinite recursion when marshalling objects of this type.
+    def __setstate__(self, state):
+        self.__dict__ = state
+
+    def __getstate__(self):
+        return self.__dict__
