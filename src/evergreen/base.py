@@ -71,16 +71,8 @@ class _BaseEvergreenObject(object):
 
     def __getattr__(self, item):
         """Lookup an attribute if it exists."""
-        if item in self.json:
+        if item is not 'json' and item in self.json:
             if self._is_field_a_date(item):
                 return parse_evergreen_datetime(self.json[item])
             return self.json[item]
-        raise TypeError('Unknown attribute {0}'.format(item))
-
-    # The below are for pickle support; without them, __getattr__ calls create an
-    # infinite recursion when marshalling objects of this type.
-    def __setstate__(self, state):
-        self.__dict__ = state
-
-    def __getstate__(self):
-        return self.__dict__
+        raise AttributeError('Unknown attribute {0}'.format(item))
