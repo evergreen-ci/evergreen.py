@@ -140,18 +140,56 @@ def task_stats(ctx, after_date, before_date, project, distros, group_by, group_n
 
 @cli.command()
 @click.pass_context
-@click.option('-a', '--after-date')
-@click.option('-b', '--before-date')
-@click.option('-p', '--project', required=True)
-@click.option('-d', '--distros', multiple=True)
-@click.option('--group-by')
-@click.option('-g', '--group-num-days', default=30)
-@click.option('-r', '--requesters', multiple=True)
-@click.option('-s', '--sort')
-@click.option('-t', '--tasks', multiple=True, required=True)
-@click.option('-v', '--variants', multiple=True)
+@click.option('-a', '--after-date', help="The earliest date to use. iso-8601 format.")
+@click.option('-b', '--before-date', help="The latest date to use. iso-8601 format.")
+@click.option('-p', '--project', required=True, help="The evergreen project, eg 'mongodb-mongo-master'")
+@click.option('-d', '--distros', multiple=True, help="The list of distributions.")
+@click.option('--group-by', help="Group the results by 'distro', 'task' or 'variant'. Defaults to 'distro'")
+@click.option('-g', '--group-num-days', default=28, help="The number of days to group results by. Defaults to 28.")
+@click.option('-r', '--requesters', multiple=True, help="The requesters.")
+@click.option('-s', '--sort', help="The sort order, can be earliest or latest.")
+@click.option('-t', '--tasks', multiple=True, required=True, help="The list of tasks, e.g. 'lint' , 'compile'. Required, no default.")
+@click.option('-v', '--variants', multiple=True, help="The list of build variants.")
 def task_reliability(ctx, after_date, before_date, project, distros, group_by, group_num_days,
                      requesters, sort, tasks, variants):
+    """
+    Get the Task Reliability scores for the matching tasks.
+
+\b
+Examples:
+\b
+    # Get the scores for mongodb-mongo-master project, compile task (grouped by distro) 
+    # group by days 30.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile
+
+\b
+    # Get the scores for mongodb-mongo-master project, compile task (grouped by task) 
+    # group by days 30.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile --group-by task
+
+\b
+    # Get the scores for mongodb-mongo-master project, compile and lint tasks (grouped by distro) 
+    # group by days 30.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile -t lint
+
+\b
+    # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro) 
+    # for the last 30 days.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1
+
+\b
+    # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro) for each
+    # day for the last 30 days.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile --group_by task
+
+\b
+    # Get the scores for mongodb-mongo-master project, lint task (grouped by task) , grouped in batches of
+    # 28 days for all dates after 168 days ago.
+    $> evg-api   --json task-reliability   -p mongodb-mongo-master -t lint  --group-by task -g 28 -a $(date -I --date="$((28 * 6)) days ago")
+
+\f 
+:see: 'task reliability<https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#taskreliability>'
+"""
     api = ctx.obj['api']
     fmt = ctx.obj['format']
 
