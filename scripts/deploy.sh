@@ -27,5 +27,6 @@ if [ $rc -ne 0 ]; then
     exit 3
 fi
 
+pip install -r requirements.txt.freeze
 twine upload --username $username --password $password dist/*
 exit $?

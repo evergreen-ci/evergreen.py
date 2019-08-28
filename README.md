@@ -75,6 +75,17 @@ by setting the env variable RUN_SLOW_TESTS to any value.
 $ RUN_SLOW_TEST=1 pytest
 ```
 
+### Versioning and Deploy
+
+Deploys to [PyPi](https://pypi.org/project/evergreen.py/) are done automatically on merges to master. 
+In order to avoid overwriting a previous deploy, the version should be updated on all changes. The
+[semver](https://semver.org/) versioning scheme should be used for determining the version number. 
+
+The version is found in the `evergreen` package at `src/evergreen/__init__.py`.
+
+Note: There are evergreen checks to ensure the version does not match the latest version in 
+PyPi.
+
 ### Merging
 
 Merges to master should be done by the evergreen [commit queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).

@@ -4,19 +4,23 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from glob import glob
-from os.path import basename
-from os.path import splitext
+import os
+from os.path import basename, splitext
 
 from setuptools import find_packages
 from setuptools import setup
 
+from pylibversion import lookup_local_module_version
+
+
+version = lookup_local_module_version(os.path.join(os.path.dirname(__file__), "src", "evergreen"))
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name='evergreen.py',
-    version='0.6.4',
+    version=version,  # The version can be updated in `src/evergreen/__init__.py`.
     license='Apache License, Version 2.0',
     description='Python client for the Evergreen API',
     long_description=long_description,
@@ -44,13 +48,15 @@ setup(
         'backports.functools_lru_cache ~= 1.5;python_version<"3.3"',
         'enum34 ~= 1.1.6;python_version<"3.3"',
         'Click ~= 7.0',
+        'pylibversion ~= 0.1.0',
         'PyYAML ~= 5.1',
         'requests ~= 2.22.0',
         'structlog ~= 19.1.0',
         'tenacity ~= 5.0.4',
     ],
-    entry_points='''
-        [console_scripts]
-        evg-api=evergreen.cli.main:main
-    ''',
+    entry_points={
+        'console_scripts': [
+            'evg-api=evergreen.cli.main:main',
+        ],
+    },
 )

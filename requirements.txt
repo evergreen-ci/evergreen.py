@@ -1,5 +1,6 @@
 Click==7.0
 mock~=2.0
+pylibversion==0.1.0
 pytest==4.2.1
 pytest-cov==2.5.0
 pytest-flake8==1.0.4
@@ -8,4 +9,5 @@ PyYAML==5.1
 requests==2.22.0
 tenacity==5.0.4
 tox==3.7.0
+twine==1.13.0
 yapf-junit==0.25.0
