@@ -138,6 +138,13 @@ def task_stats(ctx, after_date, before_date, project, distros, group_by, group_n
     click.echo(fmt_output(fmt, task_statistics))
 
 
+RELIABILITY_GROUP_MAPPING = {
+    'task': 'task',
+    'variant': 'task_variant',
+    'distro': 'task_variant_distro',
+}
+
+
 @cli.command()
 @click.pass_context
 @click.option('-a', '--after-date', help="The earliest date to use. iso-8601 format.")
@@ -146,7 +153,9 @@ def task_stats(ctx, after_date, before_date, project, distros, group_by, group_n
               help="The evergreen project, eg 'mongodb-mongo-master'")
 @click.option('-d', '--distros', multiple=True, help="The list of distributions.")
 @click.option('--group-by',
-              help="Group the results by 'distro', 'task' or 'variant'. Defaults to 'distro'")
+              type=click.Choice(RELIABILITY_GROUP_MAPPING.keys()),
+              default=RELIABILITY_GROUP_MAPPING['task'],
+              help="Group the results by 'task', 'variant' or 'distro'. Defaults to 'task'")
 @click.option('-g', '--group-num-days', default=28,
               help="The number of days to group results by. Defaults to 28.")
 @click.option('-r', '--requesters', multiple=True, help="The requesters.")
@@ -162,35 +171,47 @@ def task_reliability(ctx, after_date, before_date, project, distros, group_by, g
 \b
 Examples:
 \b
-    # Get the scores for mongodb-mongo-master project, compile task (grouped by distro)
-    # group by days 30.
+    # Get the scores for mongodb-mongo-master project, compile task (grouped by task)
+    # for today (1 day, grouped by days 1).
     $> evg-api --json task-reliability -p mongodb-mongo-master -t compile
+OR
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile \\
+        --group-by task
 
 \b
-    # Get the scores for mongodb-mongo-master project, compile task (grouped by task)
-    # group by days 30.
-    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile --group-by task
+    # Get the scores for mongodb-mongo-master project, compile task (grouped by variant)
+    # for today (1 day, grouped by days 1).
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile \\
+        --group-by variant
 
 \b
     # Get the scores for mongodb-mongo-master project, compile and lint tasks (grouped by distro)
-    # group by days 30.
-    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile -t lint
+    # for today (1 day, grouped by days 1).
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t compile -t lint \\
+        --group-by distro
+\b
+    # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro)
+    # for the last 28 days.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1 \\
+        -a $(date -I --date="27 days ago")
+OR
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1 \\
+        -a $(date -I --date="27 days ago") -b $(date -I)
+OR
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1 \\
+        --group_num_days 28
 
 \b
     # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro)
-    # for the last 30 days.
-    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1
-
-\b
-    # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro)
-    # for each day for the last 30 days.
-    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile --group_by task
+    # for each day for the last 28 days.
+    $> evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile \\
+         --group_by distro -a $(date -I --date="27 days ago")
 
 \b
     # Get the scores for mongodb-mongo-master project, lint task (grouped by task) , grouped in
     # batches of 28 days for all dates after 168 days ago.
     $> evg-api   --json task-reliability   -p mongodb-mongo-master -t lint  --group-by task \\
-        -g 28 -a $(date -I --date="$((28 * 6)) days ago")
+        -g 28 -a $(date -I --date="$((28 * 6 - 1)) days ago")
 
 \f
 :see: 'task reliability
@@ -201,7 +222,9 @@ Examples:
 
     task_reliability_list = api.task_reliability_by_project(project, after_date, before_date,
                                                             group_num_days, requesters, tasks,
-                                                            variants, distros, group_by, sort)
+                                                            variants, distros,
+                                                            RELIABILITY_GROUP_MAPPING[group_by],
+                                                            sort)
     task_reliability_scores = [t.json for t in task_reliability_list]
     click.echo(fmt_output(fmt, task_reliability_scores))
 
