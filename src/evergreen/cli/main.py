@@ -154,7 +154,7 @@ RELIABILITY_GROUP_MAPPING = {
 @click.option('-d', '--distros', multiple=True, help="The list of distributions.")
 @click.option('--group-by',
               type=click.Choice(RELIABILITY_GROUP_MAPPING.keys()),
-              default=RELIABILITY_GROUP_MAPPING['task'],
+              default='task',
               help="Group the results by 'task', 'variant' or 'distro'. Defaults to 'task'")
 @click.option('-g', '--group-num-days', default=28,
               help="The number of days to group results by. Defaults to 28.")
