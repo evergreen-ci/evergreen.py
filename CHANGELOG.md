@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.4 - 2019-08-28
+- Removed after_date default on task reliability.
+- Updated task reliability documentation.
+
 ## 0.6.3 - 2019-08-27
 - Supported multiprocessing use cases by implementing pickle support
 
