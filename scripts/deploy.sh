@@ -20,6 +20,8 @@ if [ -e "dist" ]; then
     exit 2
 fi
 
+pip install -r requirements.txt.freze
+
 python setup.py sdist bdist_wheel
 rc=$?
 if [ $rc -ne 0 ]; then
@@ -27,6 +29,5 @@ if [ $rc -ne 0 ]; then
     exit 3
 fi
 
-pip install -r requirements.txt.freeze
 twine upload --username $username --password $password dist/*
 exit $?
