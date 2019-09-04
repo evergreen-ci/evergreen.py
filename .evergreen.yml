@@ -7,6 +7,7 @@ buildvariants:
   - name: unit_tests
   - name: validate_requirements
   - name: yapf_src
+  - name: deploy
   display_tasks:
   - name: yapf
     execution_tasks:
@@ -59,6 +60,22 @@ functions:
           coverage combine
           COVERALLS_REPO_TOKEN=${coveralls_repo_token} coveralls
 
+  deploy:
+    - command: shell.exec
+      params:
+        working_dir: src
+        script: |
+          set -o errexit
+          . venv/bin/activate
+
+
+          if [ "${is_patch}" = "true" ]; then
+            # Do not deploy on patches.
+            exit 0
+          fi
+
+          scripts/deploy.sh ${pypi_user} ${pypi_password}
+
 pre:
 - command: git.get_project
   params:
@@ -94,3 +111,8 @@ tasks:
     - func: validate requirements
       vars:
         requirements_file: requirements.txt
+
+- name: deploy
+  patchable: false
+  commands:
+    - func: deploy

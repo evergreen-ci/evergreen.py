@@ -20,6 +20,8 @@ if [ -e "dist" ]; then
     exit 2
 fi
 
+pip install -r requirements.txt.freeze
+
 python setup.py sdist bdist_wheel
 rc=$?
 if [ $rc -ne 0 ]; then
