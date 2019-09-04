@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.5 - 2019-09-04
+- Add CD support from evergreen.
+
 ## 0.6.4 - 2019-08-28
 - Removed after_date default on task reliability.
 - Updated task reliability documentation.
