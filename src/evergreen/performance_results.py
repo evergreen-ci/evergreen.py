@@ -2,7 +2,7 @@
 """Performance results representation of evergreen."""
 from __future__ import absolute_import
 
-import copy
+from copy import copy
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_short_datetime_attrib, \
     evg_datetime_attrib
@@ -12,8 +12,9 @@ from evergreen.util import parse_evergreen_datetime
 class PerformanceTestResult(_BaseEvergreenObject):
     """Representation of a test result from Evergreen."""
     thread_level = evg_attrib('thread_level')
-    operations_per_second = evg_attrib('ops_per_sec_values')
-    mean_operations_per_second = evg_attrib('ops_per_sec')
+    recorded_values = evg_attrib('recorded_values')
+    mean_value = evg_attrib('mean_value')
+    measurement = evg_attrib('measurement')
 
     def __init__(self, json, api):
         """Create an instance of a test result."""
@@ -35,16 +36,11 @@ class PerformanceTestRun(_BaseEvergreenObject):
             test_result.get('start', test_result['results']['start']))
         self.end = parse_evergreen_datetime(
             test_result.get('end', test_result['results']['end']))
-        # Microbenchmarks does not produce a 'workload' field. We need to fill in the 'workload'
-        # field for microbenchmark points in order to query on 'workload'.
-        self.maximum_thread_level, self.maximum_operations_per_second = _get_max_ops_per_sec(
-            test_result)
 
     @property
     def test_results(self):
-        if self.maximum_operations_per_second is None:
-            return None
-        return _get_performance_results(self.json, self._api)
+        return [PerformanceTestResult(item, self._api) for item in
+                _format_performance_results(self.json['results'])]
 
 
 class PerformanceTestBatch(_BaseEvergreenObject):
@@ -90,70 +86,204 @@ class PerformanceData(_BaseEvergreenObject):
         return PerformanceTestBatch(self.json['data'], self._api, self)
 
 
-def _get_performance_results(test_result, api):
+def _format_performance_results(results):
     """
-    Extract and sort the thread level and respective results from the raw data file from Evergreen.
-    See below for an example of the resulting format:
+    Extract and sort the thread level and respective results from the raw data file from Evergreen,
+    adding max result entries as appropriate.
+    See below for an example of the transformation:
+    Before:
+    {
+        "16":{
+            "95th_read_latency_us":4560.0,
+            "95th_read_latency_us_values":[
+                4560.0
+            ],
+            "99th_read_latency_us":9150.0,
+            "99th_read_latency_us_values":[
+                9150.0
+            ],
+            "average_read_latency_us":1300.0,
+            "average_read_latency_us_values":[
+                1300.0
+            ],
+            "ops_per_sec":1100.0,
+            "ops_per_sec_values":[
+                1100.0
+            ]
+        },
+        "8":{
+            "95th_read_latency_us":4500.0,
+            "95th_read_latency_us_values":[
+                4000.0,
+                5000.0
+            ],
+            "99th_read_latency_us":10000.0,
+            "99th_read_latency_us_values":[
+                10000.0
+            ],
+            "average_read_latency_us":1300.0,
+            "average_read_latency_us_values":[
+                1300.0
+            ],
+            "ops_per_sec":1100.0,
+            "ops_per_sec_values":[
+                1100.0
+            ]
+        }
+    }
+    After:
+    [
+        {
+            'thread_level': '16',
+            'mean_value': 4560.0,
+            'recorded_values': [
+                4560.0
+            ],
+            'measurement': '95th_read_latency_us'
+        },
+        {
+            'thread_level': '16',
+            'mean_value': 9150.0,
+            'recorded_values': [
+                9150.0
+            ],
+            'measurement': '99th_read_latency_us'
+        },
+        {
+            'thread_level': '16',
+            'mean_value': 1300.0,
+            'recorded_values': [
+                1300.0
+            ],
+            'measurement': 'average_read_latency_us'
+        },
+        {
+            'thread_level': '16',
+            'mean_value': 1100.0,
+            'recorded_values': [
+                1100.0
+            ],
+            'measurement': 'ops_per_sec'
+        },
+        {
+            'thread_level': '8',
+            'mean_value': 4500.0,
+            'recorded_values': [
+                4000.0,
+                5000.0
+            ],
+            'measurement': '95th_read_latency_us'
+        },
+        {
+            'thread_level': '8',
+            'mean_value': 10000.0,
+            'recorded_values': [
+                10000.0
+            ],
+            'measurement': '99th_read_latency_us'
+        },
+        {
+            'thread_level': '8',
+            'mean_value': 1300.0,
+            'recorded_values': [
+                1300.0
+            ],
+            'measurement': 'average_read_latency_us'
+        },
+        {
+            'thread_level': '8',
+            'mean_value': 1100.0,
+            'recorded_values': [
+                1100.0
+            ],
+            'measurement': 'ops_per_sec'
+        },
+        {
+            'thread_level': 'max',
+            'mean_value': 4560.0,
+            'recorded_values': [
+                4560.0
+            ],
+            'measurement': '95th_read_latency_us'
+        },
+        {
+            'thread_level': 'max',
+            'mean_value': 10000.0,
+            'recorded_values': [
+                10000.0
+            ],
+            'measurement': '99th_read_latency_us'
+        },
+        {
+            'thread_level': 'max',
+            'mean_value': 1300.0,
+            'recorded_values': [
+                1300.0
+            ],
+            'measurement': 'average_read_latency_us'
+        },
+        {
+            'thread_level': 'max',
+            'mean_value': 1100.0,
+            'recorded_values': [
+                1100.0
+            ],
+            'measurement': 'ops_per_sec'
+        }
+    ]
 
-        [
-            {
-                'thread_level': '1',
-                'ops_per_sec': 500,
-                'ops_per_sec': [
-                    500
-                ]
-            },
-            {
-                'thread_level: '2',
-                'ops_per_sec': 700,
-                'ops_per_sec': [
-                    700
-                ]
+    :param dict results: All the test results from the raw data file from Evergreen.
+    :return: A list of PerformanceTestResults with test results organized by thread level.
+    """
+    thread_levels = sorted(key for key in results.keys() if key.isdigit())
+    performance_results = []
+    maxima = []
+
+    for thread_level in thread_levels:
+        thread_results = results[thread_level]
+        measurement_names = [key for key in thread_results.keys() if 'values' not in key]
+        maxima = {key: None for key in measurement_names}
+        for measurement in measurement_names:
+            formatted = {
+                'thread_level': thread_level,
+                'mean_value': thread_results[measurement],
+                'recorded_values': thread_results[measurement + '_values'],
+                'measurement': measurement
             }
+            performance_results.append(formatted)
+
+            if maxima[measurement] is None or maxima[measurement] < thread_results[measurement]:
+                max_copy = copy(formatted)
+                max_copy['thread_level'] = 'max'
+                maxima[measurement] = formatted
+
+    return performance_results + list(maxima.values())
+
+
+def _get_test_metrics(results):
+    """
+    :param dict results: Performance test results in the format:
+    {
+        "average_read_latency_us":9312.337801629741,
+        "average_read_latency_us_values":[
+            9312.337801629741
+        ],
+        "ops_per_sec":13721.623145260504,
+        "ops_per_sec_values":[
+            13721.623145260504
         ]
-
-    :param dict test_result: All the test results from the raw data file from Evergreen.
-    :return: A list of dictionaries with test results organized by thread level.
+    }
     """
-    thread_levels = []
-    for thread_level, result in test_result['results'].items():
-        if isinstance(result, dict):
-            this_result = copy.deepcopy(result)
-            this_result.pop('error_values', None)
-            this_result.update({'thread_level': thread_level})
-            test_result = PerformanceTestResult(this_result, api)
-            thread_levels.append(test_result)
-    return sorted(thread_levels, key=lambda k: k.thread_level)
-
-
-def _get_max_ops_per_sec(test_result):
-    """
-    For a given set of test results, find and return the maximum operations per second metric and
-    its respective thread level.
-
-    :param dict test_result: All the test results from the raw data file from Evergreen.
-    :return: The maximum operations per second found and its respective thread level.
-    :rtype: tuple(int, int).
-    """
-    max_ops_per_sec = None
-    max_thread_level = None
-    results = test_result['results']
-    for key, thread_level in results.items():
-        if not key.isdigit():
-            continue
-        if max_ops_per_sec is None or max_ops_per_sec < thread_level['ops_per_sec']:
-            max_ops_per_sec = thread_level['ops_per_sec']
-            max_thread_level = int(key)
-    return max_thread_level, max_ops_per_sec
+    return
 
 
 def _is_run_matching(test_run, tests):
     """
-    Determine if the given test_run matches a set of tests.
+    Determine if the given test_run.json matches a set of tests.
 
-    :param test_run: test_run to check.
+    :param test_run: test_run.json to check.
     :param tests: List of tests to upload.
-    :return: True if the test_run contains relevant data.
+    :return: True if the test_run.json contains relevant data.
     """
     if tests is not None and test_run.test_name not in tests:
         return False
@@ -161,7 +291,7 @@ def _is_run_matching(test_run, tests):
     if test_run.start is None:
         return False
 
-    if all(result.operations_per_second is None for result in test_run.test_results):
+    if all(result.mean_value is None for result in test_run.test_results):
         return False
 
     return True

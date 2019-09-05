@@ -161,6 +161,12 @@ def sample_evergreen_configuration():
 
 
 @pytest.fixture()
+def sample_test_run():
+    """Return sample evergreen configuration"""
+    return get_sample_json('test_run.json')
+
+
+@pytest.fixture()
 def sample_evergreen_auth(sample_evergreen_configuration):
     """Return sample evergreen configuration"""
     return EvgAuth(sample_evergreen_configuration['user'],

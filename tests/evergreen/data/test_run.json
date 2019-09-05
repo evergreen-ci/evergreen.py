@@ -1,0 +1,18 @@
+{
+  "95th_read_latency_us": 4560.0,
+  "95th_read_latency_us_values": [
+    4560.0
+  ],
+  "99th_read_latency_us": 9150.0,
+  "99th_read_latency_us_values": [
+    9150.0
+  ],
+  "average_read_latency_us": 1299.3168552027012,
+  "average_read_latency_us_values": [
+    1299.3168552027012
+  ],
+  "ops_per_sec": 12237.975942163428,
+  "ops_per_sec_values": [
+    12237.975942163428
+  ]
+}
