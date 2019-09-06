@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.6 - 2019-09-05
+- Add support for metrics not reporting operations per second
+
 ## 0.6.5 - 2019-09-04
 - Add CD support from evergreen.
 

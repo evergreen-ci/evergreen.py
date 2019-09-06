@@ -1,10 +1,22 @@
 # -*- encoding: utf-8 -*-
+import random
+from copy import copy
 
-from evergreen.util import parse_evergreen_datetime, parse_evergreen_short_datetime
 from evergreen.performance_results import PerformanceData
+from evergreen.util import parse_evergreen_datetime, parse_evergreen_short_datetime
 
 
 class TestPerformanceResults(object):
+
+    def test_sorting(self, sample_performance_results):
+        duplicate = copy(sample_performance_results)
+        data = list(sample_performance_results['data']['results'][0]['results'].items())
+        random.shuffle(data)
+        duplicate['data']['results'][0]['results'] = {key: val for key, val in data}
+        performance_data = PerformanceData(duplicate, None)
+        results = performance_data.test_batch.test_runs[0].test_results
+        thread_levels = [item.thread_level for item in results if item.thread_level != 'max']
+        assert thread_levels == sorted(thread_levels)
 
     def test_deserialization(self, sample_performance_results):
         performance_data = PerformanceData(sample_performance_results, None)
@@ -48,8 +60,9 @@ class TestPerformanceResults(object):
         test_result = test_run.test_results[0]
         test_result_json = test_run_json['results']['1']
 
-        assert test_result.mean_operations_per_second == test_result_json['ops_per_sec']
-        assert test_result.operations_per_second == test_result_json['ops_per_sec_values']
+        assert test_result.measurement == 'ops_per_sec'
+        assert test_result.mean_value == test_result_json['ops_per_sec']
+        assert test_result.recorded_values == test_result_json['ops_per_sec_values']
         assert test_result.thread_level == '1'
 
     def test_filtering_of_tests(self, sample_performance_results):
