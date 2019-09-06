@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.7 - 2019-09-06
+- Fix issue with pip install.
+
 ## 0.6.6 - 2019-09-05
 - Add support for metrics not reporting operations per second
 
