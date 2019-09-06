@@ -39,8 +39,8 @@ class PerformanceTestRun(_BaseEvergreenObject):
 
     @property
     def test_results(self):
-        return [PerformanceTestResult(item, self._api) for item in
-                _format_performance_results(self.json['results'])]
+        return [PerformanceTestResult(item, self._api)
+                for item in _format_performance_results(self.json['results'])]
 
 
 class PerformanceTestBatch(_BaseEvergreenObject):

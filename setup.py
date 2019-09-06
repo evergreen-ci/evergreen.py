@@ -52,7 +52,7 @@ setup(
         'PyYAML ~= 5.1',
         'requests ~= 2.22.0',
         'structlog ~= 19.1.0',
-        'tenacity ~= 5.0.4'
+        'tenacity ~= 5.0.4',
     ],
     entry_points={
         'console_scripts': [
