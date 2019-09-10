@@ -7,7 +7,6 @@ from evergreen.util import parse_evergreen_datetime, parse_evergreen_short_datet
 
 
 class TestPerformanceResults(object):
-
     def test_adds_max_thread_level(self, sample_performance_results):
         performance_data = PerformanceData(sample_performance_results, None)
         results = performance_data.test_batch.test_runs[0].test_results

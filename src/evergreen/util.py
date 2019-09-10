@@ -17,7 +17,7 @@ def parse_evergreen_datetime(evg_date):
     if not evg_date:
         return None
     if type(evg_date) in [int, float]:
-        return datetime.utcfromtimestamp(evg_date)
+        return datetime.fromtimestamp(evg_date)
     return datetime.strptime(evg_date, EVG_DATETIME_FORMAT)
 
 
