@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 import evergreen.util as under_test
 
@@ -6,6 +7,16 @@ SAMPLE_DATE_STRING = "2019-02-13T14:55:37.000Z"
 
 
 class TestParseEvergreenDateTime(object):
+    def test_float(self):
+        now = datetime.now()
+        timestamp = (time.mktime(now.timetuple()) + now.microsecond / 1000000.0)
+        assert now == under_test.parse_evergreen_datetime(timestamp)
+
+    def test_int(self):
+        now = datetime.now()
+        timestamp = int((time.mktime(now.timetuple()) + now.microsecond / 1000000.0))
+        assert datetime.fromtimestamp(timestamp) == under_test.parse_evergreen_datetime(timestamp)
+
     def test_no_datetime(self):
         assert not under_test.parse_evergreen_datetime(None)
 

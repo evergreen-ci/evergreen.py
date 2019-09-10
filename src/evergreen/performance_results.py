@@ -33,9 +33,9 @@ class PerformanceTestRun(_BaseEvergreenObject):
         # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
         # while sys-perf stores it in the outer 'results' field.
         self.start = parse_evergreen_datetime(
-            test_result.get('start', test_result['results']['start']))
+            test_result.get('start', test_result.get('results', {}).get('start')))
         self.end = parse_evergreen_datetime(
-            test_result.get('end', test_result['results']['end']))
+            test_result.get('end', test_result.get('results', {}).get('end')))
 
     @property
     def test_results(self):
@@ -255,7 +255,7 @@ def _format_performance_results(results):
             if maxima[measurement] is None or maxima[measurement] < thread_results[measurement]:
                 max_copy = copy(formatted)
                 max_copy['thread_level'] = 'max'
-                maxima[measurement] = formatted
+                maxima[measurement] = max_copy
 
     return performance_results + list(maxima.values())
 
