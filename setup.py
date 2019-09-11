@@ -10,7 +10,23 @@ from os.path import basename, splitext
 from setuptools import find_packages
 from setuptools import setup
 
-from pylibversion import lookup_local_module_version
+
+def _find_version_line_in_file(file_path):
+    with open(str(file_path), "r") as fileh:
+        version_lines = [
+            line for line in fileh.readlines() if line.startswith("VERSION")
+        ]
+        if len(version_lines) != 1:
+            raise ValueError(
+                "Unable to determine 'VERSION' in {file}".format(file=file_path)
+            )
+        return version_lines[0]
+
+
+def lookup_local_module_version(file_path):
+    path_to_init = os.path.join(str(file_path), "__init__.py")
+    version_tuple = eval(_find_version_line_in_file(path_to_init).split("=")[-1])
+    return ".".join([str(x) for x in version_tuple])
 
 
 version = lookup_local_module_version(os.path.join(os.path.dirname(__file__), "src", "evergreen"))
