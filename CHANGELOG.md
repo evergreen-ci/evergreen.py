@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.9 - 2019-09-11
+- Remove pylibversion dependency in setup.
+
 ## 0.6.7 - 2019-09-06
 - Fix issue with pip install.
 
