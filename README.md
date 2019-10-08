@@ -90,3 +90,19 @@ PyPi.
 
 Merges to master should be done by the evergreen [commit queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
 After a PR has been reviewed, add a comment with the text `evergreen merge` to merge the PR.
+
+### Updating the Freeze File
+
+You will need to update `requirements.txt.freeze` if you change the dependencies of this project:
+```
+#!/usr/bin/env bash
+set -e
+current_directory=$PWD
+rm ${current_directory}/requirements.txt.freeze
+virtualenv ${current_directory}/freeze_venv
+source ${current_directory}/freeze_venv/bin/activate
+pip install -r ${current_directory}/requirements.txt
+pip freeze --local --requirement requirements.txt > requirements.txt.freeze
+deactivate
+rm -rf ${current_directory}/freeze_venv
+```
