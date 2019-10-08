@@ -1,7 +1,7 @@
 Click==7.0
 mock~=2.0
 pylibversion==0.1.0
-pytest==5.2.1
+pytest==4.2.1
 pytest-cov==2.5.0
 pytest-flake8==1.0.4
 python-coveralls==2.9.1
