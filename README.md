@@ -17,7 +17,7 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 
 ### Command Line Application
 
-A command line application is included to explore the evergreen api data. It is called `evg-api`.
+A command line application is included to explore the evergreen api data. It is called `evg-api`. 
 
 ```
 $ evg-api --json list-hosts
