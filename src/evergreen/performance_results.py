@@ -235,15 +235,19 @@ def _format_performance_results(results):
     :param dict results: All the test results from the raw data file from Evergreen.
     :return: A list of PerformanceTestResults with test results organized by thread level.
     """
-    thread_levels = sorted(key for key in results.keys() if key.isdigit())
+    # Sort as integers
+    thread_levels = sorted(int(key) for key in results.keys() if key.isdigit())
+    # Cast back to string
+    thread_levels = [str(entry) for entry in thread_levels]
     performance_results = []
-    maxima = []
+    maxima = {}
 
     for thread_level in thread_levels:
         thread_results = results[thread_level]
         measurement_names = [key for key in thread_results.keys() if 'values' not in key]
-        maxima = {key: None for key in measurement_names}
         for measurement in measurement_names:
+            if measurement not in maxima:
+                maxima[measurement] = None
             formatted = {
                 'thread_level': thread_level,
                 'mean_value': thread_results[measurement],
@@ -252,7 +256,8 @@ def _format_performance_results(results):
             }
             performance_results.append(formatted)
 
-            if maxima[measurement] is None or maxima[measurement] < thread_results[measurement]:
+            if maxima[measurement] is None or \
+                    maxima[measurement]['mean_value'] < formatted['mean_value']:
                 max_copy = copy(formatted)
                 max_copy['thread_level'] = 'max'
                 maxima[measurement] = max_copy
