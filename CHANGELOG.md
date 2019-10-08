@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.10 - 2019-10-08
+- Fixed formatting of performance results.
+
 ## 0.6.9 - 2019-09-11
 - Remove pylibversion dependency in setup.
 

@@ -5,6 +5,8 @@ from copy import copy
 from evergreen.performance_results import PerformanceData
 from evergreen.util import parse_evergreen_datetime, parse_evergreen_short_datetime
 
+from evergreen.performance_results import _format_performance_results
+
 
 class TestPerformanceResults(object):
     def test_adds_max_thread_level(self, sample_performance_results):
@@ -78,3 +80,43 @@ class TestPerformanceResults(object):
 
         assert all(item.test_name in tests for item in selected_runs)
         assert not all(item.test_name in tests for item in all_runs)
+
+    # We are using specific data relating to https://jira.mongodb.org/browse/TIG-2022 in order to
+    # test this since it failed on this specific data
+    def test_formatting_performance_results(self):
+        results = {
+            "1": {
+                "ops_per_sec": 5661.263359191586,
+                "ops_per_sec_values": [5661.263359191586],
+            },
+            "16": {
+                "ops_per_sec": 80015.8949858999,
+                "ops_per_sec_values": [80015.8949858999],
+            },
+            "4": {
+                "ops_per_sec": 22143.8810289373,
+                "ops_per_sec_values": [22143.8810289373],
+            },
+            "8": {
+                "ops_per_sec": 43481.18678740368,
+                "ops_per_sec_values": [43481.18678740368],
+            },
+        }
+
+        formatted = _format_performance_results(results)
+
+        # + 1 for the maximum result
+        assert len(formatted) == len(results) + 1
+
+        for idx, thread_level in enumerate(['1', '4', '8', '16']):
+            item = formatted[idx]
+            assert thread_level == item['thread_level']
+            assert item['mean_value'] == results[thread_level]['ops_per_sec']
+            assert item['recorded_values'] == results[thread_level]['ops_per_sec_values']
+            assert item['measurement'] == 'ops_per_sec'
+
+        item = formatted[4]
+        assert 'max' == item['thread_level']
+        assert item['mean_value'] == 80015.8949858999
+        assert item['recorded_values'] == [80015.8949858999]
+        assert item['measurement'] == 'ops_per_sec'
