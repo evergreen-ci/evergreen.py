@@ -99,7 +99,7 @@ You will need to update `requirements.txt.freeze` if you change the dependencies
 set -e
 current_directory=$PWD
 rm ${current_directory}/requirements.txt.freeze
-virtualenv ${current_directory}/freeze_venv
+virtualenv -p python3 ${current_directory}/freeze_venv
 source ${current_directory}/freeze_venv/bin/activate
 pip install -r ${current_directory}/requirements.txt
 pip freeze --local --requirement requirements.txt > requirements.txt.freeze
