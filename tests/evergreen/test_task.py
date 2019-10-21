@@ -90,6 +90,12 @@ class TestTask(object):
         assert log == mock_api.retrieve_task_log.return_value
         mock_api.retrieve_task_log.assert_called_with(task.log_map['task_log'], True)
 
+    def test_stream_log(self, sample_task):
+        mock_api = MagicMock()
+        task = Task(sample_task, mock_api)
+        log = task.stream_log('task_log')
+        assert log == mock_api.stream_log.return_value
+
     def test_successful_task_is_not_undispatched(self, sample_task):
         sample_task['status'] = 'success'
         task = Task(sample_task, None)
@@ -119,3 +125,12 @@ class TestTask(object):
         task = Task(sample_task, None)
 
         assert not task.is_active()
+
+    def test_get_tests(self, sample_task):
+        mock_api = MagicMock()
+        task = Task(sample_task, mock_api)
+
+        tests = task.get_tests()
+
+        mock_api.tests_by_task.assert_called_once()
+        assert tests == mock_api.tests_by_task.return_value

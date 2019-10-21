@@ -312,6 +312,16 @@ class TestLogApi(object):
         mocked_api.session.get.assert_called_with(url='log_url', params={'text': 'true'},
                                                   timeout=None)
 
+    def test_stream_log(self, mocked_api):
+        streamed_data = [f"line{i}" for i in range(10)]
+        mocked_response = MagicMock()
+        mocked_response.iter_lines.return_value = streamed_data
+        mocked_response.status_code = 200
+        mocked_api.session.get.return_value.__enter__.return_value = mocked_response
+
+        for line in mocked_api.stream_log('log_url'):
+            assert line in streamed_data
+
 
 class TestCachedEvergreenApi(object):
     def test_build_by_id_is_cached(self, mocked_cached_api):
