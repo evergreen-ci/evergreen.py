@@ -2,7 +2,10 @@
 """Unit tests for src/evergreen/test.py."""
 from __future__ import absolute_import
 
-from unittest.mock import MagicMock
+try:
+    from unittest.mock import MagicMock, patch
+except ImportError:
+    from mock import MagicMock, patch
 
 from evergreen.tst import Tst
 

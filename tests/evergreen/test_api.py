@@ -313,7 +313,7 @@ class TestLogApi(object):
                                                   timeout=None)
 
     def test_stream_log(self, mocked_api):
-        streamed_data = [f"line{i}" for i in range(10)]
+        streamed_data = ["line_{}".format(i) for i in range(10)]
         mocked_response = MagicMock()
         mocked_response.iter_lines.return_value = streamed_data
         mocked_response.status_code = 200
