@@ -5,7 +5,7 @@ from __future__ import absolute_import
 try:
     from unittest.mock import MagicMock
 except ImportError:
-    from mock import MagicMock, patch
+    from mock import MagicMock
 
 from evergreen.tst import Tst
 
