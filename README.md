@@ -77,6 +77,9 @@ $ RUN_SLOW_TEST=1 pytest
 
 ### Versioning and Deploy
 
+Before deploying a new version, please update the `CHANGELOG.md` file with a description of what
+is being changed.
+
 Deploys to [PyPi](https://pypi.org/project/evergreen.py/) are done automatically on merges to master. 
 In order to avoid overwriting a previous deploy, the version should be updated on all changes. The
 [semver](https://semver.org/) versioning scheme should be used for determining the version number. 
