@@ -125,6 +125,22 @@ class _BaseEvergreenApi(object):
         self._raise_for_status(response)
         return response
 
+    def _stream_api(self, url, params=None):
+        """
+        Make a streaming call to an api.
+
+        :param url: url to call
+        :param params: url parameters
+        :return: Iterable over the lines of the returned content.
+        """
+        start_time = time.time()
+        with self.session.get(url=url, params=params, stream=True, timeout=self._timeout) as res:
+            self._log_api_call_time(res, start_time)
+            self._raise_for_status(res)
+
+            for line in res.iter_lines(decode_unicode=True):
+                yield line
+
     @staticmethod
     def _raise_for_status(response):
         """
@@ -683,6 +699,18 @@ class _LogApi(_BaseEvergreenApi):
         if raw:
             params['text'] = 'true'
         return self._call_api(log_url, params=params).text
+
+    def stream_log(self, log_url):
+        """
+        Stream the given log url as a python generator.
+
+        :param log_url: URL of log file to stream.
+        :return: Iterable for contents of log_url.
+        """
+        params = {
+            "text": "true"
+        }
+        return self._stream_api(log_url, params)
 
 
 class EvergreenApi(_ProjectApi, _BuildApi, _VersionApi, _PatchApi, _HostApi, _TaskApi, _OldApi,

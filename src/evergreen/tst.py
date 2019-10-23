@@ -17,6 +17,14 @@ class Logs(_BaseEvergreenObject):
         """Create an instance of a Test log."""
         super(Logs, self).__init__(json, api)
 
+    def stream(self):
+        """
+        Retrieve an iterator of the streamed contents of this log.
+
+        :return: Iterable to stream contents of log.
+        """
+        return self._api.stream_log(self.url_raw)
+
 
 class Tst(_BaseEvergreenObject):
     """

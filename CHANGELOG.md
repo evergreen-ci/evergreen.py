@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.11 - 2019-10-23
+- Add support for stream log files.
+
 ## 0.6.10 - 2019-10-08
 - Fixed formatting of performance results.
 

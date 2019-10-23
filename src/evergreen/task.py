@@ -116,6 +116,15 @@ class Task(_BaseEvergreenObject):
         """
         return self._api.retrieve_task_log(self.log_map[log_name], raw)
 
+    def stream_log(self, log_name):
+        """
+        Retrieve an iterator of a streamed log contents for the given log.
+
+        :param log_name: Log to stream.
+        :return: Iterable log contents.
+        """
+        return self._api.stream_log(self.log_map[log_name])
+
     @property
     def status_details(self):
         """
@@ -205,3 +214,13 @@ class Task(_BaseEvergreenObject):
         :return: True if task is active.
         """
         return self.scheduled_time and not self.finish_time
+
+    def get_tests(self, status=None, execution=None):
+        """
+        Get the test results for this task.
+
+        :param status: Only return tests with the given status.
+        :param execution: Return test results for the specified execution.
+        :return: List of test results for the task.
+        """
+        return self._api.tests_by_task(self.task_id, status=status, execution=execution)
