@@ -114,5 +114,9 @@ tasks:
 
 - name: deploy
   patchable: false
+  depends_on:
+    - name: validate_requirements
+    - name: yapf_src
+    - name: unit_tests
   commands:
     - func: deploy
