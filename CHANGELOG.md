@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.12 - 2019-10-24
+- Update evergreen tasks so that deploy is only done after the test for the
+ proposed version already existing finishes
+
 ## 0.6.11 - 2019-10-23
 - Add support for stream log files.
 
