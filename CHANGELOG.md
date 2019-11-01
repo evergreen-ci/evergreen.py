@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.13 - 2019-11-04
+- Add a windowing iterator.
+- Add a common import point.
+
 ## 0.6.12 - 2019-10-24
 - Update evergreen tasks so that deploy is only done after the test for the
  proposed version already existing finishes

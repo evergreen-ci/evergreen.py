@@ -7,7 +7,7 @@ import yaml
 
 import click
 
-from evergreen.api import EvergreenApi
+from evergreen import EvergreenApi
 
 
 DisplayFormat = Enum('DisplayFormat', 'human json yaml')
