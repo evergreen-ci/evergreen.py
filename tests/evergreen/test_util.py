@@ -83,4 +83,4 @@ class TestIteratorByTimeWindow(object):
         iterator = mock_by_seconds(now, 100)
 
         items = list(under_test.iterate_by_time_window(iterator, start_time, end_time, "the_time"))
-        assert math.ceil(60 / 7) == len(items)
+        assert (60 // 7) + 1 == len(items)
