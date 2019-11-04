@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-import math
 import time
 
 import evergreen.util as under_test
