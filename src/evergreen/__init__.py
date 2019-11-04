@@ -1,10 +1,6 @@
 """Evergreen API Module."""
 from pylibversion import version_tuple_to_str
 
-VERSION = (0, 6, 13)
-__version__ = version_tuple_to_str(VERSION)
-
-
 # Shortcuts for importing.
 from evergreen.api import EvergreenApi, RetryingEvergreenApi, CachedEvergreenApi, Requester
 from evergreen.build import Build
@@ -19,3 +15,6 @@ from evergreen.tst import Tst
 from evergreen.stats import TestStats, TaskStats
 from evergreen.task_reliability import TaskReliability
 from evergreen.version import Version
+
+VERSION = (0, 6, 13)
+__version__ = version_tuple_to_str(VERSION)
