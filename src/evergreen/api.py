@@ -320,7 +320,7 @@ class _ProjectApi(_BaseEvergreenApi):
         version_list = self._lazy_paginate(url, params)
         return (Version(version, self) for version in version_list)
 
-    def versions_by_project_time_window(self, project_id, start, end,
+    def versions_by_project_time_window(self, project_id, before, after,
                                         requester=Requester.GITTER_REQUEST,
                                         time_attr='create_time'):
         """
@@ -328,13 +328,13 @@ class _ProjectApi(_BaseEvergreenApi):
 
         :param project_id: Id of project to query.
         :param requester: Type of version to query
-        :param start: Timestamp to start returning items (later in time than end).
-        :param end: Timestamp to stop returning items (earlier in time than start).
+        :param before: Return versions earlier than this timestamp.
+        :param after: Return versions later than this timestamp.
         :param time_attr: Attributes to use to window timestamps.
         :return: Iterator for the given time window.
         """
-        return iterate_by_time_window(self.versions_by_project(project_id, requester), start, end,
-                                      time_attr)
+        return iterate_by_time_window(self.versions_by_project(project_id, requester), before,
+                                      after, time_attr)
 
     def patches_by_project(self, project_id, params=None):
         """
@@ -348,19 +348,19 @@ class _ProjectApi(_BaseEvergreenApi):
         patches = self._lazy_paginate_by_date(url, params)
         return (Patch(patch, self) for patch in patches)
 
-    def patches_by_project_time_window(self, project_id, start, end, params=None,
+    def patches_by_project_time_window(self, project_id, before, after, params=None,
                                        time_attr='create_time'):
         """
         Get an iterator over the patches for the given time window.
 
         :param project_id: Id of project to query.
         :param params: Parameters to pass to endpoint.
-        :param start: Timestamp to start returning items (later in time than end).
-        :param end: Timestamp to stop returning items (earlier in time than start).
+        :param before: Return patches earlier than this timestamp
+        :param after: Return patches later than this timestamp.
         :param time_attr: Attributes to use to window timestamps.
         :return: Iterator for the given time window.
         """
-        return iterate_by_time_window(self.patches_by_project(project_id, params), start, end,
+        return iterate_by_time_window(self.patches_by_project(project_id, params), before, after,
                                       time_attr)
 
     def commit_queue_for_project(self, project_id):
