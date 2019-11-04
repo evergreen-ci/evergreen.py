@@ -60,26 +60,29 @@ class TestIteratorByTimeWindow(object):
     def test_iter_ends_before_start_returns_nothing(self):
         now = datetime.now()
         iterator = mock_by_seconds(now, 5)
-        start_time = now - timedelta(hours=1)
-        end_time = start_time - timedelta(hours=1)
+        before_time = now - timedelta(hours=1)
+        after_time = before_time - timedelta(hours=1)
 
-        items = list(under_test.iterate_by_time_window(iterator, start_time, end_time, "the_time"))
+        items = list(under_test.iterate_by_time_window(iterator, before_time, after_time,
+                                                       "the_time"))
         assert not items
 
     def test_iter_ends_after_end_returns_nothing(self):
         now = datetime.now()
-        start_time = now - timedelta(hours=1)
-        end_time = start_time - timedelta(hours=1)
-        iterator = mock_by_seconds(end_time - timedelta(minutes=5), 5)
+        before_time = now - timedelta(hours=1)
+        after_time = before_time - timedelta(hours=1)
+        iterator = mock_by_seconds(after_time - timedelta(minutes=5), 5)
 
-        items = list(under_test.iterate_by_time_window(iterator, start_time, end_time, "the_time"))
+        items = list(under_test.iterate_by_time_window(iterator, before_time, after_time,
+                                                       "the_time"))
         assert not items
 
     def test_items_in_window_are_returned(self):
         now = datetime.now()
-        start_time = now - timedelta(hours=1)
-        end_time = start_time - timedelta(hours=1)
+        before_time = now - timedelta(hours=1)
+        after_time = before_time - timedelta(hours=1)
         iterator = mock_by_seconds(now, 100)
 
-        items = list(under_test.iterate_by_time_window(iterator, start_time, end_time, "the_time"))
+        items = list(under_test.iterate_by_time_window(iterator, before_time, after_time,
+                                                       "the_time"))
         assert (60 // 7) + 1 == len(items)

@@ -175,17 +175,17 @@ class TestProjectApi(object):
         # returned.
         one_day = timedelta(days=1)
         one_hour = timedelta(hours=1)
-        start_date = parse_evergreen_datetime(version_list[1]['create_time'])
-        end_date = start_date - one_day
+        before_date = parse_evergreen_datetime(version_list[1]['create_time'])
+        after_date = before_date - one_day
 
-        version_list[0]['create_time'] = (start_date + one_day).strftime(EVG_DATETIME_FORMAT)
-        version_list[1]['create_time'] = (start_date - one_hour).strftime(EVG_DATETIME_FORMAT)
-        version_list[2]['create_time'] = (end_date - one_day).strftime(EVG_DATETIME_FORMAT)
+        version_list[0]['create_time'] = (before_date + one_day).strftime(EVG_DATETIME_FORMAT)
+        version_list[1]['create_time'] = (before_date - one_hour).strftime(EVG_DATETIME_FORMAT)
+        version_list[2]['create_time'] = (after_date - one_day).strftime(EVG_DATETIME_FORMAT)
 
         mocked_api_response.json.return_value = version_list
 
-        windowed_versions = mocked_api.versions_by_project_time_window('project_id', start_date,
-                                                                       end_date)
+        windowed_versions = mocked_api.versions_by_project_time_window('project_id', before_date,
+                                                                       after_date)
 
         windowed_list = list(windowed_versions)
 
@@ -209,17 +209,17 @@ class TestProjectApi(object):
         # returned.
         one_day = timedelta(days=1)
         one_hour = timedelta(hours=1)
-        start_date = parse_evergreen_datetime(patch_list[1]['create_time'])
-        end_date = start_date - one_day
+        before_date = parse_evergreen_datetime(patch_list[1]['create_time'])
+        after_date = before_date - one_day
 
-        patch_list[0]['create_time'] = (start_date + one_day).strftime(EVG_DATETIME_FORMAT)
-        patch_list[1]['create_time'] = (start_date - one_hour).strftime(EVG_DATETIME_FORMAT)
-        patch_list[2]['create_time'] = (end_date - one_day).strftime(EVG_DATETIME_FORMAT)
+        patch_list[0]['create_time'] = (before_date + one_day).strftime(EVG_DATETIME_FORMAT)
+        patch_list[1]['create_time'] = (before_date - one_hour).strftime(EVG_DATETIME_FORMAT)
+        patch_list[2]['create_time'] = (after_date - one_day).strftime(EVG_DATETIME_FORMAT)
 
         mocked_api_response.json.return_value = patch_list
 
-        windowed_versions = mocked_api.patches_by_project_time_window('project_id', start_date,
-                                                                      end_date)
+        windowed_versions = mocked_api.patches_by_project_time_window('project_id', before_date,
+                                                                      after_date)
 
         windowed_list = list(windowed_versions)
 
