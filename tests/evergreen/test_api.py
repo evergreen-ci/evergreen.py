@@ -1,7 +1,10 @@
+from copy import deepcopy
+from datetime import timedelta
 import os
 import sys
 
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
+from evergreen.util import parse_evergreen_datetime, EVG_DATETIME_FORMAT
 
 try:
     from unittest.mock import MagicMock, patch
@@ -162,12 +165,66 @@ class TestProjectApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=expected_params,
                                                   timeout=None)
 
+    def test_versions_by_project_time_window(self, mocked_api, sample_version, mocked_api_response):
+        version_list = [
+            deepcopy(sample_version),
+            deepcopy(sample_version),
+            deepcopy(sample_version),
+        ]
+        # Create a window of 1 day, and set the dates so that only the middle items should be
+        # returned.
+        one_day = timedelta(days=1)
+        one_hour = timedelta(hours=1)
+        before_date = parse_evergreen_datetime(version_list[1]['create_time'])
+        after_date = before_date - one_day
+
+        version_list[0]['create_time'] = (before_date + one_day).strftime(EVG_DATETIME_FORMAT)
+        version_list[1]['create_time'] = (before_date - one_hour).strftime(EVG_DATETIME_FORMAT)
+        version_list[2]['create_time'] = (after_date - one_day).strftime(EVG_DATETIME_FORMAT)
+
+        mocked_api_response.json.return_value = version_list
+
+        windowed_versions = mocked_api.versions_by_project_time_window('project_id', before_date,
+                                                                       after_date)
+
+        windowed_list = list(windowed_versions)
+
+        assert len(windowed_list) == 1
+        assert version_list[1]['version_id'] == windowed_list[0].version_id
+
     def test_patches_by_project(self, mocked_api):
         patches = mocked_api.patches_by_project('project_id')
         next(patches)
         expected_url = mocked_api._create_url('/projects/project_id/patches')
         mocked_api.session.get.assert_called_with(url=expected_url, params={'limit': 100},
                                                   timeout=None)
+
+    def test_patches_by_project_time_window(self, mocked_api, sample_patch, mocked_api_response):
+        patch_list = [
+            deepcopy(sample_patch),
+            deepcopy(sample_patch),
+            deepcopy(sample_patch),
+        ]
+        # Create a window of 1 day, and set the dates so that only the middle items should be
+        # returned.
+        one_day = timedelta(days=1)
+        one_hour = timedelta(hours=1)
+        before_date = parse_evergreen_datetime(patch_list[1]['create_time'])
+        after_date = before_date - one_day
+
+        patch_list[0]['create_time'] = (before_date + one_day).strftime(EVG_DATETIME_FORMAT)
+        patch_list[1]['create_time'] = (before_date - one_hour).strftime(EVG_DATETIME_FORMAT)
+        patch_list[2]['create_time'] = (after_date - one_day).strftime(EVG_DATETIME_FORMAT)
+
+        mocked_api_response.json.return_value = patch_list
+
+        windowed_versions = mocked_api.patches_by_project_time_window('project_id', before_date,
+                                                                      after_date)
+
+        windowed_list = list(windowed_versions)
+
+        assert len(windowed_list) == 1
+        assert patch_list[1]['patch_id'] == windowed_list[0].patch_id
 
     def test_commit_queue_for_project(self, mocked_api):
         mocked_api.commit_queue_for_project('project_id')

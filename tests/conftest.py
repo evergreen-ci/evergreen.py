@@ -115,14 +115,20 @@ def sample_test():
 
 
 @pytest.fixture()
-def mocked_api():
-    """Return an Evergreen API with a mocked session."""
-    api = EvergreenApi()
-    api.session = MagicMock()
+def mocked_api_response():
+    """Mocked response returned by mock_api."""
     response_mock = MagicMock()
     response_mock.status_code = 200
     response_mock.json.return_value = [{'create_time': "2019-03-10T02:43:49.330"}]
-    api.session.get.return_value = response_mock
+    return response_mock
+
+
+@pytest.fixture()
+def mocked_api(mocked_api_response):
+    """Return an Evergreen API with a mocked session."""
+    api = EvergreenApi()
+    api.session = MagicMock()
+    api.session.get.return_value = mocked_api_response
     return api
 
 

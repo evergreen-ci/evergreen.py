@@ -63,3 +63,30 @@ def parse_evergreen_date(evg_date):
     if not evg_date:
         return None
     return datetime.strptime(evg_date, EVG_DATE_FORMAT).date()
+
+
+def iterate_by_time_window(iterator, before, after, time_attr):
+    """
+    Iterate over a window of time.
+
+    For a given iterator, generate the items that are within the specified time window.
+
+    Note: Since most evergreen iterators start with the most recent items and then look backwards
+    in time, `start` and `end` refer to the start and end of when items will be seen (i.e. `start`
+    should be later in time than `end` since we will start seeing new items first.
+
+    :param iterator: Iterator to window.
+    :param before: Return items earlier than this timestamp.
+    :param after: Return items later than this timestamp.
+    :param time_attr: Attribute of items in the iterator containing timestamp to check.
+    :return: Iterator for items in the given time window.
+    """
+    for item in iterator:
+        item_time = getattr(item, time_attr)
+        if item_time > before:
+            continue
+
+        if item_time < after:
+            break
+
+        yield item
