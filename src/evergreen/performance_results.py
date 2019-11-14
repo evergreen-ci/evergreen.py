@@ -4,9 +4,7 @@ from __future__ import absolute_import
 
 from copy import copy
 
-from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_short_datetime_attrib, \
-    evg_datetime_attrib
-from evergreen.util import parse_evergreen_datetime
+from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_short_datetime_attrib
 
 
 class PerformanceTestResult(_BaseEvergreenObject):
@@ -30,23 +28,33 @@ class PerformanceTestRun(_BaseEvergreenObject):
         """Create an instance of a test run."""
         super(PerformanceTestRun, self).__init__(test_result, api)
 
+    @property
+    def start(self):
+        """Get the start time for the given test run."""
         # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
         # while sys-perf stores it in the outer 'results' field.
-        self.start = parse_evergreen_datetime(
-            test_result.get('start', test_result.get('results', {}).get('start')))
-        self.end = parse_evergreen_datetime(
-            test_result.get('end', test_result.get('results', {}).get('end')))
+        # Also, the format of start varies depending on what generated the results.
+        return self.json.get('start', self.json.get('results', {}).get('start'))
+
+    @property
+    def end(self):
+        """Get the start time for the given test run."""
+        # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
+        # while sys-perf stores it in the outer 'results' field.
+        # Also, the format of end varies depending on what generated the results.
+        return self.json.get('end', self.json.get('results', {}).get('end'))
 
     @property
     def test_results(self):
+        """Get the performance test results for this run."""
         return [PerformanceTestResult(item, self._api)
                 for item in _format_performance_results(self.json['results'])]
 
 
 class PerformanceTestBatch(_BaseEvergreenObject):
     """Representation of a batch of tests from Evergreen."""
-    start = evg_datetime_attrib('start')
-    end = evg_datetime_attrib('end')
+    start = evg_attrib('start')
+    end = evg_attrib('end')
     storage_engine = evg_attrib('storageEngine')
     errors = evg_attrib('errors')
 
@@ -84,6 +92,14 @@ class PerformanceData(_BaseEvergreenObject):
     @property
     def test_batch(self):
         return PerformanceTestBatch(self.json['data'], self._api, self)
+
+    def __repr__(self):
+        """
+        String representation of PerformanceData for debugging purposes.
+
+        :return: String representation of PreformanceData.
+        """
+        return "PerformanceData({id})".format(id=self.task_id)
 
 
 def _format_performance_results(results):
@@ -263,23 +279,6 @@ def _format_performance_results(results):
                 maxima[measurement] = max_copy
 
     return performance_results + list(maxima.values())
-
-
-def _get_test_metrics(results):
-    """
-    :param dict results: Performance test results in the format:
-    {
-        "average_read_latency_us":9312.337801629741,
-        "average_read_latency_us_values":[
-            9312.337801629741
-        ],
-        "ops_per_sec":13721.623145260504,
-        "ops_per_sec_values":[
-            13721.623145260504
-        ]
-    }
-    """
-    return
 
 
 def _is_run_matching(test_run, tests):

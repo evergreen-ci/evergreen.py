@@ -136,3 +136,11 @@ class Version(_BaseEvergreenObject):
         if self.status != EVG_VERSION_STATUS_CREATED:
             return VersionMetrics(self).calculate(task_filter_fn)
         return None
+
+    def __repr__(self):
+        """
+        String representation of Version for debugging purposes.
+
+        :return: String representation of Version.
+        """
+        return "Version({id})".format(id=self.version_id)

@@ -224,3 +224,11 @@ class Task(_BaseEvergreenObject):
         :return: List of test results for the task.
         """
         return self._api.tests_by_task(self.task_id, status=status, execution=execution)
+
+    def __repr__(self):
+        """
+        String representation of Task for debugging purposes.
+
+        :return: String representation of Task.
+        """
+        return "Task({id})".format(id=self.task_id)
