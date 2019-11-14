@@ -33,6 +33,7 @@ class PerformanceTestRun(_BaseEvergreenObject):
         """Get the start time for the given test run."""
         # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
         # while sys-perf stores it in the outer 'results' field.
+        # Also, the format of start varies depending on what generated the results.
         return self.json.get('start', self.json.get('results', {}).get('start'))
 
     @property
@@ -40,6 +41,7 @@ class PerformanceTestRun(_BaseEvergreenObject):
         """Get the start time for the given test run."""
         # Microbenchmarks stores the 'start' and 'end' time of the test in the inner 'results' field
         # while sys-perf stores it in the outer 'results' field.
+        # Also, the format of end varies depending on what generated the results.
         return self.json.get('end', self.json.get('results', {}).get('end'))
 
     @property
