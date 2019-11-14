@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.14 - 2019-11-14
+- Do not convert type of start/end in performance results.
+
 ## 0.6.13 - 2019-11-04
 - Add a windowing iterator.
 - Add a common import point.

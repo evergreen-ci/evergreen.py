@@ -3,7 +3,7 @@ import random
 from copy import copy
 
 from evergreen.performance_results import PerformanceData
-from evergreen.util import parse_evergreen_datetime, parse_evergreen_short_datetime
+from evergreen.util import parse_evergreen_short_datetime
 
 from evergreen.performance_results import _format_performance_results
 
@@ -45,20 +45,16 @@ class TestPerformanceResults(object):
         test_batch = performance_data.test_batch
         test_batch_json = sample_performance_results['data']
 
-        assert test_batch.start == parse_evergreen_datetime(test_batch_json['start'])
-        assert test_batch.end == parse_evergreen_datetime(test_batch_json['end'])
+        assert test_batch.start == test_batch_json['start']
+        assert test_batch.end == test_batch_json['end']
         assert test_batch.errors == test_batch_json['errors']
         assert test_batch.storage_engine == test_batch_json['storageEngine']
 
         test_run = test_batch.test_runs[0]
         test_run_json = test_batch_json['results'][0]
 
-        assert test_run.start == parse_evergreen_datetime(
-            test_run_json['start'] if 'start' in test_run_json else test_run_json['results'][
-                'start'])
-        assert test_run.end == parse_evergreen_datetime(
-            test_run_json['end'] if 'end' in test_run_json else test_run_json['results'][
-                'end'])
+        assert test_run.start == test_run_json.get('start', test_run_json['results']['start'])
+        assert test_run.end == test_run_json.get('end', test_run_json['results']['end'])
         assert test_run.name == test_run_json['name']
         assert test_run.workload == test_run_json[
             'workload'] if 'workload' in test_run_json else 'microbenchmarks'

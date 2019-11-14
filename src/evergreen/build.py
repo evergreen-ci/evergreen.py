@@ -94,3 +94,11 @@ class Build(_BaseEvergreenObject):
         if self.status != EVG_BUILD_STATUS_CREATED:
             return BuildMetrics(self).calculate(task_filter_fn)
         return None
+
+    def __repr__(self):
+        """
+        String representation of Task for debugging purposes.
+
+        :return: String representation of Task.
+        """
+        return "Build({id})".format(id=self.id)
