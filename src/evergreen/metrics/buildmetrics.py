@@ -27,6 +27,12 @@ class BuildMetrics(object):
         self.timed_out_count = 0
         self.system_failure_count = 0
 
+        self.success_display_count = 0
+        self.failure_display_count = 0
+        self.undispatched_display_count = 0
+        self.timed_out_display_count = 0
+        self.system_failure_display_count = 0
+
         self.estimated_build_costs = 0
         self.total_processing_time = 0
 
@@ -35,6 +41,8 @@ class BuildMetrics(object):
         self._finish_times = []
 
         self.task_list = None
+
+        self._display_map = {}
 
     def calculate(self, task_filter_fn=None):
         """
@@ -56,7 +64,7 @@ class BuildMetrics(object):
         filtered_task_list = [task for task in self.task_list if not task.display_only]
         for task in filtered_task_list:
             self._count_task(task)
-
+        self._count_display_tasks()
         return self
 
     @property
@@ -111,6 +119,60 @@ class BuildMetrics(object):
         :return: Percentage of system failure tasks.
         """
         return self._percent_tasks(self.system_failure_count)
+
+    @property
+    def total_display_tasks(self):
+        """
+        Get the total display tasks in the build.
+        :return: total display tasks.
+        """
+        return self.success_display_count + self.failure_display_count + \
+            self.undispatched_display_count
+
+    @property
+    def pct_display_tasks_success(self):
+        """
+        Get the percentage of successful display tasks.
+
+        :return: Percentage of successful display tasks.
+        """
+        return self._percent_display_tasks(self.success_display_count)
+
+    @property
+    def pct_display_tasks_undispatched(self):
+        """
+        Get the percentage of undispatched display_tasks.
+
+        :return: Percentage of undispatched display_tasks.
+        """
+        return self._percent_display_tasks(self.undispatched_display_count)
+
+    @property
+    def pct_display_tasks_failed(self):
+        """
+        Get the percentage of failed display tasks.
+
+        :return: Percentage of failed display tasks.
+        """
+        return self._percent_display_tasks(self.failure_display_count)
+
+    @property
+    def pct_display_tasks_timed_out(self):
+        """
+        Get the percentage of timeout display tasks.
+
+        :return: Percentage of timeout display tasks.
+        """
+        return self._percent_display_tasks(self.timed_out_display_count)
+
+    @property
+    def pct_display_tasks_system_failure(self):
+        """
+        Get the percentage of system failure display tasks.
+
+        :return: Percentage of system failure display tasks.
+        """
+        return self._percent_display_tasks(self.system_failure_display_count)
 
     @property
     def create_time(self):
@@ -178,6 +240,17 @@ class BuildMetrics(object):
             return 0
         return n_tasks / self.total_tasks
 
+    def _percent_display_tasks(self, n_tasks):
+        """
+        Calculate the percent of display n_tasks out of display total.
+
+        :param n_tasks: Number of display tasks to calculate percent of.
+        :return: percentage display n_tasks is out of total display tasks.
+        """
+        if self.total_display_tasks == 0:
+            return 0
+        return n_tasks / self.total_display_tasks
+
     def _count_task(self, task):
         """
         Add stats for the given task to the metrics.
@@ -200,6 +273,18 @@ class BuildMetrics(object):
             if task.is_timeout():
                 self.timed_out_count += 1
 
+        if task.generated_by not in self._display_map:
+            self._display_map[task.generated_by] = task
+        else:
+            if self._display_map[task.generated_by].is_success() and not task.is_success():
+                self._display_map[task.generated_by] = task
+            if (not self._display_map[task.generated_by].is_timeout() and
+                    not self._display_map[task.generated_by].is_system_failure()) \
+                    and (task.is_timeout() or task.is_system_failure()):
+                self._display_map[task.generated_by] = task
+            if self._display_map[task.generated_by].is_timeout() and task.is_system_failure():
+                self._display_map[task.generated_by] = task
+
         if task.ingest_time:
             self._create_times.append(task.ingest_time)
         else:
@@ -213,6 +298,17 @@ class BuildMetrics(object):
 
         self.estimated_build_costs += task.estimated_cost
         self.total_processing_time += task.time_taken_ms / 1000
+
+    def _count_display_tasks(self):
+        for generated_by, task in self._display_map.items():
+            if task.is_success():
+                self.success_display_count += 1
+            else:
+                self.failure_display_count += 1
+                if task.is_system_failure():
+                    self.system_failure_display_count += 1
+                if task.is_timeout():
+                    self.timed_out_display_count += 1
 
     def as_dict(self, include_children=False):
         """
@@ -235,6 +331,16 @@ class BuildMetrics(object):
             'pct_tasks_failed': self.pct_tasks_failed,
             'timed_out_count': self.timed_out_count,
             'system_failure_count': self.system_failure_count,
+            'total_display_tasks': self.total_display_tasks,
+            'success_display_count': self.success_display_count,
+            'pct_display_tasks_success': self.pct_display_tasks_success,
+            'undispatched_display_count': self.undispatched_display_count,
+            'pct_display_tasks_undispatched': self.pct_display_tasks_undispatched,
+            'failure_display_count': self.failure_display_count,
+            'pct_display_tasks_failed': self.pct_display_tasks_failed,
+            'timed_out_display_count': self.timed_out_display_count,
+            'system_failure_display_count': self.system_failure_display_count,
+
             'estimated_build_costs': self.estimated_build_costs,
         }
 
@@ -279,5 +385,16 @@ class BuildMetrics(object):
             timeout_pct=self.pct_tasks_timed_out,
             system_failure_count=self.system_failure_count,
             system_failure_pct=self.pct_tasks_system_failure,
+            total_display_tasks=self.total_display_tasks,
+            success_display_count=self.success_display_count,
+            success_display_pct=self.pct_display_tasks_success,
+            undispatched_display_count=self.undispatched_display_count,
+            undispatched_display_pct=self.pct_display_tasks_undispatched,
+            failed_display_count=self.failure_display_count,
+            failed_display_pct=self.pct_display_tasks_failed,
+            timeout_display_count=self.timed_out_display_count,
+            timeout_display_pct=self.pct_display_tasks_timed_out,
+            system_failure_display_count=self.system_failure_display_count,
+            system_failure_display_pct=self.pct_display_tasks_system_failure,
             est_build_costs=self.estimated_build_costs
         ).rstrip()
