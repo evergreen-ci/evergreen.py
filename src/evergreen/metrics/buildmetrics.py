@@ -251,6 +251,20 @@ class BuildMetrics(object):
             return 0
         return n_tasks / self.total_display_tasks
 
+    def _get_task_status_score(self, task):
+        if task.is_success():
+            return 0
+        if not task.is_success() and not task.is_system_failure() and not task.is_timeout() and \
+                not task.is_undispatched():
+            return 1
+        if not task.is_success() and not task.is_undispatched() and task.is_timeout():
+            return 2
+        if not task.is_success() and not task.is_undispatched() and task.is_system_failure():
+            return 3
+        if task.is_undispatched():
+            return 4
+        return
+
     def _count_task(self, task):
         """
         Add stats for the given task to the metrics.
@@ -258,6 +272,11 @@ class BuildMetrics(object):
         """
         if task.is_undispatched():
             self.undispatched_count += 1
+            if task.generated_by:
+                self._display_map[task.generated_by] = task
+            else:
+                self.display_undispatched_count += 1
+
             return  # An 'undispatched' task has no useful stats.
 
         if task.is_active():
@@ -266,24 +285,29 @@ class BuildMetrics(object):
 
         if task.is_success():
             self.success_count += 1
+            if not task.generated_by:
+                self.display_success_count += 1
         else:
             self.failure_count += 1
+            if not task.generated_by:
+                self.display_failure_count += 1
             if task.is_system_failure():
                 self.system_failure_count += 1
+                if not task.generated_by:
+                    self.display_system_failure_count += 1
             if task.is_timeout():
                 self.timed_out_count += 1
+                if not task.generated_by:
+                    self.display_timed_out_count += 1
 
         if task.generated_by:
             if task.generated_by not in self._display_map:
                 self._display_map[task.generated_by] = task
             else:
-                if self._display_map[task.generated_by].is_success() and not task.is_success():
-                    self._display_map[task.generated_by] = task
-                if (not self._display_map[task.generated_by].is_timeout() and
-                        not self._display_map[task.generated_by].is_system_failure()) \
-                        and (task.is_timeout() or task.is_system_failure()):
-                    self._display_map[task.generated_by] = task
-                if self._display_map[task.generated_by].is_timeout() and task.is_system_failure():
+                current_task_score = \
+                    self._get_task_status_score(self._display_map[task.generated_by])
+                new_task_score = self._get_task_status_score(task)
+                if new_task_score > current_task_score:
                     self._display_map[task.generated_by] = task
 
         if task.ingest_time:
@@ -302,8 +326,12 @@ class BuildMetrics(object):
 
     def _count_display_tasks(self):
         for generated_by, task in self._display_map.items():
+            if task.is_undispatched():
+                self.display_undispatched_count += 1
+                continue
             if task.is_success():
                 self.display_success_count += 1
+                continue
             else:
                 self.display_failure_count += 1
                 if task.is_system_failure():
