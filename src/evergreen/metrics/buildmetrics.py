@@ -368,7 +368,9 @@ class BuildMetrics(object):
             'failure_display_count': self.display_failure_count,
             'pct_display_tasks_failed': self.pct_display_tasks_failed,
             'timed_out_display_count': self.display_timed_out_count,
+            'pct_display_tasks_timed_out': self.pct_display_tasks_timed_out,
             'system_failure_display_count': self.display_system_failure_count,
+            'pct_display_tasks_system_failure': self.pct_display_tasks_system_failure,
 
             'estimated_build_costs': self.estimated_build_costs,
         }
