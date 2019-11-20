@@ -67,6 +67,13 @@ def sample_task():
 
 
 @pytest.fixture()
+def sample_task_list():
+    """Return sample task json."""
+    return [get_sample_json('task.json'), get_sample_json('task.json'),
+            get_sample_json('task.json')]
+
+
+@pytest.fixture()
 def sample_version():
     """Return sample version json."""
     return get_sample_json('version.json')
