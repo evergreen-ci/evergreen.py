@@ -71,6 +71,11 @@ class TestTask(object):
         assert len(task.artifacts) == len(sample_task['artifacts'])
         assert task.artifacts[0].name == sample_task['artifacts'][0]['name']
 
+    def test_no_artifacts(self, sample_task):
+        sample_task["artifacts"] = None
+        task = Task(sample_task, None)
+        assert len(task.artifacts) == 0
+
     def test_logs(self, sample_task):
         task = Task(sample_task, None)
 
