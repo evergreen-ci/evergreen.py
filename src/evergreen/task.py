@@ -115,8 +115,11 @@ class Task(_BaseEvergreenObject):
     def artifacts(self):
         """
         Retrieve the artifacts for the given task.
+
         :return: List of artifacts.
         """
+        if not self.json.get('artifacts'):
+            return []
         return [Artifact(artifact, self._api) for artifact in self.json['artifacts']]
 
     @property

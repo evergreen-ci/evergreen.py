@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.15 - 2019-11-22
+- Handle empty artifacts in a task.
+
 ## 0.6.14 - 2019-11-14
 - Do not convert type of start/end in performance results.
 
