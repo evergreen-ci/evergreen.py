@@ -33,26 +33,25 @@ class Artifact(_BaseEvergreenObject):
 
 
 class StatusScore(IntEnum):
+    """Integer score of the task status"""
+
     SUCCESS = 1
     FAILURE = 2
-    FAILURE_TIMEOUT = 3
-    FAILURE_SYSTEM = 4
+    FAILURE_SYSTEM = 3
+    FAILURE_TIMEOUT = 4
     UNDISPATCHED = 5
 
     @classmethod
     def get_task_status_score(self, task):
         if task.is_success():
             return StatusScore.SUCCESS
-        if not task.is_success() and not task.is_system_failure() and not task.is_timeout() and \
-                not task.is_undispatched():
-            return StatusScore.FAILURE
-        if not task.is_success() and not task.is_undispatched() and task.is_timeout():
-            return StatusScore.FAILURE_TIMEOUT
-        if not task.is_success() and not task.is_undispatched() and task.is_system_failure():
-            return StatusScore.FAILURE_SYSTEM
         if task.is_undispatched():
             return StatusScore.UNDISPATCHED
-        return StatusScore.UNDISPATCHED
+        if task.is_timeout():
+            return StatusScore.FAILURE_TIMEOUT
+        if task.is_system_failure():
+            return StatusScore.FAILURE_SYSTEM
+        return StatusScore.FAILURE
 
 
 class StatusDetails(_BaseEvergreenObject):
@@ -159,6 +158,10 @@ class Task(_BaseEvergreenObject):
 
     @property
     def status_score(self):
+        """
+        Retrieve the status score enum for the given task.
+        :return: Status score.
+        """
         return StatusScore.get_task_status_score(self)
 
     def get_execution(self, execution):
