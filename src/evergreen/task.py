@@ -156,8 +156,7 @@ class Task(_BaseEvergreenObject):
         """
         return StatusDetails(self.json['status_details'], self._api)
 
-    @property
-    def status_score(self):
+    def get_status_score(self):
         """
         Retrieve the status score enum for the given task.
         :return: Status score.

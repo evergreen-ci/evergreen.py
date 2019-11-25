@@ -290,7 +290,8 @@ class BuildMetrics(object):
             if task.generated_by not in self._display_map:
                 self._display_map[task.generated_by] = task
             else:
-                if task.status_score > self._display_map[task.generated_by].status_score:
+                if task.get_status_score() > \
+                        self._display_map[task.generated_by].get_status_score():
                     self._display_map[task.generated_by] = task
 
         if task.ingest_time:

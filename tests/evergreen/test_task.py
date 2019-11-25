@@ -143,7 +143,7 @@ class TestTask(object):
         sample_task['status'] = status_string
         task = Task(sample_task, None)
 
-        assert task.status_score == status_score
+        assert task.get_status_score() == status_score
 
     @pytest.mark.parametrize("status_string,status_score", [(True, StatusScore.FAILURE_TIMEOUT),
                                                             (False, StatusScore.FAILURE_SYSTEM)])
@@ -153,4 +153,4 @@ class TestTask(object):
         sample_task['status_details']['timed_out'] = status_string
         task = Task(sample_task, None)
 
-        assert task.status_score == status_score
+        assert task.get_status_score() == status_score
