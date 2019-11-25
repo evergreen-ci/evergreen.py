@@ -251,20 +251,6 @@ class BuildMetrics(object):
             return 0
         return n_tasks / self.total_display_tasks
 
-    def _get_task_status_score(self, task):
-        if task.is_success():
-            return 0
-        if not task.is_success() and not task.is_system_failure() and not task.is_timeout() and \
-                not task.is_undispatched():
-            return 1
-        if not task.is_success() and not task.is_undispatched() and task.is_timeout():
-            return 2
-        if not task.is_success() and not task.is_undispatched() and task.is_system_failure():
-            return 3
-        if task.is_undispatched():
-            return 4
-        return
-
     def _count_task(self, task):
         """
         Add stats for the given task to the metrics.
@@ -304,10 +290,7 @@ class BuildMetrics(object):
             if task.generated_by not in self._display_map:
                 self._display_map[task.generated_by] = task
             else:
-                current_task_score = \
-                    self._get_task_status_score(self._display_map[task.generated_by])
-                new_task_score = self._get_task_status_score(task)
-                if new_task_score > current_task_score:
+                if task.status_score > self._display_map[task.generated_by].status_score:
                     self._display_map[task.generated_by] = task
 
         if task.ingest_time:
