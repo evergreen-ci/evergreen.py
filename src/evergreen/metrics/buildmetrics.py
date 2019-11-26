@@ -7,6 +7,10 @@ from structlog import get_logger
 
 from evergreen.errors.exceptions import ActiveTaskMetricsException
 
+from collections import defaultdict
+
+from evergreen.task import StatusScore
+
 LOGGER = get_logger(__name__)
 
 
@@ -42,7 +46,7 @@ class BuildMetrics(object):
 
         self.task_list = None
 
-        self._display_map = {}
+        self._display_map = defaultdict(list)
 
     def calculate(self, task_filter_fn=None):
         """
@@ -259,7 +263,7 @@ class BuildMetrics(object):
         if task.is_undispatched():
             self.undispatched_count += 1
             if task.generated_by:
-                self._display_map[task.generated_by] = task
+                self._display_map[task.generated_by].append(task)
             else:
                 self.display_undispatched_count += 1
 
@@ -287,12 +291,7 @@ class BuildMetrics(object):
                     self.display_timed_out_count += 1
 
         if task.generated_by:
-            if task.generated_by not in self._display_map:
-                self._display_map[task.generated_by] = task
-            else:
-                if task.get_status_score() > \
-                        self._display_map[task.generated_by].get_status_score():
-                    self._display_map[task.generated_by] = task
+            self._display_map[task.generated_by].append(task)
 
         if task.ingest_time:
             self._create_times.append(task.ingest_time)
@@ -309,19 +308,25 @@ class BuildMetrics(object):
         self.total_processing_time += task.time_taken_ms / 1000
 
     def _count_display_tasks(self):
-        for generated_by, task in self._display_map.items():
-            if task.is_undispatched():
-                self.display_undispatched_count += 1
-                continue
-            if task.is_success():
+        for generated_by, tasks in self._display_map.items():
+            status = max([task.get_status_score() for task in tasks])
+            if status == StatusScore.SUCCESS:
                 self.display_success_count += 1
                 continue
-            else:
+            if status == StatusScore.UNDISPATCHED:
+                self.display_undispatched_count += 1
+                continue
+            if status == StatusScore.FAILURE:
                 self.display_failure_count += 1
-                if task.is_system_failure():
-                    self.display_system_failure_count += 1
-                if task.is_timeout():
-                    self.display_timed_out_count += 1
+                continue
+            if status == StatusScore.FAILURE_SYSTEM:
+                self.display_system_failure_count += 1
+                self.display_failure_count += 1
+                continue
+            if status == StatusScore.FAILURE_TIMEOUT:
+                self.display_timed_out_count += 1
+                self.display_failure_count += 1
+                continue
 
     def as_dict(self, include_children=False):
         """

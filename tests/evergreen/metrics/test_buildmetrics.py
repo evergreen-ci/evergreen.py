@@ -230,7 +230,7 @@ class TestBuildMetrics(object):
         assert build_metrics.display_timed_out_count == 1
         assert build_metrics.total_display_tasks == 1
         assert build_metrics.pct_display_tasks_failed == 1
-        assert build_metrics.pct_display_tasks_system_failure == 1
+        assert build_metrics.pct_display_tasks_system_failure == 0
         assert build_metrics.pct_display_tasks_timed_out == 1
 
     def test_generate_by_failure_priority(self, sample_task_list):
@@ -302,7 +302,7 @@ class TestBuildMetrics(object):
         assert build_metrics.display_timed_out_count == 1
         assert build_metrics.display_success_count == 0
         assert build_metrics.display_failure_count == 1
-        assert build_metrics.display_system_failure_count == 1
+        assert build_metrics.display_system_failure_count == 0
         assert build_metrics.total_display_tasks == 1
 
     def test_generate_by_system_undispatched_priority(self, sample_task_list):
