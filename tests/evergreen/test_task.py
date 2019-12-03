@@ -8,7 +8,7 @@ try:
 except ImportError:
     from mock import MagicMock
 
-from evergreen.task import Task, _EVG_DATE_FIELDS_IN_TASK
+from evergreen.task import Task, StatusScore, _EVG_DATE_FIELDS_IN_TASK
 
 
 class TestTask(object):
@@ -139,3 +139,23 @@ class TestTask(object):
 
         mock_api.tests_by_task.assert_called_once()
         assert tests == mock_api.tests_by_task.return_value
+
+    @pytest.mark.parametrize("status_string,status_score", [("success", StatusScore.SUCCESS),
+                                                            ("failure", StatusScore.FAILURE),
+                                                            ("undispatched",
+                                                             StatusScore.UNDISPATCHED)])
+    def test_no_details_task_is_scored_correctly(self, sample_task, status_string, status_score):
+        sample_task['status'] = status_string
+        task = Task(sample_task, None)
+
+        assert task.get_status_score() == status_score
+
+    @pytest.mark.parametrize("status_string,status_score", [(True, StatusScore.FAILURE_TIMEOUT),
+                                                            (False, StatusScore.FAILURE_SYSTEM)])
+    def test_detailed_task_is_scored_correctly(self, sample_task, status_string, status_score):
+        sample_task['status_details']['type'] = 'system'
+        sample_task['status'] = 'failed'
+        sample_task['status_details']['timed_out'] = status_string
+        task = Task(sample_task, None)
+
+        assert task.get_status_score() == status_score

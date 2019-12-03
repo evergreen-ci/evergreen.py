@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+from enum import IntEnum
 
 EVG_SUCCESS_STATUS = 'success'
 EVG_SYSTEM_FAILURE_STATUS = 'system'
@@ -29,6 +30,33 @@ class Artifact(_BaseEvergreenObject):
     def __init__(self, json, api):
         """Create an instance of an evergreen task artifact."""
         super(Artifact, self).__init__(json, api)
+
+
+class StatusScore(IntEnum):
+    """Integer score of the task status"""
+
+    SUCCESS = 1
+    FAILURE = 2
+    FAILURE_SYSTEM = 3
+    FAILURE_TIMEOUT = 4
+    UNDISPATCHED = 5
+
+    @classmethod
+    def get_task_status_score(self, task):
+        """
+        Retrieves the status score based on the task status
+
+        :return: Status score.
+        """
+        if task.is_success():
+            return StatusScore.SUCCESS
+        if task.is_undispatched():
+            return StatusScore.UNDISPATCHED
+        if task.is_timeout():
+            return StatusScore.FAILURE_TIMEOUT
+        if task.is_system_failure():
+            return StatusScore.FAILURE_SYSTEM
+        return StatusScore.FAILURE
 
 
 class StatusDetails(_BaseEvergreenObject):
@@ -135,6 +163,13 @@ class Task(_BaseEvergreenObject):
         :return: Status details.
         """
         return StatusDetails(self.json['status_details'], self._api)
+
+    def get_status_score(self):
+        """
+        Retrieve the status score enum for the given task.
+        :return: Status score.
+        """
+        return StatusScore.get_task_status_score(self)
 
     def get_execution(self, execution):
         """
