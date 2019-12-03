@@ -43,6 +43,11 @@ class StatusScore(IntEnum):
 
     @classmethod
     def get_task_status_score(self, task):
+        """
+        Retrieves the status score based on the task status
+
+        :return: Status score.
+        """
         if task.is_success():
             return StatusScore.SUCCESS
         if task.is_undispatched():

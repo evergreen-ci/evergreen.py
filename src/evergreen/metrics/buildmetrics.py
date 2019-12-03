@@ -385,6 +385,12 @@ class BuildMetrics(object):
         Failed Tasks: {failed_count} ({failed_pct:.2%})
         Timeout Tasks: {timeout_count} ({timeout_pct:.2%})
         System Failure Tasks: {system_failure_count} ({system_failure_pct:.2%})
+        Total Display Tasks: {total_display_tasks}
+        Successful Display Tasks: {success_display_count} ({success_display_pct:.2%})
+        Undispatched Display Tasks: {undispatched_display_count} ({undispatched_display_pct:.2%})
+        Failed Display Tasks: {failed_display_count} ({failed_display_pct:.2%})
+        Timeout Display Tasks: {timeout_display_count} ({timeout_display_pct:.2%})
+        System Failure Tasks: {system_failure_display_count} ({system_failure_display_pct:.2%})
         Estimated Build Costs: {est_build_costs:.3f}
         """.format(
             build_id=self.build.id,

@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.16 - 2019-12-03
+- Add displayable counts to builds metrics
+
 ## 0.6.15 - 2019-11-22
 - Handle empty artifacts in a task.
 
