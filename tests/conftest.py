@@ -13,6 +13,7 @@ import os
 import pytest
 
 from evergreen.api import EvergreenApi, CachedEvergreenApi, RetryingEvergreenApi
+from evergreen.version import Requester
 
 TESTS_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 SAMPLE_DATA_PATH = os.path.join(TESTS_DIRECTORY, 'evergreen', 'data')
@@ -184,3 +185,8 @@ def sample_evergreen_auth(sample_evergreen_configuration):
     """Return sample evergreen configuration"""
     return EvgAuth(sample_evergreen_configuration['user'],
                    sample_evergreen_configuration['api_key'])
+
+
+@pytest.fixture(params=(list(Requester)))
+def requester_value(request):
+    return request.param

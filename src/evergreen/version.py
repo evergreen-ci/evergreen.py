@@ -2,9 +2,30 @@
 """Version representation of evergreen."""
 from __future__ import absolute_import
 
+from enum import Enum, auto
+
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.metrics.versionmetrics import VersionMetrics
 
+
+class Requester(Enum):
+    """Requester that created version."""
+    PATCH_REQUEST = auto()
+    GITTER_REQUEST = auto()
+    GITHUB_PULL_REQUEST = auto()
+    MERGE_TEST = auto()
+    AD_HOC = auto()
+    UNKNOWN = auto()
+
+    def evg_value(self):
+        return self.name.lower()
+
+
+PATCH_REQUESTERS = {
+    Requester.PATCH_REQUEST,
+    Requester.GITHUB_PULL_REQUEST,
+    Requester.MERGE_TEST,
+}
 
 EVG_VERSION_STATUS_SUCCESS = 'success'
 EVG_VERSION_STATUS_FAILED = 'failed'
@@ -32,7 +53,7 @@ class BuildVariantStatus(_BaseEvergreenObject):
 
 
 class Version(_BaseEvergreenObject):
-    """Representation of a Evergreen Version."""
+    """Representation of an Evergreen Version."""
 
     version_id = evg_attrib('version_id')
     create_time = evg_datetime_attrib('create_time')
@@ -67,10 +88,16 @@ class Version(_BaseEvergreenObject):
 
     @property
     def build_variants_status(self):
+        """Get a list of build variant statuses."""
         if 'build_variants_status' not in self.json or not self.json['build_variants_status']:
             return []
         build_variants_status = self.json['build_variants_status']
         return [BuildVariantStatus(bvs, self._api) for bvs in build_variants_status]
+
+    @property
+    def requester(self):
+        """Get the requester of this version."""
+        return Requester[self.json.get("requester", "UNKNOWN").upper()]
 
     def build_by_variant(self, build_variant):
         """
@@ -103,6 +130,8 @@ class Version(_BaseEvergreenObject):
 
         :return: True if this version is a patch build.
         """
+        if self.requester and self.requester != Requester.UNKNOWN:
+            return self.requester in PATCH_REQUESTERS
         return not self.version_id.startswith(self.project.replace('-', '_'))
 
     def is_completed(self):

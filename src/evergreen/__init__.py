@@ -16,5 +16,5 @@ from evergreen.stats import TestStats, TaskStats
 from evergreen.task_reliability import TaskReliability
 from evergreen.version import Version
 
-VERSION = (0, 6, 16)
+VERSION = (1, 0, 0)
 __version__ = version_tuple_to_str(VERSION)

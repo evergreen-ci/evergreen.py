@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 
 import time
-from enum import Enum
 
 from evergreen.performance_results import PerformanceData
 
@@ -41,7 +40,7 @@ from evergreen.tst import Tst
 from evergreen.stats import TestStats, TaskStats
 from evergreen.task_reliability import TaskReliability
 from evergreen.util import evergreen_input_to_output, iterate_by_time_window
-from evergreen.version import Version
+from evergreen.version import Version, Requester
 
 structlog.configure(logger_factory=LoggerFactory())
 LOGGER = structlog.getLogger(__name__)
@@ -51,8 +50,6 @@ DEFAULT_LIMIT = 100
 MAX_RETRIES = 3
 START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
-
-Requester = Enum('Requester', 'PATCH_REQUEST GITTER_REQUEST GITHUB_PULL_REQUEST MERGE_TEST AD_HOC')
 
 
 class _BaseEvergreenApi(object):
