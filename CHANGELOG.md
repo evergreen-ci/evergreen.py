@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 - 2019-12-04
+- Add `requester` field to `Version`.
+- Better handling of `is_patch` in `Version`.
+
 ## 0.6.16 - 2019-12-03
 - Add displayable counts to builds metrics
 
