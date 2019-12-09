@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.1 - 2019-12-09
+- Add `TRIGGER_REQUEST` request type.
+
 ## 1.0.0 - 2019-12-04
 - Add `requester` field to `Version`.
 - Better handling of `is_patch` in `Version`.

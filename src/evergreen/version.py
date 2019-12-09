@@ -15,6 +15,7 @@ class Requester(Enum):
     GITHUB_PULL_REQUEST = auto()
     MERGE_TEST = auto()
     AD_HOC = auto()
+    TRIGGER_REQUEST = auto()
     UNKNOWN = auto()
 
     def evg_value(self):
