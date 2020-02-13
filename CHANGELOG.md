@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.2 - 2020-02-13
+- Handle different timestamp formats from evergreen API.
+
 ## 1.0.1 - 2019-12-09
 - Add `TRIGGER_REQUEST` request type.
 
