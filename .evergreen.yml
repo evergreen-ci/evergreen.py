@@ -49,17 +49,6 @@ functions:
           pip freeze --local --requirement ${requirements_file} > pip.freeze
           diff ${requirements_file}.freeze pip.freeze
 
-  upload code coverage:
-    - command: shell.exec
-      params:
-        working_dir: src
-        script: |
-          set -o errexit
-          . venv/bin/activate
-
-          coverage combine
-          COVERALLS_REPO_TOKEN=${coveralls_repo_token} coveralls
-
   deploy:
     - command: shell.exec
       params:
@@ -98,7 +87,6 @@ tasks:
         . venv/bin/activate
 
         tox
-  - func: upload code coverage
 
 - name: yapf_src
   commands:

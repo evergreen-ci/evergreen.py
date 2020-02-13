@@ -1,6 +1,8 @@
 """Useful utilities for interacting with Evergreen."""
 from datetime import datetime
 
+from dateutil.parser import parse
+
 EVG_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%S.%fZ'
 EVG_SHORT_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 EVG_DATE_FORMAT = '%Y-%m-%d'
@@ -18,7 +20,7 @@ def parse_evergreen_datetime(evg_date):
         return None
     if type(evg_date) in [int, float]:
         return datetime.fromtimestamp(evg_date)
-    return datetime.strptime(evg_date, EVG_DATETIME_FORMAT)
+    return parse(evg_date)
 
 
 def parse_evergreen_short_datetime(evg_date):

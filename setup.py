@@ -65,6 +65,7 @@ setup(
         'enum34 ~= 1.1.6;python_version<"3.3"',
         'Click ~= 7.0',
         'pylibversion ~= 0.1.0',
+        'python-dateutil ~= 2.8.1',
         'PyYAML ~= 5.1',
         'requests ~= 2.22.0',
         'structlog ~= 19.1.0',

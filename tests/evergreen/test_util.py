@@ -8,8 +8,6 @@ try:
 except ImportError:
     from mock import MagicMock
 
-SAMPLE_DATE_STRING = "2019-02-13T14:55:37.000Z"
-
 
 class TestParseEvergreenDateTime(object):
     def test_float(self):
@@ -29,7 +27,13 @@ class TestParseEvergreenDateTime(object):
         now = datetime.now()
         now_str = now.strftime(under_test.EVG_DATETIME_FORMAT)
 
-        assert now == under_test.parse_evergreen_datetime(now_str)
+        assert now == under_test.parse_evergreen_datetime(now_str).replace(tzinfo=None)
+
+    def test_milliseconds_evergreen_format(self):
+        assert isinstance(under_test.parse_evergreen_datetime("2019-02-13T14:55:37.000Z"), datetime)
+
+    def test_no_milliseconds_evergreen_format(self):
+        assert isinstance(under_test.parse_evergreen_datetime("2019-02-13T14:55:37Z"), datetime)
 
 
 class TestFormatEvergreenDatetime(object):
