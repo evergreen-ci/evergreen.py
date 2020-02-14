@@ -3,11 +3,7 @@
 from __future__ import absolute_import
 
 from datetime import datetime, timedelta
-
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import MagicMock
+from unittest.mock import MagicMock
 
 import evergreen.metrics.versionmetrics as under_test
 
@@ -39,7 +35,7 @@ def create_mock_build_list(n, bm_list=None):
 
 
 def create_mock_version(builds=None):
-    mock_version = MagicMock(version_id='version_id')
+    mock_version = MagicMock(version_id="version_id")
     mock_version.get_builds.return_value = builds if builds else []
     return mock_version
 
@@ -62,7 +58,7 @@ class TestVersionMetrics(object):
     def test_multiple_builds(self, sample_task, sample_build):
         n_tasks = 5
         n_builds = 3
-        mock_build_metric = mock_build_metrics(n_tasks, sample_task['estimated_cost'] * n_tasks)
+        mock_build_metric = mock_build_metrics(n_tasks, sample_task["estimated_cost"] * n_tasks)
         build_list = create_mock_build_list(n_builds, mock_build_metric)
         mock_version = create_mock_version(build_list)
 
@@ -71,7 +67,7 @@ class TestVersionMetrics(object):
         total_tasks = n_tasks * n_builds
         assert version_metrics.task_success_count == total_tasks
         assert version_metrics.task_failure_count == 0
-        assert version_metrics.estimated_cost == total_tasks * sample_task['estimated_cost']
+        assert version_metrics.estimated_cost == total_tasks * sample_task["estimated_cost"]
         assert version_metrics.pct_tasks_success == 1
         assert version_metrics.pct_tasks_failure == 0
         assert version_metrics.pct_tasks_system_failure == 0
@@ -148,8 +144,8 @@ class TestVersionMetrics(object):
         version_metrics._count_build(build_mock, None)
 
         ver_dict = version_metrics.as_dict()
-        assert ver_dict['version'] == mock_version.version_id
-        assert 'build_metrics' not in ver_dict
+        assert ver_dict["version"] == mock_version.version_id
+        assert "build_metrics" not in ver_dict
 
     def test_dict_format_with_children(self):
         build_metrics = mock_build_metrics()
@@ -162,9 +158,9 @@ class TestVersionMetrics(object):
         version_metrics._count_build(build_mock, None)
 
         ver_dict = version_metrics.as_dict(include_children=True)
-        assert ver_dict['version'] == mock_version.version_id
-        assert len(ver_dict['build_metrics']) == 1
-        assert ver_dict['build_metrics'][0] == build_metrics.as_dict.return_value
+        assert ver_dict["version"] == mock_version.version_id
+        assert len(ver_dict["build_metrics"]) == 1
+        assert ver_dict["build_metrics"][0] == build_metrics.as_dict.return_value
 
     def test_string_format(self):
         build_metrics = mock_build_metrics()

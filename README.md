@@ -51,19 +51,16 @@ $ evg-api --json list-hosts
 
 ### Testing
 
-Tox is being used for multiversion testing. Tests are run on python 2.7 and 3.6. You should have
-both of these installed locally. To run tests, install the requirements.txt and then run tox.
-    
+Use poetry and pytest for testing.    
 ```
-$ pip install -r requirements.txt
-$ tox
+$ poetry install
+$ poetry run pytest
 ```
 
-To get code coverage information, you can run pytest directly.
+To get code coverage information:
 
 ```
-$ pip install -r requirements.txt
-$ pytest --cov=src --cov-report=html
+$ poetry run pytest --cov=src --cov-report=html
 ```
 
 This will generate an html coverage report in `htmlcov/` directory.
@@ -72,7 +69,7 @@ There are a few tests that are slow running. These tests are not run by default,
 by setting the env variable RUN_SLOW_TESTS to any value.
 
 ```
-$ RUN_SLOW_TEST=1 pytest
+$ RUN_SLOW_TEST=1 poetry run pytest
 ```
 
 ### Versioning and Deploy
@@ -84,28 +81,9 @@ Deploys to [PyPi](https://pypi.org/project/evergreen.py/) are done automatically
 In order to avoid overwriting a previous deploy, the version should be updated on all changes. The
 [semver](https://semver.org/) versioning scheme should be used for determining the version number. 
 
-The version is found in the `evergreen` package at `src/evergreen/__init__.py`.
-
-Note: There are evergreen checks to ensure the version does not match the latest version in 
-PyPi.
+The version is found in the `pyproject.toml` file.
 
 ### Merging
 
 Merges to master should be done by the evergreen [commit queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
 After a PR has been reviewed, add a comment with the text `evergreen merge` to merge the PR.
-
-### Updating the Freeze File
-
-You will need to update `requirements.txt.freeze` if you change the dependencies of this project:
-```
-#!/usr/bin/env bash
-set -e
-current_directory=$PWD
-rm ${current_directory}/requirements.txt.freeze
-virtualenv -p python3 ${current_directory}/freeze_venv
-source ${current_directory}/freeze_venv/bin/activate
-pip install -r ${current_directory}/requirements.txt
-pip freeze --local --requirement requirements.txt > requirements.txt.freeze
-deactivate
-rm -rf ${current_directory}/freeze_venv
-```

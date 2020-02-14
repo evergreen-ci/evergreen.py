@@ -1,20 +1,27 @@
-from __future__ import absolute_import
+"""Representation of an evergreen patch."""
+from __future__ import absolute_import, annotations
+
+from typing import Dict, List, Optional, Set, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+
+if TYPE_CHECKING:
+    from evergreen.api import EvergreenApi
+    from evergreen.version import Version
 
 
 class GithubPatchData(_BaseEvergreenObject):
     """Representation of github patch data in a patch object."""
 
-    pr_number = evg_attrib('pr_number')
-    base_owner = evg_attrib('base_owner')
-    base_repo = evg_attrib('base_repo')
-    head_owner = evg_attrib('head_owner')
-    head_repo = evg_attrib('head_repo')
-    head_hash = evg_attrib('head_hash')
-    author = evg_attrib('author')
+    pr_number = evg_attrib("pr_number")
+    base_owner = evg_attrib("base_owner")
+    base_repo = evg_attrib("base_repo")
+    head_owner = evg_attrib("head_owner")
+    head_repo = evg_attrib("head_repo")
+    head_hash = evg_attrib("head_hash")
+    author = evg_attrib("author")
 
-    def __init__(self, json, api):
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
         """
         Create an instance of github patch data.
 
@@ -27,9 +34,9 @@ class GithubPatchData(_BaseEvergreenObject):
 class VariantsTasks(_BaseEvergreenObject):
     """Representation of a variants tasks object."""
 
-    name = evg_attrib('name')
+    name = evg_attrib("name")
 
-    def __init__(self, json, api):
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
         """
         Create an instance of a variants tasks object.
 
@@ -37,17 +44,17 @@ class VariantsTasks(_BaseEvergreenObject):
         :param api: intance of the evergreen api object.
         """
         super(VariantsTasks, self).__init__(json, api)
-        self._task_set = 0
+        self._task_set: Optional[Set[str]] = None
 
     @property
-    def tasks(self):
+    def tasks(self) -> Set[str]:
         """
         Retrieve the set of all tasks for this variant.
 
         :return: Set of all tasks for this variant.
         """
         if not self._task_set:
-            self._task_set = set(self.json['tasks'])
+            self._task_set = set(self.json["tasks"])
 
         return self._task_set
 
@@ -55,44 +62,44 @@ class VariantsTasks(_BaseEvergreenObject):
 class Patch(_BaseEvergreenObject):
     """Representation of an Evergreen patch."""
 
-    patch_id = evg_attrib('patch_id')
-    description = evg_attrib('description')
-    project_id = evg_attrib('project_id')
-    branch = evg_attrib('branch')
-    git_hash = evg_attrib('git_hash')
-    patch_number = evg_attrib('patch_number')
-    author = evg_attrib('author')
-    version = evg_attrib('version')
-    status = evg_attrib('status')
-    create_time = evg_datetime_attrib('create_time')
-    start_time = evg_datetime_attrib('start_time')
-    finish_time = evg_datetime_attrib('finish_time')
-    builds = evg_attrib('builds')
-    tasks = evg_attrib('tasks')
-    activated = evg_attrib('activated')
-    alias = evg_attrib('alias')
+    patch_id = evg_attrib("patch_id")
+    description = evg_attrib("description")
+    project_id = evg_attrib("project_id")
+    branch = evg_attrib("branch")
+    git_hash = evg_attrib("git_hash")
+    patch_number = evg_attrib("patch_number")
+    author = evg_attrib("author")
+    version = evg_attrib("version")
+    status = evg_attrib("status")
+    create_time = evg_datetime_attrib("create_time")
+    start_time = evg_datetime_attrib("start_time")
+    finish_time = evg_datetime_attrib("finish_time")
+    builds = evg_attrib("builds")
+    tasks = evg_attrib("tasks")
+    activated = evg_attrib("activated")
+    alias = evg_attrib("alias")
 
-    def __init__(self, json, api):
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen patch.
 
         :param json: json representing patch.
         """
         super(Patch, self).__init__(json, api)
-        self._variants_tasks = None
-        self._variant_task_dict = None
+        self._variants_tasks: Optional[List[VariantsTasks]] = None
+        self._variant_task_dict: Optional[Dict[str, Set[str]]] = None
 
     @property
-    def github_patch_data(self):
+    def github_patch_data(self) -> GithubPatchData:
         """
         Retrieve the github patch data for this patch.
 
         :return: Github Patch Data for this patch.
         """
-        return GithubPatchData(self.json['github_patch_data'], self._api)
+        return GithubPatchData(self.json["github_patch_data"], self._api)
 
     @property
-    def variants_tasks(self):
+    def variants_tasks(self) -> List[VariantsTasks]:
         """
         Retrieve the variants tasks for this patch.
 
@@ -100,11 +107,11 @@ class Patch(_BaseEvergreenObject):
         """
         if not self._variants_tasks:
             self._variants_tasks = [
-                VariantsTasks(vt, self._api) for vt in self.json['variants_tasks']
+                VariantsTasks(vt, self._api) for vt in self.json["variants_tasks"]
             ]
         return self._variants_tasks
 
-    def task_list_for_variant(self, variant):
+    def task_list_for_variant(self, variant: str) -> Set[str]:
         """
         Retrieve the list of tasks for the given variant.
 
@@ -115,7 +122,7 @@ class Patch(_BaseEvergreenObject):
             self._variant_task_dict = {vt.name: vt.tasks for vt in self.variants_tasks}
         return self._variant_task_dict[variant]
 
-    def get_version(self):
+    def get_version(self) -> Version:
         """
         Get version for this patch.
 
@@ -123,5 +130,6 @@ class Patch(_BaseEvergreenObject):
         """
         return self._api.version_by_id(self.version)
 
-    def __str__(self):
-        return '{}: {}'.format(self.patch_id, self.description)
+    def __str__(self) -> str:
+        """Get a human readable string version of the patch."""
+        return "{}: {}".format(self.patch_id, self.description)

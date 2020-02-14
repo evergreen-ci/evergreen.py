@@ -1,15 +1,23 @@
 # -*- encoding: utf-8 -*-
 """Version representation of evergreen."""
-from __future__ import absolute_import
+from __future__ import absolute_import, annotations
 
 from enum import Enum, auto
+from typing import Callable, Dict, List, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.metrics.versionmetrics import VersionMetrics
 
+if TYPE_CHECKING:
+    from evergreen.api import EvergreenApi
+    from evergreen.build import Build
+    from evergreen.manifest import Manifest
+    from evergreen.patch import Patch
+
 
 class Requester(Enum):
     """Requester that created version."""
+
     PATCH_REQUEST = auto()
     GITTER_REQUEST = auto()
     GITHUB_PULL_REQUEST = auto()
@@ -18,7 +26,8 @@ class Requester(Enum):
     TRIGGER_REQUEST = auto()
     UNKNOWN = auto()
 
-    def evg_value(self):
+    def evg_value(self) -> str:
+        """Get the evergreen value for a requester."""
         return self.name.lower()
 
 
@@ -28,9 +37,9 @@ PATCH_REQUESTERS = {
     Requester.MERGE_TEST,
 }
 
-EVG_VERSION_STATUS_SUCCESS = 'success'
-EVG_VERSION_STATUS_FAILED = 'failed'
-EVG_VERSION_STATUS_CREATED = 'created'
+EVG_VERSION_STATUS_SUCCESS = "success"
+EVG_VERSION_STATUS_FAILED = "failed"
+EVG_VERSION_STATUS_CREATED = "created"
 
 COMPLETED_STATES = {
     EVG_VERSION_STATUS_FAILED,
@@ -41,14 +50,14 @@ COMPLETED_STATES = {
 class BuildVariantStatus(_BaseEvergreenObject):
     """Representation of a Build Variants status."""
 
-    build_variant = evg_attrib('build_variant')
-    build_id = evg_attrib('build_id')
+    build_variant = evg_attrib("build_variant")
+    build_id = evg_attrib("build_id")
 
-    def __init__(self, json, api):
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
         """Create an instance of a Build Variants status."""
         super(BuildVariantStatus, self).__init__(json, api)
 
-    def get_build(self):
+    def get_build(self) -> Build:
         """Get the build object for this build variants status."""
         return self._api.build_by_id(self.build_id)
 
@@ -56,24 +65,24 @@ class BuildVariantStatus(_BaseEvergreenObject):
 class Version(_BaseEvergreenObject):
     """Representation of an Evergreen Version."""
 
-    version_id = evg_attrib('version_id')
-    create_time = evg_datetime_attrib('create_time')
-    start_time = evg_datetime_attrib('start_time')
-    finish_time = evg_datetime_attrib('finish_time')
-    revision = evg_attrib('revision')
-    order = evg_attrib('order')
-    project = evg_attrib('project')
-    author = evg_attrib('author')
-    author_email = evg_attrib('author_email')
-    message = evg_attrib('message')
-    status = evg_attrib('status')
-    repo = evg_attrib('repo')
-    branch = evg_attrib('branch')
-    errors = evg_attrib('errors')
-    warnings = evg_attrib('warnings')
-    ignored = evg_attrib('ignored')
+    version_id = evg_attrib("version_id")
+    create_time = evg_datetime_attrib("create_time")
+    start_time = evg_datetime_attrib("start_time")
+    finish_time = evg_datetime_attrib("finish_time")
+    revision = evg_attrib("revision")
+    order = evg_attrib("order")
+    project = evg_attrib("project")
+    author = evg_attrib("author")
+    author_email = evg_attrib("author_email")
+    message = evg_attrib("message")
+    status = evg_attrib("status")
+    repo = evg_attrib("repo")
+    branch = evg_attrib("branch")
+    errors = evg_attrib("errors")
+    warnings = evg_attrib("warnings")
+    ignored = evg_attrib("ignored")
 
-    def __init__(self, json, api):
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen version.
 
@@ -81,26 +90,25 @@ class Version(_BaseEvergreenObject):
         """
         super(Version, self).__init__(json, api)
 
-        if 'build_variants_status' in self.json and self.json['build_variants_status']:
+        if "build_variants_status" in self.json and self.json["build_variants_status"]:
             self.build_variants_map = {
-                bvs['build_variant']: bvs['build_id']
-                for bvs in self.json['build_variants_status']
+                bvs["build_variant"]: bvs["build_id"] for bvs in self.json["build_variants_status"]
             }
 
     @property
-    def build_variants_status(self):
+    def build_variants_status(self) -> List[BuildVariantStatus]:
         """Get a list of build variant statuses."""
-        if 'build_variants_status' not in self.json or not self.json['build_variants_status']:
+        if "build_variants_status" not in self.json or not self.json["build_variants_status"]:
             return []
-        build_variants_status = self.json['build_variants_status']
+        build_variants_status = self.json["build_variants_status"]
         return [BuildVariantStatus(bvs, self._api) for bvs in build_variants_status]
 
     @property
-    def requester(self):
+    def requester(self) -> Requester:
         """Get the requester of this version."""
         return Requester[self.json.get("requester", "UNKNOWN").upper()]
 
-    def build_by_variant(self, build_variant):
+    def build_by_variant(self, build_variant: str) -> Build:
         """
         Get a build object for the specified variant.
 
@@ -109,7 +117,7 @@ class Version(_BaseEvergreenObject):
         """
         return self._api.build_by_id(self.build_variants_map[build_variant])
 
-    def get_manifest(self):
+    def get_manifest(self) -> Manifest:
         """
         Get the manifest for this version.
 
@@ -117,7 +125,7 @@ class Version(_BaseEvergreenObject):
         """
         return self._api.manifest(self.project, self.revision)
 
-    def get_builds(self):
+    def get_builds(self) -> List[Build]:
         """
         Get all the builds that are a part of this version.
 
@@ -125,7 +133,7 @@ class Version(_BaseEvergreenObject):
         """
         return self._api.builds_by_version(self.version_id)
 
-    def is_patch(self):
+    def is_patch(self) -> bool:
         """
         Determine if this version from a patch build.
 
@@ -133,9 +141,9 @@ class Version(_BaseEvergreenObject):
         """
         if self.requester and self.requester != Requester.UNKNOWN:
             return self.requester in PATCH_REQUESTERS
-        return not self.version_id.startswith(self.project.replace('-', '_'))
+        return not self.version_id.startswith(self.project.replace("-", "_"))
 
-    def is_completed(self):
+    def is_completed(self) -> bool:
         """
         Determine if this version has completed running tasks.
 
@@ -143,7 +151,7 @@ class Version(_BaseEvergreenObject):
         """
         return self.status in COMPLETED_STATES
 
-    def get_patch(self):
+    def get_patch(self) -> Optional[Patch]:
         """
         Get the patch information for this version.
 
@@ -153,7 +161,7 @@ class Version(_BaseEvergreenObject):
             return self._api.patch_by_id(self.version_id)
         return None
 
-    def get_metrics(self, task_filter_fn=None):
+    def get_metrics(self, task_filter_fn: Optional[Callable] = None) -> Optional[VersionMetrics]:
         """
         Calculate the metrics for this version.
 
@@ -167,9 +175,9 @@ class Version(_BaseEvergreenObject):
             return VersionMetrics(self).calculate(task_filter_fn)
         return None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
-        String representation of Version for debugging purposes.
+        Get the string representation of Version for debugging purposes.
 
         :return: String representation of Version.
         """

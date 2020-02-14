@@ -5,6 +5,7 @@ htmlcov/
 __pycache__
 junit-*.xml
 .tox
+.mypy_cache/
 
 .venv/
 venv/

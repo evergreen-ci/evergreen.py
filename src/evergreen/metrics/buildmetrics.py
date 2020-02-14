@@ -1,15 +1,20 @@
 # -*- encoding: utf-8 -*-
 """Metrics for Evergreen builds."""
-from __future__ import absolute_import
-from __future__ import division
+from __future__ import absolute_import, annotations, division
+
+from collections import defaultdict
+from datetime import datetime, timedelta
+from typing import Callable, Dict, List, Optional, TYPE_CHECKING
 
 from structlog import get_logger
 
 from evergreen.errors.exceptions import ActiveTaskMetricsException
-
-from collections import defaultdict
-
 from evergreen.task import StatusScore
+
+if TYPE_CHECKING:
+    from evergreen.task import Task
+    from evergreen.build import Build
+
 
 LOGGER = get_logger(__name__)
 
@@ -17,7 +22,7 @@ LOGGER = get_logger(__name__)
 class BuildMetrics(object):
     """Metrics about an evergreen build."""
 
-    def __init__(self, build):
+    def __init__(self, build: Build) -> None:
         """
         Create an instance of build metrics.
 
@@ -40,15 +45,15 @@ class BuildMetrics(object):
         self.estimated_build_costs = 0
         self.total_processing_time = 0
 
-        self._create_times = []
-        self._start_times = []
-        self._finish_times = []
+        self._create_times: List[datetime] = []
+        self._start_times: List[datetime] = []
+        self._finish_times: List[datetime] = []
 
-        self.task_list = None
+        self.task_list: List[Task] = []
 
-        self._display_map = defaultdict(list)
+        self._display_map: Dict[str, List[Task]] = defaultdict(list)
 
-    def calculate(self, task_filter_fn=None):
+    def calculate(self, task_filter_fn: Optional[Callable] = None) -> BuildMetrics:
         """
         Calculate metrics for the given build.
 
@@ -72,15 +77,16 @@ class BuildMetrics(object):
         return self
 
     @property
-    def total_tasks(self):
+    def total_tasks(self) -> int:
         """
         Get the total tasks in the build.
+
         :return: total tasks.
         """
         return self.success_count + self.failure_count + self.undispatched_count
 
     @property
-    def pct_tasks_success(self):
+    def pct_tasks_success(self) -> float:
         """
         Get the percentage of successful tasks.
 
@@ -89,7 +95,7 @@ class BuildMetrics(object):
         return self._percent_tasks(self.success_count)
 
     @property
-    def pct_tasks_undispatched(self):
+    def pct_tasks_undispatched(self) -> float:
         """
         Get the percentage of undispatched tasks.
 
@@ -98,7 +104,7 @@ class BuildMetrics(object):
         return self._percent_tasks(self.undispatched_count)
 
     @property
-    def pct_tasks_failed(self):
+    def pct_tasks_failed(self) -> float:
         """
         Get the percentage of failed tasks.
 
@@ -107,7 +113,7 @@ class BuildMetrics(object):
         return self._percent_tasks(self.failure_count)
 
     @property
-    def pct_tasks_timed_out(self):
+    def pct_tasks_timed_out(self) -> float:
         """
         Get the percentage of timeout tasks.
 
@@ -116,7 +122,7 @@ class BuildMetrics(object):
         return self._percent_tasks(self.timed_out_count)
 
     @property
-    def pct_tasks_system_failure(self):
+    def pct_tasks_system_failure(self) -> float:
         """
         Get the percentage of system failure tasks.
 
@@ -125,16 +131,20 @@ class BuildMetrics(object):
         return self._percent_tasks(self.system_failure_count)
 
     @property
-    def total_display_tasks(self):
+    def total_display_tasks(self) -> int:
         """
         Get the total display tasks in the build.
+
         :return: total display tasks.
         """
-        return self.display_success_count + self.display_failure_count + \
-            self.display_undispatched_count
+        return (
+            self.display_success_count
+            + self.display_failure_count
+            + self.display_undispatched_count
+        )
 
     @property
-    def pct_display_tasks_success(self):
+    def pct_display_tasks_success(self) -> float:
         """
         Get the percentage of successful display tasks.
 
@@ -143,7 +153,7 @@ class BuildMetrics(object):
         return self._percent_display_tasks(self.display_success_count)
 
     @property
-    def pct_display_tasks_undispatched(self):
+    def pct_display_tasks_undispatched(self) -> float:
         """
         Get the percentage of undispatched display_tasks.
 
@@ -152,7 +162,7 @@ class BuildMetrics(object):
         return self._percent_display_tasks(self.display_undispatched_count)
 
     @property
-    def pct_display_tasks_failed(self):
+    def pct_display_tasks_failed(self) -> float:
         """
         Get the percentage of failed display tasks.
 
@@ -161,7 +171,7 @@ class BuildMetrics(object):
         return self._percent_display_tasks(self.display_failure_count)
 
     @property
-    def pct_display_tasks_timed_out(self):
+    def pct_display_tasks_timed_out(self) -> float:
         """
         Get the percentage of timeout display tasks.
 
@@ -170,7 +180,7 @@ class BuildMetrics(object):
         return self._percent_display_tasks(self.display_timed_out_count)
 
     @property
-    def pct_display_tasks_system_failure(self):
+    def pct_display_tasks_system_failure(self) -> float:
         """
         Get the percentage of system failure display tasks.
 
@@ -179,7 +189,7 @@ class BuildMetrics(object):
         return self._percent_display_tasks(self.display_system_failure_count)
 
     @property
-    def create_time(self):
+    def create_time(self) -> Optional[datetime]:
         """
         Time the first task of the build was created.
 
@@ -190,7 +200,7 @@ class BuildMetrics(object):
         return None
 
     @property
-    def start_time(self):
+    def start_time(self) -> Optional[datetime]:
         """
         Time first task of build was started.
 
@@ -201,7 +211,7 @@ class BuildMetrics(object):
         return None
 
     @property
-    def end_time(self):
+    def end_time(self) -> Optional[datetime]:
         """
         Time last task of build was completed.
 
@@ -212,7 +222,7 @@ class BuildMetrics(object):
         return None
 
     @property
-    def makespan(self):
+    def makespan(self) -> Optional[timedelta]:
         """
         Wall clock duration of build.
 
@@ -223,7 +233,7 @@ class BuildMetrics(object):
         return None
 
     @property
-    def wait_time(self):
+    def wait_time(self) -> Optional[timedelta]:
         """
         Wall clock duration until build was started.
 
@@ -233,7 +243,7 @@ class BuildMetrics(object):
             return self.start_time - self.create_time
         return None
 
-    def _percent_tasks(self, n_tasks):
+    def _percent_tasks(self, n_tasks: int) -> float:
         """
         Calculate the percent of n_tasks out of total.
 
@@ -244,7 +254,7 @@ class BuildMetrics(object):
             return 0
         return n_tasks / self.total_tasks
 
-    def _percent_display_tasks(self, n_tasks):
+    def _percent_display_tasks(self, n_tasks: int) -> float:
         """
         Calculate the percent of display n_tasks out of display total.
 
@@ -255,9 +265,10 @@ class BuildMetrics(object):
             return 0
         return n_tasks / self.total_display_tasks
 
-    def _count_task(self, task):
+    def _count_task(self, task: Task) -> None:
         """
         Add stats for the given task to the metrics.
+
         :param task: Task to add.
         """
         if task.is_undispatched():
@@ -270,8 +281,8 @@ class BuildMetrics(object):
             return  # An 'undispatched' task has no useful stats.
 
         if task.is_active():
-            LOGGER.warning('Active task found during metrics collection', task_id=task.task_id)
-            raise ActiveTaskMetricsException(task, 'Task in progress during metrics collection')
+            LOGGER.warning("Active task found during metrics collection", task_id=task.task_id)
+            raise ActiveTaskMetricsException(task, "Task in progress during metrics collection")
 
         if task.is_success():
             self.success_count += 1
@@ -307,7 +318,7 @@ class BuildMetrics(object):
         self.estimated_build_costs += task.estimated_cost
         self.total_processing_time += task.time_taken_ms / 1000
 
-    def _count_display_tasks(self):
+    def _count_display_tasks(self) -> None:
         for generated_by, tasks in self._display_map.items():
             status = max([task.get_status_score() for task in tasks])
             if status == StatusScore.SUCCESS:
@@ -328,7 +339,7 @@ class BuildMetrics(object):
                 self.display_failure_count += 1
                 continue
 
-    def as_dict(self, include_children=False):
+    def as_dict(self, include_children: bool = False) -> Dict:
         """
         Provide a dictionary representation.
 
@@ -336,40 +347,39 @@ class BuildMetrics(object):
         :return: Dictionary of metrics.
         """
         metric = {
-            'build': self.build.id,
-            'total_processing_time': self.total_processing_time,
-            'makespan': self.makespan.total_seconds(),
-            'wait_time': self.wait_time.total_seconds(),
-            'total_tasks': self.total_tasks,
-            'success_count': self.success_count,
-            'pct_tasks_success': self.pct_tasks_success,
-            'undispatched_count': self.undispatched_count,
-            'pct_tasks_undispatched': self.pct_tasks_undispatched,
-            'failure_count': self.failure_count,
-            'pct_tasks_failed': self.pct_tasks_failed,
-            'timed_out_count': self.timed_out_count,
-            'system_failure_count': self.system_failure_count,
-            'total_display_tasks': self.total_display_tasks,
-            'success_display_count': self.display_success_count,
-            'pct_display_tasks_success': self.pct_display_tasks_success,
-            'undispatched_display_count': self.display_undispatched_count,
-            'pct_display_tasks_undispatched': self.pct_display_tasks_undispatched,
-            'failure_display_count': self.display_failure_count,
-            'pct_display_tasks_failed': self.pct_display_tasks_failed,
-            'timed_out_display_count': self.display_timed_out_count,
-            'pct_display_tasks_timed_out': self.pct_display_tasks_timed_out,
-            'system_failure_display_count': self.display_system_failure_count,
-            'pct_display_tasks_system_failure': self.pct_display_tasks_system_failure,
-
-            'estimated_build_costs': self.estimated_build_costs,
+            "build": self.build.id,
+            "total_processing_time": self.total_processing_time,
+            "makespan": self.makespan.total_seconds() if self.makespan else None,
+            "wait_time": self.wait_time.total_seconds() if self.wait_time else None,
+            "total_tasks": self.total_tasks,
+            "success_count": self.success_count,
+            "pct_tasks_success": self.pct_tasks_success,
+            "undispatched_count": self.undispatched_count,
+            "pct_tasks_undispatched": self.pct_tasks_undispatched,
+            "failure_count": self.failure_count,
+            "pct_tasks_failed": self.pct_tasks_failed,
+            "timed_out_count": self.timed_out_count,
+            "system_failure_count": self.system_failure_count,
+            "total_display_tasks": self.total_display_tasks,
+            "success_display_count": self.display_success_count,
+            "pct_display_tasks_success": self.pct_display_tasks_success,
+            "undispatched_display_count": self.display_undispatched_count,
+            "pct_display_tasks_undispatched": self.pct_display_tasks_undispatched,
+            "failure_display_count": self.display_failure_count,
+            "pct_display_tasks_failed": self.pct_display_tasks_failed,
+            "timed_out_display_count": self.display_timed_out_count,
+            "pct_display_tasks_timed_out": self.pct_display_tasks_timed_out,
+            "system_failure_display_count": self.display_system_failure_count,
+            "pct_display_tasks_system_failure": self.pct_display_tasks_system_failure,
+            "estimated_build_costs": self.estimated_build_costs,
         }
 
         if include_children:
-            metric['tasks'] = [task.json for task in self.task_list]
+            metric["tasks"] = [task.json for task in self.task_list]
 
         return metric
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Create string version of metrics.
 
@@ -396,10 +406,10 @@ class BuildMetrics(object):
             build_id=self.build.id,
             total_processing_time=self.total_processing_time,
             total_processing_time_min=(self.total_processing_time / 60),
-            makespan=(self.makespan.total_seconds()),
-            makespan_min=(self.makespan.total_seconds() / 60),
-            waittime=(self.wait_time.total_seconds()),
-            waittime_min=(self.wait_time.total_seconds() / 60),
+            makespan=(self.makespan.total_seconds()) if self.makespan else 0,
+            makespan_min=(self.makespan.total_seconds() / 60) if self.makespan else 0,
+            waittime=(self.wait_time.total_seconds()) if self.wait_time else 0,
+            waittime_min=(self.wait_time.total_seconds() / 60) if self.wait_time else 0,
             total_tasks=self.total_tasks,
             success_count=self.success_count,
             success_pct=self.pct_tasks_success,
@@ -422,5 +432,5 @@ class BuildMetrics(object):
             timeout_display_pct=self.pct_display_tasks_timed_out,
             system_failure_display_count=self.display_system_failure_count,
             system_failure_display_pct=self.pct_display_tasks_system_failure,
-            est_build_costs=self.estimated_build_costs
+            est_build_costs=self.estimated_build_costs,
         ).rstrip()

@@ -1,15 +1,23 @@
+"""Exceptions for the evergreen module."""
+from __future__ import annotations
+
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from evergreen.task import Task
 
 
 class EvergreenException(Exception):
     """An exception coming from the evergreen client."""
 
-    def __init__(self, msg=None):
+    def __init__(self, msg: Optional[str] = None) -> None:
         """
         Create a new exception instance.
+
         :param msg: Message describing exception.
         """
         if not msg:
-            msg = 'Exception in evergreen client'
+            msg = "Exception in evergreen client"
 
         super(EvergreenException, self).__init__(msg)
 
@@ -17,14 +25,14 @@ class EvergreenException(Exception):
 class MetricsException(EvergreenException):
     """An exception with metrics collection."""
 
-    def __init__(self, msg=None):
+    def __init__(self, msg: Optional[str] = None) -> None:
         """
         Create a new exception instance.
 
         :param msg: Message describing exception.
         """
         if not msg:
-            msg = 'Exception in metrics collection'
+            msg = "Exception in metrics collection"
 
         super(MetricsException, self).__init__(msg)
 
@@ -32,7 +40,7 @@ class MetricsException(EvergreenException):
 class ActiveTaskMetricsException(MetricsException):
     """An exception when a task is in progress during metrics collection."""
 
-    def __init__(self, task, msg=None):
+    def __init__(self, task: Task, msg: Optional[str] = None) -> None:
         """
         Create a new exception instance.
 
@@ -40,7 +48,7 @@ class ActiveTaskMetricsException(MetricsException):
         :param msg: Message describing exception.
         """
         if not msg:
-            msg = 'Exception in metrics collection'
+            msg = "Exception in metrics collection"
 
         super(MetricsException, self).__init__(msg)
 

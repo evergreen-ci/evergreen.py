@@ -1,12 +1,20 @@
 # -*- encoding: utf-8 -*-
 """Task representation of evergreen."""
-from __future__ import absolute_import
+from __future__ import absolute_import, annotations
 
-from evergreen.util import parse_evergreen_datetime, parse_evergreen_date, \
-    parse_evergreen_short_datetime
+from typing import Any, Callable, Dict, Optional, TYPE_CHECKING
+
+from evergreen.util import (
+    parse_evergreen_date,
+    parse_evergreen_datetime,
+    parse_evergreen_short_datetime,
+)
+
+if TYPE_CHECKING:
+    from evergreen.api import EvergreenApi
 
 
-def evg_attrib(attrib_name, type_fn=None):
+def evg_attrib(attrib_name: str, type_fn: Optional[Callable] = None) -> property:
     """
     Create an attribute for the given evergreen property.
 
@@ -17,7 +25,7 @@ def evg_attrib(attrib_name, type_fn=None):
     :param type_fn: method to use to convert attribute by type.
     """
 
-    def attrib_getter(instance):
+    def attrib_getter(instance: _BaseEvergreenObject) -> Any:
         if attrib_name not in instance.json:
             return None
 
@@ -25,10 +33,10 @@ def evg_attrib(attrib_name, type_fn=None):
             return type_fn(instance.json[attrib_name])
         return instance.json.get(attrib_name, None)
 
-    return property(attrib_getter, doc='value of {}'.format(attrib_name))
+    return property(attrib_getter, doc=f"value of {attrib_name}")
 
 
-def evg_datetime_attrib(attrib_name):
+def evg_datetime_attrib(attrib_name: str) -> property:
     """
     Create a datetime attribute for the given evergreen property.
 
@@ -37,7 +45,7 @@ def evg_datetime_attrib(attrib_name):
     return evg_attrib(attrib_name, parse_evergreen_datetime)
 
 
-def evg_short_datetime_attrib(attrib_name):
+def evg_short_datetime_attrib(attrib_name: str) -> property:
     """
     Create a shortened datetime attribute for the given evergreen property.
 
@@ -46,7 +54,7 @@ def evg_short_datetime_attrib(attrib_name):
     return evg_attrib(attrib_name, parse_evergreen_short_datetime)
 
 
-def evg_date_attrib(attrib_name):
+def evg_date_attrib(attrib_name: str) -> property:
     """
     Create a date attribute for the given evergreen property.
 
@@ -58,29 +66,33 @@ def evg_date_attrib(attrib_name):
 class _BaseEvergreenObject(object):
     """Common evergreen object."""
 
-    def __init__(self, json, api):
-        """
-        Create an instance of an evergreen task.
-        """
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+        """Create an instance of an evergreen task."""
         self.json = json
         self._api = api
         self._date_fields = None
 
-    def _is_field_a_date(self, item):
-        return self._date_fields and item in self._date_fields and self.json[item]
+    def _is_field_a_date(self, item: str) -> bool:
+        """
+        Determine if given field is a date.
 
-    def __getattr__(self, item):
+        :param item: field to check.
+        :return: True if field is a date.
+        """
+        return bool(self._date_fields and item in self._date_fields and self.json[item])
+
+    def __getattr__(self, item: str) -> Any:
         """Lookup an attribute if it exists."""
-        if item != 'json' and item in self.json:
+        if item != "json" and item in self.json:
             if self._is_field_a_date(item):
                 return parse_evergreen_datetime(self.json[item])
             return self.json[item]
-        raise AttributeError('Unknown attribute {0}'.format(item))
+        raise AttributeError("Unknown attribute {0}".format(item))
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if isinstance(other, _BaseEvergreenObject):
             return self.json == other.json
         return False
 
-    def __ne__(self, other):
+    def __ne__(self, other: Any) -> bool:
         return not self.__eq__(other)

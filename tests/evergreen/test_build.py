@@ -2,10 +2,7 @@
 """Unit tests for src/evergreen/build.py."""
 from __future__ import absolute_import
 
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import MagicMock
+from unittest.mock import MagicMock
 
 from evergreen.build import Build
 from evergreen.metrics.buildmetrics import BuildMetrics
@@ -14,7 +11,7 @@ from evergreen.metrics.buildmetrics import BuildMetrics
 class TestBuild(object):
     def test_basic_data(self, sample_build):
         build = Build(sample_build, None)
-        assert sample_build['project_id'] == build.project_id
+        assert sample_build["project_id"] == build.project_id
 
     def test_get_tasks(self, sample_build):
         mock_api = MagicMock()
@@ -23,19 +20,19 @@ class TestBuild(object):
 
     def test_status_counts(self, sample_build):
         build = Build(sample_build, None)
-        assert sample_build['status_counts']['succeeded'] == build.status_counts.succeeded
-        assert sample_build['status_counts']['failed'] == build.status_counts.failed
-        assert sample_build['status_counts']['started'] == build.status_counts.started
-        assert sample_build['status_counts']['timed_out'] == build.status_counts.timed_out
+        assert sample_build["status_counts"]["succeeded"] == build.status_counts.succeeded
+        assert sample_build["status_counts"]["failed"] == build.status_counts.failed
+        assert sample_build["status_counts"]["started"] == build.status_counts.started
+        assert sample_build["status_counts"]["timed_out"] == build.status_counts.timed_out
 
     def test_get_metrics_not_completed(self, sample_build):
-        sample_build['status'] = 'created'
+        sample_build["status"] = "created"
         build = Build(sample_build, None)
 
         assert not build.get_metrics()
 
     def test_get_metrics_completed(self, sample_build):
-        sample_build['status'] = 'success'
+        sample_build["status"] = "success"
         mock_api = MagicMock()
         build = Build(sample_build, mock_api)
 

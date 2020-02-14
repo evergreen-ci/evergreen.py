@@ -1,8 +1,6 @@
 """Evergreen API Module."""
-from pylibversion import version_tuple_to_str
-
 # Shortcuts for importing.
-from evergreen.api import EvergreenApi, RetryingEvergreenApi, CachedEvergreenApi, Requester
+from evergreen.api import CachedEvergreenApi, EvergreenApi, Requester, RetryingEvergreenApi
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.distro import Distro
@@ -10,11 +8,8 @@ from evergreen.host import Host
 from evergreen.manifest import Manifest
 from evergreen.patch import Patch
 from evergreen.project import Project
+from evergreen.stats import TaskStats, TestStats
 from evergreen.task import Task
-from evergreen.tst import Tst
-from evergreen.stats import TestStats, TaskStats
 from evergreen.task_reliability import TaskReliability
+from evergreen.tst import Tst
 from evergreen.version import Version
-
-VERSION = (1, 0, 2)
-__version__ = version_tuple_to_str(VERSION)

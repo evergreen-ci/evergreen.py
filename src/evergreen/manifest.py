@@ -1,20 +1,24 @@
-from __future__ import absolute_import
+"""Representation of evergreen manifest."""
+from __future__ import absolute_import, annotations
+
+from typing import Dict, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib
 
+if TYPE_CHECKING:
+    from evergreen.api import EvergreenApi
+
 
 class ManifestModule(_BaseEvergreenObject):
-    """
-    Represents a module in the evergreen manifest.
-    """
+    """Represents a module in the evergreen manifest."""
 
-    branch = evg_attrib('branch')
-    repo = evg_attrib('repo')
-    revision = evg_attrib('revision')
-    owner = evg_attrib('owner')
-    url = evg_attrib('url')
+    branch = evg_attrib("branch")
+    repo = evg_attrib("repo")
+    revision = evg_attrib("revision")
+    owner = evg_attrib("owner")
+    url = evg_attrib("url")
 
-    def __init__(self, name, json, api):
+    def __init__(self, name: str, json: Dict, api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen manifest module.
 
@@ -26,16 +30,14 @@ class ManifestModule(_BaseEvergreenObject):
 
 
 class Manifest(_BaseEvergreenObject):
-    """
-    Representation of an evergreen manifest.
-    """
+    """Representation of an evergreen manifest."""
 
-    id = evg_attrib('id')
-    revision = evg_attrib('revision')
-    project = evg_attrib('project')
-    branch = evg_attrib('branch')
+    id = evg_attrib("id")
+    revision = evg_attrib("revision")
+    project = evg_attrib("project")
+    branch = evg_attrib("branch")
 
-    def __init__(self, json, api):
+    def __init__(self, json: Dict, api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen version manifest.
 
@@ -45,12 +47,12 @@ class Manifest(_BaseEvergreenObject):
         super(Manifest, self).__init__(json, api)
 
     @property
-    def modules(self):
+    def modules(self) -> Optional[Dict[str, ManifestModule]]:
         """Map of modules in this manifest."""
-        if 'modules' not in self.json:
+        if "modules" not in self.json:
             return None
 
-        modules = self.json['modules'].items()
+        modules = self.json["modules"].items()
 
         return {
             module_key: ManifestModule(module_key, module_value, self._api)
