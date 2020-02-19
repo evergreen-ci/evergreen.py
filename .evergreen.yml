@@ -34,7 +34,7 @@ functions:
             exit 0
           fi
 
-          poetry publish --username ${pypi_user} --password ${pypi_password}
+          poetry publish --build --username ${pypi_user} --password ${pypi_password}
 
 pre:
 - command: git.get_project
