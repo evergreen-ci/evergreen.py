@@ -1,34 +1,35 @@
 # -*- encoding: utf-8 -*-
 """Get configuration about connecting to evergreen."""
-from __future__ import absolute_import
+from __future__ import absolute_import, annotations
 
 from collections import namedtuple
 import os
+from typing import Dict, Optional
 
 import yaml
 
-EvgAuth = namedtuple('EvgAuth', ['username', 'api_key'])
+EvgAuth = namedtuple("EvgAuth", ["username", "api_key"])
 
 DEFAULT_NETWORK_TIMEOUT_SEC = 5 * 60
-DEFAULT_API_SERVER = 'https://evergreen.mongodb.com'
+DEFAULT_API_SERVER = "https://evergreen.mongodb.com"
 CONFIG_FILE_LOCATIONS = [
-    os.path.expanduser(os.path.join('~', 'cli_bin', '.evergreen.yml')),
-    os.path.expanduser(os.path.join('~', '.evergreen.yml')),
+    os.path.expanduser(os.path.join("~", "cli_bin", ".evergreen.yml")),
+    os.path.expanduser(os.path.join("~", ".evergreen.yml")),
 ]
 
 
-def read_evergreen_from_file(filename):
+def read_evergreen_from_file(filename: str) -> Dict:
     """
     Read evergreen config from given filename.
 
     :param filename: Filename to read config.
     :return: Config read from file.
     """
-    with open(filename, 'r') as fstream:
+    with open(filename, "r") as fstream:
         return yaml.safe_load(fstream)
 
 
-def read_evergreen_config():
+def read_evergreen_config() -> Optional[Dict]:
     """
     Search known location for the evergreen config file.
 
@@ -40,11 +41,11 @@ def read_evergreen_config():
     return None
 
 
-def get_auth_from_config(config):
+def get_auth_from_config(config: Dict) -> EvgAuth:
     """
     Get the evergreen authentication from the specified config file.
 
     :param config: Evergreen configuration.
     :return: Authentication information for evergreen.
     """
-    return EvgAuth(config['user'], config['api_key'])
+    return EvgAuth(config["user"], config["api_key"])

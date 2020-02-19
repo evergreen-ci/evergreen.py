@@ -2,17 +2,13 @@
 """Unit tests for src/evergreen/metrics/buildmetrics.py."""
 from __future__ import absolute_import
 
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import MagicMock
+from unittest.mock import MagicMock
 
 import pytest
 
-from evergreen.task import Task
-from evergreen.errors.exceptions import ActiveTaskMetricsException
-
 import evergreen.metrics.buildmetrics as under_test
+from evergreen.errors.exceptions import ActiveTaskMetricsException
+from evergreen.task import Task
 
 
 def create_mock_build(task_list=None):
@@ -60,7 +56,7 @@ class TestBuildMetrics(object):
         assert len(build_metrics._finish_times) == n_tasks
 
     def test_adding_successful_task(self, sample_task):
-        sample_task['status'] = 'success'
+        sample_task["status"] = "success"
         task = Task(sample_task, None)
         mock_build = create_mock_build()
 
@@ -87,8 +83,8 @@ class TestBuildMetrics(object):
 
     def test_adding_successful_generated_task(self, sample_task):
         n_tasks = 2
-        sample_task['status'] = 'success'
-        sample_task['generated_by'] = 'foobar'
+        sample_task["status"] = "success"
+        sample_task["generated_by"] = "foobar"
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
 
         mock_build = create_mock_build(task_list)
@@ -100,7 +96,7 @@ class TestBuildMetrics(object):
         assert build_metrics.pct_display_tasks_success == 1
 
     def test_adding_undispatched_task(self, sample_task):
-        sample_task['status'] = 'undispatched'
+        sample_task["status"] = "undispatched"
         task = Task(sample_task, None)
         mock_build = create_mock_build()
 
@@ -119,8 +115,8 @@ class TestBuildMetrics(object):
 
     def test_adding_undispatched_generated_task(self, sample_task):
         n_tasks = 2
-        sample_task['status'] = 'undispatched'
-        sample_task['generated_by'] = 'foobar'
+        sample_task["status"] = "undispatched"
+        sample_task["generated_by"] = "foobar"
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
 
         mock_build = create_mock_build(task_list)
@@ -131,7 +127,7 @@ class TestBuildMetrics(object):
         assert build_metrics.pct_display_tasks_undispatched == 1
 
     def test_adding_failed_task(self, sample_task):
-        sample_task['status'] = 'failed'
+        sample_task["status"] = "failed"
         task = Task(sample_task, None)
         mock_build = create_mock_build()
 
@@ -158,8 +154,8 @@ class TestBuildMetrics(object):
 
     def test_adding_failed_generated_task(self, sample_task):
         n_tasks = 2
-        sample_task['status'] = 'failed'
-        sample_task['generated_by'] = 'foobar'
+        sample_task["status"] = "failed"
+        sample_task["generated_by"] = "foobar"
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
 
         mock_build = create_mock_build(task_list)
@@ -172,9 +168,9 @@ class TestBuildMetrics(object):
         assert build_metrics.pct_display_tasks_timed_out == 0
 
     def test_adding_system_failed_task(self, sample_task):
-        sample_task['status'] = 'failed'
-        sample_task['status_details']['type'] = 'system'
-        sample_task['status_details']['timed_out'] = True
+        sample_task["status"] = "failed"
+        sample_task["status_details"]["type"] = "system"
+        sample_task["status_details"]["timed_out"] = True
         task = Task(sample_task, None)
         mock_build = create_mock_build()
 
@@ -201,10 +197,10 @@ class TestBuildMetrics(object):
 
     def test_adding_system_failed_display_task(self, sample_task):
         n_tasks = 2
-        sample_task['status'] = 'failed'
-        sample_task['status_details']['type'] = 'system'
-        sample_task['status_details']['timed_out'] = False
-        sample_task['generated_by'] = 'foobar'
+        sample_task["status"] = "failed"
+        sample_task["status_details"]["type"] = "system"
+        sample_task["status_details"]["timed_out"] = False
+        sample_task["generated_by"] = "foobar"
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
 
         mock_build = create_mock_build(task_list)
@@ -218,10 +214,10 @@ class TestBuildMetrics(object):
 
     def test_adding_timed_out_display_task(self, sample_task):
         n_tasks = 2
-        sample_task['status'] = 'failed'
-        sample_task['status_details']['type'] = 'system'
-        sample_task['status_details']['timed_out'] = True
-        sample_task['generated_by'] = 'foobar'
+        sample_task["status"] = "failed"
+        sample_task["status_details"]["type"] = "system"
+        sample_task["status_details"]["timed_out"] = True
+        sample_task["generated_by"] = "foobar"
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
 
         mock_build = create_mock_build(task_list)
@@ -234,17 +230,21 @@ class TestBuildMetrics(object):
         assert build_metrics.pct_display_tasks_timed_out == 1
 
     def test_generate_by_failure_priority(self, sample_task_list):
-        sample_task_list[0]['status'] = 'failure'
-        sample_task_list[1]['status'] = 'success'
-        sample_task_list[2]['status'] = 'success'
+        sample_task_list[0]["status"] = "failure"
+        sample_task_list[1]["status"] = "success"
+        sample_task_list[2]["status"] = "success"
 
-        sample_task_list[0]['generated_by'] = 'foo'
-        sample_task_list[1]['generated_by'] = 'foo'
-        sample_task_list[2]['generated_by'] = 'foo'
+        sample_task_list[0]["generated_by"] = "foo"
+        sample_task_list[1]["generated_by"] = "foo"
+        sample_task_list[2]["generated_by"] = "foo"
 
-        mock_build = create_mock_build([Task(sample_task_list[0], None),
-                                        Task(sample_task_list[1], None),
-                                        Task(sample_task_list[2], None)])
+        mock_build = create_mock_build(
+            [
+                Task(sample_task_list[0], None),
+                Task(sample_task_list[1], None),
+                Task(sample_task_list[2], None),
+            ]
+        )
 
         build_metrics = under_test.BuildMetrics(mock_build).calculate()
         assert build_metrics.success_count == 2
@@ -254,19 +254,23 @@ class TestBuildMetrics(object):
         assert build_metrics.total_display_tasks == 1
 
     def test_generate_by_system_failure_priority(self, sample_task_list):
-        sample_task_list[0]['status'] = 'failure'
-        sample_task_list[0]['status_details']['type'] = 'system'
-        sample_task_list[0]['status_details']['timed_out'] = False
-        sample_task_list[1]['status'] = 'failure'
-        sample_task_list[2]['status'] = 'success'
+        sample_task_list[0]["status"] = "failure"
+        sample_task_list[0]["status_details"]["type"] = "system"
+        sample_task_list[0]["status_details"]["timed_out"] = False
+        sample_task_list[1]["status"] = "failure"
+        sample_task_list[2]["status"] = "success"
 
-        sample_task_list[0]['generated_by'] = 'foo'
-        sample_task_list[1]['generated_by'] = 'foo'
-        sample_task_list[2]['generated_by'] = 'foo'
+        sample_task_list[0]["generated_by"] = "foo"
+        sample_task_list[1]["generated_by"] = "foo"
+        sample_task_list[2]["generated_by"] = "foo"
 
-        mock_build = create_mock_build([Task(sample_task_list[0], None),
-                                        Task(sample_task_list[1], None),
-                                        Task(sample_task_list[2], None)])
+        mock_build = create_mock_build(
+            [
+                Task(sample_task_list[0], None),
+                Task(sample_task_list[1], None),
+                Task(sample_task_list[2], None),
+            ]
+        )
 
         build_metrics = under_test.BuildMetrics(mock_build).calculate()
         assert build_metrics.success_count == 1
@@ -278,19 +282,23 @@ class TestBuildMetrics(object):
         assert build_metrics.total_display_tasks == 1
 
     def test_generate_by_system_timeout_priority(self, sample_task_list):
-        sample_task_list[0]['status'] = 'success'
-        sample_task_list[1]['status'] = 'failure'
-        sample_task_list[1]['status_details']['type'] = 'system'
-        sample_task_list[1]['status_details']['timed_out'] = True
-        sample_task_list[2]['status'] = 'failure'
+        sample_task_list[0]["status"] = "success"
+        sample_task_list[1]["status"] = "failure"
+        sample_task_list[1]["status_details"]["type"] = "system"
+        sample_task_list[1]["status_details"]["timed_out"] = True
+        sample_task_list[2]["status"] = "failure"
 
-        sample_task_list[0]['generated_by'] = 'foo'
-        sample_task_list[1]['generated_by'] = 'foo'
-        sample_task_list[2]['generated_by'] = 'foo'
+        sample_task_list[0]["generated_by"] = "foo"
+        sample_task_list[1]["generated_by"] = "foo"
+        sample_task_list[2]["generated_by"] = "foo"
 
-        mock_build = create_mock_build([Task(sample_task_list[0], None),
-                                        Task(sample_task_list[1], None),
-                                        Task(sample_task_list[2], None)])
+        mock_build = create_mock_build(
+            [
+                Task(sample_task_list[0], None),
+                Task(sample_task_list[1], None),
+                Task(sample_task_list[2], None),
+            ]
+        )
 
         build_metrics = under_test.BuildMetrics(mock_build).calculate()
         assert build_metrics.success_count == 1
@@ -306,19 +314,23 @@ class TestBuildMetrics(object):
         assert build_metrics.total_display_tasks == 1
 
     def test_generate_by_system_undispatched_priority(self, sample_task_list):
-        sample_task_list[0]['status'] = 'undispatched'
-        sample_task_list[1]['status'] = 'failure'
-        sample_task_list[1]['status_details']['type'] = 'system'
-        sample_task_list[1]['status_details']['timed_out'] = True
-        sample_task_list[2]['status'] = 'failure'
+        sample_task_list[0]["status"] = "undispatched"
+        sample_task_list[1]["status"] = "failure"
+        sample_task_list[1]["status_details"]["type"] = "system"
+        sample_task_list[1]["status_details"]["timed_out"] = True
+        sample_task_list[2]["status"] = "failure"
 
-        sample_task_list[0]['generated_by'] = 'foo'
-        sample_task_list[1]['generated_by'] = 'foo'
-        sample_task_list[2]['generated_by'] = 'foo'
+        sample_task_list[0]["generated_by"] = "foo"
+        sample_task_list[1]["generated_by"] = "foo"
+        sample_task_list[2]["generated_by"] = "foo"
 
-        mock_build = create_mock_build([Task(sample_task_list[0], None),
-                                        Task(sample_task_list[1], None),
-                                        Task(sample_task_list[2], None)])
+        mock_build = create_mock_build(
+            [
+                Task(sample_task_list[0], None),
+                Task(sample_task_list[1], None),
+                Task(sample_task_list[2], None),
+            ]
+        )
 
         build_metrics = under_test.BuildMetrics(mock_build).calculate()
         assert build_metrics.undispatched_count == 1
@@ -333,7 +345,7 @@ class TestBuildMetrics(object):
         assert build_metrics.display_undispatched_count == 1
 
     def test_adding_task_without_ingest_time(self, sample_task):
-        del sample_task['ingest_time']
+        del sample_task["ingest_time"]
         task = Task(sample_task, None)
         mock_build = create_mock_build()
 
@@ -365,8 +377,8 @@ class TestBuildMetrics(object):
         build_metrics._count_display_tasks()
 
         bm_dict = build_metrics.as_dict()
-        assert bm_dict['build'] == mock_build.id
-        assert 'tasks' not in bm_dict
+        assert bm_dict["build"] == mock_build.id
+        assert "tasks" not in bm_dict
 
     def test_dict_format_with_children(self, sample_task):
         task = Task(sample_task, None)
@@ -376,9 +388,9 @@ class TestBuildMetrics(object):
         build_metrics.calculate()
 
         bm_dict = build_metrics.as_dict(include_children=True)
-        assert bm_dict['build'] == mock_build.id
-        assert len(bm_dict['tasks']) == 1
-        assert bm_dict['tasks'][0]['task_id'] == task.task_id
+        assert bm_dict["build"] == mock_build.id
+        assert len(bm_dict["tasks"]) == 1
+        assert bm_dict["tasks"][0]["task_id"] == task.task_id
 
     def test_string_format(self, sample_task):
         task = Task(sample_task, None)
@@ -391,7 +403,7 @@ class TestBuildMetrics(object):
         assert mock_build.id in str(build_metrics)
 
     def test_display_tasks_are_filtered(self, sample_task):
-        sample_task['display_only'] = True
+        sample_task["display_only"] = True
         task = Task(sample_task, None)
         mock_build = create_mock_build([task])
 
@@ -405,8 +417,8 @@ class TestBuildMetrics(object):
         n_tasks = 5
         task_list = [Task(sample_task, None) for _ in range(n_tasks)]
         sample_task_2 = sample_task.copy()
-        filter_task_name = 'filter me'
-        sample_task_2['display_name'] = filter_task_name
+        filter_task_name = "filter me"
+        sample_task_2["display_name"] = filter_task_name
         task_list_2 = [Task(sample_task_2, None) for _ in range(n_tasks)]
         mock_build = create_mock_build(task_list + task_list_2)
 
@@ -415,7 +427,7 @@ class TestBuildMetrics(object):
         assert build_metrics.total_tasks == n_tasks
 
     def test_in_progress_task(self, sample_task):
-        sample_task['finish_time'] = None
+        sample_task["finish_time"] = None
         task = Task(sample_task, None)
         mock_build = create_mock_build()
 
@@ -426,12 +438,12 @@ class TestBuildMetrics(object):
 
 class TestPercentTasks(object):
     def test_percent_of_zero_tasks_is_zero(self):
-        build_metrics = under_test.BuildMetrics('build')
+        build_metrics = under_test.BuildMetrics("build")
 
         assert build_metrics._percent_tasks(5) == 0
 
     def test_percent_of_non_zero_works(self):
-        build_metrics = under_test.BuildMetrics('build')
+        build_metrics = under_test.BuildMetrics("build")
         build_metrics.success_count = 10
 
         assert build_metrics._percent_tasks(5) == 0.5

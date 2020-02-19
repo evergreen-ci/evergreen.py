@@ -5,14 +5,7 @@ buildvariants:
   - ubuntu1604-test
   tasks:
   - name: unit_tests
-  - name: validate_requirements
-  - name: yapf_src
   - name: deploy
-  display_tasks:
-  - name: yapf
-    execution_tasks:
-      - yapf_src
-
 
 functions:
   create virtualenv:
@@ -21,33 +14,12 @@ functions:
       working_dir: src
       script: |
         set -o errexit
-        virtualenv --python=/opt/mongodbtoolchain/v3/bin/python3 venv
+        set -o verbose
+
+        /opt/mongodbtoolchain/v3/bin/python3 -m venv venv
         . venv/bin/activate
-        pip install -r requirements.txt.freeze
-
-  run yapf:
-  - command: shell.exec
-    params:
-      working_dir: src
-      script: |
-        set -o errexit
-        . venv/bin/activate
-
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
-
-        yapf-junit --target-dir ${target_directory} --out-file junit-yapf.xml --yapf-config .style.yapf
-
-  validate requirements:
-    - command: shell.exec
-      params:
-        working_dir: src
-        script: |
-          set -o errexit
-          . venv/bin/activate
-
-          pip freeze --local --requirement ${requirements_file} > pip.freeze
-          diff ${requirements_file}.freeze pip.freeze
+        pip install poetry
+        poetry install
 
   deploy:
     - command: shell.exec
@@ -57,13 +29,12 @@ functions:
           set -o errexit
           . venv/bin/activate
 
-
           if [ "${is_patch}" = "true" ]; then
             # Do not deploy on patches.
             exit 0
           fi
 
-          scripts/deploy.sh ${pypi_user} ${pypi_password}
+          poetry publish --username ${pypi_user} --password ${pypi_password}
 
 pre:
 - command: git.get_project
@@ -84,27 +55,15 @@ tasks:
       working_dir: src
       script: |
         set -o errexit
+        set -o verbose
+
         . venv/bin/activate
 
-        tox
-
-- name: yapf_src
-  commands:
-  - func: run yapf
-    vars:
-      target_directory: src
-
-- name: validate_requirements
-  commands:
-    - func: validate requirements
-      vars:
-        requirements_file: requirements.txt
+        RUN_SLOW_TESTS=1 poetry run pytest --junitxml=junit-test-output.xml
 
 - name: deploy
   patchable: false
   depends_on:
-    - name: validate_requirements
-    - name: yapf_src
     - name: unit_tests
   commands:
     - func: deploy

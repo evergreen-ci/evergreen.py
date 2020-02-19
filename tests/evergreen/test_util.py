@@ -1,18 +1,14 @@
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+from unittest.mock import MagicMock
 
 import evergreen.util as under_test
-
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import MagicMock
 
 
 class TestParseEvergreenDateTime(object):
     def test_float(self):
         now = datetime.now()
-        timestamp = (time.mktime(now.timetuple()) + now.microsecond / 1000000.0)
+        timestamp = time.mktime(now.timetuple()) + now.microsecond / 1000000.0
         assert now == under_test.parse_evergreen_datetime(timestamp)
 
     def test_int(self):
@@ -67,8 +63,9 @@ class TestIteratorByTimeWindow(object):
         before_time = now - timedelta(hours=1)
         after_time = before_time - timedelta(hours=1)
 
-        items = list(under_test.iterate_by_time_window(iterator, before_time, after_time,
-                                                       "the_time"))
+        items = list(
+            under_test.iterate_by_time_window(iterator, before_time, after_time, "the_time")
+        )
         assert not items
 
     def test_iter_ends_after_end_returns_nothing(self):
@@ -77,8 +74,9 @@ class TestIteratorByTimeWindow(object):
         after_time = before_time - timedelta(hours=1)
         iterator = mock_by_seconds(after_time - timedelta(minutes=5), 5)
 
-        items = list(under_test.iterate_by_time_window(iterator, before_time, after_time,
-                                                       "the_time"))
+        items = list(
+            under_test.iterate_by_time_window(iterator, before_time, after_time, "the_time")
+        )
         assert not items
 
     def test_items_in_window_are_returned(self):
@@ -87,6 +85,7 @@ class TestIteratorByTimeWindow(object):
         after_time = before_time - timedelta(hours=1)
         iterator = mock_by_seconds(now, 100)
 
-        items = list(under_test.iterate_by_time_window(iterator, before_time, after_time,
-                                                       "the_time"))
+        items = list(
+            under_test.iterate_by_time_window(iterator, before_time, after_time, "the_time")
+        )
         assert (60 // 7) + 1 == len(items)
