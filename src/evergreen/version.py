@@ -3,7 +3,7 @@
 from __future__ import absolute_import, annotations
 
 from enum import Enum, auto
-from typing import Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.metrics.versionmetrics import VersionMetrics
@@ -53,7 +53,7 @@ class BuildVariantStatus(_BaseEvergreenObject):
     build_variant = evg_attrib("build_variant")
     build_id = evg_attrib("build_id")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of a Build Variants status."""
         super(BuildVariantStatus, self).__init__(json, api)
 
@@ -82,7 +82,7 @@ class Version(_BaseEvergreenObject):
     warnings = evg_attrib("warnings")
     ignored = evg_attrib("ignored")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen version.
 

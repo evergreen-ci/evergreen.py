@@ -2,7 +2,7 @@
 """Host representation of evergreen."""
 from __future__ import absolute_import, annotations
 
-from typing import Dict, TYPE_CHECKING
+from typing import Any, Dict, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
@@ -19,7 +19,7 @@ class HostDistro(_BaseEvergreenObject):
     provider = evg_attrib("provider")
     image_id = evg_attrib("image_id")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of a distro.
 
@@ -38,7 +38,7 @@ class RunningTask(_BaseEvergreenObject):
     version_id = evg_attrib("version_id")
     build_id = evg_attrib("build_id")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of a Running Task.
 
@@ -76,7 +76,7 @@ class Host(_BaseEvergreenObject):
     status = evg_attrib("status")
     user_host = evg_attrib("user_host")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of an evergreen host."""
         super(Host, self).__init__(json, api)
 

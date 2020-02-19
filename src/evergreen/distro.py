@@ -22,7 +22,7 @@ class MountPoint(_BaseEvergreenObject):
     size = evg_attrib("size")
     virtual_name = evg_attrib("virtual_name")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of the mount point.
 
@@ -35,7 +35,7 @@ class MountPoint(_BaseEvergreenObject):
 class StaticDistroSettings(_BaseEvergreenObject):
     """Representation of Evergreen static distro settings."""
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of the distro settings for static images.
 
@@ -61,7 +61,7 @@ class DockerDistroSettings(_BaseEvergreenObject):
 
     image_url = evg_attrib("image_url")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of the distro settings for docker.
 
@@ -89,7 +89,7 @@ class AwsDistroSettings(_BaseEvergreenObject):
     user_data = evg_attrib("user_data")
     vpc_name = evg_attrib("vpc_name")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of the distro settings.
 
@@ -122,7 +122,7 @@ class PlannerSettings(_BaseEvergreenObject):
     patch_zipper_factor = evg_attrib("patch_zipper_factor")
     task_ordering = evg_attrib("task_ordering")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of planner settings for a distro.
 
@@ -137,7 +137,7 @@ class FinderSettings(_BaseEvergreenObject):
 
     version = evg_attrib("version")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of finder settings for a distro.
 
@@ -180,7 +180,7 @@ class Distro(_BaseEvergreenObject):
     disabled = evg_attrib("disabled")
     container_pool = evg_attrib("container_pool")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of a distro.
 

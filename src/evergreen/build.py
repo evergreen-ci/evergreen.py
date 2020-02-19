@@ -2,7 +2,7 @@
 """Representation of an evergreen build."""
 from __future__ import absolute_import, annotations
 
-from typing import Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.metrics.buildmetrics import BuildMetrics
@@ -32,7 +32,7 @@ class StatusCounts(_BaseEvergreenObject):
     dispatched = evg_attrib("dispatched")
     timed_out = evg_attrib("timed_out")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create a Status Counts object.
 
@@ -66,7 +66,7 @@ class Build(_BaseEvergreenObject):
     actual_makespan_ms = evg_attrib("actual_makespan_ms")
     origin = evg_attrib("origin")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen task.
 

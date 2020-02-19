@@ -1,7 +1,7 @@
 """Representation of evergreen manifest."""
 from __future__ import absolute_import, annotations
 
-from typing import Dict, Optional, TYPE_CHECKING
+from typing import Any, Dict, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib
 
@@ -18,7 +18,7 @@ class ManifestModule(_BaseEvergreenObject):
     owner = evg_attrib("owner")
     url = evg_attrib("url")
 
-    def __init__(self, name: str, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, name: str, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen manifest module.
 
@@ -37,7 +37,7 @@ class Manifest(_BaseEvergreenObject):
     project = evg_attrib("project")
     branch = evg_attrib("branch")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of an evergreen version manifest.
 

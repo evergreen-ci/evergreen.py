@@ -2,7 +2,7 @@
 """Test representation of evergreen."""
 from __future__ import absolute_import, annotations
 
-from typing import Dict, Iterable, TYPE_CHECKING
+from typing import Any, Dict, Iterable, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
@@ -18,7 +18,7 @@ class Logs(_BaseEvergreenObject):
     url_raw = evg_attrib("url_raw")
     log_id = evg_attrib("log_id")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of a Test log."""
         super(Logs, self).__init__(json, api)
 
@@ -41,7 +41,7 @@ class Tst(_BaseEvergreenObject):
     start_time = evg_datetime_attrib("start_time")
     end_time = evg_datetime_attrib("end_time")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of a Test object."""
         super(Tst, self).__init__(json, api)
 

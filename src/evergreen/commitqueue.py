@@ -2,7 +2,7 @@
 """Commit Queue representation of evergreen."""
 from __future__ import absolute_import, annotations
 
-from typing import Dict, List, TYPE_CHECKING
+from typing import Any, Dict, List, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib
 
@@ -16,7 +16,7 @@ class CommitQueueItem(_BaseEvergreenObject):
     issue = evg_attrib("issue")
     modules = evg_attrib("modules")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create a CommitQueueItem object.
 
@@ -31,7 +31,7 @@ class CommitQueue(_BaseEvergreenObject):
 
     queue_id = evg_attrib("queue_id")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of a commit queue from evergreen json.
 

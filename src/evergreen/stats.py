@@ -2,7 +2,7 @@
 """Stats representation of evergreen."""
 from __future__ import absolute_import, annotations
 
-from typing import Dict, TYPE_CHECKING
+from typing import Any, Dict, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_date_attrib
 
@@ -23,7 +23,7 @@ class TestStats(_BaseEvergreenObject):
     num_fail = evg_attrib("num_fail")
     avg_duration_pass = evg_attrib("avg_duration_pass")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of a test stats object.
 
@@ -44,7 +44,7 @@ class TaskStats(_BaseEvergreenObject):
     num_fail = evg_attrib("num_fail")
     avg_duration_pass = evg_attrib("avg_duration_pass")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """
         Create an instance of a test stats object.
 

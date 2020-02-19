@@ -29,7 +29,7 @@ class Artifact(_BaseEvergreenObject):
     visibility = evg_attrib("visibility")
     ignore_for_fetch = evg_attrib("ignore_for_fetch")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of an evergreen task artifact."""
         super(Artifact, self).__init__(json, api)
 
@@ -69,7 +69,7 @@ class StatusDetails(_BaseEvergreenObject):
     desc = evg_attrib("desc")
     timed_out = evg_attrib("timed_out")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of an evergreen task status details."""
         super(StatusDetails, self).__init__(json, api)
 
@@ -111,7 +111,7 @@ class Task(_BaseEvergreenObject):
     time_taken_ms = evg_attrib("time_taken_ms")
     version_id = evg_attrib("version_id")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of an evergreen task."""
         super(Task, self).__init__(json, api)
         self._logs_map: Optional[Dict[Any, Any]] = None

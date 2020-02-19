@@ -20,7 +20,7 @@ class PerformanceTestResult(_BaseEvergreenObject):
     mean_value = evg_attrib("mean_value")
     measurement = evg_attrib("measurement")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of a test result."""
         super(PerformanceTestResult, self).__init__(json, api)
 
@@ -68,7 +68,7 @@ class PerformanceTestBatch(_BaseEvergreenObject):
     storage_engine = evg_attrib("storageEngine")
     errors = evg_attrib("errors")
 
-    def __init__(self, json: Dict, api: EvergreenApi, parent: PerformanceData) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi, parent: PerformanceData) -> None:
         """Create an instance of a batch of tests."""
         super(PerformanceTestBatch, self).__init__(json, api)
         self.parent = parent
@@ -102,7 +102,7 @@ class PerformanceData(_BaseEvergreenObject):
     tag = evg_attrib("tag")
     create_time = evg_short_datetime_attrib("create_time")
 
-    def __init__(self, json: Dict, api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
         """Create an instance of performance data."""
         super(PerformanceData, self).__init__(json, api)
 
