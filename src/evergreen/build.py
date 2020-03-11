@@ -10,6 +10,7 @@ from evergreen.metrics.buildmetrics import BuildMetrics
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
     from evergreen.task import Task
+    from evergreen.version import Version
 
 EVG_BUILD_STATUS_FAILED = "failed"
 EVG_BUILD_STATUS_SUCCESS = "success"
@@ -110,6 +111,14 @@ class Build(_BaseEvergreenObject):
         if self.status != EVG_BUILD_STATUS_CREATED:
             return BuildMetrics(self).calculate(task_filter_fn)
         return None
+
+    def get_version(self) -> Version:
+        """
+        Get the version this build is a part of.
+
+        :return: Version that this build is a part of.
+        """
+        return self._api.version_by_id(self.version)
 
     def __repr__(self) -> str:
         """
