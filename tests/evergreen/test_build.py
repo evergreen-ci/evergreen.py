@@ -38,3 +38,8 @@ class TestBuild(object):
 
         metrics = build.get_metrics()
         assert isinstance(metrics, BuildMetrics)
+
+    def test_get_version(self, sample_build):
+        mock_api = MagicMock()
+        build = Build(sample_build, mock_api)
+        assert mock_api.version_by_id.return_value == build.get_version()
