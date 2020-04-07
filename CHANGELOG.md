@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.0 - 2020-04-07
+- Rethrow same exception if retries fail.
+
 ## 1.1.0 - 2020-02-18
 - Switch to poetry for dependency management.
 - Add mypy, black and pydocstyle checks.

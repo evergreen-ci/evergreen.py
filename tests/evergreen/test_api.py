@@ -7,7 +7,6 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from requests.exceptions import HTTPError
-from tenacity import RetryError
 
 import evergreen.api as under_test
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
@@ -416,7 +415,7 @@ class TestRetryingEvergreenApi(object):
         version_id = "version id"
         mocked_retrying_api.session.get.side_effect = HTTPError()
 
-        with pytest.raises(RetryError):
+        with pytest.raises(HTTPError):
             mocked_retrying_api.version_by_id(version_id)
 
         assert mocked_retrying_api.session.get.call_count == under_test.MAX_RETRIES

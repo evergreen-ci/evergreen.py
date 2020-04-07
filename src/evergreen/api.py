@@ -951,6 +951,7 @@ class RetryingEvergreenApi(EvergreenApi):
         retry=retry_if_exception_type(requests.exceptions.HTTPError),
         stop=stop_after_attempt(MAX_RETRIES),
         wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),
+        reraise=True,
     )
     def _call_api(self, url: str, params: Dict = None) -> requests.Response:
         """
