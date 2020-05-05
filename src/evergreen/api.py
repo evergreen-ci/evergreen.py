@@ -6,7 +6,7 @@ from datetime import datetime
 from time import time
 from functools import lru_cache
 from json.decoder import JSONDecodeError
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, Iterator, List, Optional
 
 import requests
 import structlog
@@ -35,6 +35,7 @@ from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.util import evergreen_input_to_output, iterate_by_time_window
 from evergreen.version import Requester, Version
+from evergreen.manifest import ManifestModule
 
 try:
     from urlparse import urlparse
@@ -308,6 +309,18 @@ class _ProjectApi(_BaseEvergreenApi):
         url = self._create_url("/projects/{project_id}".format(project_id=project_id))
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
+    def project_by_name(self, project_name: str) -> Optional[Project]:
+        """
+        Get a project by project_id.
+
+        :param project_name: Name of project to query.
+        :return: Project specified.
+        """
+        for project in self.all_projects():
+            if project.identifier == project_name:
+                return project
+        return None
+
     def recent_version_by_project(
         self, project_id: str, params: Optional[Dict] = None
     ) -> List[Version]:
@@ -326,7 +339,7 @@ class _ProjectApi(_BaseEvergreenApi):
 
     def versions_by_project(
         self, project_id: str, requester: Requester = Requester.GITTER_REQUEST
-    ) -> Iterable[Version]:
+    ) -> Iterator[Version]:
         """
         Get the versions created in the specified project.
 
@@ -360,6 +373,16 @@ class _ProjectApi(_BaseEvergreenApi):
         return iterate_by_time_window(
             self.versions_by_project(project_id, requester), before, after, time_attr
         )
+
+    def most_recent_version_in_project(self, project_id: str) -> Version:
+        """
+        Fetch the most recent version in an Evergreen project.
+
+        :param project_id: Id of project to query.
+        :return: Version queried for.
+        """
+        version_iterator = self.versions_by_project(project_id)
+        return next(version_iterator)
 
     def patches_by_project(self, project_id: str, params: Dict = None) -> Iterable[Patch]:
         """
@@ -404,6 +427,20 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url("/commit_queue/{project_id}".format(project_id=project_id))
         return CommitQueue(self._paginate(url), self)  # type: ignore[arg-type]
+
+    def module_for_project(self, project_id: str, module_name: str) -> Optional[ManifestModule]:
+        """
+        Fetch the module associated with an Evergreen project.
+
+        :param project_id: Id of project to query.
+        :param module_name: Name of the module to analyze
+        :return: evg_api client instance of the module
+        """
+        recent_version = self.most_recent_version_in_project(project_id)
+        modules = recent_version.get_manifest().modules
+        if modules:
+            return modules.get(module_name)
+        return None
 
     def test_stats_by_project(
         self,

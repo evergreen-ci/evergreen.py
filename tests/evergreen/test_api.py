@@ -131,13 +131,18 @@ class TestHostApi(object):
 class TestProjectApi(object):
     def test_all_projects(self, mocked_api):
         mocked_api.all_projects()
-        expected_url = mocked_api._create_url("/projects")
-        mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+        mocked_api._create_url("/projects")
 
     def test_project_by_id(self, mocked_api):
         mocked_api.project_by_id("project_id")
         expected_url = mocked_api._create_url("/projects/project_id")
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+
+    def test_project_by_name(self, mocked_api, mocked_api_response, sample_projects):
+        mocked_api_response.json.return_value = sample_projects
+        project = mocked_api.project_by_name("project 2")
+
+        assert project.identifier == "project 2"
 
     def test_recent_version_by_project(self, mocked_api):
         mocked_api.recent_version_by_project("project_id")
@@ -181,6 +186,19 @@ class TestProjectApi(object):
         assert len(windowed_list) == 1
         assert version_list[1]["version_id"] == windowed_list[0].version_id
 
+    def test_most_recent_version_in_project(self, mocked_api, sample_version, mocked_api_response):
+        version_1 = dict(sample_version, **{"version_id": "version_1"})
+        version_2 = dict(sample_version, **{"version_id": "version_2"})
+        version_3 = dict(sample_version, **{"version_id": "version_3"})
+        response_mock = MagicMock()
+        response_mock.status_code = 200
+        response_mock.json.side_effect = [[version_1], [version_2], [version_3]]
+        mocked_api.session.get.return_value = response_mock
+
+        most_recent_version = mocked_api.most_recent_version_in_project("project_id")
+
+        assert most_recent_version.version_id == "version_2"
+
     def test_patches_by_project(self, mocked_api):
         patches = mocked_api.patches_by_project("project_id")
         next(patches)
@@ -221,6 +239,19 @@ class TestProjectApi(object):
         mocked_api.commit_queue_for_project("project_id")
         expected_url = mocked_api._create_url("/commit_queue/project_id")
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+
+    def test_module_for_project(
+        self, mocked_api, mocked_api_response, sample_version, sample_manifest
+    ):
+        version_list = [sample_version]
+        response_mock = MagicMock()
+        response_mock.status_code = 200
+        response_mock.json.side_effect = [version_list, version_list, version_list, sample_manifest]
+        mocked_api.session.get.return_value = response_mock
+
+        module = mocked_api.module_for_project("project 1", "module1")
+
+        assert module.repo == "repo1"
 
     def test_test_stats_by_project(self, mocked_api):
         after_date = "2019-01-01"

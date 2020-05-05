@@ -114,6 +114,12 @@ def sample_project():
 
 
 @pytest.fixture()
+def sample_projects():
+    """Return sample projects json."""
+    return get_sample_json("projects.json")
+
+
+@pytest.fixture()
 def sample_test():
     """Return sample test json."""
     return get_sample_json("test.json")
