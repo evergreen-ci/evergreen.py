@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.1 - 2020-05-07
+- Add support for filtering all_projects and fetching a given module for a project.
+
 ## 1.2.0 - 2020-04-07
 - Rethrow same exception if retries fail.
 
