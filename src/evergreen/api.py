@@ -6,7 +6,7 @@ from datetime import datetime
 from time import time
 from functools import lru_cache
 from json.decoder import JSONDecodeError
-from typing import Any, Dict, Iterable, Iterator, List, Optional
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional
 
 import requests
 import structlog
@@ -35,7 +35,6 @@ from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.util import evergreen_input_to_output, iterate_by_time_window
 from evergreen.version import Requester, Version
-from evergreen.manifest import ManifestModule
 
 try:
     from urlparse import urlparse
@@ -289,15 +288,19 @@ class _ProjectApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_ProjectApi, self).__init__(api_server, auth, timeout)
 
-    def all_projects(self) -> List[Project]:
+    def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:
         """
         Get all projects in evergreen.
 
+        :param project_filter_fn: function to filter projects, should accept a project_id argument.
         :return: List of all projects in evergreen.
         """
         url = self._create_url("/projects")
         project_list = self._paginate(url)
-        return [Project(project, self) for project in project_list]  # type: ignore[arg-type]
+        projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
+        if project_filter_fn:
+            return [project for project in projects if project_filter_fn(project)]
+        return projects
 
     def project_by_id(self, project_id: str) -> Project:
         """
@@ -308,18 +311,6 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url("/projects/{project_id}".format(project_id=project_id))
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
-
-    def project_by_name(self, project_name: str) -> Optional[Project]:
-        """
-        Get a project by project_id.
-
-        :param project_name: Name of project to query.
-        :return: Project specified.
-        """
-        for project in self.all_projects():
-            if project.identifier == project_name:
-                return project
-        return None
 
     def recent_version_by_project(
         self, project_id: str, params: Optional[Dict] = None
@@ -374,16 +365,6 @@ class _ProjectApi(_BaseEvergreenApi):
             self.versions_by_project(project_id, requester), before, after, time_attr
         )
 
-    def most_recent_version_in_project(self, project_id: str) -> Version:
-        """
-        Fetch the most recent version in an Evergreen project.
-
-        :param project_id: Id of project to query.
-        :return: Version queried for.
-        """
-        version_iterator = self.versions_by_project(project_id)
-        return next(version_iterator)
-
     def patches_by_project(self, project_id: str, params: Dict = None) -> Iterable[Patch]:
         """
         Get a list of patches for the specified project.
@@ -427,20 +408,6 @@ class _ProjectApi(_BaseEvergreenApi):
         """
         url = self._create_url("/commit_queue/{project_id}".format(project_id=project_id))
         return CommitQueue(self._paginate(url), self)  # type: ignore[arg-type]
-
-    def module_for_project(self, project_id: str, module_name: str) -> Optional[ManifestModule]:
-        """
-        Fetch the module associated with an Evergreen project.
-
-        :param project_id: Id of project to query.
-        :param module_name: Name of the module to analyze
-        :return: evg_api client instance of the module
-        """
-        recent_version = self.most_recent_version_in_project(project_id)
-        modules = recent_version.get_manifest().modules
-        if modules:
-            return modules.get(module_name)
-        return None
 
     def test_stats_by_project(
         self,

@@ -2,9 +2,11 @@
 """Evergreen representation of a project."""
 from __future__ import absolute_import, annotations
 
-from typing import Any, Dict, TYPE_CHECKING
+from typing import Any, Dict, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib
+from evergreen.manifest import ManifestModule
+from evergreen.version import Version
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
@@ -41,3 +43,25 @@ class Project(_BaseEvergreenObject):
     def __str__(self) -> str:
         """Get a string version of the Project."""
         return self.identifier
+
+    def most_recent_version(self) -> Version:
+        """
+        Fetch the most recent version.
+
+        :return: Version queried for.
+        """
+        version_iterator = self._api.versions_by_project(self.identifier)
+        return next(version_iterator)
+
+    def module_by_name(self, module_name: str) -> Optional[ManifestModule]:
+        """
+        Fetch the module with the given name.
+
+        :param module_name: Name of the module to analyze
+        :return: evg_api client instance of the module
+        """
+        recent_version = self.most_recent_version()
+        modules = recent_version.get_manifest().modules
+        if modules:
+            return modules.get(module_name)
+        return None
