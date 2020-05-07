@@ -18,28 +18,3 @@ class TestProject(object):
         most_recent_version = project.most_recent_version()
 
         assert most_recent_version.version_id == "version_0"
-
-    def test_module_by_name(self, sample_project):
-        mock_api = MagicMock()
-        project = Project(sample_project, mock_api)
-        version_mock = MagicMock()
-        my_module_mock = MagicMock()
-        version_mock.get_manifest.return_value = MagicMock(modules={"my-module": my_module_mock})
-        versions = [version_mock]
-        mock_api.versions_by_project.return_value = (v for v in versions)
-
-        module = project.module_by_name("my-module")
-
-        assert module == my_module_mock
-
-    def test_module_does_not_exist(self, sample_project):
-        mock_api = MagicMock()
-        project = Project(sample_project, mock_api)
-        version_mock = MagicMock(version_id="lydia")
-        version_mock.get_manifest.return_value = MagicMock(modules={"not-my-module": MagicMock()})
-        versions = [version_mock]
-        mock_api.versions_by_project.return_value = (v for v in versions)
-
-        module = project.module_by_name("my-module")
-
-        assert not module
