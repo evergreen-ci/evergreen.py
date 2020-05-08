@@ -44,6 +44,14 @@ class TestVersion(object):
         mock_api.manifest.assert_called_with(sample_version["project"], sample_version["revision"])
         assert len(manifest.modules) == len(sample_manifest["modules"])
 
+    def test_get_modules(self, sample_version, sample_manifest):
+        mock_api = MagicMock()
+        mock_api.manifest.return_value = Manifest(sample_manifest, None)
+        version = Version(sample_version, mock_api)
+        modules = version.get_modules()
+
+        assert len(modules) == len(sample_manifest["modules"])
+
     def test_is_patch_with_requester(self, sample_version):
         del sample_version["requester"]
         version = Version(sample_version, None)

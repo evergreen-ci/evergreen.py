@@ -6,7 +6,7 @@ from datetime import datetime
 from time import time
 from functools import lru_cache
 from json.decoder import JSONDecodeError
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional
 
 import requests
 import structlog
@@ -288,15 +288,19 @@ class _ProjectApi(_BaseEvergreenApi):
         """Create an Evergreen Api object."""
         super(_ProjectApi, self).__init__(api_server, auth, timeout)
 
-    def all_projects(self) -> List[Project]:
+    def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:
         """
         Get all projects in evergreen.
 
+        :param project_filter_fn: function to filter projects, should accept a project_id argument.
         :return: List of all projects in evergreen.
         """
         url = self._create_url("/projects")
         project_list = self._paginate(url)
-        return [Project(project, self) for project in project_list]  # type: ignore[arg-type]
+        projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
+        if project_filter_fn:
+            return [project for project in projects if project_filter_fn(project)]
+        return projects
 
     def project_by_id(self, project_id: str) -> Project:
         """
@@ -326,7 +330,7 @@ class _ProjectApi(_BaseEvergreenApi):
 
     def versions_by_project(
         self, project_id: str, requester: Requester = Requester.GITTER_REQUEST
-    ) -> Iterable[Version]:
+    ) -> Iterator[Version]:
         """
         Get the versions created in the specified project.
 

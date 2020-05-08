@@ -5,6 +5,7 @@ from __future__ import absolute_import, annotations
 from typing import Any, Dict, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib
+from evergreen.version import Version
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
@@ -41,3 +42,12 @@ class Project(_BaseEvergreenObject):
     def __str__(self) -> str:
         """Get a string version of the Project."""
         return self.identifier
+
+    def most_recent_version(self) -> Version:
+        """
+        Fetch the most recent version.
+
+        :return: Version queried for.
+        """
+        version_iterator = self._api.versions_by_project(self.identifier)
+        return next(version_iterator)

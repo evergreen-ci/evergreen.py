@@ -1,0 +1,77 @@
+[
+  {
+    "batch_time": 0,
+    "branch_name": "master",
+    "display_name": "The project (master)",
+    "enabled": true,
+    "identifier": "project 1",
+    "owner_name": "10gen",
+    "private": true,
+    "remote_path": ".evergreen.yml",
+    "repo_name": "project",
+    "tracked": true,
+    "deactivate_previous": false,
+    "admins": [
+      "user.name",
+      "user 2",
+      "another user"
+    ],
+    "tracks_push_events": true,
+    "pr_testing_enabled": true,
+    "commit_queue": {
+      "enabled": false,
+      "merge_method": "squash",
+      "patch_type": ""
+    }
+  },
+  {
+    "batch_time": 0,
+    "branch_name": "master",
+    "display_name": "The project 2 (master)",
+    "enabled": true,
+    "identifier": "project 2",
+    "owner_name": "10gen",
+    "private": true,
+    "remote_path": ".evergreen.yml",
+    "repo_name": "project",
+    "tracked": true,
+    "deactivate_previous": false,
+    "admins": [
+      "user.name",
+      "user 2",
+      "another user"
+    ],
+    "tracks_push_events": true,
+    "pr_testing_enabled": true,
+    "commit_queue": {
+      "enabled": false,
+      "merge_method": "squash",
+      "patch_type": ""
+    }
+  },
+  {
+    "batch_time": 0,
+    "branch_name": "master",
+    "display_name": "The project 3 (master)",
+    "enabled": true,
+    "identifier": "project 3",
+    "owner_name": "10gen",
+    "private": true,
+    "remote_path": ".evergreen.yml",
+    "repo_name": "project",
+    "tracked": true,
+    "deactivate_previous": false,
+    "admins": [
+      "user.name",
+      "user 2",
+      "another user"
+    ],
+    "tracks_push_events": true,
+    "pr_testing_enabled": true,
+    "commit_queue": {
+      "enabled": false,
+      "merge_method": "squash",
+      "patch_type": ""
+    }
+  }
+]

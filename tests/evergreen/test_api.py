@@ -134,6 +134,17 @@ class TestProjectApi(object):
         expected_url = mocked_api._create_url("/projects")
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
 
+    def test_all_projects_with_filter(self, mocked_api, mocked_api_response, sample_projects):
+        mocked_api_response.json.return_value = sample_projects
+
+        def filter_fn(project):
+            return project.identifier == "project 2"
+
+        projects = mocked_api.all_projects(filter_fn)
+
+        assert len(projects) == 1
+        assert projects[0].identifier == "project 2"
+
     def test_project_by_id(self, mocked_api):
         mocked_api.project_by_id("project_id")
         expected_url = mocked_api._create_url("/projects/project_id")

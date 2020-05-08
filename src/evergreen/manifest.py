@@ -50,7 +50,7 @@ class Manifest(_BaseEvergreenObject):
     def modules(self) -> Optional[Dict[str, ManifestModule]]:
         """Map of modules in this manifest."""
         if "modules" not in self.json:
-            return None
+            return {}
 
         modules = self.json["modules"].items()
 

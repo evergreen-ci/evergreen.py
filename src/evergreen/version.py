@@ -6,6 +6,7 @@ from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+from evergreen.manifest import ManifestModule
 from evergreen.metrics.versionmetrics import VersionMetrics
 
 if TYPE_CHECKING:
@@ -124,6 +125,14 @@ class Version(_BaseEvergreenObject):
         :return: Manifest for this version.
         """
         return self._api.manifest(self.project, self.revision)
+
+    def get_modules(self) -> Optional[Dict[str, ManifestModule]]:
+        """
+        Get the modules for this version.
+
+        :return: ManifestModules for this version.
+        """
+        return self.get_manifest().modules
 
     def get_builds(self) -> List[Build]:
         """
