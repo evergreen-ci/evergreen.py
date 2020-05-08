@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Host representation of evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from typing import Any, Dict, TYPE_CHECKING
 
@@ -19,7 +19,7 @@ class HostDistro(_BaseEvergreenObject):
     provider = evg_attrib("provider")
     image_id = evg_attrib("image_id")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of a distro.
 
@@ -38,7 +38,7 @@ class RunningTask(_BaseEvergreenObject):
     version_id = evg_attrib("version_id")
     build_id = evg_attrib("build_id")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of a Running Task.
 
@@ -47,7 +47,7 @@ class RunningTask(_BaseEvergreenObject):
         """
         super(RunningTask, self).__init__(json, api)
 
-    def get_build(self) -> Build:
+    def get_build(self) -> "Build":
         """
         Get build for the running task.
 
@@ -55,7 +55,7 @@ class RunningTask(_BaseEvergreenObject):
         """
         return self._api.build_by_id(self.build_id)
 
-    def get_version(self) -> Version:
+    def get_version(self) -> "Version":
         """
         Get version for the running task.
 
@@ -76,7 +76,7 @@ class Host(_BaseEvergreenObject):
     status = evg_attrib("status")
     user_host = evg_attrib("user_host")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen host."""
         super(Host, self).__init__(json, api)
 
@@ -90,7 +90,7 @@ class Host(_BaseEvergreenObject):
         """Get the distro on this host."""
         return HostDistro(self.json["distro"], self._api)
 
-    def get_build(self) -> Build:
+    def get_build(self) -> "Build":
         """
         Get the build for the build using this host.
 
@@ -98,7 +98,7 @@ class Host(_BaseEvergreenObject):
         """
         return self.running_task.get_build()
 
-    def get_version(self) -> Version:
+    def get_version(self) -> "Version":
         """
         Get the version for the task using this host.
 

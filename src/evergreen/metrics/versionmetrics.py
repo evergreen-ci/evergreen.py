@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Metrics for an evergreen version."""
-from __future__ import absolute_import, division, annotations
+from __future__ import absolute_import, division
 
 from datetime import datetime
 from typing import Callable, Dict, List, Optional, TYPE_CHECKING
@@ -18,7 +18,7 @@ LOGGER = get_logger(__name__)
 class VersionMetrics(object):
     """Metrics about an evergreen version."""
 
-    def __init__(self, version: Version) -> None:
+    def __init__(self, version: "Version") -> None:
         """
         Create an instance of version metrics.
 
@@ -40,7 +40,7 @@ class VersionMetrics(object):
         self.build_metrics: List[BuildMetrics] = []
         self.build_list: Optional[List[Build]] = None
 
-    def calculate(self, task_filter_fn: Optional[Callable] = None) -> VersionMetrics:
+    def calculate(self, task_filter_fn: Optional[Callable] = None) -> "VersionMetrics":
         """
         Calculate metrics for the given build.
 
@@ -166,7 +166,7 @@ class VersionMetrics(object):
 
         return n_tasks / self.total_tasks
 
-    def _count_build(self, build: Build, task_filter_fn: Optional[Callable]) -> None:
+    def _count_build(self, build: "Build", task_filter_fn: Optional[Callable]) -> None:
         """
         Add stats for the given build to the metrics.
 

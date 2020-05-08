@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Version representation of evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
     from evergreen.build import Build
     from evergreen.manifest import Manifest
-    from evergreen.patch import Patch
+    from evergreen.patch import Patch  # noqa: F401
 
 
 class Requester(Enum):
@@ -54,11 +54,11 @@ class BuildVariantStatus(_BaseEvergreenObject):
     build_variant = evg_attrib("build_variant")
     build_id = evg_attrib("build_id")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of a Build Variants status."""
         super(BuildVariantStatus, self).__init__(json, api)
 
-    def get_build(self) -> Build:
+    def get_build(self) -> "Build":
         """Get the build object for this build variants status."""
         return self._api.build_by_id(self.build_id)
 
@@ -83,7 +83,7 @@ class Version(_BaseEvergreenObject):
     warnings = evg_attrib("warnings")
     ignored = evg_attrib("ignored")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of an evergreen version.
 
@@ -109,7 +109,7 @@ class Version(_BaseEvergreenObject):
         """Get the requester of this version."""
         return Requester[self.json.get("requester", "UNKNOWN").upper()]
 
-    def build_by_variant(self, build_variant: str) -> Build:
+    def build_by_variant(self, build_variant: str) -> "Build":
         """
         Get a build object for the specified variant.
 
@@ -118,7 +118,7 @@ class Version(_BaseEvergreenObject):
         """
         return self._api.build_by_id(self.build_variants_map[build_variant])
 
-    def get_manifest(self) -> Manifest:
+    def get_manifest(self) -> "Manifest":
         """
         Get the manifest for this version.
 
@@ -134,7 +134,7 @@ class Version(_BaseEvergreenObject):
         """
         return self.get_manifest().modules
 
-    def get_builds(self) -> List[Build]:
+    def get_builds(self) -> List["Build"]:
         """
         Get all the builds that are a part of this version.
 
@@ -160,7 +160,7 @@ class Version(_BaseEvergreenObject):
         """
         return self.status in COMPLETED_STATES
 
-    def get_patch(self) -> Optional[Patch]:
+    def get_patch(self) -> Optional["Patch"]:
         """
         Get the patch information for this version.
 

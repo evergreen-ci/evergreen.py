@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Get configuration about connecting to evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from collections import namedtuple
 import os

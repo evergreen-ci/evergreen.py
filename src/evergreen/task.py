@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Task representation of evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from datetime import timedelta
 from enum import IntEnum
@@ -10,7 +10,7 @@ from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
-    from evergreen.tst import Tst
+    from evergreen.tst import Tst  # noqa: F401
 
 EVG_SUCCESS_STATUS = "success"
 EVG_SYSTEM_FAILURE_STATUS = "system"
@@ -29,7 +29,7 @@ class Artifact(_BaseEvergreenObject):
     visibility = evg_attrib("visibility")
     ignore_for_fetch = evg_attrib("ignore_for_fetch")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task artifact."""
         super(Artifact, self).__init__(json, api)
 
@@ -44,7 +44,7 @@ class StatusScore(IntEnum):
     UNDISPATCHED = 5
 
     @classmethod
-    def get_task_status_score(cls, task: Task) -> StatusScore:
+    def get_task_status_score(cls, task: "Task") -> "StatusScore":
         """
         Retrieve the status score based on the task status.
 
@@ -69,7 +69,7 @@ class StatusDetails(_BaseEvergreenObject):
     desc = evg_attrib("desc")
     timed_out = evg_attrib("timed_out")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task status details."""
         super(StatusDetails, self).__init__(json, api)
 
@@ -111,7 +111,7 @@ class Task(_BaseEvergreenObject):
     time_taken_ms = evg_attrib("time_taken_ms")
     version_id = evg_attrib("version_id")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task."""
         super(Task, self).__init__(json, api)
         self._logs_map: Optional[Dict[Any, Any]] = None
@@ -174,7 +174,7 @@ class Task(_BaseEvergreenObject):
         """
         return StatusScore.get_task_status_score(self)
 
-    def get_execution(self, execution: int) -> Optional[Task]:
+    def get_execution(self, execution: int) -> Optional["Task"]:
         """
         Get the task info for the specified execution.
 
@@ -257,7 +257,9 @@ class Task(_BaseEvergreenObject):
         """
         return self.scheduled_time and not self.finish_time
 
-    def get_tests(self, status: Optional[str] = None, execution: Optional[int] = None) -> List[Tst]:
+    def get_tests(
+        self, status: Optional[str] = None, execution: Optional[int] = None
+    ) -> List["Tst"]:
         """
         Get the test results for this task.
 

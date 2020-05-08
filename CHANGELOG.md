@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.0 - 2020-05-08
+* Add python 3.6 support.
+
 ## 1.2.1 - 2020-05-07
 - Add support for filtering all_projects and fetching a given module for a project.
 

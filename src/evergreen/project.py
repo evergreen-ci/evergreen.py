@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Evergreen representation of a project."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from typing import Any, Dict, TYPE_CHECKING
 
@@ -30,7 +30,7 @@ class Project(_BaseEvergreenObject):
     pr_testing_enabled = evg_attrib("pr_testing_enabled")
     commit_queue = evg_attrib("commit_queue")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of an evergreen project.
 
