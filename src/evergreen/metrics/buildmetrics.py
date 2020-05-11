@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Metrics for Evergreen builds."""
-from __future__ import absolute_import, annotations, division
+from __future__ import absolute_import, division
 
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -22,7 +22,7 @@ LOGGER = get_logger(__name__)
 class BuildMetrics(object):
     """Metrics about an evergreen build."""
 
-    def __init__(self, build: Build) -> None:
+    def __init__(self, build: "Build") -> None:
         """
         Create an instance of build metrics.
 
@@ -53,7 +53,7 @@ class BuildMetrics(object):
 
         self._display_map: Dict[str, List[Task]] = defaultdict(list)
 
-    def calculate(self, task_filter_fn: Optional[Callable] = None) -> BuildMetrics:
+    def calculate(self, task_filter_fn: Optional[Callable] = None) -> "BuildMetrics":
         """
         Calculate metrics for the given build.
 
@@ -265,7 +265,7 @@ class BuildMetrics(object):
             return 0
         return n_tasks / self.total_display_tasks
 
-    def _count_task(self, task: Task) -> None:
+    def _count_task(self, task: "Task") -> None:
         """
         Add stats for the given task to the metrics.
 

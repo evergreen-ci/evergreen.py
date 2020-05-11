@@ -1,6 +1,4 @@
 """Exceptions for the evergreen module."""
-from __future__ import annotations
-
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -40,7 +38,7 @@ class MetricsException(EvergreenException):
 class ActiveTaskMetricsException(MetricsException):
     """An exception when a task is in progress during metrics collection."""
 
-    def __init__(self, task: Task, msg: Optional[str] = None) -> None:
+    def __init__(self, task: "Task", msg: Optional[str] = None) -> None:
         """
         Create a new exception instance.
 

@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Task representation of evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from typing import Any, Callable, Dict, Optional, TYPE_CHECKING
 
@@ -66,7 +66,7 @@ def evg_date_attrib(attrib_name: str) -> property:
 class _BaseEvergreenObject(object):
     """Common evergreen object."""
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task."""
         self.json = json
         self._api = api

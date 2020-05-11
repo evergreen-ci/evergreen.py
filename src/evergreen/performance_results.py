@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Performance results representation of evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
@@ -20,7 +20,7 @@ class PerformanceTestResult(_BaseEvergreenObject):
     mean_value = evg_attrib("mean_value")
     measurement = evg_attrib("measurement")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of a test result."""
         super(PerformanceTestResult, self).__init__(json, api)
 
@@ -31,7 +31,7 @@ class PerformanceTestRun(_BaseEvergreenObject):
     workload = evg_attrib("workload")
     test_name = evg_attrib("name")
 
-    def __init__(self, test_result: Dict, api: EvergreenApi) -> None:
+    def __init__(self, test_result: Dict, api: "EvergreenApi") -> None:
         """Create an instance of a test run."""
         super(PerformanceTestRun, self).__init__(test_result, api)
 
@@ -68,7 +68,9 @@ class PerformanceTestBatch(_BaseEvergreenObject):
     storage_engine = evg_attrib("storageEngine")
     errors = evg_attrib("errors")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi, parent: PerformanceData) -> None:
+    def __init__(
+        self, json: Dict[str, Any], api: "EvergreenApi", parent: "PerformanceData"
+    ) -> None:
         """Create an instance of a batch of tests."""
         super(PerformanceTestBatch, self).__init__(json, api)
         self.parent = parent
@@ -102,7 +104,7 @@ class PerformanceData(_BaseEvergreenObject):
     tag = evg_attrib("tag")
     create_time = evg_short_datetime_attrib("create_time")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of performance data."""
         super(PerformanceData, self).__init__(json, api)
 

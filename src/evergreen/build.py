@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Representation of an evergreen build."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
@@ -9,7 +9,7 @@ from evergreen.metrics.buildmetrics import BuildMetrics
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
-    from evergreen.task import Task
+    from evergreen.task import Task  # noqa: F401
     from evergreen.version import Version
 
 EVG_BUILD_STATUS_FAILED = "failed"
@@ -33,7 +33,7 @@ class StatusCounts(_BaseEvergreenObject):
     dispatched = evg_attrib("dispatched")
     timed_out = evg_attrib("timed_out")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create a Status Counts object.
 
@@ -67,7 +67,7 @@ class Build(_BaseEvergreenObject):
     actual_makespan_ms = evg_attrib("actual_makespan_ms")
     origin = evg_attrib("origin")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of an evergreen task.
 
@@ -81,7 +81,7 @@ class Build(_BaseEvergreenObject):
         """Get the status counts of the build."""
         return StatusCounts(self.json["status_counts"], self._api)
 
-    def get_tasks(self, fetch_all_executions: bool = False) -> List[Task]:
+    def get_tasks(self, fetch_all_executions: bool = False) -> List["Task"]:
         """
         Get all tasks for this build.
 
@@ -112,7 +112,7 @@ class Build(_BaseEvergreenObject):
             return BuildMetrics(self).calculate(task_filter_fn)
         return None
 
-    def get_version(self) -> Version:
+    def get_version(self) -> "Version":
         """
         Get the version this build is a part of.
 

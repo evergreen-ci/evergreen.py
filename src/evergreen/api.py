@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 """API for interacting with evergreen."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from datetime import datetime
 from time import time
@@ -856,7 +856,7 @@ class EvergreenApi(
         use_config_file: bool = False,
         config_file: Optional[str] = None,
         timeout: Optional[int] = DEFAULT_NETWORK_TIMEOUT_SEC,
-    ) -> EvergreenApi:
+    ) -> "EvergreenApi":
         """
         Get an evergreen api instance based on config file settings.
 

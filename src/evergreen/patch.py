@@ -1,5 +1,5 @@
 """Representation of an evergreen patch."""
-from __future__ import absolute_import, annotations
+from __future__ import absolute_import
 
 from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
 
@@ -21,7 +21,7 @@ class GithubPatchData(_BaseEvergreenObject):
     head_hash = evg_attrib("head_hash")
     author = evg_attrib("author")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of github patch data.
 
@@ -36,7 +36,7 @@ class VariantsTasks(_BaseEvergreenObject):
 
     name = evg_attrib("name")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of a variants tasks object.
 
@@ -79,7 +79,7 @@ class Patch(_BaseEvergreenObject):
     activated = evg_attrib("activated")
     alias = evg_attrib("alias")
 
-    def __init__(self, json: Dict[str, Any], api: EvergreenApi) -> None:
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
         Create an instance of an evergreen patch.
 
@@ -122,7 +122,7 @@ class Patch(_BaseEvergreenObject):
             self._variant_task_dict = {vt.name: vt.tasks for vt in self.variants_tasks}
         return self._variant_task_dict[variant]
 
-    def get_version(self) -> Version:
+    def get_version(self) -> "Version":
         """
         Get version for this patch.
 
