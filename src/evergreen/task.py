@@ -264,10 +264,15 @@ class Task(_BaseEvergreenObject):
         Get the test results for this task.
 
         :param status: Only return tests with the given status.
-        :param execution: Return test results for the specified execution.
+        :param execution: If None then return test results for this tasks execution otherwise return
+        the test results for the specified execution.
         :return: List of test results for the task.
         """
-        return self._api.tests_by_task(self.task_id, status=status, execution=execution)
+        return self._api.tests_by_task(
+            self.task_id,
+            status=status,
+            execution=self.execution if execution is None else execution,
+        )
 
     def __repr__(self) -> str:
         """

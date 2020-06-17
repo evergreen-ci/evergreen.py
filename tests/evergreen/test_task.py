@@ -127,13 +127,22 @@ class TestTask(object):
 
         assert not task.is_active()
 
-    def test_get_tests(self, sample_task):
+    @pytest.mark.parametrize(
+        "execution,expected", [(None, 1), (0, 0)],
+    )
+    def test_get_tests(self, sample_task, execution, expected):
         mock_api = MagicMock()
         task = Task(sample_task, mock_api)
 
-        tests = task.get_tests()
+        if execution is None:
+            tests = task.get_tests()
+        else:
+            tests = task.get_tests(execution=execution)
 
         mock_api.tests_by_task.assert_called_once()
+
+        kwargs = mock_api.tests_by_task.call_args[1]
+        assert "execution" in kwargs and kwargs["execution"] == expected
         assert tests == mock_api.tests_by_task.return_value
 
     @pytest.mark.parametrize(
