@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.1 - 2020-06-17
+- Task.get_tests should default to the task execution.
+
 ## 1.3.0 - 2020-05-08
 * Add python 3.6 support.
 
