@@ -62,6 +62,18 @@ class TestTask(object):
 
         assert not task.get_execution(999)
 
+    def test_get_execution_or_self(self, sample_task):
+        task = Task(sample_task, None)
+        execution = task.get_execution_or_self(0)
+
+        assert execution.display_name == "sharding_auth_gen"
+
+    def test_get_execution_or_self_with_no_execution(self, sample_task):
+        task = Task(sample_task, None)
+        execution = task.get_execution_or_self(999)
+
+        assert execution == task
+
     def test_artifacts(self, sample_task):
         task = Task(sample_task, None)
         assert len(task.artifacts) == len(sample_task["artifacts"])
@@ -170,3 +182,30 @@ class TestTask(object):
         task = Task(sample_task, None)
 
         assert task.get_status_score() == status_score
+
+    def test_get_execution_tasks(self, sample_task, sample_display_task):
+        mock_api = MagicMock()
+        mock_api.task_by_id.return_value = Task(sample_task, mock_api)
+
+        display_task = Task(sample_display_task, mock_api)
+        execution_tasks = display_task.get_execution_tasks()
+
+        assert len(execution_tasks) == len(sample_display_task["execution_tasks"])
+
+    def test_get_execution_tasks_with_filters(self, sample_task, sample_display_task):
+        mock_api = MagicMock()
+        mock_api.task_by_id.return_value = Task(sample_task, mock_api)
+        max_return = 2
+        seen = 0
+
+        def cap_seen(t):
+            nonlocal seen
+            if seen >= max_return:
+                return False
+            seen += 1
+            return True
+
+        display_task = Task(sample_display_task, mock_api)
+        execution_tasks = display_task.get_execution_tasks(filter_fn=cap_seen)
+
+        assert len(execution_tasks) == max_return

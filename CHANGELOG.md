@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.0 - 2020-06-25
+- Get a list of execution tasks from a display task.
+
 ## 1.3.1 - 2020-06-17
 - Task.get_tests should default to the task execution.
 
