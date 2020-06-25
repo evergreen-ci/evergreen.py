@@ -291,12 +291,12 @@ class Task(_BaseEvergreenObject):
 
     def get_execution_tasks(
         self, filter_fn: Optional[Callable[["Task"], bool]] = None
-    ) -> List["Task"]:
+    ) -> Optional[List["Task"]]:
         """
         Get a list of execution tasks associated with this task.
 
         If this is a display task, return the tasks execution tasks associated with it. 
-        If this is not a display task, return an empty list.
+        If this is not a display task, returns None.
 
         :param filter_fn: Function to filter returned results.
         :return: List of execution tasks.
@@ -315,7 +315,7 @@ class Task(_BaseEvergreenObject):
                 return [task for task in execution_tasks if filter_fn(task)]
             return execution_tasks
 
-        return []
+        return None
 
     def __repr__(self) -> str:
         """
