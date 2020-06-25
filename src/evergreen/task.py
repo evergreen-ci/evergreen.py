@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 from datetime import timedelta
 from enum import IntEnum
-from typing import Any, Dict, Iterable, List, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, Iterable, List, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
@@ -90,6 +90,7 @@ class Task(_BaseEvergreenObject):
     est_wait_to_start_ms = evg_attrib("est_wait_to_start_ms")
     estimated_cost = evg_attrib("estimated_cost")
     execution = evg_attrib("execution")
+    execution_tasks = evg_attrib("execution_tasks")
     expected_duration_ms = evg_attrib("expected_duration_ms")
     finish_time = evg_datetime_attrib("finish_time")
     generate_task = evg_attrib("generate_task")
@@ -191,6 +192,20 @@ class Task(_BaseEvergreenObject):
 
         return None
 
+    def get_execution_or_self(self, execution: int) -> "Task":
+        """
+        Get the specified execution if it exists.
+
+        If the specified execution does not exist, return self.
+
+        :param execution: Index of execution.
+        :return: Task info for specified execution or self.
+        """
+        task_execution = self.get_execution(execution)
+        if task_execution:
+            return task_execution
+        return self
+
     def wait_time(self) -> Optional[timedelta]:
         """
         Get the time taken until the task started running.
@@ -273,6 +288,34 @@ class Task(_BaseEvergreenObject):
             status=status,
             execution=self.execution if execution is None else execution,
         )
+
+    def get_execution_tasks(
+        self, filter_fn: Optional[Callable[["Task"], bool]] = None
+    ) -> Optional[List["Task"]]:
+        """
+        Get a list of execution tasks associated with this task.
+
+        If this is a display task, return the tasks execution tasks associated with it. 
+        If this is not a display task, returns None.
+
+        :param filter_fn: Function to filter returned results.
+        :return: List of execution tasks.
+        """
+        if self.display_only:
+            execution_tasks = [
+                self._api.task_by_id(task_id, fetch_all_executions=True)
+                for task_id in self.execution_tasks
+            ]
+
+            execution_tasks = [
+                task.get_execution_or_self(self.execution) for task in execution_tasks
+            ]
+
+            if filter_fn:
+                return [task for task in execution_tasks if filter_fn(task)]
+            return execution_tasks
+
+        return None
 
     def __repr__(self) -> str:
         """
