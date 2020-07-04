@@ -15,7 +15,7 @@ def parse_evergreen_datetime(evg_date: Optional[Any]) -> Optional[datetime]:
     Convert an evergreen datetime string into a datetime object.
 
     :param evg_date: String to convert to a datetime.
-    :return datetime version of date.
+    :return: datetime version of date.
     """
     if not evg_date:
         return None
@@ -31,7 +31,7 @@ def parse_evergreen_short_datetime(evg_date: Optional[str]) -> Optional[datetime
     Convert an evergreen datetime string into a datetime object.
 
     :param evg_date: String to convert to a datetime.
-    :return datetime version of date.
+    :return: datetime version of date.
     """
     if not evg_date:
         return None

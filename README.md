@@ -5,6 +5,10 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/evergreen.py) ![PyPI](https://img.shields.io/pypi/v/evergreen.py.svg) [![Coverage Status](https://coveralls.io/repos/github/evergreen-ci/evergreen.py/badge.svg?branch=master)](https://coveralls.io/github/evergreen-ci/evergreen.py?branch=master)
 
+## Documentation
+
+You can find the documentation [here](https://evergreen-ci.github.io/evergreen.py/).
+
 ## Usage
 
 ```

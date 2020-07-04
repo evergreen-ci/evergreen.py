@@ -52,7 +52,7 @@ START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
 
 
-class _BaseEvergreenApi(object):
+class EvergreenApi(object):
     """Base methods for building API objects."""
 
     def __init__(
@@ -224,19 +224,6 @@ class _BaseEvergreenApi(object):
                 yield result
             params["start_at"] = evergreen_input_to_output(data[-1]["create_time"])
 
-
-class _DistrosApi(_BaseEvergreenApi):
-    """API for distros endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_DistrosApi, self).__init__(api_server, auth, timeout)
-
     def all_distros(self) -> List[Distro]:
         """
         Get all distros in evergreen.
@@ -246,19 +233,6 @@ class _DistrosApi(_BaseEvergreenApi):
         url = self._create_url("/distros")
         distro_list = self._paginate(url)
         return [Distro(distro, self) for distro in distro_list]  # type: ignore[arg-type]
-
-
-class _HostApi(_BaseEvergreenApi):
-    """API for hosts endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_HostApi, self).__init__(api_server, auth, timeout)
 
     def all_hosts(self, status: Optional[str] = None) -> List[Host]:
         """
@@ -274,19 +248,6 @@ class _HostApi(_BaseEvergreenApi):
         url = self._create_url("/hosts")
         host_list = self._paginate(url, params)
         return [Host(host, self) for host in host_list]  # type: ignore[arg-type]
-
-
-class _ProjectApi(_BaseEvergreenApi):
-    """API for project endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_ProjectApi, self).__init__(api_server, auth, timeout)
 
     def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:
         """
@@ -582,19 +543,6 @@ class _ProjectApi(_BaseEvergreenApi):
             TaskReliability(task_reliability, self) for task_reliability in task_reliability_scores  # type: ignore[arg-type]
         ]
 
-
-class _BuildApi(_BaseEvergreenApi):
-    """API for build endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_BuildApi, self).__init__(api_server, auth, timeout)
-
     def build_by_id(self, build_id: str) -> Build:
         """
         Get a build by id.
@@ -623,19 +571,6 @@ class _BuildApi(_BaseEvergreenApi):
         task_list = self._paginate(url, params)
         return [Task(task, self) for task in task_list]  # type: ignore[arg-type]
 
-
-class _VersionApi(_BaseEvergreenApi):
-    """API for version endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_VersionApi, self).__init__(api_server, auth, timeout)
-
     def version_by_id(self, version_id: str) -> Version:
         """
         Get version by version id.
@@ -658,19 +593,6 @@ class _VersionApi(_BaseEvergreenApi):
         build_list = self._paginate(url, params)
         return [Build(build, self) for build in build_list]  # type: ignore[arg-type]
 
-
-class _PatchApi(_BaseEvergreenApi):
-    """API for patch endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_PatchApi, self).__init__(api_server, auth, timeout)
-
     def patch_by_id(self, patch_id: str, params: Dict = None) -> Patch:
         """
         Get a patch by patch id.
@@ -681,19 +603,6 @@ class _PatchApi(_BaseEvergreenApi):
         """
         url = self._create_url("/patches/{patch_id}".format(patch_id=patch_id))
         return Patch(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
-
-
-class _TaskApi(_BaseEvergreenApi):
-    """API for task endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_TaskApi, self).__init__(api_server, auth, timeout)
 
     def task_by_id(self, task_id: str, fetch_all_executions: Optional[bool] = None) -> Task:
         """
@@ -753,19 +662,6 @@ class _TaskApi(_BaseEvergreenApi):
         )
         return [PerformanceData(result, self) for result in self._paginate(url)]  # type: ignore[arg-type]
 
-
-class _OldApi(_BaseEvergreenApi):
-    """API for pre-v2 endpoints."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_OldApi, self).__init__(api_server, auth, timeout)
-
     def _create_old_url(self, endpoint: str) -> str:
         """
         Build a url for an pre-v2 endpoint.
@@ -790,19 +686,6 @@ class _OldApi(_BaseEvergreenApi):
         )
         return Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
 
-
-class _LogApi(_BaseEvergreenApi):
-    """API for accessing log files."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(_LogApi, self).__init__(api_server, auth, timeout)
-
     def retrieve_task_log(self, log_url: str, raw: bool = False) -> str:
         """
         Get the request log file from a task.
@@ -825,29 +708,6 @@ class _LogApi(_BaseEvergreenApi):
         """
         params = {"text": "true"}
         return self._stream_api(log_url, params)
-
-
-class EvergreenApi(
-    _ProjectApi,
-    _BuildApi,
-    _VersionApi,
-    _PatchApi,
-    _HostApi,
-    _TaskApi,
-    _OldApi,
-    _LogApi,
-    _DistrosApi,
-):
-    """Access to the Evergreen API Server."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(EvergreenApi, self).__init__(api_server, auth, timeout=timeout)
 
     @classmethod
     def get_api(
