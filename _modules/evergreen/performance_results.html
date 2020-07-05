@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>evergreen.performance_results &#8212; evergreen.py 1.4.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">evergreen.performance_results</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for evergreen.performance_results</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Performance results representation of evergreen.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+
+<span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_short_datetime_attrib</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+
+
+<div class="viewcode-block" id="PerformanceTestResult"><a class="viewcode-back" href="../../evergreen.html#evergreen.performance_results.PerformanceTestResult">[docs]</a><span class="k">class</span> <span class="nc">PerformanceTestResult</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a test result from Evergreen.&quot;&quot;&quot;</span>
+
+    <span class="n">thread_level</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;thread_level&quot;</span><span class="p">)</span>
+    <span class="n">recorded_values</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;recorded_values&quot;</span><span class="p">)</span>
+    <span class="n">mean_value</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;mean_value&quot;</span><span class="p">)</span>
+    <span class="n">measurement</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;measurement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an instance of a test result.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PerformanceTestResult</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PerformanceTestRun"><a class="viewcode-back" href="../../evergreen.html#evergreen.performance_results.PerformanceTestRun">[docs]</a><span class="k">class</span> <span class="nc">PerformanceTestRun</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a test run from Evergreen.&quot;&quot;&quot;</span>
+
+    <span class="n">workload</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;workload&quot;</span><span class="p">)</span>
+    <span class="n">test_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an instance of a test run.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PerformanceTestRun</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">test_result</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get the start time for the given test run.&quot;&quot;&quot;</span>
+        <span class="c1"># Microbenchmarks stores the &#39;start&#39; and &#39;end&#39; time of the test in the inner &#39;results&#39; field</span>
+        <span class="c1"># while sys-perf stores it in the outer &#39;results&#39; field.</span>
+        <span class="c1"># Also, the format of start varies depending on what generated the results.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get the start time for the given test run.&quot;&quot;&quot;</span>
+        <span class="c1"># Microbenchmarks stores the &#39;start&#39; and &#39;end&#39; time of the test in the inner &#39;results&#39; field</span>
+        <span class="c1"># while sys-perf stores it in the outer &#39;results&#39; field.</span>
+        <span class="c1"># Also, the format of end varies depending on what generated the results.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test_results</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PerformanceTestResult</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get the performance test results for this run.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">PerformanceTestResult</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">_format_performance_results</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">])</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PerformanceTestBatch"><a class="viewcode-back" href="../../evergreen.html#evergreen.performance_results.PerformanceTestBatch">[docs]</a><span class="k">class</span> <span class="nc">PerformanceTestBatch</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a batch of tests from Evergreen.&quot;&quot;&quot;</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">)</span>
+    <span class="n">storage_engine</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;storageEngine&quot;</span><span class="p">)</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;errors&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="s2">&quot;PerformanceData&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an instance of a batch of tests.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PerformanceTestBatch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PerformanceTestRun</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of test runs.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">PerformanceTestRun</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]]</span>
+
+<div class="viewcode-block" id="PerformanceTestBatch.test_runs_matching"><a class="viewcode-back" href="../../evergreen.html#evergreen.performance_results.PerformanceTestBatch.test_runs_matching">[docs]</a>    <span class="k">def</span> <span class="nf">test_runs_matching</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PerformanceTestRun</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of test run for the given tests.</span>
+
+<span class="sd">        :param tests: List of tests to match against.</span>
+<span class="sd">        :return: List of test runs for the given tests.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_runs</span> <span class="k">if</span> <span class="n">_is_run_matching</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">tests</span><span class="p">)]</span></div></div>
+
+
+<div class="viewcode-block" id="PerformanceData"><a class="viewcode-back" href="../../evergreen.html#evergreen.performance_results.PerformanceData">[docs]</a><span class="k">class</span> <span class="nc">PerformanceData</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of performance data from Evergreen.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="n">project_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;project_id&quot;</span><span class="p">)</span>
+    <span class="n">task_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_name&quot;</span><span class="p">)</span>
+    <span class="n">task_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_id&quot;</span><span class="p">)</span>
+    <span class="n">variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;variant&quot;</span><span class="p">)</span>
+    <span class="n">version_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;version_id&quot;</span><span class="p">)</span>
+    <span class="n">revision</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;revision&quot;</span><span class="p">)</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">)</span>
+    <span class="n">tag</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">)</span>
+    <span class="n">create_time</span> <span class="o">=</span> <span class="n">evg_short_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;create_time&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an instance of performance data.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PerformanceData</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PerformanceTestBatch</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the performance test batch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">PerformanceTestBatch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get string representation of PerformanceData for debugging purposes.</span>
+
+<span class="sd">        :return: String representation of PreformanceData.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;PerformanceData(</span><span class="si">{id}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_format_performance_results</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract and sort the thread level and respective results.</span>
+
+<span class="sd">    Data gathered from the raw data file from Evergreen,</span>
+<span class="sd">    adding max result entries as appropriate.</span>
+<span class="sd">    See below for an example of the transformation:</span>
+<span class="sd">    Before:</span>
+<span class="sd">    {</span>
+<span class="sd">        &quot;16&quot;:{</span>
+<span class="sd">            &quot;95th_read_latency_us&quot;:4560.0,</span>
+<span class="sd">            &quot;95th_read_latency_us_values&quot;:[</span>
+<span class="sd">                4560.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &quot;99th_read_latency_us&quot;:9150.0,</span>
+<span class="sd">            &quot;99th_read_latency_us_values&quot;:[</span>
+<span class="sd">                9150.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &quot;average_read_latency_us&quot;:1300.0,</span>
+<span class="sd">            &quot;average_read_latency_us_values&quot;:[</span>
+<span class="sd">                1300.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &quot;ops_per_sec&quot;:1100.0,</span>
+<span class="sd">            &quot;ops_per_sec_values&quot;:[</span>
+<span class="sd">                1100.0</span>
+<span class="sd">            ]</span>
+<span class="sd">        },</span>
+<span class="sd">        &quot;8&quot;:{</span>
+<span class="sd">            &quot;95th_read_latency_us&quot;:4500.0,</span>
+<span class="sd">            &quot;95th_read_latency_us_values&quot;:[</span>
+<span class="sd">                4000.0,</span>
+<span class="sd">                5000.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &quot;99th_read_latency_us&quot;:10000.0,</span>
+<span class="sd">            &quot;99th_read_latency_us_values&quot;:[</span>
+<span class="sd">                10000.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &quot;average_read_latency_us&quot;:1300.0,</span>
+<span class="sd">            &quot;average_read_latency_us_values&quot;:[</span>
+<span class="sd">                1300.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &quot;ops_per_sec&quot;:1100.0,</span>
+<span class="sd">            &quot;ops_per_sec_values&quot;:[</span>
+<span class="sd">                1100.0</span>
+<span class="sd">            ]</span>
+<span class="sd">        }</span>
+<span class="sd">    }</span>
+<span class="sd">    After:</span>
+<span class="sd">    [</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;16&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 4560.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                4560.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;95th_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;16&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 9150.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                9150.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;99th_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;16&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 1300.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                1300.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;average_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;16&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 1100.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                1100.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;ops_per_sec&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;8&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 4500.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                4000.0,</span>
+<span class="sd">                5000.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;95th_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;8&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 10000.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                10000.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;99th_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;8&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 1300.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                1300.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;average_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;8&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 1100.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                1100.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;ops_per_sec&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;max&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 4560.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                4560.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;95th_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;max&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 10000.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                10000.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;99th_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;max&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 1300.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                1300.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;average_read_latency_us&#39;</span>
+<span class="sd">        },</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;thread_level&#39;: &#39;max&#39;,</span>
+<span class="sd">            &#39;mean_value&#39;: 1100.0,</span>
+<span class="sd">            &#39;recorded_values&#39;: [</span>
+<span class="sd">                1100.0</span>
+<span class="sd">            ],</span>
+<span class="sd">            &#39;measurement&#39;: &#39;ops_per_sec&#39;</span>
+<span class="sd">        }</span>
+<span class="sd">    ]</span>
+
+<span class="sd">    :param dict results: All the test results from the raw data file from Evergreen.</span>
+<span class="sd">    :return: A list of PerformanceTestResults with test results organized by thread level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thread_levels</span> <span class="o">=</span> <span class="n">_thread_levels_from_results</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+    <span class="n">performance_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">maxima</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">thread_level</span> <span class="ow">in</span> <span class="n">thread_levels</span><span class="p">:</span>
+        <span class="n">thread_results</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">thread_level</span><span class="p">]</span>
+        <span class="n">measurement_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">thread_results</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;values&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">key</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">measurement_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">measurement</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">maxima</span><span class="p">:</span>
+                <span class="n">maxima</span><span class="p">[</span><span class="n">measurement</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">formatted</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;thread_level&quot;</span><span class="p">:</span> <span class="n">thread_level</span><span class="p">,</span>
+                <span class="s2">&quot;mean_value&quot;</span><span class="p">:</span> <span class="n">thread_results</span><span class="p">[</span><span class="n">measurement</span><span class="p">],</span>
+                <span class="s2">&quot;recorded_values&quot;</span><span class="p">:</span> <span class="n">thread_results</span><span class="p">[</span><span class="n">measurement</span> <span class="o">+</span> <span class="s2">&quot;_values&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;measurement&quot;</span><span class="p">:</span> <span class="n">measurement</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">performance_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">formatted</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">maxima</span><span class="p">[</span><span class="n">measurement</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">or</span> <span class="n">maxima</span><span class="p">[</span><span class="n">measurement</span><span class="p">][</span><span class="s2">&quot;mean_value&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">formatted</span><span class="p">[</span><span class="s2">&quot;mean_value&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">max_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">formatted</span><span class="p">)</span>
+                <span class="n">max_copy</span><span class="p">[</span><span class="s2">&quot;thread_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;max&quot;</span>
+                <span class="n">maxima</span><span class="p">[</span><span class="n">measurement</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_copy</span>
+
+    <span class="k">return</span> <span class="n">performance_results</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">maxima</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+
+<span class="k">def</span> <span class="nf">_thread_levels_from_results</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gather the thread levels from the results dict.</span>
+
+<span class="sd">    :param results: Dictionary of performance results.</span>
+<span class="sd">    :return: List of thread levels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Sort as integers</span>
+    <span class="n">thread_levels</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">isdigit</span><span class="p">())</span>
+    <span class="c1"># Cast back to string</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">thread_levels</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_is_run_matching</span><span class="p">(</span><span class="n">test_run</span><span class="p">:</span> <span class="n">PerformanceTestRun</span><span class="p">,</span> <span class="n">tests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine if the given test_run.json matches a set of tests.</span>
+
+<span class="sd">    :param test_run: test_run.json to check.</span>
+<span class="sd">    :param tests: List of tests to upload.</span>
+<span class="sd">    :return: True if the test_run.json contains relevant data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tests</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">test_run</span><span class="o">.</span><span class="n">test_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tests</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">test_run</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">mean_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">test_run</span><span class="o">.</span><span class="n">test_results</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2020 MongoDB.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.2.
+  </div>
+  
+  </body>
+</html>

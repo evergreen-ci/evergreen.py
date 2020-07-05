@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting started with evergreen.py &#8212; evergreen.py 1.4.1 documentation</title>
+    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sample Usages" href="sample_usage.html" />
+    <link rel="prev" title="evergreen.py documentation" href="index.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sample_usage.html" title="Sample Usages"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="evergreen.py documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Getting started with evergreen.py</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started-with-evergreen-py">
+<h1>Getting started with evergreen.py<a class="headerlink" href="#getting-started-with-evergreen-py" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="design-philosophy">
+<h2>Design Philosophy<a class="headerlink" href="#design-philosophy" title="Permalink to this headline">¶</a></h2>
+<p>This project is meant to be a thin client around the <a class="reference external" href="https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage">Evergreen REST API</a>. As such,
+you can refer to the REST API for more detailed documentation.</p>
+<div class="section" id="missing-fields">
+<h3>Missing Fields<a class="headerlink" href="#missing-fields" title="Permalink to this headline">¶</a></h3>
+<p>One of the goals of this project is to provide native python objects for working
+with the API rather than working with raw JSON. This allows features like
+autocomplete in modern editors. However, new fields can be introduced to the
+data and updates to this project tend to lagging. Evergreen object does have a
+<code class="docutils literal notranslate"><span class="pre">json</span></code> attribute that can be used to access any properties not already
+included.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">project</span> <span class="o">=</span> <span class="n">evg_api</span><span class="o">.</span><span class="n">project_by_id</span><span class="p">(</span><span class="s2">&quot;my-project&quot;</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">project</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="n">project</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;display_name&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="new-functionality">
+<h3>New Functionality<a class="headerlink" href="#new-functionality" title="Permalink to this headline">¶</a></h3>
+<p>Development of this project has mostly happened in a JIT (Just In Time)
+fashion. The Evergreen API is constantly being added to, but a lot of the
+new functionality has not been used in any python scripts. Thus parts of the
+client may be missing or incomplete. If there is additional functionality you
+would like added, feel free to put up a PR.</p>
+</div>
+</div>
+<div class="section" id="getting-an-api-object">
+<h2>Getting an API object<a class="headerlink" href="#getting-an-api-object" title="Permalink to this headline">¶</a></h2>
+<p>The first step in using the API is to get an API object to work with. This can
+be done with the <code class="docutils literal notranslate"><span class="pre">get_api</span></code> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Many Evergreen endpoints require authentication. When creating an <code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code>
+object, you can pass credentials to use for authentication. There are a number
+of way to do this.</p>
+<div class="section" id="pass-credentials-directly">
+<h3>Pass credentials directly<a class="headerlink" href="#pass-credentials-directly" title="Permalink to this headline">¶</a></h3>
+<p>You can pass in credentials directly with an <code class="docutils literal notranslate"><span class="pre">EvgAuth</span></code> object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span><span class="p">,</span> <span class="n">EvgAuth</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="n">EvgAuth</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;my_user&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;api_key&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pass-credentials-via-a-configuration-file">
+<h3>Pass credentials via a configuration file<a class="headerlink" href="#pass-credentials-via-a-configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>You can also pass credentials with a configuration file. The configuration file
+should use the same format and location used the by the <a class="reference external" href="https://github.com/evergreen-ci/evergreen/wiki/Using-the-Command-Line-Tool#downloading-the-command-line-tool">evergreen command line tool</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">(</span><span class="n">use_config_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also specify a location for the config file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">(</span><span class="n">config_file</span><span class="o">=</span><span class="s2">&quot;/path/to/config&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="special-api-types">
+<h3>Special API Types<a class="headerlink" href="#special-api-types" title="Permalink to this headline">¶</a></h3>
+<p>We have occassionally seen intermittent failures from the Evergreen API. These
+go away on retry. As a result, a <code class="docutils literal notranslate"><span class="pre">RetryingEvergreenApi</span></code> is provided that we
+retry requests that failed with an HTTP Error. This will retry an API call
+three times before failing.</p>
+<p>It can be created just like an normal <code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">RetryingEvergreenApi</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">RetryingEvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>After creating a <code class="docutils literal notranslate"><span class="pre">RetryingEvergreenApi</span></code> is can be treated just like a normal
+<code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code> object.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting started with evergreen.py</a><ul>
+<li><a class="reference internal" href="#design-philosophy">Design Philosophy</a><ul>
+<li><a class="reference internal" href="#missing-fields">Missing Fields</a></li>
+<li><a class="reference internal" href="#new-functionality">New Functionality</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-an-api-object">Getting an API object</a><ul>
+<li><a class="reference internal" href="#pass-credentials-directly">Pass credentials directly</a></li>
+<li><a class="reference internal" href="#pass-credentials-via-a-configuration-file">Pass credentials via a configuration file</a></li>
+<li><a class="reference internal" href="#special-api-types">Special API Types</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation index</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">evergreen.py documentation</a></li>
+      <li>Next: <a href="sample_usage.html" title="next chapter">Sample Usages</a></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/getting_started.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2020 MongoDB.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.2.
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Usages &#8212; evergreen.py 1.4.1 documentation</title>
+    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="evergreen" href="modules.html" />
+    <link rel="prev" title="Getting started with evergreen.py" href="getting_started.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="evergreen"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="getting_started.html" title="Getting started with evergreen.py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Home</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Sample Usages</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sample-usages">
+<h1>Sample Usages<a class="headerlink" href="#sample-usages" title="Permalink to this headline">¶</a></h1>
+<p>Some samples for using <code class="docutils literal notranslate"><span class="pre">evergreen.py</span></code>.</p>
+<div class="section" id="diplaying-all-the-failed-tests-from-a-given-task">
+<h2>Diplaying all the failed tests from a given task<a class="headerlink" href="#diplaying-all-the-failed-tests-from-a-given-task" title="Permalink to this headline">¶</a></h2>
+<p>If you have an ID of a failed task, a common operation would be to
+get a list of all the tests that failed. In this example, we will
+print out that list.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">()</span>
+<span class="n">task_id</span> <span class="o">=</span> <span class="s2">&quot;task_id_1&quot;</span>
+
+<span class="n">task</span> <span class="o">=</span> <span class="n">evg_api</span><span class="o">.</span><span class="n">task_by_id</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">task</span><span class="o">.</span><span class="n">get_tests</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">test</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="s2">&quot;pass&quot;</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="o">.</span><span class="n">test_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sample Usages</a><ul>
+<li><a class="reference internal" href="#diplaying-all-the-failed-tests-from-a-given-task">Diplaying all the failed tests from a given task</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation index</a><ul>
+      <li>Previous: <a href="getting_started.html" title="previous chapter">Getting started with evergreen.py</a></li>
+      <li>Next: <a href="modules.html" title="next chapter">evergreen</a></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/sample_usage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2020 MongoDB.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.2.
+  </div>
+  
+  </body>
+</html>

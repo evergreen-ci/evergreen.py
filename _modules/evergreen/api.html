@@ -1,0 +1,908 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>evergreen.api &#8212; evergreen.py 1.4.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">evergreen.api</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for evergreen.api</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;API for interacting with evergreen.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">json.decoder</span> <span class="kn">import</span> <span class="n">JSONDecodeError</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">structlog</span>
+<span class="kn">from</span> <span class="nn">structlog.stdlib</span> <span class="kn">import</span> <span class="n">LoggerFactory</span>
+<span class="kn">from</span> <span class="nn">tenacity</span> <span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">retry_if_exception_type</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span>
+
+<span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
+<span class="kn">from</span> <span class="nn">evergreen.commitqueue</span> <span class="kn">import</span> <span class="n">CommitQueue</span>
+<span class="kn">from</span> <span class="nn">evergreen.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
+    <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
+    <span class="n">EvgAuth</span><span class="p">,</span>
+    <span class="n">get_auth_from_config</span><span class="p">,</span>
+    <span class="n">read_evergreen_config</span><span class="p">,</span>
+    <span class="n">read_evergreen_from_file</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">evergreen.distro</span> <span class="kn">import</span> <span class="n">Distro</span>
+<span class="kn">from</span> <span class="nn">evergreen.host</span> <span class="kn">import</span> <span class="n">Host</span>
+<span class="kn">from</span> <span class="nn">evergreen.manifest</span> <span class="kn">import</span> <span class="n">Manifest</span>
+<span class="kn">from</span> <span class="nn">evergreen.patch</span> <span class="kn">import</span> <span class="n">Patch</span>
+<span class="kn">from</span> <span class="nn">evergreen.performance_results</span> <span class="kn">import</span> <span class="n">PerformanceData</span>
+<span class="kn">from</span> <span class="nn">evergreen.project</span> <span class="kn">import</span> <span class="n">Project</span>
+<span class="kn">from</span> <span class="nn">evergreen.stats</span> <span class="kn">import</span> <span class="n">TaskStats</span><span class="p">,</span> <span class="n">TestStats</span>
+<span class="kn">from</span> <span class="nn">evergreen.task</span> <span class="kn">import</span> <span class="n">Task</span>
+<span class="kn">from</span> <span class="nn">evergreen.task_reliability</span> <span class="kn">import</span> <span class="n">TaskReliability</span>
+<span class="kn">from</span> <span class="nn">evergreen.tst</span> <span class="kn">import</span> <span class="n">Tst</span>
+<span class="kn">from</span> <span class="nn">evergreen.util</span> <span class="kn">import</span> <span class="n">evergreen_input_to_output</span><span class="p">,</span> <span class="n">iterate_by_time_window</span>
+<span class="kn">from</span> <span class="nn">evergreen.version</span> <span class="kn">import</span> <span class="n">Requester</span><span class="p">,</span> <span class="n">Version</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urlparse</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>  <span class="c1"># type: ignore</span>
+
+
+<span class="n">structlog</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">logger_factory</span><span class="o">=</span><span class="n">LoggerFactory</span><span class="p">())</span>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">CACHE_SIZE</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="n">DEFAULT_LIMIT</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">START_WAIT_TIME_SEC</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">MAX_WAIT_TIME_SEC</span> <span class="o">=</span> <span class="mi">5</span>
+
+
+<div class="viewcode-block" id="EvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">EvergreenApi</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base methods for building API objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
+        <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a _BaseEvergreenApi object.</span>
+
+<span class="sd">        :param api_server: URI of Evergreen API server.</span>
+<span class="sd">        :param auth: EvgAuth object with auth information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span> <span class="o">=</span> <span class="n">api_server</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="n">adapter</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{url.scheme}</span><span class="s2">://&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">urlparse</span><span class="p">(</span><span class="n">api_server</span><span class="p">)),</span> <span class="n">adapter</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Api-User&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;Api-Key&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">_create_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format a call to a v2 REST API endpoint.</span>
+
+<span class="sd">        :param endpoint: endpoint to call.</span>
+<span class="sd">        :return: Full url to get endpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{api_server}</span><span class="s2">/rest/v2</span><span class="si">{endpoint}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">api_server</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_plugin_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format the a call to a plugin endpoint.</span>
+
+<span class="sd">        :param endpoint: endpoint to call.</span>
+<span class="sd">        :return: Full url to get endpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{api_server}</span><span class="s2">/plugin/json</span><span class="si">{endpoint}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">api_server</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_log_api_call_time</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Log how long the api call took.</span>
+
+<span class="sd">        :param response: Response from API.</span>
+<span class="sd">        :param start_time: Time the response was started.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">duration</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Request completed.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Request completed.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_call_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a call to the evergreen api.</span>
+
+<span class="sd">        :param url: Url of call to make.</span>
+<span class="sd">        :param params: parameters to pass to api.</span>
+<span class="sd">        :return: response from api server.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log_api_call_time</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">start_time</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raise_for_status</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span>
+
+    <span class="k">def</span> <span class="nf">_stream_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make a streaming call to an api.</span>
+
+<span class="sd">        :param url: url to call</span>
+<span class="sd">        :param params: url parameters</span>
+<span class="sd">        :return: Iterable over the lines of the returned content.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">res</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_api_call_time</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">start_time</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_raise_for_status</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">(</span><span class="n">decode_unicode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">line</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_raise_for_status</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raise an exception with the evergreen message if it exists.</span>
+
+<span class="sd">        :param response: response from evergreen api.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">json_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">400</span> <span class="ow">and</span> <span class="s2">&quot;error&quot;</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;error&quot;</span><span class="p">],</span> <span class="n">response</span><span class="o">=</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">JSONDecodeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_paginate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Paginate until all results are returned and return a list of all JSON results.</span>
+
+<span class="sd">        :param url: url to make request to.</span>
+<span class="sd">        :param params: parameters to pass to request.</span>
+<span class="sd">        :return: json list of all results.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">json_data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">while</span> <span class="s2">&quot;next&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">params</span> <span class="ow">and</span> <span class="s2">&quot;limit&quot;</span> <span class="ow">in</span> <span class="n">params</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">json_data</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;limit&quot;</span><span class="p">]:</span>
+                <span class="k">break</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">():</span>
+                <span class="n">json_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">json_data</span>
+
+    <span class="k">def</span> <span class="nf">_lazy_paginate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Lazy paginate, the results are returned lazily.</span>
+
+<span class="sd">        :param url: URL to query.</span>
+<span class="sd">        :param params: Params to pass to url.</span>
+<span class="sd">        :return: A generator to get results from.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">DEFAULT_LIMIT</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="n">next_url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">next_url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+            <span class="n">json_response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">json_response</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">json_response</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">result</span>
+            <span class="k">if</span> <span class="s2">&quot;next&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="n">next_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_lazy_paginate_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Paginate based on date, the results are returned lazily.</span>
+
+<span class="sd">        :param url: URL to query.</span>
+<span class="sd">        :param params: Params to pass to url.</span>
+<span class="sd">        :return: A generator to get results from.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">DEFAULT_LIMIT</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">result</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evergreen_input_to_output</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;create_time&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="EvergreenApi.all_distros"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_distros">[docs]</a>    <span class="k">def</span> <span class="nf">all_distros</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Distro</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all distros in evergreen.</span>
+
+<span class="sd">        :return: List of all distros in evergreen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/distros&quot;</span><span class="p">)</span>
+        <span class="n">distro_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Distro</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">distro</span> <span class="ow">in</span> <span class="n">distro_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.all_hosts"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">all_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Host</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all hosts in evergreen.</span>
+
+<span class="sd">        :param status: Only return hosts with specified status.</span>
+<span class="sd">        :return: List of all hosts in evergreen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/hosts&quot;</span><span class="p">)</span>
+        <span class="n">host_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">host_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.all_projects"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_projects">[docs]</a>    <span class="k">def</span> <span class="nf">all_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Project</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all projects in evergreen.</span>
+
+<span class="sd">        :param project_filter_fn: function to filter projects, should accept a project_id argument.</span>
+<span class="sd">        :return: List of all projects in evergreen.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects&quot;</span><span class="p">)</span>
+        <span class="n">project_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">projects</span> <span class="o">=</span> <span class="p">[</span><span class="n">Project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">project_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="k">if</span> <span class="n">project_filter_fn</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">project</span> <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">projects</span> <span class="k">if</span> <span class="n">project_filter_fn</span><span class="p">(</span><span class="n">project</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">projects</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.project_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.project_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">project_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Project</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a project by project_id.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :return: Project specified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.recent_version_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.recent_version_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">recent_version_by_project</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get recent versions created in specified project.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :param params: parameters to pass to endpoint.</span>
+<span class="sd">        :return: List of recent versions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span>
+            <span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/recent_versions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">version_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">versions_by_project</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the versions created in the specified project.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :param requester: Type of versions to query.</span>
+<span class="sd">        :return: Generator of versions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/versions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requester&quot;</span><span class="p">:</span> <span class="n">requester</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()}</span>
+        <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazy_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">version_list</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.versions_by_project_time_window"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.versions_by_project_time_window">[docs]</a>    <span class="k">def</span> <span class="nf">versions_by_project_time_window</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">before</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">after</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span><span class="p">,</span>
+        <span class="n">time_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;create_time&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an iterator over the patches for the given time window.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :param requester: Type of version to query</span>
+<span class="sd">        :param before: Return versions earlier than this timestamp.</span>
+<span class="sd">        :param after: Return versions later than this timestamp.</span>
+<span class="sd">        :param time_attr: Attributes to use to window timestamps.</span>
+<span class="sd">        :return: Iterator for the given time window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">iterate_by_time_window</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">versions_by_project</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">requester</span><span class="p">),</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">,</span> <span class="n">time_attr</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.patches_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patches_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">patches_by_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of patches for the specified project.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :param params: parameters to pass to endpoint.</span>
+<span class="sd">        :return: List of recent patches.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/patches&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="n">patches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazy_paginate_by_date</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">Patch</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">patch</span> <span class="ow">in</span> <span class="n">patches</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.patches_by_project_time_window"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patches_by_project_time_window">[docs]</a>    <span class="k">def</span> <span class="nf">patches_by_project_time_window</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">before</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">after</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">time_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;create_time&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an iterator over the patches for the given time window.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :param params: Parameters to pass to endpoint.</span>
+<span class="sd">        :param before: Return patches earlier than this timestamp</span>
+<span class="sd">        :param after: Return patches later than this timestamp.</span>
+<span class="sd">        :param time_attr: Attributes to use to window timestamps.</span>
+<span class="sd">        :return: Iterator for the given time window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">iterate_by_time_window</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patches_by_project</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">params</span><span class="p">),</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">,</span> <span class="n">time_attr</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.commit_queue_for_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.commit_queue_for_project">[docs]</a>    <span class="k">def</span> <span class="nf">commit_queue_for_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommitQueue</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current commit queue for the specified project.</span>
+
+<span class="sd">        :param project_id: Id of project to query.</span>
+<span class="sd">        :return: Current commit queue for project.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/commit_queue/</span><span class="si">{project_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">CommitQueue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.test_stats_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.test_stats_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">test_stats_by_project</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">after_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">before_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">group_num_days</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">requesters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Requester</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tests</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">distros</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">group_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TestStats</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a patch by patch id.</span>
+
+<span class="sd">        :param project_id: Id of patch to query for.</span>
+<span class="sd">        :param after_date: Collect stats after this date.</span>
+<span class="sd">        :param before_date: Collect stats before this date.</span>
+<span class="sd">        :param group_num_days: Aggregate statistics to this size.</span>
+<span class="sd">        :param requesters: Filter by requestors (mainline, patch, trigger, or adhoc).</span>
+<span class="sd">        :param tests: Only include specified tests.</span>
+<span class="sd">        :param tasks: Only include specified tasks.</span>
+<span class="sd">        :param variants: Only include specified variants.</span>
+<span class="sd">        :param distros: Only include specified distros.</span>
+<span class="sd">        :param group_by: How to group results (test_task_variant, test_task, or test)</span>
+<span class="sd">        :param sort: How to sort results (earliest or latest).</span>
+<span class="sd">        :return: Patch queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">after_date</span><span class="p">,</span>
+            <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">before_date</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
+        <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span>
+        <span class="k">if</span> <span class="n">tests</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tests&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tests</span>
+        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
+        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
+        <span class="k">if</span> <span class="n">distros</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distros&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros</span>
+        <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
+        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/test_stats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="n">test_stats_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">TestStats</span><span class="p">(</span><span class="n">test_stat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test_stat</span> <span class="ow">in</span> <span class="n">test_stats_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.tasks_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tasks_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">tasks_by_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all the tasks for a project.</span>
+
+<span class="sd">        :param project_id: The project&#39;s id.</span>
+<span class="sd">        :param statuses: the types of statuses to get tasks for.</span>
+<span class="sd">        :return: The list of matching tasks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span>
+            <span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/versions/tasks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">statuses</span><span class="p">}</span> <span class="k">if</span> <span class="n">statuses</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Task</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">json</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.task_stats_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.task_stats_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">task_stats_by_project</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">after_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">before_date</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">group_num_days</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">requesters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Requester</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">distros</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">group_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskStats</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get task stats by project id.</span>
+
+<span class="sd">        :param project_id: Id of patch to query for.</span>
+<span class="sd">        :param after_date: Collect stats after this date.</span>
+<span class="sd">        :param before_date: Collect stats before this date.</span>
+<span class="sd">        :param group_num_days: Aggregate statistics to this size.</span>
+<span class="sd">        :param requesters: Filter by requestors (mainline, patch, trigger, or adhoc).</span>
+<span class="sd">        :param tasks: Only include specified tasks.</span>
+<span class="sd">        :param variants: Only include specified variants.</span>
+<span class="sd">        :param distros: Only include specified distros.</span>
+<span class="sd">        :param group_by: How to group results (test_task_variant, test_task, or test)</span>
+<span class="sd">        :param sort: How to sort results (earliest or latest).</span>
+<span class="sd">        :return: Patch queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">after_date</span><span class="p">,</span>
+            <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">before_date</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
+        <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span>
+        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
+        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
+        <span class="k">if</span> <span class="n">distros</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distros&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros</span>
+        <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
+        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/task_stats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="n">task_stats_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">TaskStats</span><span class="p">(</span><span class="n">task_stat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_stat</span> <span class="ow">in</span> <span class="n">task_stats_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.task_reliability_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.task_reliability_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">task_reliability_by_project</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">after_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">before_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">group_num_days</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">requesters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Requester</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">distros</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">group_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskReliability</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get task reliability scores.</span>
+
+<span class="sd">        :param project_id: Id of patch to query for.</span>
+<span class="sd">        :param after_date: Collect stats after this date.</span>
+<span class="sd">        :param before_date: Collect stats before this date, defaults to nothing.</span>
+<span class="sd">        :param group_num_days: Aggregate statistics to this size.</span>
+<span class="sd">        :param requesters: Filter by requesters (mainline, patch, trigger, or adhoc).</span>
+<span class="sd">        :param tasks: Only include specified tasks.</span>
+<span class="sd">        :param variants: Only include specified variants.</span>
+<span class="sd">        :param distros: Only include specified distros.</span>
+<span class="sd">        :param group_by: How to group results (test_task_variant, test_task, or test)</span>
+<span class="sd">        :param sort: How to sort results (earliest or latest).</span>
+<span class="sd">        :return: Patch queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">after_date</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;after_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">after_date</span>
+        <span class="k">if</span> <span class="n">before_date</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;before_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">before_date</span>
+        <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
+        <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span>
+        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
+        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
+        <span class="k">if</span> <span class="n">distros</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distros&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros</span>
+        <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
+        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span>
+            <span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/task_reliability&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">task_reliability_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">TaskReliability</span><span class="p">(</span><span class="n">task_reliability</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_reliability</span> <span class="ow">in</span> <span class="n">task_reliability_scores</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.build_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.build_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Build</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a build by id.</span>
+
+<span class="sd">        :param build_id: build id to query.</span>
+<span class="sd">        :return: Build queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/builds/</span><span class="si">{build_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">build_id</span><span class="o">=</span><span class="n">build_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.tasks_by_build"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tasks_by_build">[docs]</a>    <span class="k">def</span> <span class="nf">tasks_by_build</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all tasks for a given build.</span>
+
+<span class="sd">        :param build_id: build_id to query.</span>
+<span class="sd">        :param fetch_all_executions: Fetch all executions for a given task.</span>
+<span class="sd">        :return: List of tasks for the specified build.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">fetch_all_executions</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;fetch_all_executions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/builds/</span><span class="si">{build_id}</span><span class="s2">/tasks&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">build_id</span><span class="o">=</span><span class="n">build_id</span><span class="p">))</span>
+        <span class="n">task_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">task_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.version_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.version_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">version_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get version by version id.</span>
+
+<span class="sd">        :param version_id: Id of version to query.</span>
+<span class="sd">        :return: Version queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/versions/</span><span class="si">{version_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version_id</span><span class="o">=</span><span class="n">version_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.builds_by_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.builds_by_version">[docs]</a>    <span class="k">def</span> <span class="nf">builds_by_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Build</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all builds for a given Evergreen version_id.</span>
+
+<span class="sd">        :param version_id: Version Id to query for.</span>
+<span class="sd">        :param params: Dictionary of parameters to pass to query.</span>
+<span class="sd">        :return: List of builds for the specified version.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/versions/</span><span class="si">{version_id}</span><span class="s2">/builds&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version_id</span><span class="o">=</span><span class="n">version_id</span><span class="p">))</span>
+        <span class="n">build_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Build</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">build_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.patch_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patch_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">patch_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Patch</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a patch by patch id.</span>
+
+<span class="sd">        :param patch_id: Id of patch to query for.</span>
+<span class="sd">        :param params: Parameters to pass to endpoint.</span>
+<span class="sd">        :return: Patch queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/patches/</span><span class="si">{patch_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">patch_id</span><span class="o">=</span><span class="n">patch_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.task_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.task_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">task_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a task by task_id.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :param fetch_all_executions: Should all executions of the task be fetched.</span>
+<span class="sd">        :return: Task queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">fetch_all_executions</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fetch_all_executions&quot;</span><span class="p">:</span> <span class="n">fetch_all_executions</span><span class="p">}</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/tasks/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.tests_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tests_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">tests_by_task</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tst</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all tests for a given task.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :param status: Limit results to given status.</span>
+<span class="sd">        :param execution: Retrieve the specified task execution (defaults to 0).</span>
+<span class="sd">        :return: List of tests for the specified task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="k">if</span> <span class="n">execution</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;execution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">execution</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/tasks/</span><span class="si">{task_id}</span><span class="s2">/tests&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Tst</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.performance_results_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">performance_results_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PerformanceData</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the &#39;perf.json&#39; performance results for a given task_id.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :return: Contents of &#39;perf.json&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_plugin_url</span><span class="p">(</span><span class="s2">&quot;/task/</span><span class="si">{task_id}</span><span class="s2">/perf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">PerformanceData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.performance_results_by_task_name"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task_name">[docs]</a>    <span class="k">def</span> <span class="nf">performance_results_by_task_name</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PerformanceData</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the &#39;perf.json&#39; performance results for a given task_id and task_name.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :param task_name: Name of task to query for.</span>
+<span class="sd">        :return: Contents of &#39;perf.json&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{api_server}</span><span class="s2">/api/2/task/</span><span class="si">{task_id}</span><span class="s2">/json/history/</span><span class="si">{task_name}</span><span class="s2">/perf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">api_server</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task_name</span><span class="o">=</span><span class="n">task_name</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">PerformanceData</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+    <span class="k">def</span> <span class="nf">_create_old_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a url for an pre-v2 endpoint.</span>
+
+<span class="sd">        :param endpoint: endpoint to build url for.</span>
+<span class="sd">        :return: An string pointing to the given endpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{api_server}</span><span class="s2">/</span><span class="si">{endpoint}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">api_server</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="n">endpoint</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EvergreenApi.manifest"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest">[docs]</a>    <span class="k">def</span> <span class="nf">manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Manifest</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the manifest for the given revision.</span>
+
+<span class="sd">        :param project_id: Project the revision belongs to.</span>
+<span class="sd">        :param revision: Revision to get manifest of.</span>
+<span class="sd">        :return: Manifest of the given revision of the given project.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_old_url</span><span class="p">(</span>
+            <span class="s2">&quot;plugin/manifest/get/</span><span class="si">{project_id}</span><span class="s2">/</span><span class="si">{revision}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">,</span> <span class="n">revision</span><span class="o">=</span><span class="n">revision</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">Manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.retrieve_task_log"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.retrieve_task_log">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_task_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the request log file from a task.</span>
+
+<span class="sd">        :param log_url: URL of log to retrieve.</span>
+<span class="sd">        :param raw: Retrieve the raw version of the log</span>
+<span class="sd">        :return: Contents of specified log file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">raw</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">log_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">text</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.stream_log"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.stream_log">[docs]</a>    <span class="k">def</span> <span class="nf">stream_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stream the given log url as a python generator.</span>
+
+<span class="sd">        :param log_url: URL of log file to stream.</span>
+<span class="sd">        :return: Iterable for contents of log_url.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_api</span><span class="p">(</span><span class="n">log_url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.get_api"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_api">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_api</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_config_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">config_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an evergreen api instance based on config file settings.</span>
+
+<span class="sd">        :param auth: EvgAuth with authentication to use.</span>
+<span class="sd">        :param use_config_file: attempt to read auth from default config file.</span>
+<span class="sd">        :param config_file: config file with authentication information.</span>
+<span class="sd">        :param timeout: Network timeout.</span>
+<span class="sd">        :return: EvergreenApi instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">_setup_kwargs</span><span class="p">(</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="n">auth</span><span class="p">,</span> <span class="n">use_config_file</span><span class="o">=</span><span class="n">use_config_file</span><span class="p">,</span> <span class="n">config_file</span><span class="o">=</span><span class="n">config_file</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_setup_kwargs</span><span class="p">(</span>
+        <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_config_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">config_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;auth&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="p">,</span> <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">use_config_file</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">read_evergreen_config</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">config_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">read_evergreen_from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">auth</span> <span class="o">=</span> <span class="n">get_auth_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span>
+
+            <span class="c1"># If there is a value for api_server_host, then use it.</span>
+            <span class="k">if</span> <span class="s2">&quot;evergreen&quot;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;evergreen&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_server_host&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;api_server&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;evergreen&quot;</span><span class="p">][</span><span class="s2">&quot;api_server_host&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">kwargs</span></div>
+
+
+<div class="viewcode-block" id="CachedEvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">CachedEvergreenApi</span><span class="p">(</span><span class="n">EvergreenApi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Access to the Evergreen API server that caches certain calls.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
+        <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CachedEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CachedEvergreenApi.build_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi.build_by_id">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">CACHE_SIZE</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Build</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a build by id.</span>
+
+<span class="sd">        :param build_id: build id to query.</span>
+<span class="sd">        :return: Build queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CachedEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CachedEvergreenApi.version_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi.version_by_id">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">CACHE_SIZE</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">version_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get version by version id.</span>
+
+<span class="sd">        :param version_id: Id of version to query.</span>
+<span class="sd">        :return: Version queried for.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CachedEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">(</span><span class="n">version_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CachedEvergreenApi.clear_caches"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi.clear_caches">[docs]</a>    <span class="k">def</span> <span class="nf">clear_caches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Clear the cache.&quot;&quot;&quot;</span>
+        <span class="n">cached_functions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">cached_functions</span><span class="p">:</span>
+            <span class="n">fn</span><span class="o">.</span><span class="n">cache_clear</span><span class="p">()</span>  <span class="c1"># type: ignore[attr-defined]</span></div></div>
+
+
+<div class="viewcode-block" id="RetryingEvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.RetryingEvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">RetryingEvergreenApi</span><span class="p">(</span><span class="n">EvergreenApi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An Evergreen Api that retries failed calls.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
+        <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+    <span class="nd">@retry</span><span class="p">(</span>
+        <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">),</span>
+        <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="n">MAX_RETRIES</span><span class="p">),</span>
+        <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">START_WAIT_TIME_SEC</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">MAX_WAIT_TIME_SEC</span><span class="p">),</span>
+        <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_call_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Call into the evergreen api.</span>
+
+<span class="sd">        :param url: Url to call.</span>
+<span class="sd">        :param params: Parameters to pass to api.</span>
+<span class="sd">        :return: Result from calling API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation index</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2020 MongoDB.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.1.2.
+  </div>
+  
+  </body>
+</html>
