@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.1 - 2020-07-05
+- Add API documentation site.
+
 ## 1.4.0 - 2020-06-25
 - Get a list of execution tasks from a display task.
 

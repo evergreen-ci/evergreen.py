@@ -6,6 +6,7 @@ buildvariants:
   tasks:
   - name: unit_tests
   - name: deploy
+  - name: documentation
 
 functions:
   create virtualenv:
@@ -15,6 +16,9 @@ functions:
       script: |
         set -o errexit
         set -o verbose
+
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
 
         virtualenv --python=python3 venv
         . venv/bin/activate
@@ -35,6 +39,35 @@ functions:
           fi
 
           poetry publish --build --username ${pypi_user} --password ${pypi_password}
+
+  build_docs:
+    - command: shell.exec
+      params:
+        working_dir: src
+        script: |
+          set -o errexit
+          set -o verbose
+          . venv/bin/activate
+
+          poetry run sphinx-apidoc -o docs/source src "*cli*"
+          poetry run sphinx-build -W docs/source docs/build
+
+  publish_docs:
+    - command: shell.exec
+      params:
+        working_dir: src
+        script: |
+          set -o errexit
+          set -o verbose
+          . venv/bin/activate
+
+          if [ "${is_patch}" = "true" ]; then
+            # Do not deploy on patches.
+            exit 0
+          fi
+
+          poetry run gh-pusher --build-dir docs/build
+
 
 pre:
 - command: git.get_project
@@ -70,3 +103,9 @@ tasks:
     - name: unit_tests
   commands:
     - func: deploy
+
+- name: documentation
+  depends_on:
+    - name: unit_tests
+  commands:
+    - func: publish_docs
