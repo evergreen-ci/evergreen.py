@@ -66,6 +66,9 @@ functions:
             exit 0
           fi
 
+          export LC_ALL=C.UTF-8
+          export LANG=C.UTF-8
+
           poetry run gh-pusher --build-dir docs/build
 
 
