@@ -942,15 +942,15 @@ argument.</p>
 <dt id="evergreen.config.EvgAuth">
 <em class="property">class </em><code class="sig-prename descclassname">evergreen.config.</code><code class="sig-name descname">EvgAuth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">api_key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#evergreen.config.EvgAuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
-<dl class="py attribute">
+<dl class="py method">
 <dt id="evergreen.config.EvgAuth.api_key">
-<code class="sig-name descname">api_key</code><a class="headerlink" href="#evergreen.config.EvgAuth.api_key" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">api_key</code><a class="headerlink" href="#evergreen.config.EvgAuth.api_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="py method">
 <dt id="evergreen.config.EvgAuth.username">
-<code class="sig-name descname">username</code><a class="headerlink" href="#evergreen.config.EvgAuth.username" title="Permalink to this definition">¶</a></dt>
+<em class="property">property </em><code class="sig-name descname">username</code><a class="headerlink" href="#evergreen.config.EvgAuth.username" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
 
@@ -2570,7 +2570,7 @@ argument.</p>
 
 <dl class="py method">
 <dt id="evergreen.task.Task.get_execution_tasks">
-<code class="sig-name descname">get_execution_tasks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filter_fn</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><span class="p">[</span>Task<span class="p">]</span><span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_execution_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_execution_tasks" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_execution_tasks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filter_fn</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span>Task<span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_execution_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_execution_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of execution tasks associated with this task.</p>
 <p>If this is a display task, return the tasks execution tasks associated with it. 
 If this is not a display task, returns None.</p>
