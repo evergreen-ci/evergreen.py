@@ -111,4 +111,5 @@ tasks:
   depends_on:
     - name: unit_tests
   commands:
+    - func: build_docs
     - func: publish_docs
