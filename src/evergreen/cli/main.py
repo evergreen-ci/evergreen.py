@@ -363,3 +363,6 @@ def build_stats(ctx, build_id, tasks):
 def main():
     """Create command line application."""
     return cli(obj={})
+
+if __name__ == '__main__':
+    main()
