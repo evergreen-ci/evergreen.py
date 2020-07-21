@@ -51,7 +51,7 @@ def get_auth_from_config(config: Dict) -> EvgAuth:
     return EvgAuth(config["user"], config["api_key"])
 
 
-def get_auth() -> EvgAuth:
+def get_auth() -> Optional[EvgAuth]:
     """
     Get the evergreen authentication object from the default locations. Convenience function.
 

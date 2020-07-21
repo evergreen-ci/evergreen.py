@@ -151,7 +151,7 @@ class TestProjectApi(object):
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
 
     def test_recent_version_by_project(self, mocked_api):
-        mocked_api.recent_version_by_project("project_id")
+        mocked_api.recent_versions_by_project("project_id")
         expected_url = mocked_api._create_url("/projects/project_id/recent_versions")
         mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
 
