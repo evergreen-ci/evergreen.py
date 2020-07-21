@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen.api &#8212; evergreen.py 1.4.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 1.4.2 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -318,7 +318,7 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">Project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.recent_version_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.recent_version_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">recent_version_by_project</span><span class="p">(</span>
+<div class="viewcode-block" id="EvergreenApi.recent_versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.recent_versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">recent_versions_by_project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -331,8 +331,9 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span>
             <span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/recent_versions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">Version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">version_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+        <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">version_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">versions_by_project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen package &#8212; evergreen.py 1.4.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 1.4.2 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -344,8 +344,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="evergreen.api.EvergreenApi.recent_version_by_project">
-<code class="sig-name descname">recent_version_by_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.recent_version_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.recent_version_by_project" title="Permalink to this definition">¶</a></dt>
+<dt id="evergreen.api.EvergreenApi.recent_versions_by_project">
+<code class="sig-name descname">recent_versions_by_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.recent_versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.recent_versions_by_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get recent versions created in specified project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -957,9 +957,20 @@ argument.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="evergreen.config.get_auth">
+<code class="sig-prename descclassname">evergreen.config.</code><code class="sig-name descname">get_auth</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth">evergreen.config.EvgAuth</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/config.html#get_auth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.config.get_auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the evergreen authentication object from the default locations. Convenience function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Authentication information for evergreen.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="evergreen.config.get_auth_from_config">
 <code class="sig-prename descclassname">evergreen.config.</code><code class="sig-name descname">get_auth_from_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Dict</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth">evergreen.config.EvgAuth</a><a class="reference internal" href="_modules/evergreen/config.html#get_auth_from_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.config.get_auth_from_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the evergreen authentication from the specified config file.</p>
+<dd><p>Get the evergreen authentication from the specified config dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>config</strong> – Evergreen configuration.</p>
