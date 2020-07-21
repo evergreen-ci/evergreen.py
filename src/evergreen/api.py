@@ -273,7 +273,7 @@ class EvergreenApi(object):
         url = self._create_url("/projects/{project_id}".format(project_id=project_id))
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
-    def recent_version_by_project(
+    def recent_versions_by_project(
         self, project_id: str, params: Optional[Dict] = None
     ) -> List[Version]:
         """
@@ -286,8 +286,9 @@ class EvergreenApi(object):
         url = self._create_url(
             "/projects/{project_id}/recent_versions".format(project_id=project_id)
         )
-        version_list = self._paginate(url, params)
-        return [Version(version, self) for version in version_list]  # type: ignore[arg-type]
+        version_list = self._call_api(url, params)
+
+        return version_list.json()  # type: ignore[arg-type]
 
     def versions_by_project(
         self, project_id: str, requester: Requester = Requester.GITTER_REQUEST

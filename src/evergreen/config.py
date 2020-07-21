@@ -43,9 +43,21 @@ def read_evergreen_config() -> Optional[Dict]:
 
 def get_auth_from_config(config: Dict) -> EvgAuth:
     """
-    Get the evergreen authentication from the specified config file.
+    Get the evergreen authentication from the specified config dict.
 
     :param config: Evergreen configuration.
     :return: Authentication information for evergreen.
     """
     return EvgAuth(config["user"], config["api_key"])
+
+
+def get_auth() -> Optional[EvgAuth]:
+    """
+    Get the evergreen authentication object from the default locations. Convenience function.
+
+    :return: Authentication information for evergreen.
+    """
+    conf = read_evergreen_config()
+    if conf:
+        return get_auth_from_config(conf)
+    return None
