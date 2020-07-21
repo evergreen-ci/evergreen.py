@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.2 - 2020-07-21
+- Fix wrapping of /projects/<id>/recent_versions API responses into an incompatible object
+
 ## 1.4.1 - 2020-07-05
 - Add API documentation site.
 
