@@ -1,0 +1,42 @@
+{
+    "Variant": "enterprise-windows-required",
+    "Tasks": [
+        "noPassthrough_06_enterprise-windows-required",
+        "noPassthrough_04_enterprise-windows-required",
+        "noPassthrough_03_enterprise-windows-required",
+        "noPassthrough_01_enterprise-windows-required",
+        "burn_in_tests_gen",
+        "noPassthrough_misc_enterprise-windows-required",
+        "noPassthrough_02_enterprise-windows-required",
+        "noPassthrough_00_enterprise-windows-required",
+        "noPassthrough_05_enterprise-windows-required",
+        "noPassthrough_10_enterprise-windows-required",
+        "unittest_shell_hang_analyzer_0_enterprise-windows-required",
+        "package",
+        "server_discovery_and_monitoring_json_test",
+        "dbtest",
+        "noPassthrough_09_enterprise-windows-required",
+        "noPassthrough_gen",
+        "unittest_shell_hang_analyzer_misc_enterprise-windows-required",
+        "server_selection_json_test",
+        "unittest_shell_hang_analyzer_gen",
+        "noPassthrough_07_enterprise-windows-required",
+        "compile",
+        "noPassthrough_08_enterprise-windows-required",
+        "buildscripts_test"
+    ],
+    "DisplayTasks": [
+        {
+            "Name": "burn_in_tests",
+            "ExecutionTasks": null
+        },
+        {
+            "Name": "unittest_shell_hang_analyzer",
+            "ExecutionTasks": null
+        },
+        {
+            "Name": "noPassthrough",
+            "ExecutionTasks": null
+        }
+    ]
+}

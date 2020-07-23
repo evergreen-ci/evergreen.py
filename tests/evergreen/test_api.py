@@ -164,6 +164,14 @@ class TestProjectApi(object):
             url=expected_url, params=expected_params, timeout=None
         )
 
+    def test_alias_for_version(self, mocked_api):
+        mocked_api.alias_for_version("version_id", "my_alias")
+        expected_url = mocked_api._create_url("/projects/test_alias")
+        expected_params = {"version": "version_id", "alias": "my_alias", "include_deps": False}
+        mocked_api.session.get.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None
+        )
+
     def test_versions_by_project_time_window(self, mocked_api, sample_version, mocked_api_response):
         version_list = [
             deepcopy(sample_version),
