@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen.api &#8212; evergreen.py 1.4.2 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 1.4.3 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -58,6 +58,7 @@
 <span class="kn">from</span> <span class="nn">structlog.stdlib</span> <span class="kn">import</span> <span class="n">LoggerFactory</span>
 <span class="kn">from</span> <span class="nn">tenacity</span> <span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">retry_if_exception_type</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span>
 
+<span class="kn">from</span> <span class="nn">evergreen.alias</span> <span class="kn">import</span> <span class="n">VariantAlias</span>
 <span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
 <span class="kn">from</span> <span class="nn">evergreen.commitqueue</span> <span class="kn">import</span> <span class="n">CommitQueue</span>
 <span class="kn">from</span> <span class="nn">evergreen.config</span> <span class="kn">import</span> <span class="p">(</span>
@@ -334,6 +335,22 @@
         <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">version_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.alias_for_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.alias_for_version">[docs]</a>    <span class="k">def</span> <span class="nf">alias_for_version</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_deps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">VariantAlias</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the tasks and variants that an alias would select for an evergreen version.</span>
+
+<span class="sd">        :param version_id: Evergreen version to query against.</span>
+<span class="sd">        :param alias: Alias to query.</span>
+<span class="sd">        :param include_deps: If true, will also select tasks that are dependencies.</span>
+<span class="sd">        :return: List of Variant alias details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">version_id</span><span class="p">,</span> <span class="s2">&quot;alias&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">,</span> <span class="s2">&quot;include_deps&quot;</span><span class="p">:</span> <span class="n">include_deps</span><span class="p">}</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/test_alias&quot;</span><span class="p">)</span>
+        <span class="n">variant_alias_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">VariantAlias</span><span class="p">(</span><span class="n">variant_alias</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">variant_alias</span> <span class="ow">in</span> <span class="n">variant_alias_list</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">versions_by_project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span>

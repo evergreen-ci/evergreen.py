@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen package &#8212; evergreen.py 1.4.2 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 1.4.3 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -124,6 +124,24 @@
 <em class="property">class </em><code class="sig-prename descclassname">evergreen.api.</code><code class="sig-name descname">EvergreenApi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_server</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://evergreen.mongodb.com'</span></em>, <em class="sig-param"><span class="n">auth</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth">evergreen.config.EvgAuth</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base methods for building API objects.</p>
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.alias_for_version">
+<code class="sig-name descname">alias_for_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">include_deps</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>evergreen.alias.VariantAlias<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.alias_for_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.alias_for_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the tasks and variants that an alias would select for an evergreen version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version_id</strong> – Evergreen version to query against.</p></li>
+<li><p><strong>alias</strong> – Alias to query.</p></li>
+<li><p><strong>include_deps</strong> – If true, will also select tasks that are dependencies.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of Variant alias details.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.all_distros">
 <code class="sig-name descname">all_distros</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.distro.Distro" title="evergreen.distro.Distro">evergreen.distro.Distro</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.all_distros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.all_distros" title="Permalink to this definition">¶</a></dt>
