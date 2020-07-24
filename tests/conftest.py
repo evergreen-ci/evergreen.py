@@ -132,6 +132,12 @@ def sample_test():
 
 
 @pytest.fixture()
+def sample_version_alias():
+    """Return sample version alias json."""
+    return get_sample_json("version_alias.json")
+
+
+@pytest.fixture()
 def mocked_api_response():
     """Mocked response returned by mock_api."""
     response_mock = MagicMock()

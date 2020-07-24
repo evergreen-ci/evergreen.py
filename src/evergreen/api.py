@@ -13,6 +13,7 @@ import structlog
 from structlog.stdlib import LoggerFactory
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
+from evergreen.alias import VariantAlias
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import (
@@ -289,6 +290,22 @@ class EvergreenApi(object):
         version_list = self._call_api(url, params)
 
         return version_list.json()  # type: ignore[arg-type]
+
+    def alias_for_version(
+        self, version_id: str, alias: str, include_deps: bool = False
+    ) -> List[VariantAlias]:
+        """
+        Get the tasks and variants that an alias would select for an evergreen version.
+
+        :param version_id: Evergreen version to query against.
+        :param alias: Alias to query.
+        :param include_deps: If true, will also select tasks that are dependencies.
+        :return: List of Variant alias details.
+        """
+        params = {"version": version_id, "alias": alias, "include_deps": include_deps}
+        url = self._create_url("/projects/test_alias")
+        variant_alias_list = self._paginate(url, params)
+        return [VariantAlias(variant_alias, self) for variant_alias in variant_alias_list]
 
     def versions_by_project(
         self, project_id: str, requester: Requester = Requester.GITTER_REQUEST

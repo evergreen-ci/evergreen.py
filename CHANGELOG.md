@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.3 - 2020-07-23
+- Add support for the /test_alias endpoint.
+
 ## 1.4.2 - 2020-07-21
 - Fix wrapping of /projects/<id>/recent_versions API responses into an incompatible object
 
