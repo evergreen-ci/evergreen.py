@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen package &#8212; evergreen.py 1.4.3 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 1.4.4 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -241,6 +241,41 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>EvergreenApi instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.json_by_task">
+<code class="sig-name descname">json_by_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">json_key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.json_by_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.json_by_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the json reported for task {task_id} using the key {json_key}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Id of task to query for.</p></li>
+<li><p><strong>json_key</strong> – The key that json was published under, e.g. “perf”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The json published for that task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.json_history_for_task">
+<code class="sig-name descname">json_history_for_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">task_name</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">json_key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.json_history_for_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.json_history_for_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the history of json reported for task {task_id} using the key {json_key}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Id of task to query for.</p></li>
+<li><p><strong>task_name</strong> – Name of task to query for.</p></li>
+<li><p><strong>json_key</strong> – The key that json was published under, e.g. “perf”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A chronological list of json published for that task.</p>
 </dd>
 </dl>
 </dd></dl>

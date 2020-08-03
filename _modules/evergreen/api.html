@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen.api &#8212; evergreen.py 1.4.3 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 1.4.4 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -51,7 +51,7 @@
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span> <span class="nn">json.decoder</span> <span class="kn">import</span> <span class="n">JSONDecodeError</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">structlog</span>
@@ -204,7 +204,9 @@
 
         <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_paginate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_paginate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Paginate until all results are returned and return a list of all JSON results.</span>
 
@@ -350,7 +352,10 @@
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">version_id</span><span class="p">,</span> <span class="s2">&quot;alias&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">,</span> <span class="s2">&quot;include_deps&quot;</span><span class="p">:</span> <span class="n">include_deps</span><span class="p">}</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/test_alias&quot;</span><span class="p">)</span>
         <span class="n">variant_alias_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">VariantAlias</span><span class="p">(</span><span class="n">variant_alias</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">variant_alias</span> <span class="ow">in</span> <span class="n">variant_alias_list</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">VariantAlias</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">variant_alias</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">variant_alias</span> <span class="ow">in</span> <span class="n">variant_alias_list</span>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">versions_by_project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span>
@@ -724,6 +729,31 @@
             <span class="n">api_server</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">,</span> <span class="n">task_name</span><span class="o">=</span><span class="n">task_name</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">PerformanceData</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.json_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.json_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">json_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">json_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the json reported for task {task_id} using the key {json_key}.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :param json_key: The key that json was published under, e.g. &quot;perf&quot;.</span>
+<span class="sd">        :return: The json published for that task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_plugin_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/task/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">json_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.json_history_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.json_history_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">json_history_for_task</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">json_key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the history of json reported for task {task_id} using the key {json_key}.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :param task_name: Name of task to query for.</span>
+<span class="sd">        :param json_key: The key that json was published under, e.g. &quot;perf&quot;.</span>
+<span class="sd">        :return: A chronological list of json published for that task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/api/2/task/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/json/history/</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">json_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">_create_old_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
