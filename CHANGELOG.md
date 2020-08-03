@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.4 - 2020-08-03
+- Add support for any json or json history stored in evergreen.
+
 ## 1.4.3 - 2020-07-23
 - Add support for the /test_alias endpoint.
 
