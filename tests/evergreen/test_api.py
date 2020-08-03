@@ -362,6 +362,22 @@ class TestTaskApi(object):
             url=expected_url, params=expected_params, timeout=None
         )
 
+    def test_json_by_task(self, mocked_api):
+        mocked_api.json_by_task("task_id", "json_key_id")
+        expected_url = mocked_api._create_plugin_url("/task/task_id/json_key_id")
+        expected_params = None
+        mocked_api.session.get.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None
+        )
+
+    def test_json_history_for_task(self, mocked_api):
+        mocked_api.json_history_for_task("task_id", "task_name", "json_key_id")
+        expected_url = f"{DEFAULT_API_SERVER}/api/2/task/task_id/json/history/task_name/json_key_id"
+        expected_params = None
+        mocked_api.session.get.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None
+        )
+
 
 class TestOldApi(object):
     def test_patch_by_id(self, mocked_api):

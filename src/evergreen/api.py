@@ -6,7 +6,7 @@ from datetime import datetime
 from time import time
 from functools import lru_cache
 from json.decoder import JSONDecodeError
-from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional
+from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional, Union, cast
 
 import requests
 import structlog
@@ -159,7 +159,9 @@ class EvergreenApi(object):
 
         response.raise_for_status()
 
-    def _paginate(self, url: str, params: Dict = None) -> Dict:
+    def _paginate(
+        self, url: str, params: Dict = None
+    ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
         """
         Paginate until all results are returned and return a list of all JSON results.
 
@@ -305,7 +307,10 @@ class EvergreenApi(object):
         params = {"version": version_id, "alias": alias, "include_deps": include_deps}
         url = self._create_url("/projects/test_alias")
         variant_alias_list = self._paginate(url, params)
-        return [VariantAlias(variant_alias, self) for variant_alias in variant_alias_list]
+        return [
+            VariantAlias(cast(Dict[str, Any], variant_alias), self)
+            for variant_alias in variant_alias_list
+        ]
 
     def versions_by_project(
         self, project_id: str, requester: Requester = Requester.GITTER_REQUEST
@@ -679,6 +684,31 @@ class EvergreenApi(object):
             api_server=self._api_server, task_id=task_id, task_name=task_name
         )
         return [PerformanceData(result, self) for result in self._paginate(url)]  # type: ignore[arg-type]
+
+    def json_by_task(self, task_id: str, json_key: str) -> Dict[str, Any]:
+        """
+        Get the json reported for task {task_id} using the key {json_key}.
+
+        :param task_id: Id of task to query for.
+        :param json_key: The key that json was published under, e.g. "perf".
+        :return: The json published for that task.
+        """
+        url = self._create_plugin_url(f"/task/{task_id}/{json_key}")
+        return cast(Dict[str, Any], self._paginate(url))
+
+    def json_history_for_task(
+        self, task_id: str, task_name: str, json_key: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Get the history of json reported for task {task_id} using the key {json_key}.
+
+        :param task_id: Id of task to query for.
+        :param task_name: Name of task to query for.
+        :param json_key: The key that json was published under, e.g. "perf".
+        :return: A chronological list of json published for that task.
+        """
+        url = f"{self._api_server}/api/2/task/{task_id}/json/history/{task_name}/{json_key}"
+        return cast(List[Dict[str, Any]], self._paginate(url))
 
     def _create_old_url(self, endpoint: str) -> str:
         """
