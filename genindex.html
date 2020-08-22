@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index &#8212; evergreen.py 1.4.4 documentation</title>
+    <title>Index &#8212; evergreen.py 1.4.5 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -309,6 +309,10 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.task.Task.display_only">display_only() (evergreen.task.Task property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.alias.VariantAlias.display_tasks">display_tasks() (evergreen.alias.VariantAlias property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.alias.DisplayTaskAlias">DisplayTaskAlias (class in evergreen.alias)</a>
+</li>
       <li><a href="evergreen.html#evergreen.distro.Distro">Distro (class in evergreen.distro)</a>
 </li>
       <li><a href="evergreen.html#evergreen.host.Host.distro">distro() (evergreen.host.Host property)</a>
@@ -366,6 +370,13 @@
 
       <ul>
         <li><a href="evergreen.html#module-evergreen">module</a>
+</li>
+      </ul></li>
+      <li>
+    evergreen.alias
+
+      <ul>
+        <li><a href="evergreen.html#module-evergreen.alias">module</a>
 </li>
       </ul></li>
       <li>
@@ -445,6 +456,8 @@
         <li><a href="evergreen.metrics.html#module-evergreen.metrics">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     evergreen.metrics.buildmetrics
 
@@ -452,8 +465,6 @@
         <li><a href="evergreen.metrics.html#module-evergreen.metrics.buildmetrics">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     evergreen.metrics.versionmetrics
 
@@ -544,8 +555,12 @@
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.execution">execution() (evergreen.task.Task property)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.task.Task.execution_tasks">execution_tasks() (evergreen.task.Task property)</a>
+      <li><a href="evergreen.html#evergreen.alias.DisplayTaskAlias.execution_tasks">execution_tasks() (evergreen.alias.DisplayTaskAlias property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.task.Task.execution_tasks">(evergreen.task.Task property)</a>
 </li>
+      </ul></li>
       <li><a href="evergreen.html#evergreen.tst.Tst.exit_code">exit_code() (evergreen.tst.Tst property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.expansions">expansions() (evergreen.distro.Distro property)</a>
@@ -834,6 +849,8 @@
       <ul>
         <li><a href="evergreen.html#module-evergreen">evergreen</a>
 </li>
+        <li><a href="evergreen.html#module-evergreen.alias">evergreen.alias</a>
+</li>
         <li><a href="evergreen.html#module-evergreen.api">evergreen.api</a>
 </li>
         <li><a href="evergreen.html#module-evergreen.base">evergreen.base</a>
@@ -899,9 +916,11 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="evergreen.html#evergreen.distro.Distro.name">name() (evergreen.distro.Distro property)</a>
+      <li><a href="evergreen.html#evergreen.alias.DisplayTaskAlias.name">name() (evergreen.alias.DisplayTaskAlias property)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.distro.Distro.name">(evergreen.distro.Distro property)</a>
+</li>
         <li><a href="evergreen.html#evergreen.host.RunningTask.name">(evergreen.host.RunningTask property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.patch.VariantsTasks.name">(evergreen.patch.VariantsTasks property)</a>
@@ -917,10 +936,10 @@
         <li><a href="evergreen.html#evergreen.stats.TestStats.num_fail">(evergreen.stats.TestStats property)</a>
 </li>
       </ul></li>
-      <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability.num_failed">num_failed() (evergreen.task_reliability.TaskReliability property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability.num_failed">num_failed() (evergreen.task_reliability.TaskReliability property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats.num_pass">num_pass() (evergreen.stats.TaskStats property)</a>
 
       <ul>
@@ -1297,9 +1316,11 @@
 </li>
       <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability">TaskReliability (class in evergreen.task_reliability)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.build.Build.tasks">tasks() (evergreen.build.Build property)</a>
+      <li><a href="evergreen.html#evergreen.alias.VariantAlias.tasks">tasks() (evergreen.alias.VariantAlias property)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.build.Build.tasks">(evergreen.build.Build property)</a>
+</li>
         <li><a href="evergreen.html#evergreen.patch.Patch.tasks">(evergreen.patch.Patch property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.patch.VariantsTasks.tasks">(evergreen.patch.VariantsTasks property)</a>
@@ -1311,10 +1332,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.distro.Distro.teardown">teardown() (evergreen.distro.Distro property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.distro.Distro.teardown">teardown() (evergreen.distro.Distro property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.test_batch">test_batch() (evergreen.performance_results.PerformanceData property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats.test_file">test_file() (evergreen.stats.TaskStats property)</a>
@@ -1421,9 +1442,11 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.variant">variant() (evergreen.performance_results.PerformanceData property)</a>
+      <li><a href="evergreen.html#evergreen.alias.VariantAlias.variant">variant() (evergreen.alias.VariantAlias property)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.variant">(evergreen.performance_results.PerformanceData property)</a>
+</li>
         <li><a href="evergreen.html#evergreen.stats.TaskStats.variant">(evergreen.stats.TaskStats property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.stats.TestStats.variant">(evergreen.stats.TestStats property)</a>
@@ -1431,6 +1454,8 @@
         <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability.variant">(evergreen.task_reliability.TaskReliability property)</a>
 </li>
       </ul></li>
+      <li><a href="evergreen.html#evergreen.alias.VariantAlias">VariantAlias (class in evergreen.alias)</a>
+</li>
       <li><a href="evergreen.html#evergreen.patch.Patch.variants_tasks">variants_tasks() (evergreen.patch.Patch property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.patch.VariantsTasks">VariantsTasks (class in evergreen.patch)</a>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen.commitqueue &#8212; evergreen.py 1.4.5 documentation</title>
+    <title>evergreen.alias &#8212; evergreen.py 1.4.5 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -33,7 +33,7 @@
              >modules</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Home</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">evergreen.commitqueue</a></li> 
+        <li class="nav-item nav-item-this"><a href="">evergreen.alias</a></li> 
       </ul>
     </div>  
 
@@ -42,11 +42,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for evergreen.commitqueue</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Commit Queue representation of evergreen.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-
+  <h1>Source code for evergreen.alias</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Representation of project aliases.&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span>
@@ -55,46 +52,43 @@
     <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
 
 
-<div class="viewcode-block" id="CommitQueueItem"><a class="viewcode-back" href="../../evergreen.html#evergreen.commitqueue.CommitQueueItem">[docs]</a><span class="k">class</span> <span class="nc">CommitQueueItem</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of an entry in a commit queue.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DisplayTaskAlias"><a class="viewcode-back" href="../../evergreen.html#evergreen.alias.DisplayTaskAlias">[docs]</a><span class="k">class</span> <span class="nc">DisplayTaskAlias</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a DisplayTask in an alias.&quot;&quot;&quot;</span>
 
-    <span class="n">issue</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;issue&quot;</span><span class="p">)</span>
-    <span class="n">modules</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;modules&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create a CommitQueueItem object.</span>
-
-<span class="sd">        :param json: Commit queue item json.</span>
-<span class="sd">        :param api: Evergreen API.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CommitQueueItem</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="CommitQueue"><a class="viewcode-back" href="../../evergreen.html#evergreen.commitqueue.CommitQueue">[docs]</a><span class="k">class</span> <span class="nc">CommitQueue</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of a commit queue from evergreen.&quot;&quot;&quot;</span>
-
-    <span class="n">queue_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;queue_id&quot;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
+    <span class="n">execution_tasks</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;ExecutionTasks&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create an instance of a commit queue from evergreen json.</span>
+<span class="sd">        Create an instance of a display task alias.</span>
 
-<span class="sd">        :param json: Evergreen json representation of commit queue.</span>
-<span class="sd">        :param api: Evergreen api object.</span>
+<span class="sd">        :param json: json representing a display task alias.</span>
+<span class="sd">        :param api: instance of evergreen api object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CommitQueue</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VariantAlias"><a class="viewcode-back" href="../../evergreen.html#evergreen.alias.VariantAlias">[docs]</a><span class="k">class</span> <span class="nc">VariantAlias</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of an alias for a particular build variant.&quot;&quot;&quot;</span>
+
+    <span class="n">variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;Variant&quot;</span><span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;Tasks&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an instance of a variant alias.</span>
+
+<span class="sd">        :param json: json representing variant alias.</span>
+<span class="sd">        :param api: instance of evergreen api object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">queue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">CommitQueueItem</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieve the queue for this commit queue.</span>
-
-<span class="sd">        :return: Queue of commits in the commit queue.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;queue&quot;</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DisplayTaskAlias</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get a list of display tasks for the alias.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;DisplayTasks&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="p">[]</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">CommitQueueItem</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;queue&quot;</span><span class="p">]]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">DisplayTaskAlias</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;DisplayTasks&quot;</span><span class="p">]]</span></div>
 </pre></div>
 
             <div class="clearer"></div>
