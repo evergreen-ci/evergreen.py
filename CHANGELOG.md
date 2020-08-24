@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.6
+- Extend exception types covered in retries.
+
 ## 1.4.5
 - Fix docs builds.
 

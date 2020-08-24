@@ -860,7 +860,9 @@ class RetryingEvergreenApi(EvergreenApi):
         super(RetryingEvergreenApi, self).__init__(api_server, auth, timeout)
 
     @retry(
-        retry=retry_if_exception_type(requests.exceptions.HTTPError),
+        retry=retry_if_exception_type(
+            (requests.exceptions.HTTPError, requests.exceptions.ConnectionError,)
+        ),
         stop=stop_after_attempt(MAX_RETRIES),
         wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),
         reraise=True,
