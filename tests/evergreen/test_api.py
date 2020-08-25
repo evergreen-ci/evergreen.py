@@ -313,6 +313,11 @@ class TestTaskApi(object):
             url=expected_url, params=expected_params, timeout=None
         )
 
+    def test_manifest_for_task(self, mocked_api):
+        mocked_api.manifest_for_task("task_id")
+        expected_url = mocked_api._create_url("/tasks/task_id/manifest")
+        mocked_api.session.get.assert_called_with(url=expected_url, params=None, timeout=None)
+
     def test_tests_by_task(self, mocked_api):
         mocked_api.tests_by_task("task_id")
         expected_url = mocked_api._create_url("/tasks/task_id/tests")
