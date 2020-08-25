@@ -51,6 +51,7 @@ functions:
 
           poetry run sphinx-apidoc -o docs/source src "*cli*"
           poetry run sphinx-build -W docs/source docs/build
+          git clean -d -f
 
   publish_docs:
     - command: shell.exec
