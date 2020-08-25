@@ -6,6 +6,7 @@ from json.decoder import JSONDecodeError
 from unittest.mock import MagicMock, patch
 
 import pytest
+import requests
 from requests.exceptions import HTTPError
 
 import evergreen.api as under_test
@@ -462,6 +463,22 @@ class TestRetryingEvergreenApi(object):
         version_id = "version id"
         successful_response = mocked_retrying_api.session.get.return_value
         mocked_retrying_api.session.get.side_effect = [HTTPError(), successful_response]
+
+        mocked_retrying_api.version_by_id(version_id)
+
+        assert mocked_retrying_api.session.get.call_count == 2
+
+    @pytest.mark.skipif(
+        not os.environ.get("RUN_SLOW_TESTS"), reason="Slow running test due to retries"
+    )
+    def test_pass_on_retries_after_connection_error(self, mocked_retrying_api):
+        version_id = "version id"
+        successful_response = mocked_retrying_api.session.get.return_value
+
+        mocked_retrying_api.session.get.side_effect = [
+            requests.exceptions.ConnectionError(),
+            successful_response,
+        ]
 
         mocked_retrying_api.version_by_id(version_id)
 
