@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>evergreen.api &#8212; evergreen.py 1.4.5 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 1.4.7 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -705,6 +705,16 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/tasks/</span><span class="si">{task_id}</span><span class="s2">/tests&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_id</span><span class="o">=</span><span class="n">task_id</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Tst</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
+<div class="viewcode-block" id="EvergreenApi.manifest_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">manifest_for_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Manifest</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the manifest for the given task.</span>
+
+<span class="sd">        :param task_id: Task Id fo query.</span>
+<span class="sd">        :return: Manifest for the given task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/manifest&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
 <div class="viewcode-block" id="EvergreenApi.performance_results_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">performance_results_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PerformanceData</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the &#39;perf.json&#39; performance results for a given task_id.</span>
@@ -905,7 +915,9 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
 
     <span class="nd">@retry</span><span class="p">(</span>
-        <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">),</span>
+        <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,)</span>
+        <span class="p">),</span>
         <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="n">MAX_RETRIES</span><span class="p">),</span>
         <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">START_WAIT_TIME_SEC</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">MAX_WAIT_TIME_SEC</span><span class="p">),</span>
         <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
