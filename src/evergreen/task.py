@@ -7,6 +7,7 @@ from enum import IntEnum
 from typing import Any, Callable, Dict, Iterable, List, Optional, TYPE_CHECKING
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+from evergreen.manifest import Manifest
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
@@ -315,6 +316,10 @@ class Task(_BaseEvergreenObject):
             return execution_tasks
 
         return None
+
+    def get_manifest(self) -> Manifest:
+        """Get the Manifest for this task."""
+        return self._api.manifest_for_task(self.task_id)
 
     def __repr__(self) -> str:
         """

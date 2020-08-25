@@ -209,3 +209,12 @@ class TestTask(object):
         execution_tasks = display_task.get_execution_tasks(filter_fn=cap_seen)
 
         assert len(execution_tasks) == max_return
+
+    def test_get_manifest(self, sample_task):
+        mock_api = MagicMock()
+        task = Task(sample_task, mock_api)
+
+        manifest = task.get_manifest()
+
+        assert manifest == mock_api.manifest_for_task.return_value
+        mock_api.manifest_for_task.assert_called_with(task.task_id)

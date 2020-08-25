@@ -660,6 +660,16 @@ class EvergreenApi(object):
         url = self._create_url("/tasks/{task_id}/tests".format(task_id=task_id))
         return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
 
+    def manifest_for_task(self, task_id: str) -> Manifest:
+        """
+        Get the manifest for the given task.
+
+        :param task_id: Task Id fo query.
+        :return: Manifest for the given task.
+        """
+        url = self._create_url(f"/tasks/{task_id}/manifest")
+        return Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
+
     def performance_results_by_task(self, task_id: str) -> PerformanceData:
         """
         Get the 'perf.json' performance results for a given task_id.
