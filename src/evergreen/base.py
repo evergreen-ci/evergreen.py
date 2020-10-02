@@ -2,7 +2,7 @@
 """Task representation of evergreen."""
 from __future__ import absolute_import
 
-from typing import Any, Callable, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, Optional
 
 from evergreen.util import (
     parse_evergreen_date,

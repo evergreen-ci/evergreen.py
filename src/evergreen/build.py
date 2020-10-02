@@ -2,7 +2,7 @@
 """Representation of an evergreen build."""
 from __future__ import absolute_import
 
-from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.metrics.buildmetrics import BuildMetrics

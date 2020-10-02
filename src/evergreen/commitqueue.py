@@ -2,7 +2,7 @@
 """Commit Queue representation of evergreen."""
 from __future__ import absolute_import
 
-from typing import Any, Dict, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib
 

@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 from datetime import timedelta
 from enum import IntEnum
-from typing import Any, Callable, Dict, Iterable, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, List, Optional
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.manifest import Manifest

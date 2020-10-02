@@ -3,14 +3,14 @@
 from __future__ import absolute_import, division
 
 from datetime import datetime
-from typing import Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional
 
 from structlog import get_logger
 
 if TYPE_CHECKING:
     from evergreen.build import Build
-    from evergreen.version import Version
     from evergreen.metrics.buildmetrics import BuildMetrics
+    from evergreen.version import Version
 
 LOGGER = get_logger(__name__)
 

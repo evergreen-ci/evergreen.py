@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.8 - 2020-10-02
+- Add isort for import sorting.
+
 ## 1.4.7 - 2020-08-25
 - Add endpoint to get manifest for a task.
 
