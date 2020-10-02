@@ -1,6 +1,6 @@
 """Unit tests for src/evergreen/alias.py."""
 
-from evergreen.alias import VariantAlias, DisplayTaskAlias
+from evergreen.alias import DisplayTaskAlias, VariantAlias
 
 
 class TestVariantAlias(object):
