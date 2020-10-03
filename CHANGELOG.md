@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.9 - 2020-10-04
+- Add bugbear static analysis.
+
 ## 1.4.8 - 2020-10-02
 - Add isort for import sorting.
 
