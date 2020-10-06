@@ -2,8 +2,8 @@
 """Get configuration about connecting to evergreen."""
 from __future__ import absolute_import
 
-from collections import namedtuple
 import os
+from collections import namedtuple
 from typing import Dict, Optional
 
 import yaml

@@ -1,5 +1,5 @@
 """Useful utilities for interacting with Evergreen."""
-from datetime import datetime, date
+from datetime import date, datetime
 from typing import Any, Iterable, Optional
 
 from dateutil.parser import parse

@@ -4,7 +4,7 @@ from __future__ import absolute_import, division
 
 from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional
 
 from structlog import get_logger
 
@@ -12,8 +12,8 @@ from evergreen.errors.exceptions import ActiveTaskMetricsException
 from evergreen.task import StatusScore
 
 if TYPE_CHECKING:
-    from evergreen.task import Task
     from evergreen.build import Build
+    from evergreen.task import Task
 
 
 LOGGER = get_logger(__name__)
@@ -319,7 +319,7 @@ class BuildMetrics(object):
         self.total_processing_time += task.time_taken_ms / 1000
 
     def _count_display_tasks(self) -> None:
-        for generated_by, tasks in self._display_map.items():
+        for _, tasks in self._display_map.items():
             status = max([task.get_status_score() for task in tasks])
             if status == StatusScore.SUCCESS:
                 self.display_success_count += 1

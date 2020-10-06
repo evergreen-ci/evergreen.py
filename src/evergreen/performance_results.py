@@ -2,9 +2,8 @@
 """Performance results representation of evergreen."""
 from __future__ import absolute_import
 
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
-
 from copy import copy
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_short_datetime_attrib
 

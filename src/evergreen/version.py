@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 from enum import Enum, auto
-from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.manifest import ManifestModule

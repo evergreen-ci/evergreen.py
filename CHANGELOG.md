@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.8 - 2020-10-03
+- Add isort for import sorting.
+- Add bugbear static analysis.
+- Add pre-commit configuration.
+
 ## 1.4.7 - 2020-08-25
 - Add endpoint to get manifest for a task.
 

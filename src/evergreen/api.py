@@ -3,9 +3,9 @@
 from __future__ import absolute_import
 
 from datetime import datetime
-from time import time
 from functools import lru_cache
 from json.decoder import JSONDecodeError
+from time import time
 from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional, Union, cast
 
 import requests

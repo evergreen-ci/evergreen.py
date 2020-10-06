@@ -1,7 +1,7 @@
 """Representation of an evergreen patch."""
 from __future__ import absolute_import
 
-from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 

@@ -1,15 +1,14 @@
 """Command line driver for evergreen API."""
 from __future__ import absolute_import
 
+import json
 from enum import Enum
 from itertools import islice
-import json
-import yaml
 
 import click
+import yaml
 
 from evergreen import EvergreenApi
-
 
 DisplayFormat = Enum("DisplayFormat", "human json yaml")
 

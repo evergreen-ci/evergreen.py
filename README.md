@@ -80,6 +80,14 @@ by setting the env variable RUN_SLOW_TESTS to any value.
 ```
 $ RUN_SLOW_TEST=1 poetry run pytest
 ```
+### Running checks on commit
+
+This project has [pre-commit](https://pre-commit.com/) configured. Pre-commit will run configured
+checks at git commit time. To enable pre-commit on your local repository run:
+
+```bash
+$ poetry run pre-commit install
+```
 
 ### Versioning and Deploy
 
