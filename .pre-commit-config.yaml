@@ -17,7 +17,7 @@ repos:
 
     -   id: pytest
         name: pytest
-        entry: poetry run pytest src tests
+        entry: poetry run pytest
         pass_filenames: false
         always_run: true
         language: system
