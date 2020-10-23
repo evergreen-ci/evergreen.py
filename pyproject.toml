@@ -25,9 +25,9 @@ python = "^3.6.1"
 Click = "^7"
 python-dateutil = "^2"
 PyYAML = "^5"
-requests = "^2"
 structlog = "^19"
 tenacity = "^5"
+requests = "^2.24.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.1"
