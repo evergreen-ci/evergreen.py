@@ -383,6 +383,24 @@ class EvergreenApi(object):
             self.patches_by_project(project_id, params), before, after, time_attr
         )
 
+    def patches_by_user(
+        self, user_id: str, start_at: Optional[datetime] = None, limit: Optional[int] = None
+    ) -> Iterable[Patch]:
+        """
+        Get an iterable of recent patches by the given user.
+
+        :param user_id: Id of user to query.
+        :param start_at: If specified, query starting at the given date.
+        :param limit: If specified, limit the output per page.
+        """
+        params: Dict[str, Any] = {}
+        if start_at:
+            params["start_at"] = start_at
+        if limit:
+            params["limit"] = limit
+        url = self._create_url(f"/users/{user_id}/patches")
+        return (Patch(patch, self) for patch in self._lazy_paginate(url, params))
+
     def commit_queue_for_project(self, project_id: str) -> CommitQueue:
         """
         Get the current commit queue for the specified project.

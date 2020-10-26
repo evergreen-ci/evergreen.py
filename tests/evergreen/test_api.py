@@ -209,6 +209,14 @@ class TestProjectApi(object):
             url=expected_url, params={"limit": 100}, timeout=None
         )
 
+    def test_patches_by_user(self, mocked_api):
+        patches = mocked_api.patches_by_user("user_id")
+        next(patches)
+        expected_url = mocked_api._create_url("/users/user_id/patches")
+        mocked_api.session.get.assert_called_with(
+            url=expected_url, params={"limit": 100}, timeout=None
+        )
+
     def test_patches_by_project_time_window(self, mocked_api, sample_patch, mocked_api_response):
         patch_list = [
             deepcopy(sample_patch),
