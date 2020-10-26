@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.4.9 - 2020-10-26
+- Add API calls to get patches by user.
+
 ## 1.4.8 - 2020-10-03
 - Add isort for import sorting.
 - Add bugbear static analysis.
