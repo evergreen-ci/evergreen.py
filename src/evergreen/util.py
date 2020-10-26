@@ -74,6 +74,16 @@ def parse_evergreen_date(evg_date: Optional[str]) -> Optional[date]:
     return datetime.strptime(evg_date, EVG_DATE_FORMAT).date()
 
 
+def format_evergreen_date(when: datetime) -> str:
+    """
+    Convert a datetime object into a string date that evergreen understands.
+
+    :param when: Datetime object to convert.
+    :return: string version of given date.
+    """
+    return when.strftime(EVG_DATE_FORMAT)
+
+
 def iterate_by_time_window(
     iterator: Iterable, before: datetime, after: datetime, time_attr: str
 ) -> Iterable:

@@ -31,6 +31,20 @@ class Requester(Enum):
         """Get the evergreen value for a requester."""
         return self.name.lower()
 
+    def stats_value(self) -> str:
+        """Get the value for the stats endpoints."""
+        value_mappings = {
+            Requester.PATCH_REQUEST: "patch",
+            Requester.GITTER_REQUEST: "mainline",
+            Requester.GITHUB_PULL_REQUEST: "patch",
+            Requester.MERGE_TEST: "",
+            Requester.AD_HOC: "adhoc",
+            Requester.TRIGGER_REQUEST: "trigger",
+            Requester.UNKNOWN: "",
+        }
+
+        return value_mappings[self]
+
 
 PATCH_REQUESTERS = {
     Requester.PATCH_REQUEST,

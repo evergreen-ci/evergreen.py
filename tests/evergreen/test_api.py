@@ -1,7 +1,7 @@
 import os
 import sys
 from copy import deepcopy
-from datetime import timedelta
+from datetime import datetime, timedelta
 from json.decoder import JSONDecodeError
 from unittest.mock import MagicMock, patch
 
@@ -253,12 +253,16 @@ class TestProjectApi(object):
     def test_test_stats_by_project(self, mocked_api):
         after_date = "2019-01-01"
         before_date = "2019-02-01"
-        mocked_api.test_stats_by_project("project_id", after_date, before_date)
         expected_url = mocked_api._create_url("/projects/project_id/test_stats")
         expected_params = {
             "after_date": after_date,
             "before_date": before_date,
         }
+
+        mocked_api.test_stats_by_project(
+            "project_id", datetime.fromisoformat(after_date), datetime.fromisoformat(before_date),
+        )
+
         mocked_api.session.get.assert_called_with(
             url=expected_url, params=expected_params, timeout=None
         )
@@ -273,6 +277,30 @@ class TestProjectApi(object):
         expected_url = mocked_api._create_url("/projects/project_id/versions/tasks")
         mocked_api.session.get.assert_called_with(
             url=expected_url, params={"status": ["status1"]}, timeout=None
+        )
+
+
+class TestTaskStatsByProject(object):
+    def test_with_multiple_tasks(self, mocked_api):
+        after_date = "2020-04-04"
+        before_date = "2020-05-04"
+        task_list = [f"task_{i}" for i in range(3)]
+        expected_url = mocked_api._create_url("/projects/project_id/task_stats")
+        expected_params = {
+            "after_date": after_date,
+            "before_date": before_date,
+            "tasks": task_list,
+        }
+
+        mocked_api.task_stats_by_project(
+            "project_id",
+            after_date=datetime.fromisoformat(after_date),
+            before_date=datetime.fromisoformat(before_date),
+            tasks=task_list,
+        )
+
+        mocked_api.session.get.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None
         )
 
 
