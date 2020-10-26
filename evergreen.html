@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 1.4.8 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 1.4.9 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -409,6 +409,21 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Iterator for the given time window.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.patches_by_user">
+<code class="sig-name descname">patches_by_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">start_at</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>datetime.datetime<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patches_by_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patches_by_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an iterable of recent patches by the given user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> – Id of user to query.</p></li>
+<li><p><strong>start_at</strong> – If specified, query starting at the given date.</p></li>
+<li><p><strong>limit</strong> – If specified, limit the output per page.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
