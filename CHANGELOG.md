@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.2 - 2020-10-28
+- Update recent versions endpoint to return a python class instead of raw JSON
+
+## 2.0.1 - 2020-10-28
+- Add endpoints for updating patches and tasks
+
+## 2.0.0 - 2020-10-28
+- Add py.typed file to allow clients to use type information.
+- Fix type issues in the API interface.
+
 ## 1.4.9 - 2020-10-26
 - Add API calls to get patches by user.
 
