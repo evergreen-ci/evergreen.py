@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1 - 2020-10-28
+- Add endpoints for updating patches and tasks
+
 ## 2.0.0 - 2020-10-28
 - Add py.typed file to allow clients to use type information.
 - Fix type issues in the API interface.

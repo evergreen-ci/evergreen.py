@@ -420,8 +420,8 @@ class EvergreenApi(object):
 
         :param patch_id: Id of the patch to update
         :param variants: list of objects with keys "id" who's value is the variant ID, and key "tasks"
-        with value of a list of task names to configure for specified variant. See the documentation for more details
-        https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#configureschedule-a-patch
+            with value of a list of task names to configure for specified variant. See the documentation for more details
+            https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#configureschedule-a-patch
         :param description: If specified, will update the patch's description with the string provided
         """
         url = self._create_url(f"/patches/{patch_id}/configure")
