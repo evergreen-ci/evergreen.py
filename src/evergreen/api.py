@@ -2,6 +2,7 @@
 """API for interacting with evergreen."""
 from __future__ import absolute_import
 
+import json
 from datetime import datetime
 from functools import lru_cache
 from json.decoder import JSONDecodeError
@@ -112,7 +113,9 @@ class EvergreenApi(object):
         else:
             LOGGER.debug("Request completed.", url=response.request.url, duration=duration)
 
-    def _call_api(self, url: str, params: Dict = None) -> requests.Response:
+    def _call_api(
+        self, url: str, params: Dict = None, method: str = "GET", data: Optional[str] = None
+    ) -> requests.Response:
         """
         Make a call to the evergreen api.
 
@@ -121,7 +124,10 @@ class EvergreenApi(object):
         :return: response from api server.
         """
         start_time = time()
-        response = self.session.get(url=url, params=params, timeout=self._timeout)
+        response = self.session.request(
+            url=url, params=params, timeout=self._timeout, data=data, method=method
+        )
+
         self._log_api_call_time(response, start_time)
 
         self._raise_for_status(response)
@@ -170,6 +176,12 @@ class EvergreenApi(object):
         :return: json list of all results.
         """
         response = self._call_api(url, params)
+
+        if not params:
+            params = {
+                "limit": DEFAULT_LIMIT,
+            }
+
         json_data = response.json()
         while "next" in response.links:
             if params and "limit" in params and len(json_data) >= params["limit"]:
@@ -251,6 +263,42 @@ class EvergreenApi(object):
         url = self._create_url("/hosts")
         host_list = self._paginate(url, params)
         return [Host(host, self) for host in host_list]  # type: ignore[arg-type]
+
+    def configure_task(
+        self, task_id: str, activated: Optional[bool] = None, priority: Optional[int] = None
+    ) -> None:
+        """
+        Update a task.
+
+        :param task_id: Id of the task to update
+        :param activated: If specified, will update the task to specified value True or False
+        :param priority: If specified, will update the task's priority to specified number
+        """
+        url = self._create_url(f"/tasks/{task_id}")
+        data: Dict[str, Union[bool, int]] = {}
+        if activated:
+            data["activated"] = activated
+        if priority:
+            data["priority"] = priority
+        self._call_api(url, data=json.dumps(data), method="PATCH")
+
+    def restart_task(self, task_id: str) -> None:
+        """
+        Restart a task.
+
+        :param task_id: Id of the task to restart
+        """
+        url = self._create_url(f"/tasks/{task_id}/restart")
+        self._call_api(url, method="POST")
+
+    def abort_task(self, task_id: str) -> None:
+        """
+        Abort a task.
+
+        :param task_id: Id of the task to abort
+        """
+        url = self._create_url(f"/tasks/{task_id}/abort")
+        self._call_api(url, method="POST")
 
     def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:
         """
@@ -360,6 +408,30 @@ class EvergreenApi(object):
         url = self._create_url("/projects/{project_id}/patches".format(project_id=project_id))
         patches = self._lazy_paginate_by_date(url, params)
         return (Patch(patch, self) for patch in patches)  # type: ignore[arg-type]
+
+    def configure_patch(
+        self,
+        patch_id: str,
+        variants: Optional[List[Dict[str, Union[str, List[str]]]]] = None,
+        description: Optional[str] = None,
+    ) -> None:
+        """
+        Update a patch.
+
+        :param patch_id: Id of the patch to update
+        :param variants: list of objects with keys "id" who's value is the variant ID, and key "tasks"
+        with value of a list of task names to configure for specified variant. See the documentation for more details
+        https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#configureschedule-a-patch
+        :param description: If specified, will update the patch's description with the string provided
+        """
+        url = self._create_url(f"/patches/{patch_id}/configure")
+        data: Dict[str, Union[List, str]] = {}
+        if variants:
+            data["variants"] = variants
+        if description:
+            data["description"] = description
+
+        self._call_api(url, data=json.dumps(data), method="POST")
 
     def patches_by_project_time_window(
         self,
