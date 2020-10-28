@@ -349,8 +349,8 @@ class TestTaskStatsByProject(object):
             tasks=task_list,
         )
 
-        mocked_api.session.get.assert_called_with(
-            url=expected_url, params=expected_params, timeout=None
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
 
