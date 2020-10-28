@@ -35,7 +35,7 @@ from evergreen.stats import TaskStats, TestStats
 from evergreen.task import Task
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
-from evergreen.util import evergreen_input_to_output, iterate_by_time_window
+from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
 from evergreen.version import Requester, Version
 
 try:
@@ -514,8 +514,8 @@ class EvergreenApi(object):
         :return: Patch queried for.
         """
         params: Dict[str, Any] = {
-            "after_date": after_date,
-            "before_date": before_date,
+            "after_date": format_evergreen_date(after_date),
+            "before_date": format_evergreen_date(before_date),
         }
         if group_num_days:
             params["group_num_days"] = group_num_days
@@ -580,13 +580,13 @@ class EvergreenApi(object):
         :return: Patch queried for.
         """
         params: Dict[str, Any] = {
-            "after_date": after_date,
-            "before_date": before_date,
+            "after_date": format_evergreen_date(after_date),
+            "before_date": format_evergreen_date(before_date),
         }
         if group_num_days:
             params["group_num_days"] = group_num_days
         if requesters:
-            params["requesters"] = requesters
+            params["requesters"] = requesters.stats_value()
         if tasks:
             params["tasks"] = tasks
         if variants:
@@ -597,7 +597,7 @@ class EvergreenApi(object):
             params["group_by"] = group_by
         if sort:
             params["sort"] = sort
-        url = self._create_url("/projects/{project_id}/task_stats".format(project_id=project_id))
+        url = self._create_url(f"/projects/{project_id}/task_stats")
         task_stats_list = self._paginate(url, params)
         return [TaskStats(task_stat, self) for task_stat in task_stats_list]  # type: ignore[arg-type]
 
@@ -631,13 +631,13 @@ class EvergreenApi(object):
         """
         params: Dict[str, Any] = {}
         if after_date:
-            params["after_date"] = after_date
+            params["after_date"] = format_evergreen_date(after_date)
         if before_date:
-            params["before_date"] = before_date
+            params["before_date"] = format_evergreen_date(before_date)
         if group_num_days:
             params["group_num_days"] = group_num_days
         if requesters:
-            params["requesters"] = requesters
+            params["requesters"] = requesters.stats_value()
         if tasks:
             params["tasks"] = tasks
         if variants:
@@ -648,9 +648,8 @@ class EvergreenApi(object):
             params["group_by"] = group_by
         if sort:
             params["sort"] = sort
-        url = self._create_url(
-            "/projects/{project_id}/task_reliability".format(project_id=project_id)
-        )
+
+        url = self._create_url(f"/projects/{project_id}/task_reliability")
         task_reliability_scores = self._paginate(url, params)
         return [
             TaskReliability(task_reliability, self) for task_reliability in task_reliability_scores  # type: ignore[arg-type]

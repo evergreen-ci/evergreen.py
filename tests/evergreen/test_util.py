@@ -52,6 +52,15 @@ class TestParseEvergreenDate(object):
         assert now.date() == under_test.parse_evergreen_date(now_str)
 
 
+class TestFormatEvergreenDate(object):
+    def test_date_is_formatted(self):
+        now = datetime.now()
+
+        now_str = under_test.format_evergreen_date(now)
+
+        assert isinstance(now_str, str)
+
+
 def mock_by_seconds(start_time, n_items):
     return [MagicMock(the_time=(start_time - timedelta(minutes=7 * i))) for i in range(n_items)]
 
