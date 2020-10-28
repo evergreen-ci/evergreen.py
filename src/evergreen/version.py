@@ -191,3 +191,23 @@ class Version(_BaseEvergreenObject):
         :return: String representation of Version.
         """
         return "Version({id})".format(id=self.version_id)
+
+
+class RecentVersions(_BaseEvergreenObject):
+    """Wrapper for the data object returned by /projects/{project_id}/recent_versions."""
+
+    rows = evg_attrib("rows")
+    build_variants = evg_attrib("build_variants")
+
+    @property
+    def versions(self) -> List[Version]:
+        """
+        Get the list of versions from the recent versions response object.
+
+        :return: List of versions from the response object
+        """
+        versions = []
+        for wrapper in self.json["versions"]:
+            versions += wrapper["versions"]
+
+        return [Version(version, self._api) for version in versions]  # type: ignore[arg-type]
