@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 1.4.9 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 2.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -79,7 +79,7 @@
 <span class="kn">from</span> <span class="nn">evergreen.task</span> <span class="kn">import</span> <span class="n">Task</span>
 <span class="kn">from</span> <span class="nn">evergreen.task_reliability</span> <span class="kn">import</span> <span class="n">TaskReliability</span>
 <span class="kn">from</span> <span class="nn">evergreen.tst</span> <span class="kn">import</span> <span class="n">Tst</span>
-<span class="kn">from</span> <span class="nn">evergreen.util</span> <span class="kn">import</span> <span class="n">evergreen_input_to_output</span><span class="p">,</span> <span class="n">iterate_by_time_window</span>
+<span class="kn">from</span> <span class="nn">evergreen.util</span> <span class="kn">import</span> <span class="n">evergreen_input_to_output</span><span class="p">,</span> <span class="n">format_evergreen_date</span><span class="p">,</span> <span class="n">iterate_by_time_window</span>
 <span class="kn">from</span> <span class="nn">evergreen.version</span> <span class="kn">import</span> <span class="n">Requester</span><span class="p">,</span> <span class="n">Version</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -487,8 +487,8 @@
 <span class="sd">        :return: Patch queried for.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">after_date</span><span class="p">,</span>
-            <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">before_date</span><span class="p">,</span>
+            <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">after_date</span><span class="p">),</span>
+            <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">before_date</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
@@ -553,13 +553,13 @@
 <span class="sd">        :return: Patch queried for.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">after_date</span><span class="p">,</span>
-            <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">before_date</span><span class="p">,</span>
+            <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">after_date</span><span class="p">),</span>
+            <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">before_date</span><span class="p">),</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
         <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span><span class="o">.</span><span class="n">stats_value</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
         <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
@@ -570,7 +570,7 @@
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
         <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/task_stats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/task_stats&quot;</span><span class="p">)</span>
         <span class="n">task_stats_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">TaskStats</span><span class="p">(</span><span class="n">task_stat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_stat</span> <span class="ow">in</span> <span class="n">task_stats_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
@@ -604,13 +604,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">after_date</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;after_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">after_date</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;after_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">after_date</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">before_date</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;before_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">before_date</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;before_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">before_date</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
         <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span><span class="o">.</span><span class="n">stats_value</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
         <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
@@ -621,9 +621,8 @@
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
         <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span>
-            <span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/task_reliability&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">)</span>
-        <span class="p">)</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/task_reliability&quot;</span><span class="p">)</span>
         <span class="n">task_reliability_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">TaskReliability</span><span class="p">(</span><span class="n">task_reliability</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_reliability</span> <span class="ow">in</span> <span class="n">task_reliability_scores</span>  <span class="c1"># type: ignore[arg-type]</span>

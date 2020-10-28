@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.version &#8212; evergreen.py 1.4.9 documentation</title>
+    <title>evergreen.version &#8212; evergreen.py 2.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -74,7 +74,21 @@
 
 <div class="viewcode-block" id="Requester.evg_value"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester.evg_value">[docs]</a>    <span class="k">def</span> <span class="nf">evg_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get the evergreen value for a requester.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Requester.stats_value"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester.stats_value">[docs]</a>    <span class="k">def</span> <span class="nf">stats_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the value for the stats endpoints.&quot;&quot;&quot;</span>
+        <span class="n">value_mappings</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">PATCH_REQUEST</span><span class="p">:</span> <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span><span class="p">:</span> <span class="s2">&quot;mainline&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">GITHUB_PULL_REQUEST</span><span class="p">:</span> <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">MERGE_TEST</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">AD_HOC</span><span class="p">:</span> <span class="s2">&quot;adhoc&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">TRIGGER_REQUEST</span><span class="p">:</span> <span class="s2">&quot;trigger&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">value_mappings</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span></div></div>
 
 
 <span class="n">PATCH_REQUESTERS</span> <span class="o">=</span> <span class="p">{</span>

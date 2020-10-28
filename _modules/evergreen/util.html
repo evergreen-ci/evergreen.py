@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.util &#8212; evergreen.py 1.4.9 documentation</title>
+    <title>evergreen.util &#8212; evergreen.py 2.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -117,6 +117,16 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">evg_date</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">evg_date</span><span class="p">,</span> <span class="n">EVG_DATE_FORMAT</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="format_evergreen_date"><a class="viewcode-back" href="../../evergreen.html#evergreen.util.format_evergreen_date">[docs]</a><span class="k">def</span> <span class="nf">format_evergreen_date</span><span class="p">(</span><span class="n">when</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a datetime object into a string date that evergreen understands.</span>
+
+<span class="sd">    :param when: Datetime object to convert.</span>
+<span class="sd">    :return: string version of given date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">when</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">EVG_DATE_FORMAT</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="iterate_by_time_window"><a class="viewcode-back" href="../../evergreen.html#evergreen.util.iterate_by_time_window">[docs]</a><span class="k">def</span> <span class="nf">iterate_by_time_window</span><span class="p">(</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 1.4.9 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.0.0 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -3196,6 +3196,20 @@ If this is not a display task, returns None.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="evergreen.util.format_evergreen_date">
+<code class="sig-prename descclassname">evergreen.util.</code><code class="sig-name descname">format_evergreen_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">when</span><span class="p">:</span> <span class="n">datetime.datetime</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/evergreen/util.html#format_evergreen_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.util.format_evergreen_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a datetime object into a string date that evergreen understands.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>when</strong> – Datetime object to convert.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string version of given date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="evergreen.util.format_evergreen_datetime">
 <code class="sig-prename descclassname">evergreen.util.</code><code class="sig-name descname">format_evergreen_datetime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">when</span><span class="p">:</span> <span class="n">datetime.datetime</span></em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/evergreen/util.html#format_evergreen_datetime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.util.format_evergreen_datetime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a datetime object into an evergreen consumable string.</p>
@@ -3347,6 +3361,12 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 <dt id="evergreen.version.Requester.evg_value">
 <code class="sig-name descname">evg_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/evergreen/version.html#Requester.evg_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Requester.evg_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the evergreen value for a requester.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.version.Requester.stats_value">
+<code class="sig-name descname">stats_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/evergreen/version.html#Requester.stats_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Requester.stats_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value for the stats endpoints.</p>
 </dd></dl>
 
 </dd></dl>
