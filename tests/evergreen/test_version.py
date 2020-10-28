@@ -4,11 +4,26 @@ from __future__ import absolute_import
 from datetime import datetime
 from unittest.mock import MagicMock
 
+import pytest
+
 from evergreen.manifest import Manifest
 from evergreen.metrics.versionmetrics import VersionMetrics
 from evergreen.version import Requester, Version
 
 SAMPLE_VERSION_ID_FOR_PATCH = "5c9e8453d6d80a457091d74e"
+EXPECTED_REQUESTER_PAIRS = [
+    (Requester.PATCH_REQUEST, "patch"),
+    (Requester.GITTER_REQUEST, "mainline"),
+    (Requester.GITHUB_PULL_REQUEST, "patch"),
+    (Requester.AD_HOC, "adhoc"),
+    (Requester.TRIGGER_REQUEST, "trigger"),
+]
+
+
+class TestRequester(object):
+    @pytest.mark.parametrize(["requester", "value"], EXPECTED_REQUESTER_PAIRS)
+    def test_stats_value(self, requester, value):
+        assert requester.stats_value() == value
 
 
 class TestVersion(object):
