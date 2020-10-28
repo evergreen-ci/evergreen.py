@@ -18,6 +18,10 @@ def ns(relative):
     return "evergreen.api." + relative
 
 
+def from_iso_format(date_str):
+    return datetime.strptime(date_str, "%Y-%m-%d")
+
+
 class TestConfiguration(object):
     def test_uses_passed_auth(self, sample_evergreen_auth):
         kwargs = under_test.EvergreenApi._setup_kwargs(auth=sample_evergreen_auth)
@@ -260,7 +264,7 @@ class TestProjectApi(object):
         }
 
         mocked_api.test_stats_by_project(
-            "project_id", datetime.fromisoformat(after_date), datetime.fromisoformat(before_date),
+            "project_id", from_iso_format(after_date), from_iso_format(before_date),
         )
 
         mocked_api.session.get.assert_called_with(
@@ -294,8 +298,8 @@ class TestTaskStatsByProject(object):
 
         mocked_api.task_stats_by_project(
             "project_id",
-            after_date=datetime.fromisoformat(after_date),
-            before_date=datetime.fromisoformat(before_date),
+            after_date=from_iso_format(after_date),
+            before_date=from_iso_format(before_date),
             tasks=task_list,
         )
 
