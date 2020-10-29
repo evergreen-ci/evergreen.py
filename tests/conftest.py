@@ -151,7 +151,7 @@ def mocked_api(mocked_api_response):
     """Return an Evergreen API with a mocked session."""
     api = EvergreenApi()
     api.session = MagicMock()
-    api.session.get.return_value = mocked_api_response
+    api.session.request.return_value = mocked_api_response
     return api
 
 
@@ -162,7 +162,7 @@ def mocked_cached_api():
     api.session = MagicMock()
     response_mock = MagicMock()
     response_mock.status_code = 200
-    api.session.get.return_value = response_mock
+    api.session.request.return_value = response_mock
     return api
 
 
@@ -173,7 +173,7 @@ def mocked_retrying_api():
     api.session = MagicMock()
     response_mock = MagicMock()
     response_mock.status_code = 200
-    api.session.get.return_value = response_mock
+    api.session.request.return_value = response_mock
     return api
 
 
