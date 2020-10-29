@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 2.0.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 2.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -81,7 +81,7 @@
 <span class="kn">from</span> <span class="nn">evergreen.task_reliability</span> <span class="kn">import</span> <span class="n">TaskReliability</span>
 <span class="kn">from</span> <span class="nn">evergreen.tst</span> <span class="kn">import</span> <span class="n">Tst</span>
 <span class="kn">from</span> <span class="nn">evergreen.util</span> <span class="kn">import</span> <span class="n">evergreen_input_to_output</span><span class="p">,</span> <span class="n">format_evergreen_date</span><span class="p">,</span> <span class="n">iterate_by_time_window</span>
-<span class="kn">from</span> <span class="nn">evergreen.version</span> <span class="kn">import</span> <span class="n">Requester</span><span class="p">,</span> <span class="n">Version</span>
+<span class="kn">from</span> <span class="nn">evergreen.version</span> <span class="kn">import</span> <span class="n">RecentVersions</span><span class="p">,</span> <span class="n">Requester</span><span class="p">,</span> <span class="n">Version</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urlparse</span>
@@ -371,7 +371,7 @@
 
 <div class="viewcode-block" id="EvergreenApi.recent_versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.recent_versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">recent_versions_by_project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecentVersions</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get recent versions created in specified project.</span>
 
@@ -382,9 +382,8 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span>
             <span class="s2">&quot;/projects/</span><span class="si">{project_id}</span><span class="s2">/recent_versions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">project_id</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">version_list</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RecentVersions</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.alias_for_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.alias_for_version">[docs]</a>    <span class="k">def</span> <span class="nf">alias_for_version</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_deps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>

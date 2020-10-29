@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.0.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.0.2 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -518,7 +518,7 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.recent_versions_by_project">
-<code class="sig-name descname">recent_versions_by_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.recent_versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.recent_versions_by_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">recent_versions_by_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.version.RecentVersions" title="evergreen.version.RecentVersions">evergreen.version.RecentVersions</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.recent_versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.recent_versions_by_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get recent versions created in specified project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -3367,6 +3367,36 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 <dt id="evergreen.version.BuildVariantStatus.get_build">
 <code class="sig-name descname">get_build</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Build<a class="reference internal" href="_modules/evergreen/version.html#BuildVariantStatus.get_build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.BuildVariantStatus.get_build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the build object for this build variants status.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.version.RecentVersions">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.version.</code><code class="sig-name descname">RecentVersions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/version.html#RecentVersions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.RecentVersions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Wrapper for the data object returned by /projects/{project_id}/recent_versions.</p>
+<dl class="py method">
+<dt id="evergreen.version.RecentVersions.build_variants">
+<em class="property">property </em><code class="sig-name descname">build_variants</code><a class="headerlink" href="#evergreen.version.RecentVersions.build_variants" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of build_variants</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.version.RecentVersions.rows">
+<em class="property">property </em><code class="sig-name descname">rows</code><a class="headerlink" href="#evergreen.version.RecentVersions.rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of rows</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.version.RecentVersions.versions">
+<em class="property">property </em><code class="sig-name descname">versions</code><a class="headerlink" href="#evergreen.version.RecentVersions.versions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of versions from the recent versions response object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of versions from the response object</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
