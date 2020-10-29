@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.2 - 2020-10-28
+- Update recent versions endpoint to return a python class instead of raw JSON
+
 ## 2.0.1 - 2020-10-28
 - Add endpoints for updating patches and tasks
 

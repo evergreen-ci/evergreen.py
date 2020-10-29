@@ -36,7 +36,7 @@ from evergreen.task import Task
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
-from evergreen.version import Requester, Version
+from evergreen.version import RecentVersions, Requester, Version
 
 try:
     from urlparse import urlparse
@@ -326,7 +326,7 @@ class EvergreenApi(object):
 
     def recent_versions_by_project(
         self, project_id: str, params: Optional[Dict] = None
-    ) -> List[Version]:
+    ) -> RecentVersions:
         """
         Get recent versions created in specified project.
 
@@ -337,9 +337,8 @@ class EvergreenApi(object):
         url = self._create_url(
             "/projects/{project_id}/recent_versions".format(project_id=project_id)
         )
-        version_list = self._call_api(url, params)
-
-        return version_list.json()  # type: ignore[arg-type]
+        resp = self._call_api(url, params)
+        return RecentVersions(resp.json(), self)  # type: ignore[arg-type]
 
     def alias_for_version(
         self, version_id: str, alias: str, include_deps: bool = False
