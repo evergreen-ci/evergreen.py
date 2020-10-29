@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.3 - 2020-10-29
+- Allow structlog > 19
+
 ## 2.0.2 - 2020-10-28
 - Update recent versions endpoint to return a python class instead of raw JSON
 
