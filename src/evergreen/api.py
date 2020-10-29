@@ -542,12 +542,15 @@ class EvergreenApi(object):
         params = {"status": statuses} if statuses else None
         return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
 
-    def tasks_by_commit(self, project_id: str, commit_hash: str, params: Dict = None) -> List[Task]:
+    def tasks_by_project_and_commit(
+        self, project_id: str, commit_hash: str, params: Dict = None
+    ) -> List[Task]:
         """
         Get all the tasks for a revision in specified project.
 
         :param project_id: Project id associated with the revision
         :param commit_hash: Commit to get tasks for
+        :param params: Dictionary of parameters to pass to query.
         :return: The list of matching tasks.
         """
         url = self._create_url(f"/projects/{project_id}/revisions/{commit_hash}/tasks")
