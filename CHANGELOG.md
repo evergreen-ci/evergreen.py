@@ -1,7 +1,10 @@
 # Changelog
 
-## 2.0.3 - 2020-10-29
+## 2.0.4 - 2020-10-29
 - Allow structlog > 19
+
+## 2.0.3 - 2020-10-29
+- Add support for support for /projects/{project_id}/revisions/{commit_hash}/tasks
 
 ## 2.0.2 - 2020-10-28
 - Update recent versions endpoint to return a python class instead of raw JSON
