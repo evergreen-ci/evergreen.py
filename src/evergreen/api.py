@@ -73,7 +73,7 @@ class EvergreenApi(object):
         self._api_server = api_server
         self.session = requests.Session()
         adapter = requests.adapters.HTTPAdapter()
-        self.session.mount("{url.scheme}://".format(url=urlparse(api_server)), adapter)
+        self.session.mount(f"{urlparse(api_server).scheme}://", adapter)
         if auth:
             self.session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
 
@@ -84,9 +84,7 @@ class EvergreenApi(object):
         :param endpoint: endpoint to call.
         :return: Full url to get endpoint.
         """
-        return "{api_server}/rest/v2{endpoint}".format(
-            api_server=self._api_server, endpoint=endpoint
-        )
+        return f"{self._api_server}/rest/v2{endpoint}"
 
     def _create_plugin_url(self, endpoint: str) -> str:
         """
@@ -95,9 +93,7 @@ class EvergreenApi(object):
         :param endpoint: endpoint to call.
         :return: Full url to get endpoint.
         """
-        return "{api_server}/plugin/json{endpoint}".format(
-            api_server=self._api_server, endpoint=endpoint
-        )
+        return f"{self._api_server}/plugin/json{endpoint}"
 
     @staticmethod
     def _log_api_call_time(response: requests.Response, start_time: float) -> None:
@@ -321,7 +317,7 @@ class EvergreenApi(object):
         :param project_id: Id of project to query.
         :return: Project specified.
         """
-        url = self._create_url("/projects/{project_id}".format(project_id=project_id))
+        url = self._create_url(f"/projects/{project_id}")
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
     def recent_versions_by_project(
@@ -334,9 +330,7 @@ class EvergreenApi(object):
         :param params: parameters to pass to endpoint.
         :return: List of recent versions.
         """
-        url = self._create_url(
-            "/projects/{project_id}/recent_versions".format(project_id=project_id)
-        )
+        url = self._create_url(f"/projects/{project_id}/recent_versions")
         resp = self._call_api(url, params)
         return RecentVersions(resp.json(), self)  # type: ignore[arg-type]
 
@@ -369,7 +363,7 @@ class EvergreenApi(object):
         :param requester: Type of versions to query.
         :return: Generator of versions.
         """
-        url = self._create_url("/projects/{project_id}/versions".format(project_id=project_id))
+        url = self._create_url(f"/projects/{project_id}/versions")
         params = {"requester": requester.name.lower()}
         version_list = self._lazy_paginate(url, params)
         return (Version(version, self) for version in version_list)  # type: ignore[arg-type]
@@ -404,7 +398,7 @@ class EvergreenApi(object):
         :param params: parameters to pass to endpoint.
         :return: List of recent patches.
         """
-        url = self._create_url("/projects/{project_id}/patches".format(project_id=project_id))
+        url = self._create_url(f"/projects/{project_id}/patches")
         patches = self._lazy_paginate_by_date(url, params)
         return (Patch(patch, self) for patch in patches)  # type: ignore[arg-type]
 
@@ -479,7 +473,7 @@ class EvergreenApi(object):
         :param project_id: Id of project to query.
         :return: Current commit queue for project.
         """
-        url = self._create_url("/commit_queue/{project_id}".format(project_id=project_id))
+        url = self._create_url(f"/commit_queue/{project_id}")
         return CommitQueue(self._paginate(url), self)  # type: ignore[arg-type]
 
     def test_stats_by_project(
@@ -532,7 +526,7 @@ class EvergreenApi(object):
             params["group_by"] = group_by
         if sort:
             params["sort"] = sort
-        url = self._create_url("/projects/{project_id}/test_stats".format(project_id=project_id))
+        url = self._create_url(f"/projects/{project_id}/test_stats")
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]  # type: ignore[arg-type]
 
@@ -544,11 +538,20 @@ class EvergreenApi(object):
         :param statuses: the types of statuses to get tasks for.
         :return: The list of matching tasks.
         """
-        url = self._create_url(
-            "/projects/{project_id}/versions/tasks".format(project_id=project_id)
-        )
+        url = self._create_url(f"/projects/{project_id}/versions/tasks")
         params = {"status": statuses} if statuses else None
         return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
+
+    def tasks_by_commit(self, project_id: str, commit_hash: str, params: Dict = None) -> List[Task]:
+        """
+        Get all the tasks for a revision in specified project.
+
+        :param project_id: Project id associated with the revision
+        :param commit_hash: Commit to get tasks for
+        :return: The list of matching tasks.
+        """
+        url = self._create_url(f"/projects/{project_id}/revisions/{commit_hash}/tasks")
+        return [Task(json, self) for json in self._call_api(url, params).json()]  # type: ignore[arg-type]
 
     def task_stats_by_project(
         self,
@@ -661,7 +664,7 @@ class EvergreenApi(object):
         :param build_id: build id to query.
         :return: Build queried for.
         """
-        url = self._create_url("/builds/{build_id}".format(build_id=build_id))
+        url = self._create_url(f"/builds/{build_id}")
         return Build(self._paginate(url), self)  # type: ignore[arg-type]
 
     def tasks_by_build(
@@ -678,7 +681,7 @@ class EvergreenApi(object):
         if fetch_all_executions:
             params["fetch_all_executions"] = 1
 
-        url = self._create_url("/builds/{build_id}/tasks".format(build_id=build_id))
+        url = self._create_url(f"/builds/{build_id}/tasks")
         task_list = self._paginate(url, params)
         return [Task(task, self) for task in task_list]  # type: ignore[arg-type]
 
@@ -689,7 +692,7 @@ class EvergreenApi(object):
         :param version_id: Id of version to query.
         :return: Version queried for.
         """
-        url = self._create_url("/versions/{version_id}".format(version_id=version_id))
+        url = self._create_url(f"/versions/{version_id}")
         return Version(self._paginate(url), self)  # type: ignore[arg-type]
 
     def builds_by_version(self, version_id: str, params: Optional[Dict] = None) -> List[Build]:
@@ -700,7 +703,7 @@ class EvergreenApi(object):
         :param params: Dictionary of parameters to pass to query.
         :return: List of builds for the specified version.
         """
-        url = self._create_url("/versions/{version_id}/builds".format(version_id=version_id))
+        url = self._create_url(f"/versions/{version_id}/builds")
         build_list = self._paginate(url, params)
         return [Build(build, self) for build in build_list]  # type: ignore[arg-type]
 
@@ -712,7 +715,7 @@ class EvergreenApi(object):
         :param params: Parameters to pass to endpoint.
         :return: Patch queried for.
         """
-        url = self._create_url("/patches/{patch_id}".format(patch_id=patch_id))
+        url = self._create_url(f"/patches/{patch_id}")
         return Patch(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
 
     def task_by_id(self, task_id: str, fetch_all_executions: Optional[bool] = None) -> Task:
@@ -726,7 +729,7 @@ class EvergreenApi(object):
         params = None
         if fetch_all_executions:
             params = {"fetch_all_executions": fetch_all_executions}
-        url = self._create_url("/tasks/{task_id}".format(task_id=task_id))
+        url = self._create_url(f"/tasks/{task_id}")
         return Task(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
 
     def tests_by_task(
@@ -745,7 +748,7 @@ class EvergreenApi(object):
             params["status"] = status
         if execution:
             params["execution"] = execution
-        url = self._create_url("/tasks/{task_id}/tests".format(task_id=task_id))
+        url = self._create_url(f"/tasks/{task_id}/tests")
         return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
 
     def manifest_for_task(self, task_id: str) -> Manifest:
@@ -765,7 +768,7 @@ class EvergreenApi(object):
         :param task_id: Id of task to query for.
         :return: Contents of 'perf.json'
         """
-        url = self._create_plugin_url("/task/{task_id}/perf".format(task_id=task_id))
+        url = self._create_plugin_url(f"/task/{task_id}/perf")
         return PerformanceData(self._paginate(url), self)  # type: ignore[arg-type]
 
     def performance_results_by_task_name(
@@ -778,9 +781,7 @@ class EvergreenApi(object):
         :param task_name: Name of task to query for.
         :return: Contents of 'perf.json'
         """
-        url = "{api_server}/api/2/task/{task_id}/json/history/{task_name}/perf".format(
-            api_server=self._api_server, task_id=task_id, task_name=task_name
-        )
+        url = f"{self._api_server}/api/2/task/{task_id}/json/history/{task_name}/perf"
         return [PerformanceData(result, self) for result in self._paginate(url)]  # type: ignore[arg-type]
 
     def json_by_task(self, task_id: str, json_key: str) -> Dict[str, Any]:
@@ -815,7 +816,7 @@ class EvergreenApi(object):
         :param endpoint: endpoint to build url for.
         :return: An string pointing to the given endpoint.
         """
-        return "{api_server}/{endpoint}".format(api_server=self._api_server, endpoint=endpoint)
+        return f"{self._api_server}/{endpoint}"
 
     def manifest(self, project_id: str, revision: str) -> Manifest:
         """
@@ -825,11 +826,7 @@ class EvergreenApi(object):
         :param revision: Revision to get manifest of.
         :return: Manifest of the given revision of the given project.
         """
-        url = self._create_old_url(
-            "plugin/manifest/get/{project_id}/{revision}".format(
-                project_id=project_id, revision=revision
-            )
-        )
+        url = self._create_old_url(f"plugin/manifest/get/{project_id}/{revision}")
         return Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
 
     def retrieve_task_log(self, log_url: str, raw: bool = False) -> str:
