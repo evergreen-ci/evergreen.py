@@ -543,7 +543,7 @@ class EvergreenApi(object):
         return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
 
     def tasks_by_project_and_commit(
-        self, project_id: str, commit_hash: str, params: Dict = None
+        self, project_id: str, commit_hash: str, params: Optional[Dict] = None
     ) -> List[Task]:
         """
         Get all the tasks for a revision in specified project.
