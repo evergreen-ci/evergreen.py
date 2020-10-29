@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.0.2 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.0.3 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -668,6 +668,24 @@ with value of a list of task names to configure for specified variant. See the d
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project_id</strong> – The project’s id.</p></li>
 <li><p><strong>statuses</strong> – the types of statuses to get tasks for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of matching tasks.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.tasks_by_project_and_commit">
+<code class="sig-name descname">tasks_by_project_and_commit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">commit_hash</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.tasks_by_project_and_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.tasks_by_project_and_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the tasks for a revision in specified project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_id</strong> – Project id associated with the revision</p></li>
+<li><p><strong>commit_hash</strong> – Commit to get tasks for</p></li>
+<li><p><strong>params</strong> – Dictionary of parameters to pass to query.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
