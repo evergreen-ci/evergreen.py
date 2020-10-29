@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.0.0 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.0.1 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -173,6 +173,17 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base methods for building API objects.</p>
 <dl class="py method">
+<dt id="evergreen.api.EvergreenApi.abort_task">
+<code class="sig-name descname">abort_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.abort_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.abort_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abort a task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>task_id</strong> – Id of the task to abort</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.api.EvergreenApi.alias_for_version">
 <code class="sig-name descname">alias_for_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">alias</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">include_deps</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.alias.VariantAlias" title="evergreen.alias.VariantAlias">evergreen.alias.VariantAlias</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.alias_for_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.alias_for_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the tasks and variants that an alias would select for an evergreen version.</p>
@@ -270,6 +281,38 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Current commit queue for project.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.configure_patch">
+<code class="sig-name descname">configure_patch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patch_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">variants</span><span class="p">:</span> <span class="n">List<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Union<span class="p">[</span>str<span class="p">, </span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.configure_patch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.configure_patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a patch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch_id</strong> – Id of the patch to update</p></li>
+<li><p><strong>variants</strong> – list of objects with keys “id” who’s value is the variant ID, and key “tasks”
+with value of a list of task names to configure for specified variant. See the documentation for more details
+<a class="reference external" href="https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#configureschedule-a-patch">https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#configureschedule-a-patch</a></p></li>
+<li><p><strong>description</strong> – If specified, will update the patch’s description with the string provided</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.configure_task">
+<code class="sig-name descname">configure_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">activated</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">priority</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.configure_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.configure_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Id of the task to update</p></li>
+<li><p><strong>activated</strong> – If specified, will update the task to specified value True or False</p></li>
+<li><p><strong>priority</strong> – If specified, will update the task’s priority to specified number</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -486,6 +529,17 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>List of recent versions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.restart_task">
+<code class="sig-name descname">restart_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.restart_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.restart_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restart a task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>task_id</strong> – Id of the task to restart</p>
 </dd>
 </dl>
 </dd></dl>
