@@ -412,7 +412,7 @@ class EvergreenApi(object):
     def configure_patch(
         self,
         patch_id: str,
-        variants: Optional[List[Dict[str, Union[str, List[str]]]]] = None,
+        variants: List[Dict[str, Union[str, List[str]]]],
         description: Optional[str] = None,
     ) -> None:
         """

@@ -246,14 +246,6 @@ class TestProjectApi(object):
             url=expected_url, params=None, timeout=None, data=expected_data, method="POST"
         )
 
-    def test_configure_patch_description(self, mocked_api):
-        mocked_api.configure_patch("patch_id", description="mypatch")
-        expected_url = mocked_api._create_url("/patches/patch_id/configure")
-        expected_data = json.dumps({"description": "mypatch"})
-        mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=expected_data, method="POST"
-        )
-
     def test_configure_patch_variants(self, mocked_api):
         variants = ["my_variant", ["task_one", "task_two"]]
         mocked_api.configure_patch("patch_id", variants=variants)
