@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.0.4 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.0.5 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -557,6 +557,23 @@ with value of a list of task names to configure for specified variant. See the d
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Contents of specified log file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.single_test_by_task_and_test_file">
+<code class="sig-name descname">single_test_by_task_and_test_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">test_file</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.tst.Tst" title="evergreen.tst.Tst">evergreen.tst.Tst</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.single_test_by_task_and_test_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.single_test_by_task_and_test_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a test for a given task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Id of task to query for.</p></li>
+<li><p><strong>test_file</strong> – the name of the test_file of the test.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the test for the specified task.</p>
 </dd>
 </dl>
 </dd></dl>
