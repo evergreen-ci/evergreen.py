@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.5 - 2020-10-30
+- Add support for getting a single test by task id and test file
+
+## 2.0.4 - 2020-10-29
+- Allow structlog > 19
+
+## 2.0.3 - 2020-10-29
+- Add support for support for /projects/{project_id}/revisions/{commit_hash}/tasks
+
 ## 2.0.2 - 2020-10-28
 - Update recent versions endpoint to return a python class instead of raw JSON
 

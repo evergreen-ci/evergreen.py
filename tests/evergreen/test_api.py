@@ -307,6 +307,17 @@ class TestProjectApi(object):
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
+    def test_single_test_by_task(self, mocked_api):
+        mocked_api.single_test_by_task_and_test_file("task_id", "com.xgen.module.MyTests.test1")
+        expected_url = mocked_api._create_url("/tasks/task_id/tests")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params={"test_name": "com.xgen.module.MyTests.test1"},
+            timeout=None,
+            data=None,
+            method="GET",
+        )
+
     def test_tasks_by_project(self, mocked_api):
         mocked_api.tasks_by_project("project_id")
         expected_url = mocked_api._create_url("/projects/project_id/versions/tasks")

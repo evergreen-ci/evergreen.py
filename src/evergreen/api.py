@@ -748,6 +748,17 @@ class EvergreenApi(object):
         url = self._create_url("/tasks/{task_id}/tests".format(task_id=task_id))
         return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
 
+    def single_test_by_task_and_test_file(self, task_id: str, test_file: str) -> Tst:
+        """
+        Get a test for a given task.
+
+        :param task_id: Id of task to query for.
+        :param test_file: the name of the test_file of the test.
+        :return: the test for the specified task.
+        """
+        url = self._create_url(f"/tasks/{task_id}/tests")
+        return Tst(self._call_api(url, params={"test_name": test_file}).json(), self)
+
     def manifest_for_task(self, task_id: str) -> Manifest:
         """
         Get the manifest for the given task.
