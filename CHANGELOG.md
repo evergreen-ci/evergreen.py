@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.5 - 2020-10-30
+- Add support for getting a single test by task id and test file
+
 ## 2.0.4 - 2020-10-29
 - Allow structlog > 19
 
