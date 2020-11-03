@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.6 - 2020-11-03
+- Don't add unrequested limit on paginated calls.
+
 ## 2.0.5 - 2020-10-30
 - Add support for getting a single test by task id and test file
 

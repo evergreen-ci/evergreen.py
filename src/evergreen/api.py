@@ -172,12 +172,6 @@ class EvergreenApi(object):
         :return: json list of all results.
         """
         response = self._call_api(url, params)
-
-        if not params:
-            params = {
-                "limit": DEFAULT_LIMIT,
-            }
-
         json_data = response.json()
         while "next" in response.links:
             if params and "limit" in params and len(json_data) >= params["limit"]:
