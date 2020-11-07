@@ -3,11 +3,12 @@
 from __future__ import absolute_import
 
 import json
+from contextlib import contextmanager
 from datetime import datetime
 from functools import lru_cache
 from json.decoder import JSONDecodeError
 from time import time
-from typing import Any, Callable, Dict, Iterable, Iterator, List, Optional, Union, cast
+from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
 
 import requests
 import structlog
@@ -62,20 +63,49 @@ class EvergreenApi(object):
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
+        session: Optional[requests.Session] = None,
     ) -> None:
         """
         Create a _BaseEvergreenApi object.
 
         :param api_server: URI of Evergreen API server.
         :param auth: EvgAuth object with auth information.
+        :param timeout: Time (in sec) to wait before considering a call as failed.
+        :param session: Session to use for requests.
         """
         self._timeout = timeout
         self._api_server = api_server
-        self.session = requests.Session()
+        self._auth = auth
+        self._session = session
+
+    @contextmanager
+    def with_session(self) -> Generator["EvergreenApi", None, None]:
+        """Yield an instance of the API client with a shared session."""
+        session = self._create_session()
+        evg_api = EvergreenApi(self._api_server, self._auth, self._timeout, session)
+        yield evg_api
+
+    @property
+    def session(self) -> requests.Session:
+        """
+        Get the shared session if it exists, else create a new session.
+
+        :return: Session to query the API with.
+        """
+        if self._session:
+            return self._session
+
+        return self._create_session()
+
+    def _create_session(self) -> requests.Session:
+        """Create a new session to query the API with."""
+        session = requests.Session()
         adapter = requests.adapters.HTTPAdapter()
-        self.session.mount(f"{urlparse(api_server).scheme}://", adapter)
+        session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
+        auth = self._auth
         if auth:
-            self.session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
+            session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
+        return session
 
     def _create_url(self, endpoint: str) -> str:
         """
