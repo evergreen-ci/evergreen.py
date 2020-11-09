@@ -103,7 +103,8 @@ Session
 -------
 
 If you are making several calls to the API is a short amount of time, you may wish to create
-a shared session for all the calls rather. This can be done with the `with_session` context manager.
+a shared session for all the calls rather than a new session for each call. This can be done
+with the `with_session` context manager.
 
 .. code-block:: python
 
