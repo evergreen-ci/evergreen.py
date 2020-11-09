@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.0 - 2020-11-09
+- Only create re-usable session when requested to do so.
+
 ## 2.0.6 - 2020-11-03
 - Don't add unrequested limit on paginated calls.
 

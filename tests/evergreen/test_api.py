@@ -112,6 +112,28 @@ class TestLazyPagination(object):
         assert i > items_to_check
 
 
+class TestSessions(object):
+    def test_session_can_be_created(self):
+        evg_api = under_test.EvergreenApi()
+
+        session_instance_one = evg_api.session
+        session_instance_two = evg_api.session
+
+        assert session_instance_one is not None
+        assert session_instance_two is not None
+        assert session_instance_one != session_instance_two
+
+    def test_with_session_creates_a_new_session(self):
+        original_evg_api = under_test.EvergreenApi()
+
+        with original_evg_api.with_session() as evg_api_with_session:
+            session_instance_one = evg_api_with_session.session
+            session_instance_two = evg_api_with_session.session
+
+            assert session_instance_one == session_instance_two
+            assert original_evg_api.session != evg_api_with_session.session
+
+
 class TestDistrosApi(object):
     def test_all_distros(self, mocked_api):
         mocked_api.all_distros()
