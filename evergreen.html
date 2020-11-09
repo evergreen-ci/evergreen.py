@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.0.6 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.1.0 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -169,7 +169,7 @@
 
 <dl class="py class">
 <dt id="evergreen.api.EvergreenApi">
-<em class="property">class </em><code class="sig-prename descclassname">evergreen.api.</code><code class="sig-name descname">EvergreenApi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_server</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://evergreen.mongodb.com'</span></em>, <em class="sig-param"><span class="n">auth</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth">evergreen.config.EvgAuth</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.api.</code><code class="sig-name descname">EvergreenApi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_server</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://evergreen.mongodb.com'</span></em>, <em class="sig-param"><span class="n">auth</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth">evergreen.config.EvgAuth</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">session</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>requests.sessions.Session<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base methods for building API objects.</p>
 <dl class="py method">
@@ -562,6 +562,17 @@ with value of a list of task names to configure for specified variant. See the d
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.api.EvergreenApi.session">
+<em class="property">property </em><code class="sig-name descname">session</code><a class="headerlink" href="#evergreen.api.EvergreenApi.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the shared session if it exists, else create a new session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Session to query the API with.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.api.EvergreenApi.single_test_by_task_and_test_file">
 <code class="sig-name descname">single_test_by_task_and_test_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">test_file</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.tst.Tst" title="evergreen.tst.Tst">evergreen.tst.Tst</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.single_test_by_task_and_test_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.single_test_by_task_and_test_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a test for a given task.</p>
@@ -804,6 +815,12 @@ with value of a list of task names to configure for specified variant. See the d
 <dd class="field-even"><p>Iterator for the given time window.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.with_session">
+<code class="sig-name descname">with_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Generator<span class="p">[</span><a class="reference internal" href="#evergreen.api.EvergreenApi" title="evergreen.api.EvergreenApi">EvergreenApi</a><span class="p">, </span>None<span class="p">, </span>None<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.with_session"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.with_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Yield an instance of the API client with a shared session.</p>
 </dd></dl>
 
 </dd></dl>

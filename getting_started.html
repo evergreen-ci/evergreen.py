@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Getting started with evergreen.py &#8212; evergreen.py 2.0.6 documentation</title>
+    <title>Getting started with evergreen.py &#8212; evergreen.py 2.1.0 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -130,6 +130,20 @@ three times before failing.</p>
 <p>After creating a <code class="docutils literal notranslate"><span class="pre">RetryingEvergreenApi</span></code> is can be treated just like a normal
 <code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code> object.</p>
 </div>
+<div class="section" id="session">
+<h3>Session<a class="headerlink" href="#session" title="Permalink to this headline">¶</a></h3>
+<p>If you are making several calls to the API is a short amount of time, you may wish to create
+a shared session for all the calls rather than a new session for each call. This can be done
+with the <cite>with_session</cite> context manager.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+
+<span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">(</span><span class="n">use_config_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">evg_api</span><span class="o">.</span><span class="n">with_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">evg_session</span><span class="p">:</span>
+    <span class="n">evg_session</span><span class="o">.</span><span class="n">all_projects</span><span class="p">()</span>
+    <span class="n">evg_session</span><span class="o">.</span><span class="n">versions_by_project</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -152,6 +166,7 @@ three times before failing.</p>
 <li><a class="reference internal" href="#pass-credentials-directly">Pass credentials directly</a></li>
 <li><a class="reference internal" href="#pass-credentials-via-a-configuration-file">Pass credentials via a configuration file</a></li>
 <li><a class="reference internal" href="#special-api-types">Special API Types</a></li>
+<li><a class="reference internal" href="#session">Session</a></li>
 </ul>
 </li>
 </ul>
