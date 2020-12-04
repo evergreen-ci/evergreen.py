@@ -1,0 +1,44 @@
+{
+  "id": "5fc80f1b34bf9a654ba5a620",
+  "task_id": "mongodb_mongo_master_enterprise_rhel_62_64_bit_dynamic_disabled_feature_flags_aggregation_patch_b85442ba1cc20270a3595bba769438394a66e7e4_5fc6d9d83066155d7efbac17_20_12_02_00_04_16",
+  "task_execution": 0,
+  "note": {
+    "message": "hello world",
+    "source": {
+      "author": "evergreen",
+      "time": "2020-12-02T22:02:41.329Z",
+      "requester": "api"
+    }
+  },
+  "issues": [
+    {
+      "url": "http://issues.com/ISSUE-1234",
+      "issue_key": "ISSUE-1234",
+      "source": {
+        "author": "evergreen",
+        "time": "2020-12-02T22:02:41.329Z",
+        "requester": "api"
+      }
+    }
+  ],
+  "suspected_issues": [
+    {
+      "url": "http://issues.com/ISSUE-4321",
+      "issue_key": "ISSUE-4321",
+      "source": {
+        "author": "evergreen",
+        "time": "2020-12-02T22:02:41.329Z",
+        "requester": "api"
+      }
+    },
+    {
+      "url": "http://issues.com/ISSUE-2222",
+      "issue_key": "ISSUE-2222",
+      "source": {
+        "author": "evergreen",
+        "time": "2020-12-02T22:02:41.329Z",
+        "requester": "api"
+      }
+    }
+  ]
+}

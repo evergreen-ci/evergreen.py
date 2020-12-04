@@ -16,6 +16,7 @@ from structlog.stdlib import LoggerFactory
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from evergreen.alias import VariantAlias
+from evergreen.api_requests import IssueLinkRequest
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import (
@@ -34,6 +35,7 @@ from evergreen.performance_results import PerformanceData
 from evergreen.project import Project
 from evergreen.stats import TaskStats, TestStats
 from evergreen.task import Task
+from evergreen.task_annotations import TaskAnnotation
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
@@ -798,6 +800,76 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/tasks/{task_id}/manifest")
         return Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
+
+    def get_task_annotation(
+        self,
+        task_id: str,
+        execution: Optional[int] = None,
+        fetch_all_executions: Optional[bool] = None,
+    ) -> List[TaskAnnotation]:
+        """
+        Get the task annotations for the given task.
+
+        :param task_id: Id of task to query.
+        :param execution: Execution number of task to query (defaults to latest).
+        :param fetch_all_executions: Get annotations for all executions of this task.
+        :return: The task annotations for the given task, if any exists.
+        """
+        if execution is not None and fetch_all_executions is not None:
+            raise ValueError("'execution' and 'fetch_all_executions' are mutually-exclusive")
+
+        url = self._create_url(f"/tasks/{task_id}/annotations")
+        params: Dict[str, Any] = {}
+        if execution:
+            params["execution"] = execution
+        if fetch_all_executions:
+            params["fetch_all_executions"] = fetch_all_executions
+
+        response = self._call_api(url, params)
+        if response.text.strip() == "null":
+            return []
+        return [TaskAnnotation(annotation, self) for annotation in response.json()]
+
+    def annotate_task(
+        self,
+        task_id: str,
+        execution: Optional[int] = None,
+        message: Optional[str] = None,
+        issues: Optional[List[IssueLinkRequest]] = None,
+        suspected_issues: Optional[List[IssueLinkRequest]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """
+        Annotate the specified task.
+
+        :param task_id: ID of task to annotate.
+        :param execution: Execution number of task to annotate (default to latest).
+        :param message: Message to add to the annotations.
+        :param issues: Issues to attach to the annotation.
+        :param suspected_issues: Suspected issues to add to the annotation.
+        :param metadata: Extra metadata to add to the issue.
+        """
+        url = self._create_url(f"/tasks/{task_id}/annotation")
+        request: Dict[str, Any] = {
+            "task_id": task_id,
+        }
+
+        if execution:
+            request["task_execution"] = execution
+
+        if message:
+            request["note"] = {"message": message}
+
+        if issues:
+            request["issues"] = [issue.as_dict() for issue in issues]
+
+        if suspected_issues:
+            request["suspected_issues"] = [issue.as_dict() for issue in suspected_issues]
+
+        if metadata:
+            request["metadata"] = metadata
+
+        self._call_api(url, method="PUT", data=json.dumps(request))
 
     def performance_results_by_task(self, task_id: str) -> PerformanceData:
         """

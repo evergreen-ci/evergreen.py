@@ -6,8 +6,10 @@ from datetime import timedelta
 from enum import IntEnum
 from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, List, Optional
 
+from evergreen.api_requests import IssueLinkRequest
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.manifest import Manifest
+from evergreen.task_annotations import TaskAnnotation
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
@@ -295,7 +297,7 @@ class Task(_BaseEvergreenObject):
         """
         Get a list of execution tasks associated with this task.
 
-        If this is a display task, return the tasks execution tasks associated with it. 
+        If this is a display task, return the tasks execution tasks associated with it.
         If this is not a display task, returns None.
 
         :param filter_fn: Function to filter returned results.
@@ -320,6 +322,29 @@ class Task(_BaseEvergreenObject):
     def get_manifest(self) -> Manifest:
         """Get the Manifest for this task."""
         return self._api.manifest_for_task(self.task_id)
+
+    def get_task_annotation(self) -> List[TaskAnnotation]:
+        """Get the task annotation for this task."""
+        return self._api.get_task_annotation(self.task_id, self.execution)
+
+    def annotate(
+        self,
+        message: Optional[str] = None,
+        issues: Optional[List[IssueLinkRequest]] = None,
+        suspected_issues: Optional[List[IssueLinkRequest]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """
+        Annotate the specified task.
+
+        :param message: Message to add to the annotations.
+        :param issues: Issues to attach to the annotation.
+        :param suspected_issues: Suspected issues to add to the annotation.
+        :param metadata: Extra metadata to add to the issue.
+        """
+        self._api.annotate_task(
+            self.task_id, self.execution, message, issues, suspected_issues, metadata
+        )
 
     def __repr__(self) -> str:
         """
