@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.2.0 - 2020-12-04
+- Add support for the task annotations API.
+
 ## 2.1.0 - 2020-11-09
 - Only create re-usable session when requested to do so.
 

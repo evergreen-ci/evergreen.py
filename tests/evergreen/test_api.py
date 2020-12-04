@@ -11,6 +11,7 @@ import requests
 from requests.exceptions import HTTPError
 
 import evergreen.api as under_test
+from evergreen.api_requests import IssueLinkRequest
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.util import EVG_DATETIME_FORMAT, parse_evergreen_datetime
 
@@ -473,6 +474,34 @@ class TestTaskApi(object):
         expected_params = {"status": "success", "execution": 5}
         mocked_api.session.request.assert_called_with(
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
+        )
+
+    def test_get_task_annotation(self, mocked_api):
+        mocked_api.get_task_annotation("task_id", execution=5)
+        expected_url = mocked_api._create_url("/tasks/task_id/annotations")
+        expected_params = {"execution": 5}
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
+        )
+
+    def test_annotate_task(self, mocked_api):
+        mocked_api.annotate_task(
+            "task_id",
+            message="hello world",
+            issues=[IssueLinkRequest(issue_key="key-1234", url="http://hello.world/key-1234")],
+        )
+        expected_url = mocked_api._create_url("/tasks/task_id/annotation")
+        expected_params = None
+        expected_data = json.dumps(
+            {
+                "task_id": "task_id",
+                "task_execution": 0,
+                "note": {"message": "hello world"},
+                "issues": [{"issue_key": "key-1234", "url": "http://hello.world/key-1234"}],
+            }
+        )
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=expected_data, method="PUT"
         )
 
     def test_performance_results_by_task(self, mocked_api):
