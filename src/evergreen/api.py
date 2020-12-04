@@ -811,10 +811,13 @@ class EvergreenApi(object):
         Get the task annotations for the given task.
 
         :param task_id: Id of task to query.
-        :param execution: Execution number of task to query (defaults to 0).
+        :param execution: Execution number of task to query (defaults to latest).
         :param fetch_all_executions: Get annotations for all executions of this task.
         :return: The task annotations for the given task, if any exists.
         """
+        if execution is not None and fetch_all_executions is not None:
+            raise ValueError("'execution' and 'fetch_all_executions' are mutually-exclusive")
+
         url = self._create_url(f"/tasks/{task_id}/annotations")
         params: Dict[str, Any] = {}
         if execution:
@@ -830,7 +833,7 @@ class EvergreenApi(object):
     def annotate_task(
         self,
         task_id: str,
-        execution: int = 0,
+        execution: Optional[int] = None,
         message: Optional[str] = None,
         issues: Optional[List[IssueLinkRequest]] = None,
         suspected_issues: Optional[List[IssueLinkRequest]] = None,
@@ -840,7 +843,7 @@ class EvergreenApi(object):
         Annotate the specified task.
 
         :param task_id: ID of task to annotate.
-        :param execution: Execution number of task to annotate (default to 0).
+        :param execution: Execution number of task to annotate (default to latest).
         :param message: Message to add to the annotations.
         :param issues: Issues to attach to the annotation.
         :param suspected_issues: Suspected issues to add to the annotation.
@@ -849,8 +852,10 @@ class EvergreenApi(object):
         url = self._create_url(f"/tasks/{task_id}/annotation")
         request: Dict[str, Any] = {
             "task_id": task_id,
-            "task_execution": execution,
         }
+
+        if execution:
+            request["task_execution"] = execution
 
         if message:
             request["note"] = {"message": message}

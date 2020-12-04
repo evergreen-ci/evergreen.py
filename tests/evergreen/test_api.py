@@ -484,6 +484,10 @@ class TestTaskApi(object):
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
+    def test_get_task_annotation_with_invalid_parameters(self, mocked_api):
+        with pytest.raises(ValueError):
+            mocked_api.get_task_annotation("task_id", execution=5, fetch_all_executions=True)
+
     def test_annotate_task(self, mocked_api):
         mocked_api.annotate_task(
             "task_id",
@@ -495,7 +499,6 @@ class TestTaskApi(object):
         expected_data = json.dumps(
             {
                 "task_id": "task_id",
-                "task_execution": 0,
                 "note": {"message": "hello world"},
                 "issues": [{"issue_key": "key-1234", "url": "http://hello.world/key-1234"}],
             }
