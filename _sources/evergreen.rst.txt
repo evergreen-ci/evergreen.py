@@ -29,6 +29,14 @@ evergreen.api module
    :undoc-members:
    :show-inheritance:
 
+evergreen.api\_requests module
+------------------------------
+
+.. automodule:: evergreen.api_requests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 evergreen.base module
 ---------------------
 
@@ -121,6 +129,14 @@ evergreen.task module
 ---------------------
 
 .. automodule:: evergreen.task
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+evergreen.task\_annotations module
+----------------------------------
+
+.. automodule:: evergreen.task_annotations
    :members:
    :undoc-members:
    :show-inheritance:

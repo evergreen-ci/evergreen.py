@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 2.1.0 documentation</title>
+    <title>Index &#8212; evergreen.py 2.2.0 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -111,9 +111,13 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.all_projects">all_projects() (evergreen.api.EvergreenApi method)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.ami">ami() (evergreen.distro.AwsDistroSettings property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.task.Task.annotate">annotate() (evergreen.task.Task method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.ami">ami() (evergreen.distro.AwsDistroSettings property)</a>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.annotate_task">annotate_task() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.config.EvgAuth.api_key">api_key() (evergreen.config.EvgAuth property)</a>
 </li>
@@ -123,9 +127,11 @@
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.artifacts">artifacts() (evergreen.task.Task property)</a>
 </li>
-      <li><a href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.as_dict">as_dict() (evergreen.metrics.buildmetrics.BuildMetrics method)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.IssueLinkRequest.as_dict">as_dict() (evergreen.api_requests.IssueLinkRequest method)</a>
 
       <ul>
+        <li><a href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.as_dict">(evergreen.metrics.buildmetrics.BuildMetrics method)</a>
+</li>
         <li><a href="evergreen.metrics.html#evergreen.metrics.versionmetrics.VersionMetrics.as_dict">(evergreen.metrics.versionmetrics.VersionMetrics method)</a>
 </li>
       </ul></li>
@@ -133,6 +139,8 @@
 
       <ul>
         <li><a href="evergreen.html#evergreen.patch.Patch.author">(evergreen.patch.Patch property)</a>
+</li>
+        <li><a href="evergreen.html#evergreen.task_annotations.Source.author">(evergreen.task_annotations.Source property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.version.Version.author">(evergreen.version.Version property)</a>
 </li>
@@ -395,6 +403,13 @@
 </li>
       </ul></li>
       <li>
+    evergreen.api_requests
+
+      <ul>
+        <li><a href="evergreen.html#module-evergreen.api_requests">module</a>
+</li>
+      </ul></li>
+      <li>
     evergreen.base
 
       <ul>
@@ -513,6 +528,13 @@
 
       <ul>
         <li><a href="evergreen.html#module-evergreen.task">module</a>
+</li>
+      </ul></li>
+      <li>
+    evergreen.task_annotations
+
+      <ul>
+        <li><a href="evergreen.html#module-evergreen.task_annotations">module</a>
 </li>
       </ul></li>
       <li>
@@ -653,14 +675,20 @@
         <li><a href="evergreen.html#evergreen.version.Version.get_metrics">(evergreen.version.Version method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.version.Version.get_modules">get_modules() (evergreen.version.Version method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.version.Version.get_patch">get_patch() (evergreen.version.Version method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.get_status_score">get_status_score() (evergreen.task.Task method)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.get_task_annotation">get_task_annotation() (evergreen.api.EvergreenApi method)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.task.Task.get_task_annotation">(evergreen.task.Task method)</a>
+</li>
+      </ul></li>
       <li><a href="evergreen.html#evergreen.task.StatusScore.get_task_status_score">get_task_status_score() (evergreen.task.StatusScore class method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.build.Build.get_tasks">get_tasks() (evergreen.build.Build method)</a>
@@ -755,8 +783,6 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.instance_type">instance_type() (evergreen.distro.AwsDistroSettings property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.ipv6">ipv6() (evergreen.distro.AwsDistroSettings property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.is_active">is_active() (evergreen.task.Task method)</a>
@@ -767,6 +793,8 @@
         <li><a href="evergreen.html#evergreen.version.Version.is_completed">(evergreen.version.Version method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.version.Version.is_patch">is_patch() (evergreen.version.Version method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.is_success">is_success() (evergreen.task.Task method)</a>
@@ -780,6 +808,18 @@
       <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.is_vpc">is_vpc() (evergreen.distro.AwsDistroSettings property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.commitqueue.CommitQueueItem.issue">issue() (evergreen.commitqueue.CommitQueueItem property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.IssueLinkRequest.issue_key">issue_key() (evergreen.api_requests.IssueLinkRequest property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.task_annotations.IssueLink.issue_key">(evergreen.task_annotations.IssueLink property)</a>
+</li>
+      </ul></li>
+      <li><a href="evergreen.html#evergreen.task_annotations.IssueLink">IssueLink (class in evergreen.task_annotations)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.IssueLinkRequest">IssueLinkRequest (class in evergreen.api_requests)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.issues">issues() (evergreen.task_annotations.TaskAnnotation property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.util.iterate_by_time_window">iterate_by_time_window() (in module evergreen.util)</a>
 </li>
@@ -853,7 +893,13 @@
 </li>
       <li><a href="evergreen.html#evergreen.version.Requester.MERGE_TEST">MERGE_TEST (evergreen.version.Requester attribute)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.version.Version.message">message() (evergreen.version.Version property)</a>
+      <li><a href="evergreen.html#evergreen.task_annotations.Note.message">message() (evergreen.task_annotations.Note property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.version.Version.message">(evergreen.version.Version property)</a>
+</li>
+      </ul></li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.metadata">metadata() (evergreen.task_annotations.TaskAnnotation property)</a>
 </li>
       <li><a href="evergreen.errors.html#evergreen.errors.exceptions.MetricsException">MetricsException</a>
 </li>
@@ -868,6 +914,8 @@
         <li><a href="evergreen.html#module-evergreen.alias">evergreen.alias</a>
 </li>
         <li><a href="evergreen.html#module-evergreen.api">evergreen.api</a>
+</li>
+        <li><a href="evergreen.html#module-evergreen.api_requests">evergreen.api_requests</a>
 </li>
         <li><a href="evergreen.html#module-evergreen.base">evergreen.base</a>
 </li>
@@ -902,6 +950,8 @@
         <li><a href="evergreen.html#module-evergreen.stats">evergreen.stats</a>
 </li>
         <li><a href="evergreen.html#module-evergreen.task">evergreen.task</a>
+</li>
+        <li><a href="evergreen.html#module-evergreen.task_annotations">evergreen.task_annotations</a>
 </li>
         <li><a href="evergreen.html#module-evergreen.task_reliability">evergreen.task_reliability</a>
 </li>
@@ -946,6 +996,10 @@
         <li><a href="evergreen.html#evergreen.task.Artifact.name">(evergreen.task.Artifact property)</a>
 </li>
       </ul></li>
+      <li><a href="evergreen.html#evergreen.task_annotations.Note">Note (class in evergreen.task_annotations)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.note">note() (evergreen.task_annotations.TaskAnnotation property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats.num_fail">num_fail() (evergreen.stats.TaskStats property)</a>
 
       <ul>
@@ -1160,8 +1214,12 @@
 </li>
       <li><a href="evergreen.html#evergreen.version.Requester">Requester (class in evergreen.version)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.version.Version.requester">requester() (evergreen.version.Version property)</a>
+      <li><a href="evergreen.html#evergreen.task_annotations.Source.requester">requester() (evergreen.task_annotations.Source property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.version.Version.requester">(evergreen.version.Version property)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.restart_task">restart_task() (evergreen.api.EvergreenApi method)</a>
@@ -1218,6 +1276,14 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.MountPoint.size">size() (evergreen.distro.MountPoint property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.task_annotations.Source">Source (class in evergreen.task_annotations)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.task_annotations.IssueLink.source">source() (evergreen.task_annotations.IssueLink property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.task_annotations.Note.source">(evergreen.task_annotations.Note property)</a>
+</li>
+      </ul></li>
       <li><a href="evergreen.html#evergreen.distro.Distro.ssh_key">ssh_key() (evergreen.distro.Distro property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.ssh_options">ssh_options() (evergreen.distro.Distro property)</a>
@@ -1244,10 +1310,10 @@
         <li><a href="evergreen.html#evergreen.version.Version.start_time">(evergreen.version.Version property)</a>
 </li>
       </ul></li>
-      <li><a href="evergreen.html#evergreen.build.StatusCounts.started">started() (evergreen.build.StatusCounts property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.build.StatusCounts.started">started() (evergreen.build.StatusCounts property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.host.Host.started_by">started_by() (evergreen.host.Host property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.StaticDistroSettings">StaticDistroSettings (class in evergreen.distro)</a>
@@ -1298,6 +1364,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability.success_rate">success_rate() (evergreen.task_reliability.TaskReliability property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.suspected_issues">suspected_issues() (evergreen.task_annotations.TaskAnnotation property)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1312,6 +1380,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.task_by_id">task_by_id() (evergreen.api.EvergreenApi method)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.task_execution">task_execution() (evergreen.task_annotations.TaskAnnotation property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.task.Task.task_group">task_group() (evergreen.task.Task property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.task_group_max_hosts">task_group_max_hosts() (evergreen.task.Task property)</a>
@@ -1322,6 +1392,8 @@
         <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.task_id">(evergreen.performance_results.PerformanceData property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.task.Task.task_id">(evergreen.task.Task property)</a>
+</li>
+        <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.task_id">(evergreen.task_annotations.TaskAnnotation property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.tst.Tst.task_id">(evergreen.tst.Tst property)</a>
 </li>
@@ -1344,6 +1416,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.task_stats_by_project">task_stats_by_project() (evergreen.api.EvergreenApi method)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation">TaskAnnotation (class in evergreen.task_annotations)</a>
+</li>
       <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability">TaskReliability (class in evergreen.task_reliability)</a>
 </li>
       <li><a href="evergreen.html#evergreen.alias.VariantAlias.tasks">tasks() (evergreen.alias.VariantAlias property)</a>
@@ -1362,10 +1436,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_commit">tasks_by_project_and_commit() (evergreen.api.EvergreenApi method)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
+</li>
       <li><a href="evergreen.html#evergreen.distro.Distro.teardown">teardown() (evergreen.distro.Distro property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.test_batch">test_batch() (evergreen.performance_results.PerformanceData property)</a>
@@ -1399,6 +1473,8 @@
       <li><a href="evergreen.html#evergreen.stats.TestStats">TestStats (class in evergreen.stats)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestResult.thread_level">thread_level() (evergreen.performance_results.PerformanceTestResult property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.task_annotations.Source.time">time() (evergreen.task_annotations.Source property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.build.Build.time_taken_ms">time_taken_ms() (evergreen.build.Build property)</a>
 
@@ -1442,10 +1518,14 @@
 </li>
       <li><a href="evergreen.html#evergreen.version.Requester.UNKNOWN">UNKNOWN (evergreen.version.Requester attribute)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.manifest.ManifestModule.url">url() (evergreen.manifest.ManifestModule property)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.IssueLinkRequest.url">url() (evergreen.api_requests.IssueLinkRequest property)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.manifest.ManifestModule.url">(evergreen.manifest.ManifestModule property)</a>
+</li>
         <li><a href="evergreen.html#evergreen.task.Artifact.url">(evergreen.task.Artifact property)</a>
+</li>
+        <li><a href="evergreen.html#evergreen.task_annotations.IssueLink.url">(evergreen.task_annotations.IssueLink property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.tst.Logs.url">(evergreen.tst.Logs property)</a>
 </li>

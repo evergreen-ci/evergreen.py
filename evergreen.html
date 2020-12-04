@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.1.0 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.2.0 documentation</title>
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -241,6 +241,24 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.api.EvergreenApi.annotate_task">
+<code class="sig-name descname">annotate_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">execution</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">issues</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest" title="evergreen.api_requests.IssueLinkRequest">evergreen.api_requests.IssueLinkRequest</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suspected_issues</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest" title="evergreen.api_requests.IssueLinkRequest">evergreen.api_requests.IssueLinkRequest</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.annotate_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.annotate_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Annotate the specified task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – ID of task to annotate.</p></li>
+<li><p><strong>execution</strong> – Execution number of task to annotate (default to latest).</p></li>
+<li><p><strong>message</strong> – Message to add to the annotations.</p></li>
+<li><p><strong>issues</strong> – Issues to attach to the annotation.</p></li>
+<li><p><strong>suspected_issues</strong> – Suspected issues to add to the annotation.</p></li>
+<li><p><strong>metadata</strong> – Extra metadata to add to the issue.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.api.EvergreenApi.build_by_id">
 <code class="sig-name descname">build_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">build_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.build.Build" title="evergreen.build.Build">evergreen.build.Build</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.build_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.build_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a build by id.</p>
@@ -332,6 +350,24 @@ with value of a list of task names to configure for specified variant. See the d
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>EvergreenApi instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.get_task_annotation">
+<code class="sig-name descname">get_task_annotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">execution</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.task_annotations.TaskAnnotation" title="evergreen.task_annotations.TaskAnnotation">evergreen.task_annotations.TaskAnnotation</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.get_task_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.get_task_annotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the task annotations for the given task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – Id of task to query.</p></li>
+<li><p><strong>execution</strong> – Execution number of task to query (defaults to latest).</p></li>
+<li><p><strong>fetch_all_executions</strong> – Get annotations for all executions of this task.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The task annotations for the given task, if any exists.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -830,6 +866,35 @@ with value of a list of task names to configure for specified variant. See the d
 <em class="property">class </em><code class="sig-prename descclassname">evergreen.api.</code><code class="sig-name descname">RetryingEvergreenApi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_server</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://evergreen.mongodb.com'</span></em>, <em class="sig-param"><span class="n">auth</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth">evergreen.config.EvgAuth</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api.html#RetryingEvergreenApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.RetryingEvergreenApi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#evergreen.api.EvergreenApi" title="evergreen.api.EvergreenApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.api.EvergreenApi</span></code></a></p>
 <p>An Evergreen Api that retries failed calls.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-evergreen.api_requests">
+<span id="evergreen-api-requests-module"></span><h2>evergreen.api_requests module<a class="headerlink" href="#module-evergreen.api_requests" title="Permalink to this headline">¶</a></h2>
+<p>Objects for making requests to the API.</p>
+<dl class="py class">
+<dt id="evergreen.api_requests.IssueLinkRequest">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.api_requests.</code><code class="sig-name descname">IssueLinkRequest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">issue_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api_requests.html#IssueLinkRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Issue to add to a task annotation.</p>
+<dl class="py method">
+<dt id="evergreen.api_requests.IssueLinkRequest.as_dict">
+<code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api_requests.html#IssueLinkRequest.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a dictionary representation of the issue link.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api_requests.IssueLinkRequest.issue_key">
+<em class="property">property </em><code class="sig-name descname">issue_key</code><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.issue_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api_requests.IssueLinkRequest.url">
+<em class="property">property </em><code class="sig-name descname">url</code><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -2680,6 +2745,22 @@ argument.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.task.Task.annotate">
+<code class="sig-name descname">annotate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">issues</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest" title="evergreen.api_requests.IssueLinkRequest">evergreen.api_requests.IssueLinkRequest</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suspected_issues</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest" title="evergreen.api_requests.IssueLinkRequest">evergreen.api_requests.IssueLinkRequest</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/task.html#Task.annotate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.annotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Annotate the specified task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> – Message to add to the annotations.</p></li>
+<li><p><strong>issues</strong> – Issues to attach to the annotation.</p></li>
+<li><p><strong>suspected_issues</strong> – Suspected issues to add to the annotation.</p></li>
+<li><p><strong>metadata</strong> – Extra metadata to add to the issue.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.task.Task.artifacts">
 <em class="property">property </em><code class="sig-name descname">artifacts</code><a class="headerlink" href="#evergreen.task.Task.artifacts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the artifacts for the given task.</p>
@@ -2819,7 +2900,7 @@ argument.</p>
 <dt id="evergreen.task.Task.get_execution_tasks">
 <code class="sig-name descname">get_execution_tasks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filter_fn</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">Task</a><span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_execution_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_execution_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of execution tasks associated with this task.</p>
-<p>If this is a display task, return the tasks execution tasks associated with it. 
+<p>If this is a display task, return the tasks execution tasks associated with it.
 If this is not a display task, returns None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2846,6 +2927,12 @@ If this is not a display task, returns None.</p>
 <dd class="field-odd"><p>Status score.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.Task.get_task_annotation">
+<code class="sig-name descname">get_task_annotation</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.task_annotations.TaskAnnotation" title="evergreen.task_annotations.TaskAnnotation">evergreen.task_annotations.TaskAnnotation</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_task_annotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_task_annotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the task annotation for this task.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3090,6 +3177,122 @@ If this is not a display task, returns None.</p>
 <dd class="field-odd"><p>Time taken until task started running.</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-evergreen.task_annotations">
+<span id="evergreen-task-annotations-module"></span><h2>evergreen.task_annotations module<a class="headerlink" href="#module-evergreen.task_annotations" title="Permalink to this headline">¶</a></h2>
+<p>Models to working with task annotations.</p>
+<dl class="py class">
+<dt id="evergreen.task_annotations.IssueLink">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.task_annotations.</code><code class="sig-name descname">IssueLink</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/task_annotations.html#IssueLink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task_annotations.IssueLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a issue added as a task annotation.</p>
+<dl class="py method">
+<dt id="evergreen.task_annotations.IssueLink.issue_key">
+<em class="property">property </em><code class="sig-name descname">issue_key</code><a class="headerlink" href="#evergreen.task_annotations.IssueLink.issue_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of issue_key</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.IssueLink.source">
+<em class="property">property </em><code class="sig-name descname">source</code><a class="headerlink" href="#evergreen.task_annotations.IssueLink.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the source of this issue link.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.IssueLink.url">
+<em class="property">property </em><code class="sig-name descname">url</code><a class="headerlink" href="#evergreen.task_annotations.IssueLink.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of url</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.task_annotations.Note">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.task_annotations.</code><code class="sig-name descname">Note</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/task_annotations.html#Note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task_annotations.Note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a note associated with a task annotation.</p>
+<dl class="py method">
+<dt id="evergreen.task_annotations.Note.message">
+<em class="property">property </em><code class="sig-name descname">message</code><a class="headerlink" href="#evergreen.task_annotations.Note.message" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.Note.source">
+<em class="property">property </em><code class="sig-name descname">source</code><a class="headerlink" href="#evergreen.task_annotations.Note.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the source of this note.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.task_annotations.Source">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.task_annotations.</code><code class="sig-name descname">Source</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/task_annotations.html#Source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task_annotations.Source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Source of where an annotation was generated.</p>
+<dl class="py method">
+<dt id="evergreen.task_annotations.Source.author">
+<em class="property">property </em><code class="sig-name descname">author</code><a class="headerlink" href="#evergreen.task_annotations.Source.author" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of author</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.Source.requester">
+<em class="property">property </em><code class="sig-name descname">requester</code><a class="headerlink" href="#evergreen.task_annotations.Source.requester" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of requester</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.Source.time">
+<em class="property">property </em><code class="sig-name descname">time</code><a class="headerlink" href="#evergreen.task_annotations.Source.time" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of time</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.task_annotations.TaskAnnotation">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.task_annotations.</code><code class="sig-name descname">TaskAnnotation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/task_annotations.html#TaskAnnotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a task annotation.</p>
+<dl class="py method">
+<dt id="evergreen.task_annotations.TaskAnnotation.issues">
+<em class="property">property </em><code class="sig-name descname">issues</code><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation.issues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the issues this task has been annotated with.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.TaskAnnotation.metadata">
+<em class="property">property </em><code class="sig-name descname">metadata</code><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation.metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get metadata associated with this annotation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.TaskAnnotation.note">
+<em class="property">property </em><code class="sig-name descname">note</code><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation.note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a note about this annotation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.TaskAnnotation.suspected_issues">
+<em class="property">property </em><code class="sig-name descname">suspected_issues</code><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation.suspected_issues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the suspected issues this task has been annotated with.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.TaskAnnotation.task_execution">
+<em class="property">property </em><code class="sig-name descname">task_execution</code><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation.task_execution" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of task_execution</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task_annotations.TaskAnnotation.task_id">
+<em class="property">property </em><code class="sig-name descname">task_id</code><a class="headerlink" href="#evergreen.task_annotations.TaskAnnotation.task_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of task_id</p>
 </dd></dl>
 
 </dd></dl>
@@ -3739,6 +3942,7 @@ argument.</p>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-evergreen.alias">evergreen.alias module</a></li>
 <li><a class="reference internal" href="#module-evergreen.api">evergreen.api module</a></li>
+<li><a class="reference internal" href="#module-evergreen.api_requests">evergreen.api_requests module</a></li>
 <li><a class="reference internal" href="#module-evergreen.base">evergreen.base module</a></li>
 <li><a class="reference internal" href="#module-evergreen.build">evergreen.build module</a></li>
 <li><a class="reference internal" href="#module-evergreen.commitqueue">evergreen.commitqueue module</a></li>
@@ -3751,6 +3955,7 @@ argument.</p>
 <li><a class="reference internal" href="#module-evergreen.project">evergreen.project module</a></li>
 <li><a class="reference internal" href="#module-evergreen.stats">evergreen.stats module</a></li>
 <li><a class="reference internal" href="#module-evergreen.task">evergreen.task module</a></li>
+<li><a class="reference internal" href="#module-evergreen.task_annotations">evergreen.task_annotations module</a></li>
 <li><a class="reference internal" href="#module-evergreen.task_reliability">evergreen.task_reliability module</a></li>
 <li><a class="reference internal" href="#module-evergreen.tst">evergreen.tst module</a></li>
 <li><a class="reference internal" href="#module-evergreen.util">evergreen.util module</a></li>
