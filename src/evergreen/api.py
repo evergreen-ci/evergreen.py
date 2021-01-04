@@ -149,6 +149,8 @@ class EvergreenApi(object):
 
         :param url: Url of call to make.
         :param params: parameters to pass to api.
+        :param method: HTTP method to make call with.
+        :param data: Extra data to send to the endpoint.
         :return: response from api server.
         """
         start_time = time()
@@ -1072,12 +1074,16 @@ class RetryingEvergreenApi(EvergreenApi):
         wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),
         reraise=True,
     )
-    def _call_api(self, url: str, params: Dict = None) -> requests.Response:
+    def _call_api(
+        self, url: str, params: Dict = None, method: str = "GET", data: Optional[str] = None
+    ) -> requests.Response:
         """
         Call into the evergreen api.
 
         :param url: Url to call.
         :param params: Parameters to pass to api.
+        :param method: HTTP method to make call with.
+        :param data: Extra data to send to the endpoint.
         :return: Result from calling API.
         """
-        return super(RetryingEvergreenApi, self)._call_api(url, params)
+        return super(RetryingEvergreenApi, self)._call_api(url, params, method, data)
