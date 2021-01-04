@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
+    <title>evergreen package &#8212; evergreen.py 2.2.1 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="evergreen.errors package" href="evergreen.errors.html" />
@@ -440,7 +439,7 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.patch_by_id">
-<code class="sig-name descname">patch_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patch_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patch_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patch_by_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">patch_by_id</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patch_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patch_by_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patch_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a patch by patch id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -457,7 +456,7 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.patches_by_project">
-<code class="sig-name descname">patches_by_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patches_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patches_by_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">patches_by_project</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patches_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patches_by_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of patches for the specified project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -474,7 +473,7 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.patches_by_project_time_window">
-<code class="sig-name descname">patches_by_project_time_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">before</span><span class="p">:</span> <span class="n">datetime.datetime</span></em>, <em class="sig-param"><span class="n">after</span><span class="p">:</span> <span class="n">datetime.datetime</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">time_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'create_time'</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patches_by_project_time_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patches_by_project_time_window" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">patches_by_project_time_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">project_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">before</span><span class="p">:</span> <span class="n">datetime.datetime</span></em>, <em class="sig-param"><span class="n">after</span><span class="p">:</span> <span class="n">datetime.datetime</span></em>, <em class="sig-param"><span class="n">params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">time_attr</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'create_time'</span></em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.patch.Patch" title="evergreen.patch.Patch">evergreen.patch.Patch</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patches_by_project_time_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patches_by_project_time_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get an iterator over the patches for the given time window.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1015,7 +1014,7 @@ allow editors to show what attributes are available for a given evergreen object
 
 <dl class="py method">
 <dt id="evergreen.build.Build.get_metrics">
-<code class="sig-name descname">get_metrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics" title="evergreen.metrics.buildmetrics.BuildMetrics">evergreen.metrics.buildmetrics.BuildMetrics</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/build.html#Build.get_metrics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.build.Build.get_metrics" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_metrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics" title="evergreen.metrics.buildmetrics.BuildMetrics">evergreen.metrics.buildmetrics.BuildMetrics</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/build.html#Build.get_metrics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.build.Build.get_metrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get metrics for the build.</p>
 <p>Metrics are only available on build that have finished running..</p>
 <dl class="field-list simple">
@@ -2898,7 +2897,7 @@ argument.</p>
 
 <dl class="py method">
 <dt id="evergreen.task.Task.get_execution_tasks">
-<code class="sig-name descname">get_execution_tasks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filter_fn</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">Task</a><span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_execution_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_execution_tasks" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_execution_tasks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filter_fn</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">, </span>bool<span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task">evergreen.task.Task</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_execution_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_execution_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of execution tasks associated with this task.</p>
 <p>If this is a display task, return the tasks execution tasks associated with it.
 If this is not a display task, returns None.</p>
@@ -3996,7 +3995,7 @@ argument.</p>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.2.
   </div>
   
   </body>
