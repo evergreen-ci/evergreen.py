@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.2.1 - 2021-01-04
+- Update RetryingEvergreenApi to support multiple HTTP methods.
+
 ## 2.2.0 - 2020-12-04
 - Add support for the task annotations API.
 
