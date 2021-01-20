@@ -3,7 +3,7 @@
 A client library for the Evergreen API written in python. Currently supports the V2 version of
 the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage .
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/evergreen.py) ![PyPI](https://img.shields.io/pypi/v/evergreen.py.svg) [![Coverage Status](https://coveralls.io/repos/github/evergreen-ci/evergreen.py/badge.svg?branch=master)](https://coveralls.io/github/evergreen-ci/evergreen.py?branch=master)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/evergreen.py) [![PyPI](https://img.shields.io/pypi/v/evergreen.py.svg)](https://pypi.org/project/evergreen.py/) [![Coverage Status](https://coveralls.io/repos/github/evergreen-ci/evergreen.py/badge.svg?branch=master)](https://coveralls.io/github/evergreen-ci/evergreen.py?branch=master)
 
 ## Documentation
 

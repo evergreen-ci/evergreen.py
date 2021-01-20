@@ -1,5 +1,7 @@
 # Changelog
 
+## 2.2.2 - 2021-01-20
+- Re-enable coveralls support.
 ## 2.2.1 - 2021-01-04
 - Update RetryingEvergreenApi to support multiple HTTP methods.
 
