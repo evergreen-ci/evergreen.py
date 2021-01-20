@@ -99,7 +99,30 @@ tasks:
 
         . venv/bin/activate
 
-        RUN_SLOW_TESTS=1 poetry run pytest --junitxml=junit-test-output.xml
+        RUN_SLOW_TESTS=1 poetry run pytest --cov=src --junitxml=junit-test-output.xml
+  - command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        set -o errexit
+        set -o verbose
+
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+
+        . venv/bin/activate
+
+        # Depending on how a patch is created, evergreen may not provide the actual
+        # branch. It may apply the change as a diff on the master branch. So, if this
+        # is a patch build, we don't want to use the branch name. We will use the
+        # version_id instead.
+        if [ "${is_patch}" = "true" ]; then
+          export GIT_BRANCH=${version_id}
+        else
+          export GIT_BRANCH=${branch_name}
+        fi
+
+        COVERALLS_REPO_TOKEN=${coveralls_repo_token|} poetry run coveralls
 
 - name: deploy
   patchable: false
