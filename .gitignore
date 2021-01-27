@@ -14,3 +14,4 @@ venv/
 evergreen.py.egg-info
 build/
 dist/
+.python-version

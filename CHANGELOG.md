@@ -1,4 +1,6 @@
 # Changelog
+## 2.2.3 - 2021-01-27
+- Updated host to ubuntu1804-small
 
 ## 2.2.2 - 2021-01-20
 - Re-enable coveralls support.
