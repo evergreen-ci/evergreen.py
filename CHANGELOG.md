@@ -1,7 +1,11 @@
 # Changelog
 
+## 2.2.4 - 2021-02-01
+- Added `has_oom` and `get_oom_pids` methods to the `Task` class. 
+
 ## 2.2.2 - 2021-01-20
 - Re-enable coveralls support.
+
 ## 2.2.1 - 2021-01-04
 - Update RetryingEvergreenApi to support multiple HTTP methods.
 
