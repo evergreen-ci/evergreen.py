@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.task &#8212; evergreen.py 2.2.3 documentation</title>
+    <title>evergreen.task &#8212; evergreen.py 2.2.4 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -108,6 +108,17 @@
         <span class="k">return</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">FAILURE</span></div></div>
 
 
+<div class="viewcode-block" id="OomTrackerInfo"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.OomTrackerInfo">[docs]</a><span class="k">class</span> <span class="nc">OomTrackerInfo</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a task&#39;s OOM Tracker Info from evergreen.&quot;&quot;&quot;</span>
+
+    <span class="n">detected</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;detected&quot;</span><span class="p">)</span>
+    <span class="n">pids</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;pids&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task OOM Tracker Info.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OomTrackerInfo</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="StatusDetails"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.StatusDetails">[docs]</a><span class="k">class</span> <span class="nc">StatusDetails</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Representation of a task status details from evergreen.&quot;&quot;&quot;</span>
 
@@ -118,7 +129,16 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task status details.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">StatusDetails</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">StatusDetails</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">oom_tracker_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OomTrackerInfo</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the OOM tracker info from the status details for the given task.</span>
+
+<span class="sd">        :return: OOM Tracker Info.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">OomTrackerInfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;oom_tracker_info&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
@@ -311,6 +331,14 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">timed_out</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
+<div class="viewcode-block" id="Task.has_oom"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.has_oom">[docs]</a>    <span class="k">def</span> <span class="nf">has_oom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine if the given task has an OOM failure.</span>
+
+<span class="sd">        :return: True if task has an OOM failure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">oom_tracker_info</span><span class="o">.</span><span class="n">detected</span></div>
+
 <div class="viewcode-block" id="Task.is_active"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if the given task is active.</span>
@@ -370,6 +398,14 @@
 <div class="viewcode-block" id="Task.get_task_annotation"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_task_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">get_task_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskAnnotation</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Get the task annotation for this task.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">get_task_annotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Task.get_oom_pids"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_oom_pids">[docs]</a>    <span class="k">def</span> <span class="nf">get_oom_pids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Get the OOM PIDs for this task.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">oom_tracker_info</span><span class="o">.</span><span class="n">pids</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">oom_tracker_info</span><span class="o">.</span><span class="n">pids</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Task.annotate"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.annotate">[docs]</a>    <span class="k">def</span> <span class="nf">annotate</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

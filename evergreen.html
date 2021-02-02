@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 2.2.3 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 2.2.4 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -2653,6 +2653,25 @@ argument.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt id="evergreen.task.OomTrackerInfo">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.task.</code><code class="sig-name descname">OomTrackerInfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/task.html#OomTrackerInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.OomTrackerInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a task’s OOM Tracker Info from evergreen.</p>
+<dl class="py method">
+<dt id="evergreen.task.OomTrackerInfo.detected">
+<em class="property">property </em><code class="sig-name descname">detected</code><a class="headerlink" href="#evergreen.task.OomTrackerInfo.detected" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of detected</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.OomTrackerInfo.pids">
+<em class="property">property </em><code class="sig-name descname">pids</code><a class="headerlink" href="#evergreen.task.OomTrackerInfo.pids" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of pids</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="evergreen.task.StatusDetails">
 <em class="property">class </em><code class="sig-prename descclassname">evergreen.task.</code><code class="sig-name descname">StatusDetails</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/task.html#StatusDetails"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.StatusDetails" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
@@ -2661,6 +2680,17 @@ argument.</p>
 <dt id="evergreen.task.StatusDetails.desc">
 <em class="property">property </em><code class="sig-name descname">desc</code><a class="headerlink" href="#evergreen.task.StatusDetails.desc" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of desc</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.StatusDetails.oom_tracker_info">
+<em class="property">property </em><code class="sig-name descname">oom_tracker_info</code><a class="headerlink" href="#evergreen.task.StatusDetails.oom_tracker_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the OOM tracker info from the status details for the given task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>OOM Tracker Info.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -2918,6 +2948,12 @@ If this is not a display task, returns None.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.task.Task.get_oom_pids">
+<code class="sig-name descname">get_oom_pids</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>int<span class="p">]</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_oom_pids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_oom_pids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the OOM PIDs for this task.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.task.Task.get_status_score">
 <code class="sig-name descname">get_status_score</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.task.StatusScore" title="evergreen.task.StatusScore">evergreen.task.StatusScore</a><a class="reference internal" href="_modules/evergreen/task.html#Task.get_status_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_status_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the status score enum for the given task.</p>
@@ -2947,6 +2983,17 @@ If this is not a display task, returns None.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>List of test results for the task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.Task.has_oom">
+<code class="sig-name descname">has_oom</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/evergreen/task.html#Task.has_oom"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.has_oom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the given task has an OOM failure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if task has an OOM failure.</p>
 </dd>
 </dl>
 </dd></dl>
