@@ -1,4 +1,6 @@
 # Changelog
+## 2.2.3 - 2021-01-27
+- Updated host to ubuntu1804-small
 
 ## 2.2.4 - 2021-02-01
 - Added `has_oom` and `get_oom_pids` methods to the `Task` class. 
