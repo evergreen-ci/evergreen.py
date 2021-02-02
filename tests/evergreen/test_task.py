@@ -4,10 +4,58 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from evergreen.task import _EVG_DATE_FIELDS_IN_TASK, StatusScore, Task
+from evergreen.task import _EVG_DATE_FIELDS_IN_TASK, OomTrackerInfo, StatusScore, Task
 
 
 class TestTask(object):
+    def test_task_has_oom(self, sample_task):
+        task = Task(sample_task, None)
+        assert task.has_oom()
+
+    def test_task_does_not_have_oom(self, sample_task):
+        sample_task["status_details"]["oom_tracker_info"]["detected"] = False
+        task = Task(sample_task, None)
+        assert not task.has_oom()
+
+    def test_task_has_pids(self, sample_task):
+        task = Task(sample_task, None)
+        assert task.get_oom_pids() == [19803]
+
+    def test_task_does_not_have_pids(self, sample_task):
+        sample_task["status_details"]["oom_tracker_info"]["pids"] = None
+        task = Task(sample_task, None)
+        assert task.get_oom_pids() == []
+
+    def test_oom_tracker_info_object_has_oom(self, sample_task):
+        task = Task(sample_task, None)
+        assert task.status_details.oom_tracker_info == OomTrackerInfo(
+            task.json["status_details"]["oom_tracker_info"], None
+        )
+        assert (
+            task.status_details.oom_tracker_info.detected
+            == task.status_details.json["oom_tracker_info"]["detected"]
+        )
+        assert (
+            task.status_details.oom_tracker_info.pids
+            == task.status_details.json["oom_tracker_info"]["pids"]
+        )
+
+    def test_oom_tracker_info_object_does_not_have_oom(self, sample_task):
+        sample_task["status_details"]["oom_tracker_info"]["detected"] = False
+        sample_task["status_details"]["oom_tracker_info"]["pids"] = None
+        task = Task(sample_task, None)
+        assert task.status_details.oom_tracker_info == OomTrackerInfo(
+            task.json["status_details"]["oom_tracker_info"], None
+        )
+        assert (
+            task.status_details.oom_tracker_info.detected
+            == task.status_details.json["oom_tracker_info"]["detected"]
+        )
+        assert (
+            task.status_details.oom_tracker_info.pids
+            == task.status_details.json["oom_tracker_info"]["pids"]
+        )
+
     def test_time_fields_return_time_objects(self, sample_task):
         task = Task(sample_task, None)
         for date_field in _EVG_DATE_FIELDS_IN_TASK:

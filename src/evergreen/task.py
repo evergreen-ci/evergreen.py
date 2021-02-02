@@ -64,6 +64,17 @@ class StatusScore(IntEnum):
         return StatusScore.FAILURE
 
 
+class OomTrackerInfo(_BaseEvergreenObject):
+    """Representation of a task's OOM Tracker Info from evergreen."""
+
+    detected = evg_attrib("detected")
+    pids = evg_attrib("pids")
+
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
+        """Create an instance of an evergreen task OOM Tracker Info."""
+        super(OomTrackerInfo, self).__init__(json, api)
+
+
 class StatusDetails(_BaseEvergreenObject):
     """Representation of a task status details from evergreen."""
 
@@ -75,6 +86,15 @@ class StatusDetails(_BaseEvergreenObject):
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task status details."""
         super(StatusDetails, self).__init__(json, api)
+
+    @property
+    def oom_tracker_info(self) -> OomTrackerInfo:
+        """
+        Retrieve the OOM tracker info from the status details for the given task.
+
+        :return: OOM Tracker Info.
+        """
+        return OomTrackerInfo(self.json["oom_tracker_info"], self._api)
 
 
 class Task(_BaseEvergreenObject):
@@ -267,6 +287,14 @@ class Task(_BaseEvergreenObject):
             return self.status_details.timed_out
         return False
 
+    def has_oom(self) -> bool:
+        """
+        Determine if the given task has an OOM failure.
+
+        :return: True if task has an OOM failure.
+        """
+        return self.status_details.oom_tracker_info.detected
+
     def is_active(self) -> bool:
         """
         Determine if the given task is active.
@@ -326,6 +354,14 @@ class Task(_BaseEvergreenObject):
     def get_task_annotation(self) -> List[TaskAnnotation]:
         """Get the task annotation for this task."""
         return self._api.get_task_annotation(self.task_id, self.execution)
+
+    def get_oom_pids(self) -> List[int]:
+        """Get the OOM PIDs for this task."""
+        return (
+            self.status_details.oom_tracker_info.pids
+            if self.status_details.oom_tracker_info.pids
+            else []
+        )
 
     def annotate(
         self,

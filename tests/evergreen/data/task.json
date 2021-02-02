@@ -27,7 +27,13 @@
     "status": "success",
     "type": "setup",
     "desc": "'shell.exec' in \"run tests\"",
-    "timed_out": false
+    "timed_out": false,
+    "oom_tracker_info": {
+      "detected": true,
+      "pids": [
+        19803
+      ]
+    }
   },
   "logs": {
     "all_log": "https://evergreen.mongodb.com/task_log_raw/mongodb_mongo_master_linux_64_debug_aggregation_auth_patch_3a8290eef5c5934462b5cb84c9daded1b3073ad9_5c6469b6d6d80a06ba7b3aff_19_02_13_19_02_16/0?type=ALL",
