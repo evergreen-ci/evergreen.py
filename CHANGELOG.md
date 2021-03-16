@@ -1,4 +1,7 @@
 # Changelog
+## 2.2.5 - 2021-03-12
+- Removed `estimated_cost` attribute from `Task` class. 
+
 ## 2.2.4 - 2021-02-01
 - Added `has_oom` and `get_oom_pids` methods to the `Task` class. 
 

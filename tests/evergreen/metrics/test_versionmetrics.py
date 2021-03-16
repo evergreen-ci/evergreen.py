@@ -8,7 +8,7 @@ from unittest.mock import MagicMock
 import evergreen.metrics.versionmetrics as under_test
 
 
-def mock_build_metrics(success_count=0, cost=0):
+def mock_build_metrics(success_count=0):
     now = datetime.now()
     build_metrics = MagicMock()
     build_metrics.total_processing_time = 0
@@ -16,7 +16,6 @@ def mock_build_metrics(success_count=0, cost=0):
     build_metrics.failure_count = 0
     build_metrics.timed_out_count = 0
     build_metrics.system_failure_count = 0
-    build_metrics.estimated_build_costs = cost
     build_metrics.create_time = now
     build_metrics.start_time = now + timedelta(minutes=30)
     build_metrics.end_time = now + timedelta(minutes=60)
@@ -47,7 +46,6 @@ class TestVersionMetrics(object):
 
         assert version_metrics.total_processing_time == 0
         assert version_metrics.task_success_count == 0
-        assert version_metrics.estimated_cost == 0
 
         assert not version_metrics.create_time
         assert not version_metrics.start_time
@@ -58,7 +56,7 @@ class TestVersionMetrics(object):
     def test_multiple_builds(self, sample_task, sample_build):
         n_tasks = 5
         n_builds = 3
-        mock_build_metric = mock_build_metrics(n_tasks, sample_task["estimated_cost"] * n_tasks)
+        mock_build_metric = mock_build_metrics(n_tasks)
         build_list = create_mock_build_list(n_builds, mock_build_metric)
         mock_version = create_mock_version(build_list)
 
@@ -67,7 +65,6 @@ class TestVersionMetrics(object):
         total_tasks = n_tasks * n_builds
         assert version_metrics.task_success_count == total_tasks
         assert version_metrics.task_failure_count == 0
-        assert version_metrics.estimated_cost == total_tasks * sample_task["estimated_cost"]
         assert version_metrics.pct_tasks_success == 1
         assert version_metrics.pct_tasks_failure == 0
         assert version_metrics.pct_tasks_system_failure == 0

@@ -42,7 +42,6 @@ class BuildMetrics(object):
         self.display_timed_out_count = 0
         self.display_system_failure_count = 0
 
-        self.estimated_build_costs = 0
         self.total_processing_time = 0
 
         self._create_times: List[datetime] = []
@@ -315,7 +314,6 @@ class BuildMetrics(object):
         if task.start_time:
             self._start_times.append(task.start_time)
 
-        self.estimated_build_costs += task.estimated_cost
         self.total_processing_time += task.time_taken_ms / 1000
 
     def _count_display_tasks(self) -> None:
@@ -371,7 +369,6 @@ class BuildMetrics(object):
             "pct_display_tasks_timed_out": self.pct_display_tasks_timed_out,
             "system_failure_display_count": self.display_system_failure_count,
             "pct_display_tasks_system_failure": self.pct_display_tasks_system_failure,
-            "estimated_build_costs": self.estimated_build_costs,
         }
 
         if include_children:
@@ -401,7 +398,6 @@ class BuildMetrics(object):
         Failed Display Tasks: {failed_display_count} ({failed_display_pct:.2%})
         Timeout Display Tasks: {timeout_display_count} ({timeout_display_pct:.2%})
         System Failure Tasks: {system_failure_display_count} ({system_failure_display_pct:.2%})
-        Estimated Build Costs: {est_build_costs:.3f}
         """.format(
             build_id=self.build.id,
             total_processing_time=self.total_processing_time,
@@ -432,5 +428,4 @@ class BuildMetrics(object):
             timeout_display_pct=self.pct_display_tasks_timed_out,
             system_failure_display_count=self.display_system_failure_count,
             system_failure_display_pct=self.pct_display_tasks_system_failure,
-            est_build_costs=self.estimated_build_costs,
         ).rstrip()

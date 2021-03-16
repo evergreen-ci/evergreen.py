@@ -111,7 +111,6 @@ class Task(_BaseEvergreenObject):
     display_only = evg_attrib("display_only")
     distro_id = evg_attrib("distro_id")
     est_wait_to_start_ms = evg_attrib("est_wait_to_start_ms")
-    estimated_cost = evg_attrib("estimated_cost")
     execution = evg_attrib("execution")
     execution_tasks = evg_attrib("execution_tasks")
     expected_duration_ms = evg_attrib("expected_duration_ms")

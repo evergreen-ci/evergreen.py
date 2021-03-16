@@ -24,7 +24,6 @@ class TestBuildMetrics(object):
 
         assert build_metrics.total_tasks == 0
         assert build_metrics.total_processing_time == 0
-        assert build_metrics.estimated_build_costs == 0
         assert build_metrics.pct_tasks_undispatched == 0
         assert build_metrics.pct_tasks_failed == 0
         assert build_metrics.pct_tasks_timed_out == 0
