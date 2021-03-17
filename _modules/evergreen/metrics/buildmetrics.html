@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.metrics.buildmetrics &#8212; evergreen.py 2.2.4 documentation</title>
+    <title>evergreen.metrics.buildmetrics &#8212; evergreen.py 3.0.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -86,7 +86,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">display_timed_out_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display_system_failure_count</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimated_build_costs</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_processing_time</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_times</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -359,7 +358,6 @@
         <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_start_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimated_build_costs</span> <span class="o">+=</span> <span class="n">task</span><span class="o">.</span><span class="n">estimated_cost</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_processing_time</span> <span class="o">+=</span> <span class="n">task</span><span class="o">.</span><span class="n">time_taken_ms</span> <span class="o">/</span> <span class="mi">1000</span>
 
     <span class="k">def</span> <span class="nf">_count_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -415,7 +413,6 @@
             <span class="s2">&quot;pct_display_tasks_timed_out&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pct_display_tasks_timed_out</span><span class="p">,</span>
             <span class="s2">&quot;system_failure_display_count&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_system_failure_count</span><span class="p">,</span>
             <span class="s2">&quot;pct_display_tasks_system_failure&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pct_display_tasks_system_failure</span><span class="p">,</span>
-            <span class="s2">&quot;estimated_build_costs&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimated_build_costs</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="n">include_children</span><span class="p">:</span>
@@ -445,7 +442,6 @@
 <span class="s2">        Failed Display Tasks: </span><span class="si">{failed_display_count}</span><span class="s2"> (</span><span class="si">{failed_display_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        Timeout Display Tasks: </span><span class="si">{timeout_display_count}</span><span class="s2"> (</span><span class="si">{timeout_display_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        System Failure Tasks: </span><span class="si">{system_failure_display_count}</span><span class="s2"> (</span><span class="si">{system_failure_display_pct:.2%}</span><span class="s2">)</span>
-<span class="s2">        Estimated Build Costs: </span><span class="si">{est_build_costs:.3f}</span><span class="s2"></span>
 <span class="s2">        &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">build_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
             <span class="n">total_processing_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_processing_time</span><span class="p">,</span>
@@ -476,7 +472,6 @@
             <span class="n">timeout_display_pct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pct_display_tasks_timed_out</span><span class="p">,</span>
             <span class="n">system_failure_display_count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_system_failure_count</span><span class="p">,</span>
             <span class="n">system_failure_display_pct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pct_display_tasks_system_failure</span><span class="p">,</span>
-            <span class="n">est_build_costs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">estimated_build_costs</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span></div>
 </pre></div>
 

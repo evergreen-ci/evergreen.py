@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.metrics.versionmetrics &#8212; evergreen.py 2.2.4 documentation</title>
+    <title>evergreen.metrics.versionmetrics &#8212; evergreen.py 3.0.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -75,7 +75,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">task_failure_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_timeout_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_system_failure_count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimated_cost</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_create_times</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_start_times</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -235,7 +234,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">task_failure_count</span> <span class="o">+=</span> <span class="n">build_metrics</span><span class="o">.</span><span class="n">failure_count</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">task_timeout_count</span> <span class="o">+=</span> <span class="n">build_metrics</span><span class="o">.</span><span class="n">timed_out_count</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">task_system_failure_count</span> <span class="o">+=</span> <span class="n">build_metrics</span><span class="o">.</span><span class="n">system_failure_count</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">estimated_cost</span> <span class="o">+=</span> <span class="n">build_metrics</span><span class="o">.</span><span class="n">estimated_build_costs</span>
 
                 <span class="k">if</span> <span class="n">build_metrics</span><span class="o">.</span><span class="n">create_time</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_create_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">build_metrics</span><span class="o">.</span><span class="n">create_time</span><span class="p">)</span>
@@ -263,7 +261,6 @@
             <span class="s2">&quot;task_pct_failed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pct_tasks_failure</span><span class="p">,</span>
             <span class="s2">&quot;task_timeout_count&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_timeout_count</span><span class="p">,</span>
             <span class="s2">&quot;task_system_failure_count&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_system_failure_count</span><span class="p">,</span>
-            <span class="s2">&quot;estimated_cost&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimated_cost</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="n">include_children</span><span class="p">:</span>
@@ -292,7 +289,6 @@
 <span class="s2">        Failed Tasks: </span><span class="si">{task_failure_count}</span><span class="s2"> (</span><span class="si">{task_pct_failed:.2%}</span><span class="s2">)</span>
 <span class="s2">        Timed Out Tasks: </span><span class="si">{task_timeout_count}</span><span class="s2"> (</span><span class="si">{task_pct_timed_out:.2%}</span><span class="s2">)</span>
 <span class="s2">        System Failure Tasks: </span><span class="si">{task_system_failure_count}</span><span class="s2"> (</span><span class="si">{task_pct_system_failure:.2%}</span><span class="s2">)</span>
-<span class="s2">        Estimated Cost: </span><span class="si">{estimated_cost:.3f}</span><span class="s2"></span>
 <span class="s2">        &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">version</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">version_id</span><span class="p">,</span>
             <span class="n">total_processing_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">total_processing_time</span><span class="p">,</span>
@@ -310,7 +306,6 @@
             <span class="n">task_pct_timed_out</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pct_tasks_timeout</span><span class="p">,</span>
             <span class="n">task_system_failure_count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_system_failure_count</span><span class="p">,</span>
             <span class="n">task_pct_system_failure</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pct_tasks_system_failure</span><span class="p">,</span>
-            <span class="n">estimated_cost</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">estimated_cost</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span></div>
 </pre></div>
 
