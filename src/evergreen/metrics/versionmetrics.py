@@ -31,7 +31,6 @@ class VersionMetrics(object):
         self.task_failure_count = 0
         self.task_timeout_count = 0
         self.task_system_failure_count = 0
-        self.estimated_cost = 0
 
         self._create_times: List[datetime] = []
         self._start_times: List[datetime] = []
@@ -191,7 +190,6 @@ class VersionMetrics(object):
                 self.task_failure_count += build_metrics.failure_count
                 self.task_timeout_count += build_metrics.timed_out_count
                 self.task_system_failure_count += build_metrics.system_failure_count
-                self.estimated_cost += build_metrics.estimated_build_costs
 
                 if build_metrics.create_time:
                     self._create_times.append(build_metrics.create_time)
@@ -219,7 +217,6 @@ class VersionMetrics(object):
             "task_pct_failed": self.pct_tasks_failure,
             "task_timeout_count": self.task_timeout_count,
             "task_system_failure_count": self.task_system_failure_count,
-            "estimated_cost": self.estimated_cost,
         }
 
         if include_children:
@@ -248,7 +245,6 @@ class VersionMetrics(object):
         Failed Tasks: {task_failure_count} ({task_pct_failed:.2%})
         Timed Out Tasks: {task_timeout_count} ({task_pct_timed_out:.2%})
         System Failure Tasks: {task_system_failure_count} ({task_pct_system_failure:.2%})
-        Estimated Cost: {estimated_cost:.3f}
         """.format(
             version=self.version.version_id,
             total_processing_time=self.total_processing_time,
@@ -266,5 +262,4 @@ class VersionMetrics(object):
             task_pct_timed_out=self.pct_tasks_timeout,
             task_system_failure_count=self.task_system_failure_count,
             task_pct_system_failure=self.pct_tasks_system_failure,
-            estimated_cost=self.estimated_cost,
         ).rstrip()

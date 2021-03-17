@@ -44,7 +44,6 @@
   "time_taken_ms": 379965,
   "expected_duration_ms": 412346,
   "est_wait_to_start_ms": 0,
-  "estimated_cost": 0.025272363425925926,
   "generate_task": false,
   "generated_by": "",
   "artifacts": [
@@ -105,7 +104,6 @@
       "time_taken_ms": 96435,
       "expected_duration_ms": 83532,
       "est_wait_to_start_ms": 0,
-      "estimated_cost": 0.006414118055555555,
       "generate_task": true,
       "generated_by": "",
       "artifacts": null,
