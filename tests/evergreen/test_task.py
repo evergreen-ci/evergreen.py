@@ -8,15 +8,8 @@ from evergreen.task import _EVG_DATE_FIELDS_IN_TASK, OomTrackerInfo, StatusScore
 
 
 class TestTask(object):
-    def test_evg_task_has_estimated_cost(self, sample_task):
-        assert sample_task["estimated_cost"]
-        task = Task(sample_task, None)
-        assert task.estimated_cost
-
     def test_evg_task_has_no_estimated_cost(self, sample_task):
-        del sample_task["estimated_cost"]
-        with pytest.raises(KeyError):
-            assert sample_task["estimated_cost"]
+        assert not sample_task.get("estimated_cost")
         task = Task(sample_task, None)
         with pytest.raises(AttributeError):
             assert task.estimated_cost
