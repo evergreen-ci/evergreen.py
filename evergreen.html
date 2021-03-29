@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.0.0 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.0.1 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -817,13 +817,15 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.versions_by_project">
-<code class="sig-name descname">versions_by_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em>, <em class="sig-param">requester: evergreen.version.Requester = &lt;Requester.GITTER_REQUEST: 2&gt;</em><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">versions_by_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em>, <em class="sig-param">requester: evergreen.version.Requester = &lt;Requester.GITTER_REQUEST: 2&gt;</em>, <em class="sig-param">start: Optional[int] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the versions created in the specified project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>project_id</strong> – Id of project to query.</p></li>
 <li><p><strong>requester</strong> – Type of versions to query.</p></li>
+<li><p><strong>start</strong> – Optional. The revision order number to start after, for pagination.</p></li>
+<li><p><strong>limit</strong> – Optional. The number of versions to be returned per page of pagination.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
