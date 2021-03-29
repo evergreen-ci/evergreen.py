@@ -207,6 +207,17 @@ class TestProjectApi(object):
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
+    def test_version_by_project_with_limit_and_start(self, mocked_api):
+        start = 15
+        limit = 20
+        returned_versions = mocked_api.versions_by_project("project_id", start=start, limit=limit)
+        expected_url = mocked_api._create_url("/projects/project_id/versions")
+        expected_params = {"requester": "gitter_request", "start": start, "limit": limit}
+        next(returned_versions)
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
+        )
+
     def test_alias_for_version(self, mocked_api):
         mocked_api.alias_for_version("version_id", "my_alias")
         expected_url = mocked_api._create_url("/projects/test_alias")

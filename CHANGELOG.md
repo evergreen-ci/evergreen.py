@@ -1,4 +1,7 @@
 # Changelog
+## 3.0.1 - 2021-03-26
+- Added `start` and `limit` to `versions_by_project`.
+
 ## 3.0.0 - 2021-03-16
 - Removed `estimated_cost` attribute from `Task` class. 
 
