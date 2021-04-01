@@ -81,6 +81,16 @@ class Build(_BaseEvergreenObject):
         """Get the status counts of the build."""
         return StatusCounts(self.json["status_counts"], self._api)
 
+    def get_human_readable_project_id(self) -> str:
+        """
+        Retrieve the human-readable project id from Evergreen.
+
+        This requires the caller to be Admin on the project.
+
+        :return: Human-readable project id.
+        """
+        return self._api.get_human_readable_project_id(self.project_id)
+
     def get_tasks(self, fetch_all_executions: bool = False) -> List["Task"]:
         """
         Get all tasks for this build.
