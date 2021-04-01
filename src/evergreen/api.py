@@ -392,17 +392,27 @@ class EvergreenApi(object):
         ]
 
     def versions_by_project(
-        self, project_id: str, requester: Requester = Requester.GITTER_REQUEST
+        self,
+        project_id: str,
+        requester: Requester = Requester.GITTER_REQUEST,
+        start: Optional[int] = None,
+        limit: Optional[int] = None,
     ) -> Iterator[Version]:
         """
         Get the versions created in the specified project.
 
         :param project_id: Id of project to query.
         :param requester: Type of versions to query.
+        :param start: Optional. The revision order number to start after, for pagination.
+        :param limit: Optional. The number of versions to be returned per page of pagination.
         :return: Generator of versions.
         """
         url = self._create_url(f"/projects/{project_id}/versions")
-        params = {"requester": requester.name.lower()}
+        params: Dict[str, Any] = {"requester": requester.name.lower()}
+        if start:
+            params["start"] = start
+        if limit:
+            params["limit"] = limit
         version_list = self._lazy_paginate(url, params)
         return (Version(version, self) for version in version_list)  # type: ignore[arg-type]
 
