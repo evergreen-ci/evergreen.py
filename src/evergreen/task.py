@@ -161,7 +161,7 @@ class Task(_BaseEvergreenObject):
             self._logs_map = {key: value for key, value in self.json["logs"].items()}
         return self._logs_map
 
-    def get_human_readable_project_id(self) -> str:
+    def get_project_identifier(self) -> str:
         """
         Retrieve the human-readable project id from Evergreen.
 
@@ -169,7 +169,7 @@ class Task(_BaseEvergreenObject):
 
         :return: Human-readable project id.
         """
-        return self._api.get_human_readable_project_id(self.project_id)
+        return self._api.project_by_id(self.project_id).identifier
 
     def retrieve_log(self, log_name: str, raw: bool = False) -> str:
         """

@@ -348,16 +348,6 @@ class EvergreenApi(object):
         url = self._create_url(f"/projects/{project_id}")
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
-    def get_human_readable_project_id(self, project_id: str) -> str:
-        """
-        Retrieve the human-readable project id from Evergreen.
-
-        This requires the caller to be Admin on the project.
-
-        :return: Human-readable project id.
-        """
-        return self.project_by_id(project_id).identifier
-
     def recent_versions_by_project(
         self, project_id: str, params: Optional[Dict] = None
     ) -> RecentVersions:
