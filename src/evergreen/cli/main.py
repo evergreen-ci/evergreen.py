@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import json
 from enum import Enum
 from itertools import islice
+from typing import Optional
 
 import click
 import yaml
@@ -90,12 +91,13 @@ def list_projects(ctx):
 @cli.command()
 @click.pass_context
 @click.option("--project", required=True)
+@click.option("--start", type=int)
 @click.option("--limit", type=int)
-def list_versions(ctx, project, limit):
+def list_versions(ctx, project: str, start: Optional[int], limit: Optional[int]) -> None:
     """Get the versions for the given project."""
     api = ctx.obj["api"]
     fmt = ctx.obj["format"]
-    version_list = api.versions_by_project(project)
+    version_list = api.versions_by_project(project, start=start, limit=limit)
     versions_to_display = [version for version in islice(version_list, None, limit)]
 
     click.echo(fmt_output(fmt, versions_to_display))
