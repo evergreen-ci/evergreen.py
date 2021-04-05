@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 EVG_SUCCESS_STATUS = "success"
 EVG_SYSTEM_FAILURE_STATUS = "system"
 EVG_UNDISPATCHED_STATUS = "undispatched"
+EVG_TEST_STATUS_TYPE = "test"
 
 _EVG_DATE_FIELDS_IN_TASK = frozenset(
     ["create_time", "dispatch_time", "finish_time", "ingest_time", "scheduled_time", "start_time"]
@@ -257,6 +258,16 @@ class Task(_BaseEvergreenObject):
         :return: True if task was successful.
         """
         return self.status == EVG_SUCCESS_STATUS
+
+    def is_test_failure(self) -> bool:
+        """
+        Whether task was a test failure.
+
+        :return: True is task was a test failure.
+        """
+        if not self.is_success() and self.status_details and self.status_details.type:
+            return self.status_details.type == EVG_TEST_STATUS_TYPE
+        return False
 
     def is_undispatched(self) -> bool:
         """

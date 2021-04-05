@@ -4,7 +4,13 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from evergreen.task import _EVG_DATE_FIELDS_IN_TASK, OomTrackerInfo, StatusScore, Task
+from evergreen.task import (
+    _EVG_DATE_FIELDS_IN_TASK,
+    EVG_TEST_STATUS_TYPE,
+    OomTrackerInfo,
+    StatusScore,
+    Task,
+)
 
 
 class TestTask(object):
@@ -78,6 +84,7 @@ class TestTask(object):
         assert task.is_success()
         assert not task.is_system_failure()
         assert not task.is_timeout()
+        assert not task.is_test_failure()
 
     def test_bad_status_attributes(self, sample_task):
         sample_task["status_details"]["type"] = "system"
@@ -87,6 +94,15 @@ class TestTask(object):
         assert not task.is_success()
         assert task.is_system_failure()
         assert task.is_timeout()
+
+    def test_task_is_test_failure(self, sample_task):
+        sample_task["status_details"]["type"] = EVG_TEST_STATUS_TYPE
+        sample_task["status"] = "failed"
+        task = Task(sample_task, None)
+        assert not task.is_success()
+        assert not task.is_system_failure()
+        assert not task.is_timeout()
+        assert task.is_test_failure()
 
     def test_wait_time(self, sample_task):
         task = Task(sample_task, None)

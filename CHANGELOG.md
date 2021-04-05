@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.3 - 2021-04-05
+- Add `is_test_failure` method to `Task` object.
+
 ## 3.0.2 - 2021-04-05
 - Fix handling of `Requester` for test stats endpoint.
 
