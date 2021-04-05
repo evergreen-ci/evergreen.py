@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.0.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -442,7 +442,7 @@
 <span class="sd">        :return: Generator of versions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/versions&quot;</span><span class="p">)</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requester&quot;</span><span class="p">:</span> <span class="n">requester</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()}</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requester&quot;</span><span class="p">:</span> <span class="n">requester</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
         <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
@@ -595,7 +595,7 @@
         <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
         <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span><span class="o">.</span><span class="n">stats_value</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">tests</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tests&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tests</span>
         <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>

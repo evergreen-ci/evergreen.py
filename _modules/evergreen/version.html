@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.version &#8212; evergreen.py 3.0.1 documentation</title>
+    <title>evergreen.version &#8212; evergreen.py 3.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -46,7 +46,7 @@
 <span class="sd">&quot;&quot;&quot;Version representation of evergreen.&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
@@ -60,16 +60,16 @@
     <span class="kn">from</span> <span class="nn">evergreen.patch</span> <span class="kn">import</span> <span class="n">Patch</span>  <span class="c1"># noqa: F401</span>
 
 
-<div class="viewcode-block" id="Requester"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester">[docs]</a><span class="k">class</span> <span class="nc">Requester</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Requester"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester">[docs]</a><span class="k">class</span> <span class="nc">Requester</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Requester that created version.&quot;&quot;&quot;</span>
 
-    <span class="n">PATCH_REQUEST</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">GITTER_REQUEST</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">GITHUB_PULL_REQUEST</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">MERGE_TEST</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">AD_HOC</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">TRIGGER_REQUEST</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <span class="n">PATCH_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;patch_request&quot;</span>
+    <span class="n">GITTER_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;gitter_request&quot;</span>
+    <span class="n">GITHUB_PULL_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;github_pull_request&quot;</span>
+    <span class="n">MERGE_TEST</span> <span class="o">=</span> <span class="s2">&quot;merge_test&quot;</span>
+    <span class="n">AD_HOC</span> <span class="o">=</span> <span class="s2">&quot;ad_hoc&quot;</span>
+    <span class="n">TRIGGER_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;trigger_request&quot;</span>
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">&quot;UNKNOWN&quot;</span>
 
 <div class="viewcode-block" id="Requester.evg_value"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester.evg_value">[docs]</a>    <span class="k">def</span> <span class="nf">evg_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get the evergreen value for a requester.&quot;&quot;&quot;</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.0.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -817,7 +817,7 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.versions_by_project">
-<code class="sig-name descname">versions_by_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em>, <em class="sig-param">requester: evergreen.version.Requester = &lt;Requester.GITTER_REQUEST: 2&gt;</em>, <em class="sig-param">start: Optional[int] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">versions_by_project</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em>, <em class="sig-param">requester: evergreen.version.Requester = &lt;Requester.GITTER_REQUEST: 'gitter_request'&gt;</em>, <em class="sig-param">start: Optional[int] = None</em>, <em class="sig-param">limit: Optional[int] = None</em><span class="sig-paren">)</span> &#x2192; Iterator<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the versions created in the specified project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -836,7 +836,7 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.versions_by_project_time_window">
-<code class="sig-name descname">versions_by_project_time_window</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em>, <em class="sig-param">before: datetime.datetime</em>, <em class="sig-param">after: datetime.datetime</em>, <em class="sig-param">requester: evergreen.version.Requester = &lt;Requester.GITTER_REQUEST: 2&gt;</em>, <em class="sig-param">time_attr: str = 'create_time'</em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project_time_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project_time_window" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">versions_by_project_time_window</code><span class="sig-paren">(</span><em class="sig-param">project_id: str</em>, <em class="sig-param">before: datetime.datetime</em>, <em class="sig-param">after: datetime.datetime</em>, <em class="sig-param">requester: evergreen.version.Requester = &lt;Requester.GITTER_REQUEST: 'gitter_request'&gt;</em>, <em class="sig-param">time_attr: str = 'create_time'</em><span class="sig-paren">)</span> &#x2192; Iterable<span class="p">[</span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version">evergreen.version.Version</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project_time_window"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project_time_window" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get an iterator over the patches for the given time window.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -3701,41 +3701,41 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 <dl class="py class">
 <dt id="evergreen.version.Requester">
 <em class="property">class </em><code class="sig-prename descclassname">evergreen.version.</code><code class="sig-name descname">Requester</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/version.html#Requester"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Requester" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
 <p>Requester that created version.</p>
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.AD_HOC">
-<code class="sig-name descname">AD_HOC</code><em class="property"> = 5</em><a class="headerlink" href="#evergreen.version.Requester.AD_HOC" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">AD_HOC</code><em class="property"> = 'ad_hoc'</em><a class="headerlink" href="#evergreen.version.Requester.AD_HOC" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.GITHUB_PULL_REQUEST">
-<code class="sig-name descname">GITHUB_PULL_REQUEST</code><em class="property"> = 3</em><a class="headerlink" href="#evergreen.version.Requester.GITHUB_PULL_REQUEST" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">GITHUB_PULL_REQUEST</code><em class="property"> = 'github_pull_request'</em><a class="headerlink" href="#evergreen.version.Requester.GITHUB_PULL_REQUEST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.GITTER_REQUEST">
-<code class="sig-name descname">GITTER_REQUEST</code><em class="property"> = 2</em><a class="headerlink" href="#evergreen.version.Requester.GITTER_REQUEST" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">GITTER_REQUEST</code><em class="property"> = 'gitter_request'</em><a class="headerlink" href="#evergreen.version.Requester.GITTER_REQUEST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.MERGE_TEST">
-<code class="sig-name descname">MERGE_TEST</code><em class="property"> = 4</em><a class="headerlink" href="#evergreen.version.Requester.MERGE_TEST" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">MERGE_TEST</code><em class="property"> = 'merge_test'</em><a class="headerlink" href="#evergreen.version.Requester.MERGE_TEST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.PATCH_REQUEST">
-<code class="sig-name descname">PATCH_REQUEST</code><em class="property"> = 1</em><a class="headerlink" href="#evergreen.version.Requester.PATCH_REQUEST" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">PATCH_REQUEST</code><em class="property"> = 'patch_request'</em><a class="headerlink" href="#evergreen.version.Requester.PATCH_REQUEST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.TRIGGER_REQUEST">
-<code class="sig-name descname">TRIGGER_REQUEST</code><em class="property"> = 6</em><a class="headerlink" href="#evergreen.version.Requester.TRIGGER_REQUEST" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">TRIGGER_REQUEST</code><em class="property"> = 'trigger_request'</em><a class="headerlink" href="#evergreen.version.Requester.TRIGGER_REQUEST" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="evergreen.version.Requester.UNKNOWN">
-<code class="sig-name descname">UNKNOWN</code><em class="property"> = 7</em><a class="headerlink" href="#evergreen.version.Requester.UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">UNKNOWN</code><em class="property"> = 'UNKNOWN'</em><a class="headerlink" href="#evergreen.version.Requester.UNKNOWN" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
