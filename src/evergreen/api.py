@@ -398,7 +398,7 @@ class EvergreenApi(object):
         :return: Generator of versions.
         """
         url = self._create_url(f"/projects/{project_id}/versions")
-        params: Dict[str, Any] = {"requester": requester.name.lower()}
+        params: Dict[str, Any] = {"requester": requester}
         if start:
             params["start"] = start
         if limit:
@@ -551,7 +551,7 @@ class EvergreenApi(object):
         if group_num_days:
             params["group_num_days"] = group_num_days
         if requesters:
-            params["requesters"] = requesters
+            params["requesters"] = requesters.stats_value()
         if tests:
             params["tests"] = tests
         if tasks:

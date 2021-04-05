@@ -1,4 +1,8 @@
 # Changelog
+
+## 3.0.2 - 2021-04-05
+- Fix handling of `Requester` for test stats endpoint.
+
 ## 3.0.1 - 2021-03-26
 - Added `start` and `limit` to `versions_by_project`.
 
