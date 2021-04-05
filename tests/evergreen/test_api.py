@@ -14,6 +14,7 @@ import evergreen.api as under_test
 from evergreen.api_requests import IssueLinkRequest
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.util import EVG_DATETIME_FORMAT, parse_evergreen_datetime
+from evergreen.version import Requester
 
 
 def ns(relative):
@@ -335,6 +336,27 @@ class TestProjectApi(object):
 
         mocked_api.test_stats_by_project(
             "project_id", from_iso_format(after_date), from_iso_format(before_date),
+        )
+
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
+        )
+
+    def test_test_stats_by_project_with_requester(self, mocked_api):
+        after_date = "2019-01-01"
+        before_date = "2019-02-01"
+        expected_url = mocked_api._create_url("/projects/project_id/test_stats")
+        expected_params = {
+            "after_date": after_date,
+            "before_date": before_date,
+            "requesters": "patch",
+        }
+
+        mocked_api.test_stats_by_project(
+            "project_id",
+            from_iso_format(after_date),
+            from_iso_format(before_date),
+            requesters=Requester.PATCH_REQUEST,
         )
 
         mocked_api.session.request.assert_called_with(

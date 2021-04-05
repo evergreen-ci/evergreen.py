@@ -2,7 +2,7 @@
 """Version representation of evergreen."""
 from __future__ import absolute_import
 
-from enum import Enum, auto
+from enum import Enum
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
@@ -16,16 +16,16 @@ if TYPE_CHECKING:
     from evergreen.patch import Patch  # noqa: F401
 
 
-class Requester(Enum):
+class Requester(str, Enum):
     """Requester that created version."""
 
-    PATCH_REQUEST = auto()
-    GITTER_REQUEST = auto()
-    GITHUB_PULL_REQUEST = auto()
-    MERGE_TEST = auto()
-    AD_HOC = auto()
-    TRIGGER_REQUEST = auto()
-    UNKNOWN = auto()
+    PATCH_REQUEST = "patch_request"
+    GITTER_REQUEST = "gitter_request"
+    GITHUB_PULL_REQUEST = "github_pull_request"
+    MERGE_TEST = "merge_test"
+    AD_HOC = "ad_hoc"
+    TRIGGER_REQUEST = "trigger_request"
+    UNKNOWN = "UNKNOWN"
 
     def evg_value(self) -> str:
         """Get the evergreen value for a requester."""
