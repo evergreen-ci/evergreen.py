@@ -1,4 +1,8 @@
 # Changelog
+
+## 3.0.5 - 2021-04-07
+- Allow tenacity > 5
+
 ## 3.0.4 - 2021-04-06
 - Added helper functions to the `Task` and `Build` objects to fetch the project `identifier` field.
 
