@@ -166,6 +166,12 @@ class TestTask(object):
         log = task.retrieve_log("task_log")
         assert log == mock_api.retrieve_task_log.return_value
 
+    def test_get_project_identifier(self, sample_task):
+        mock_api = MagicMock()
+        task = Task(sample_task, mock_api)
+        identifier = task.get_project_identifier()
+        assert identifier == mock_api.project_by_id(task.project_id).identifier
+
     def test_retrieve_log_with_raw(self, sample_task):
         mock_api = MagicMock()
         task = Task(sample_task, mock_api)

@@ -162,6 +162,16 @@ class Task(_BaseEvergreenObject):
             self._logs_map = {key: value for key, value in self.json["logs"].items()}
         return self._logs_map
 
+    def get_project_identifier(self) -> str:
+        """
+        Retrieve the human-readable project id from Evergreen.
+
+        This requires the caller to be Admin on the project.
+
+        :return: Human-readable project id.
+        """
+        return self._api.project_by_id(self.project_id).identifier
+
     def retrieve_log(self, log_name: str, raw: bool = False) -> str:
         """
         Retrieve the contents of the specified log.

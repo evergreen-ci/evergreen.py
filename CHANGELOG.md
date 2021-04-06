@@ -1,4 +1,6 @@
 # Changelog
+## 3.0.4 - 2021-04-06
+- Added helper functions to the `Task` and `Build` objects to fetch the project `identifier` field.
 
 ## 3.0.3 - 2021-04-05
 - Add `is_test_failure` method to `Task` object.
