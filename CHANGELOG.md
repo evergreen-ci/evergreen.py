@@ -2,6 +2,9 @@
 ## 3.0.3 - 2021-04-05
 - Added helper functions to the `Task` and `Build` objects to fetch the project `identifier` field.
 
+## 3.0.3 - 2021-04-05
+- Add `is_test_failure` method to `Task` object.
+
 ## 3.0.2 - 2021-04-05
 - Fix handling of `Requester` for test stats endpoint.
 
