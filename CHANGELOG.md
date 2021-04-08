@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.6 - 2021-04-07
+- Added ability to send messages using Slack with `send_slack_message` method.
+
 ## 3.0.5 - 2021-04-07
 - Allow tenacity > 5
 

@@ -11,7 +11,7 @@ import requests
 from requests.exceptions import HTTPError
 
 import evergreen.api as under_test
-from evergreen.api_requests import IssueLinkRequest
+from evergreen.api_requests import IssueLinkRequest, SlackAttachment
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.util import EVG_DATETIME_FORMAT, parse_evergreen_datetime
 from evergreen.version import Requester
@@ -372,6 +372,38 @@ class TestProjectApi(object):
             timeout=None,
             data=None,
             method="GET",
+        )
+
+    def test_send_slack_message(self, mocked_api):
+        target = "@fake-user"
+        msg = "I'm a fake message"
+        mocked_api.send_slack_message(target, msg)
+        expected_url = mocked_api._create_url("/notifications/slack")
+        expected_data = json.dumps({"target": target, "msg": msg})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, timeout=None, data=expected_data, method="POST", params=None
+        )
+
+    def test_send_slack_message_with_attachments(self, mocked_api):
+        target = "@fake-user"
+        msg = "I'm a fake message"
+        attachments = [
+            SlackAttachment(text="Test Text", title="Test Title"),
+            SlackAttachment(text="Fake text", title="Fake title"),
+        ]
+        mocked_api.send_slack_message(target, msg, attachments)
+        expected_url = mocked_api._create_url("/notifications/slack")
+        expected_data = json.dumps(
+            {
+                "target": target,
+                "msg": msg,
+                "attachments": [
+                    att.dict(exclude_none=True, exclude_unset=True) for att in attachments
+                ],
+            }
+        )
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, timeout=None, data=expected_data, method="POST", params=None
         )
 
     def test_tasks_by_project(self, mocked_api):

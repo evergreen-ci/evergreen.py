@@ -16,7 +16,7 @@ from structlog.stdlib import LoggerFactory
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from evergreen.alias import VariantAlias
-from evergreen.api_requests import IssueLinkRequest
+from evergreen.api_requests import IssueLinkRequest, SlackAttachment
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import (
@@ -361,6 +361,29 @@ class EvergreenApi(object):
         url = self._create_url(f"/projects/{project_id}/recent_versions")
         resp = self._call_api(url, params)
         return RecentVersions(resp.json(), self)  # type: ignore[arg-type]
+
+    def send_slack_message(
+        self, target: str, msg: str, attachments: Optional[List[SlackAttachment]] = None
+    ) -> None:
+        """
+        Send a Slack message to a user or channel in Slack.
+
+        :param target: The slack name of the user or channel to send the message to.
+        :param msg: The slack message to send.
+        :param attachments: What additional data to send to the specified target in Slack.
+        """
+        url = self._create_url("/notifications/slack")
+        data: Dict[str, Any] = {
+            "target": target,
+            "msg": msg,
+        }
+        if attachments:
+            data["attachments"] = [
+                attachment.dict(exclude_none=True, exclude_unset=True) for attachment in attachments
+            ]
+        self._call_api(
+            url, data=json.dumps(data), method="POST",
+        )
 
     def alias_for_version(
         self, version_id: str, alias: str, include_deps: bool = False
@@ -1077,11 +1100,11 @@ class RetryingEvergreenApi(EvergreenApi):
         super(RetryingEvergreenApi, self).__init__(api_server, auth, timeout)
 
     @retry(
-        retry=retry_if_exception_type(
+        retry=retry_if_exception_type(  # type: ignore[no-untyped-call]
             (requests.exceptions.HTTPError, requests.exceptions.ConnectionError,)
         ),
-        stop=stop_after_attempt(MAX_RETRIES),
-        wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),
+        stop=stop_after_attempt(MAX_RETRIES),  # type: ignore[no-untyped-call]
+        wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),  # type: ignore[no-untyped-call]
         reraise=True,
     )
     def _call_api(

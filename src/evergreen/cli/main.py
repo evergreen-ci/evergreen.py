@@ -105,6 +105,16 @@ def list_versions(ctx, project: str, start: Optional[int], limit: Optional[int])
 
 @cli.command()
 @click.pass_context
+@click.option("--target", required=True)
+@click.option("--msg", required=True)
+def send_slack_message(ctx, target: str, msg: str) -> None:
+    """Send a Slack message to the specified target."""
+    api = ctx.obj["api"]
+    api.send_slack_message(target, msg)
+
+
+@cli.command()
+@click.pass_context
 @click.option("-a", "--after-date", required=True)
 @click.option("-b", "--before-date", required=True)
 @click.option("-p", "--project", required=True)
