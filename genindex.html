@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 3.0.5 documentation</title>
+    <title>Index &#8212; evergreen.py 3.0.6 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -114,10 +114,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.annotate">annotate() (evergreen.task.Task method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.annotate_task">annotate_task() (evergreen.api.EvergreenApi method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.config.EvgAuth.api_key">api_key() (evergreen.config.EvgAuth property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.arch">arch() (evergreen.distro.Distro property)</a>
@@ -145,6 +145,10 @@
 </li>
       </ul></li>
       <li><a href="evergreen.html#evergreen.version.Version.author_email">author_email() (evergreen.version.Version property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.author_icon">author_icon (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.author_name">author_name (evergreen.api_requests.SlackAttachment attribute)</a>
 </li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats.avg_duration_pass">avg_duration_pass() (evergreen.stats.TaskStats property)</a>
 
@@ -250,6 +254,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.clone_method">clone_method() (evergreen.distro.Distro property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.color">color (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.project.Project.commit_queue">commit_queue() (evergreen.project.Project property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.commit_queue_for_project">commit_queue_for_project() (evergreen.api.EvergreenApi method)</a>
@@ -258,10 +264,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.commitqueue.CommitQueueItem">CommitQueueItem (class in evergreen.commitqueue)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.distro.Distro.communication_method">communication_method() (evergreen.distro.Distro property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.distro.Distro.communication_method">communication_method() (evergreen.distro.Distro property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.configure_patch">configure_patch() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.configure_task">configure_task() (evergreen.api.EvergreenApi method)</a>
@@ -610,12 +616,16 @@
 </li>
       <li><a href="evergreen.html#evergreen.task.StatusScore.FAILURE_TIMEOUT">FAILURE_TIMEOUT (evergreen.task.StatusScore attribute)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.distro.Distro.finder_settings">finder_settings() (evergreen.distro.Distro property)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.fallback">fallback (evergreen.api_requests.SlackAttachment attribute)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.distro.FinderSettings">FinderSettings (class in evergreen.distro)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.fields">fields (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.distro.Distro.finder_settings">finder_settings() (evergreen.distro.Distro property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.distro.FinderSettings">FinderSettings (class in evergreen.distro)</a>
+</li>
       <li><a href="evergreen.html#evergreen.build.Build.finish_time">finish_time() (evergreen.build.Build property)</a>
 
       <ul>
@@ -987,6 +997,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.MountPoint">MountPoint (class in evergreen.distro)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.mrkdwn_in">mrkdwn_in (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1279,6 +1291,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.security_group_ids">security_group_ids() (evergreen.distro.AwsDistroSettings property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.send_slack_message">send_slack_message() (evergreen.api.EvergreenApi method)</a>
+</li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.session">session() (evergreen.api.EvergreenApi property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.settings">settings() (evergreen.distro.Distro property)</a>
@@ -1289,9 +1303,15 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.shell_path">shell_path() (evergreen.distro.Distro property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField.short">short (evergreen.api_requests.SlackAttachmentField attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.single_test_by_task_and_test_file">single_test_by_task_and_test_file() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.MountPoint.size">size() (evergreen.distro.MountPoint property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment">SlackAttachment (class in evergreen.api_requests)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField">SlackAttachmentField (class in evergreen.api_requests)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task_annotations.Source">Source (class in evergreen.task_annotations)</a>
 </li>
@@ -1453,12 +1473,12 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_commit">tasks_by_project_and_commit() (evergreen.api.EvergreenApi method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.teardown">teardown() (evergreen.distro.Distro property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.test_batch">test_batch() (evergreen.performance_results.PerformanceData property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats.test_file">test_file() (evergreen.stats.TaskStats property)</a>
@@ -1489,6 +1509,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.stats.TestStats">TestStats (class in evergreen.stats)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.text">text (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestResult.thread_level">thread_level() (evergreen.performance_results.PerformanceTestResult property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task_annotations.Source.time">time() (evergreen.task_annotations.Source property)</a>
@@ -1505,6 +1527,14 @@
         <li><a href="evergreen.html#evergreen.task.StatusDetails.timed_out">(evergreen.task.StatusDetails property)</a>
 </li>
       </ul></li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.title">title (evergreen.api_requests.SlackAttachment attribute)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField.title">(evergreen.api_requests.SlackAttachmentField attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.title_link">title_link (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
       <li><a href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks">total_display_tasks() (evergreen.metrics.buildmetrics.BuildMetrics property)</a>
 </li>
       <li><a href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.total_tasks">total_tasks() (evergreen.metrics.buildmetrics.BuildMetrics property)</a>
@@ -1571,6 +1601,8 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField.value">value (evergreen.api_requests.SlackAttachmentField attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.alias.VariantAlias.variant">variant() (evergreen.alias.VariantAlias property)</a>
 
       <ul>

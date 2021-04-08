@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.0.5 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.0.6 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -60,7 +60,7 @@
 <span class="kn">from</span> <span class="nn">tenacity</span> <span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">retry_if_exception_type</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span>
 
 <span class="kn">from</span> <span class="nn">evergreen.alias</span> <span class="kn">import</span> <span class="n">VariantAlias</span>
-<span class="kn">from</span> <span class="nn">evergreen.api_requests</span> <span class="kn">import</span> <span class="n">IssueLinkRequest</span>
+<span class="kn">from</span> <span class="nn">evergreen.api_requests</span> <span class="kn">import</span> <span class="n">IssueLinkRequest</span><span class="p">,</span> <span class="n">SlackAttachment</span>
 <span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
 <span class="kn">from</span> <span class="nn">evergreen.commitqueue</span> <span class="kn">import</span> <span class="n">CommitQueue</span>
 <span class="kn">from</span> <span class="nn">evergreen.config</span> <span class="kn">import</span> <span class="p">(</span>
@@ -405,6 +405,29 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/recent_versions&quot;</span><span class="p">)</span>
         <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">RecentVersions</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.send_slack_message"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.send_slack_message">[docs]</a>    <span class="k">def</span> <span class="nf">send_slack_message</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attachments</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SlackAttachment</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a Slack message to a user or channel in Slack.</span>
+
+<span class="sd">        :param target: The slack name of the user or channel to send the message to.</span>
+<span class="sd">        :param msg: The slack message to send.</span>
+<span class="sd">        :param attachments: What additional data to send to the specified target in Slack.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/notifications/slack&quot;</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
+            <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">attachments</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;attachments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">attachment</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">attachment</span> <span class="ow">in</span> <span class="n">attachments</span>
+            <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.alias_for_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.alias_for_version">[docs]</a>    <span class="k">def</span> <span class="nf">alias_for_version</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_deps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1121,11 +1144,11 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
 
     <span class="nd">@retry</span><span class="p">(</span>
-        <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span>
+        <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
             <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,)</span>
         <span class="p">),</span>
-        <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="n">MAX_RETRIES</span><span class="p">),</span>
-        <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">START_WAIT_TIME_SEC</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">MAX_WAIT_TIME_SEC</span><span class="p">),</span>
+        <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="n">MAX_RETRIES</span><span class="p">),</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
+        <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">START_WAIT_TIME_SEC</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">MAX_WAIT_TIME_SEC</span><span class="p">),</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
         <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">def</span> <span class="nf">_call_api</span><span class="p">(</span>

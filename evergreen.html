@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.0.5 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.0.6 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -597,6 +597,21 @@ with value of a list of task names to configure for specified variant. See the d
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.api.EvergreenApi.send_slack_message">
+<code class="sig-name descname">send_slack_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">msg</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">attachments</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.SlackAttachment" title="evergreen.api_requests.SlackAttachment">evergreen.api_requests.SlackAttachment</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.send_slack_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.send_slack_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a Slack message to a user or channel in Slack.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – The slack name of the user or channel to send the message to.</p></li>
+<li><p><strong>msg</strong> – The slack message to send.</p></li>
+<li><p><strong>attachments</strong> – What additional data to send to the specified target in Slack.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.api.EvergreenApi.session">
 <em class="property">property </em><code class="sig-name descname">session</code><a class="headerlink" href="#evergreen.api.EvergreenApi.session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the shared session if it exists, else create a new session.</p>
@@ -895,6 +910,96 @@ with value of a list of task names to configure for specified variant. See the d
 <em class="property">property </em><code class="sig-name descname">url</code><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.api_requests.SlackAttachment">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.api_requests.</code><code class="sig-name descname">SlackAttachment</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">title</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title_link</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fallback</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mrkdwn_in</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">color</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">author_name</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">author_icon</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fields</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.SlackAttachmentField" title="evergreen.api_requests.SlackAttachmentField">evergreen.api_requests.SlackAttachmentField</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api_requests.html#SlackAttachment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api_requests.SlackAttachment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>An attachment to be sent using Slack.</p>
+<p>title: The attachment title.
+title_link: A URL that turns the title into a link.
+text: If fallback is empty, this is required. The main body text of the attachment as plain
+text, or with markdown using mrkdwn_in.
+fallback: If text is empty, this is required. A plain text summary of an attachment for
+clients that don’t show formatted text (eg. IRC, mobile notifications).
+mrkdwn_in: An array of fields that should be formatted with markdown.
+color: The message color. Can either be one of good (green), warning (yellow), danger (red),
+or any hex color code (eg. #439FE0).
+author_name: The display name of the author.
+author_icon: A URL that displays the author icon. Will only work if author_name is present.
+fields: Array of SlackAttachmentFields that get displayed in a table-like format.</p>
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.author_icon">
+<code class="sig-name descname">author_icon</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.author_icon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.author_name">
+<code class="sig-name descname">author_name</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.author_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.color">
+<code class="sig-name descname">color</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.fallback">
+<code class="sig-name descname">fallback</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.fallback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.fields">
+<code class="sig-name descname">fields</code><em class="property">: Optional<span class="p">[</span>List<span class="p">[</span><a class="reference internal" href="#evergreen.api_requests.SlackAttachmentField" title="evergreen.api_requests.SlackAttachmentField">evergreen.api_requests.SlackAttachmentField</a><span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.mrkdwn_in">
+<code class="sig-name descname">mrkdwn_in</code><em class="property">: Optional<span class="p">[</span>List<span class="p">[</span>str<span class="p">]</span><span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.mrkdwn_in" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.text">
+<code class="sig-name descname">text</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.title">
+<code class="sig-name descname">title</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachment.title_link">
+<code class="sig-name descname">title_link</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachment.title_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.api_requests.SlackAttachmentField">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.api_requests.</code><code class="sig-name descname">SlackAttachmentField</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">title</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">short</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api_requests.html#SlackAttachmentField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api_requests.SlackAttachmentField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Slack fields that get displayed in a table-like format.</p>
+<p>title: The field title.
+value: The field text. It can be formatted as plain text or with markdown by using mrkdwn_in.
+short: Indicates whether the field object is short enough to be displayed side-by-side with
+other field objects.</p>
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachmentField.short">
+<code class="sig-name descname">short</code><em class="property">: Optional<span class="p">[</span>bool<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachmentField.short" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachmentField.title">
+<code class="sig-name descname">title</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachmentField.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.SlackAttachmentField.value">
+<code class="sig-name descname">value</code><em class="property">: Optional<span class="p">[</span>str<span class="p">]</span></em><a class="headerlink" href="#evergreen.api_requests.SlackAttachmentField.value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
