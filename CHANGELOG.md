@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.8 - 2021-05-04
+- Added command to get a manifest.
+
 ## 3.0.7 - 2021-04-30
 - Fix incorrect mapping for TaskStats `num_pass`, `num_fail` and `avg_duration_pass` fields.
 
