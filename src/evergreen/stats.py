@@ -35,7 +35,6 @@ class TestStats(_BaseEvergreenObject):
 class TaskStats(_BaseEvergreenObject):
     """Representation of an Evergreen task stats object."""
 
-    test_file = evg_attrib("test_file")
     task_name = evg_attrib("task_name")
     variant = evg_attrib("variant")
     distro = evg_attrib("distro")

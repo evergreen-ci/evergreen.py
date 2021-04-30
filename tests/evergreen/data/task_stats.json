@@ -1,5 +1,4 @@
 {
-    "test_file": "jstests/sharding/rename.js",
     "task_name": "sharding_csrs_continuous_config_stepdown",
     "variant": "enterprise-rhel-62-64-bit",
     "distro": "rhel62-large",
