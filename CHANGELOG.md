@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.7 - 2021-04-30
+- Fix incorrect mapping for TaskStats `num_pass`, `num_fail` and `avg_duration_pass` fields.
+
 ## 3.0.6 - 2021-04-07
 - Added ability to send messages using Slack with `send_slack_message` method.
 
@@ -19,10 +22,10 @@
 - Added `start` and `limit` to `versions_by_project`.
 
 ## 3.0.0 - 2021-03-16
-- Removed `estimated_cost` attribute from `Task` class. 
+- Removed `estimated_cost` attribute from `Task` class.
 
 ## 2.2.4 - 2021-02-01
-- Added `has_oom` and `get_oom_pids` methods to the `Task` class. 
+- Added `has_oom` and `get_oom_pids` methods to the `Task` class.
 
 ## 2.2.3 - 2021-01-27
 - Updated host to ubuntu1804-small

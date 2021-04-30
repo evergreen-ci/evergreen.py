@@ -18,7 +18,7 @@ class TestStats(_BaseEvergreenObject):
     test_name = evg_attrib("test_name")
     variant = evg_attrib("variant")
     distro = evg_attrib("distro")
-    evg_date_attrib("date")
+    date = evg_date_attrib("date")
     num_pass = evg_attrib("num_pass")
     num_fail = evg_attrib("num_fail")
     avg_duration_pass = evg_attrib("avg_duration_pass")
@@ -35,14 +35,13 @@ class TestStats(_BaseEvergreenObject):
 class TaskStats(_BaseEvergreenObject):
     """Representation of an Evergreen task stats object."""
 
-    test_file = evg_attrib("test_file")
     task_name = evg_attrib("task_name")
     variant = evg_attrib("variant")
     distro = evg_attrib("distro")
-    evg_date_attrib("date")
-    num_pass = evg_attrib("num_pass")
-    num_fail = evg_attrib("num_fail")
-    avg_duration_pass = evg_attrib("avg_duration_pass")
+    date = evg_date_attrib("date")
+    num_pass = evg_attrib("num_success")
+    num_fail = evg_attrib("num_failed")
+    avg_duration_pass = evg_attrib("avg_duration_success")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
