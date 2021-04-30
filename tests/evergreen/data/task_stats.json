@@ -4,7 +4,7 @@
     "variant": "enterprise-rhel-62-64-bit",
     "distro": "rhel62-large",
     "date": "2019-02-23",
-    "num_pass": 4,
-    "num_fail": 0,
-    "avg_duration_pass": 82.01195722818375
+    "num_success": 4,
+    "num_failed": 0,
+    "avg_duration_success": 82.01195722818375
   }
