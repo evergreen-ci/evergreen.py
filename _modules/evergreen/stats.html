@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.stats &#8212; evergreen.py 3.0.6 documentation</title>
+    <title>evergreen.stats &#8212; evergreen.py 3.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -62,7 +62,7 @@
     <span class="n">test_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;test_name&quot;</span><span class="p">)</span>
     <span class="n">variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;variant&quot;</span><span class="p">)</span>
     <span class="n">distro</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;distro&quot;</span><span class="p">)</span>
-    <span class="n">evg_date_attrib</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">evg_date_attrib</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
     <span class="n">num_pass</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;num_pass&quot;</span><span class="p">)</span>
     <span class="n">num_fail</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;num_fail&quot;</span><span class="p">)</span>
     <span class="n">avg_duration_pass</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;avg_duration_pass&quot;</span><span class="p">)</span>
@@ -79,14 +79,13 @@
 <div class="viewcode-block" id="TaskStats"><a class="viewcode-back" href="../../evergreen.html#evergreen.stats.TaskStats">[docs]</a><span class="k">class</span> <span class="nc">TaskStats</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Representation of an Evergreen task stats object.&quot;&quot;&quot;</span>
 
-    <span class="n">test_file</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;test_file&quot;</span><span class="p">)</span>
     <span class="n">task_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_name&quot;</span><span class="p">)</span>
     <span class="n">variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;variant&quot;</span><span class="p">)</span>
     <span class="n">distro</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;distro&quot;</span><span class="p">)</span>
-    <span class="n">evg_date_attrib</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
-    <span class="n">num_pass</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;num_pass&quot;</span><span class="p">)</span>
-    <span class="n">num_fail</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;num_fail&quot;</span><span class="p">)</span>
-    <span class="n">avg_duration_pass</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;avg_duration_pass&quot;</span><span class="p">)</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">evg_date_attrib</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)</span>
+    <span class="n">num_pass</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;num_success&quot;</span><span class="p">)</span>
+    <span class="n">num_fail</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;num_failed&quot;</span><span class="p">)</span>
+    <span class="n">avg_duration_pass</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;avg_duration_success&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
