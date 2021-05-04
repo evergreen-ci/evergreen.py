@@ -371,6 +371,26 @@ def build_stats(ctx, build_id, tasks):
         click.echo(fmt_output(fmt, build.get_metrics().as_dict(include_children=tasks)))
 
 
+@cli.command()
+@click.pass_context
+@click.option("--project", required=True, help="The project name")
+@click.option("--commit", required=True, help="The full 40-char commit hash")
+def manifest(ctx, project, commit):
+    """
+    Get a manifest for the given project and commit.
+
+    Example: use jq to get a module version associated with a main-repo version:
+
+    evg-api --json manifest --project <PROJECT> --commit <MAIN-REPO-HASH> \\
+        | jq --raw-output .modules.<MODULE-NAME>.revision
+    """
+    api = ctx.obj["api"]
+    fmt = ctx.obj["format"]
+
+    manifest = api.manifest(project, commit)
+    click.echo(fmt_output(fmt, manifest.json))
+
+
 def main():
     """Create command line application."""
     return cli(obj={})
