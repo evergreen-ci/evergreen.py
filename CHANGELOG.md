@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.9 - 2021-05-24
+- Finish details around RecentVersions endpoint.
+
 ## 3.0.8 - 2021-05-04
 - Added command to get a manifest.
 
