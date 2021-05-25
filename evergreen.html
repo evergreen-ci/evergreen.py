@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.0.8 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.0.9 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -3808,8 +3808,27 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 
 <dl class="py method">
 <dt id="evergreen.version.BuildVariantStatus.get_build">
-<code class="sig-name descname">get_build</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Build<a class="reference internal" href="_modules/evergreen/version.html#BuildVariantStatus.get_build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.BuildVariantStatus.get_build" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_build</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.build.Build" title="evergreen.build.Build">evergreen.build.Build</a><a class="reference internal" href="_modules/evergreen/version.html#BuildVariantStatus.get_build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.BuildVariantStatus.get_build" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the build object for this build variants status.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.version.RecentVersionRow">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.version.</code><code class="sig-name descname">RecentVersionRow</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/version.html#RecentVersionRow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.RecentVersionRow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Wrapper for a row of the RecentVersions endpoint.</p>
+<dl class="py method">
+<dt id="evergreen.version.RecentVersionRow.build_variant">
+<em class="property">property </em><code class="sig-name descname">build_variant</code><a class="headerlink" href="#evergreen.version.RecentVersionRow.build_variant" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of build_variant</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.version.RecentVersionRow.builds">
+<em class="property">property </em><code class="sig-name descname">builds</code><a class="headerlink" href="#evergreen.version.RecentVersionRow.builds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a map of build IDs to build objects.</p>
 </dd></dl>
 
 </dd></dl>
@@ -3823,6 +3842,12 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 <dt id="evergreen.version.RecentVersions.build_variants">
 <em class="property">property </em><code class="sig-name descname">build_variants</code><a class="headerlink" href="#evergreen.version.RecentVersions.build_variants" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of build_variants</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.version.RecentVersions.row_map">
+<em class="property">property </em><code class="sig-name descname">row_map</code><a class="headerlink" href="#evergreen.version.RecentVersions.row_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a map of build names to RecentVersionRows.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3923,7 +3948,7 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 
 <dl class="py method">
 <dt id="evergreen.version.Version.build_by_variant">
-<code class="sig-name descname">build_by_variant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">build_variant</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Build<a class="reference internal" href="_modules/evergreen/version.html#Version.build_by_variant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Version.build_by_variant" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">build_by_variant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">build_variant</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.build.Build" title="evergreen.build.Build">evergreen.build.Build</a><a class="reference internal" href="_modules/evergreen/version.html#Version.build_by_variant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Version.build_by_variant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a build object for the specified variant.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -3961,7 +3986,7 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 
 <dl class="py method">
 <dt id="evergreen.version.Version.get_builds">
-<code class="sig-name descname">get_builds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>Build<span class="p">]</span><a class="reference internal" href="_modules/evergreen/version.html#Version.get_builds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Version.get_builds" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_builds</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.build.Build" title="evergreen.build.Build">evergreen.build.Build</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/version.html#Version.get_builds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.version.Version.get_builds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all the builds that are a part of this version.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
