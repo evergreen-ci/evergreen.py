@@ -6,12 +6,12 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
+from evergreen.build import Build
 from evergreen.manifest import ManifestModule
 from evergreen.metrics.versionmetrics import VersionMetrics
 
 if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
-    from evergreen.build import Build
     from evergreen.manifest import Manifest
     from evergreen.patch import Patch  # noqa: F401
 
@@ -207,11 +207,27 @@ class Version(_BaseEvergreenObject):
         return "Version({id})".format(id=self.version_id)
 
 
+class RecentVersionRow(_BaseEvergreenObject):
+    """Wrapper for a row of the RecentVersions endpoint."""
+
+    build_variant = evg_attrib("build_variant")
+
+    @property
+    def builds(self) -> Dict[str, Build]:
+        """Get a map of build IDs to build objects."""
+        return {k: Build(v, self._api) for k, v in self.json["builds"].items()}
+
+
 class RecentVersions(_BaseEvergreenObject):
     """Wrapper for the data object returned by /projects/{project_id}/recent_versions."""
 
     rows = evg_attrib("rows")
     build_variants = evg_attrib("build_variants")
+
+    @property
+    def row_map(self) -> Dict[str, RecentVersionRow]:
+        """Get a map of build names to RecentVersionRows."""
+        return {k: RecentVersionRow(v, self._api) for k, v in self.json["rows"].items()}
 
     @property
     def versions(self) -> List[Version]:
@@ -220,8 +236,4 @@ class RecentVersions(_BaseEvergreenObject):
 
         :return: List of versions from the response object
         """
-        versions = []
-        for wrapper in self.json["versions"]:
-            versions += wrapper["versions"]
-
-        return [Version(version, self._api) for version in versions]  # type: ignore[arg-type]
+        return [Version(wrapper["versions"], self._api) for wrapper in self.json["versions"]]

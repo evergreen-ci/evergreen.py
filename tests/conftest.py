@@ -84,6 +84,12 @@ def sample_version():
 
 
 @pytest.fixture()
+def sample_recent_versions():
+    """Return sample recent versions json."""
+    return get_sample_json("recent_versions.json")
+
+
+@pytest.fixture()
 def sample_test_stats():
     """Return sample test_stats json."""
     return get_sample_json("test_stats.json")
