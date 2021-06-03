@@ -13,17 +13,13 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 4. [Usage](#usage)
 5. [Documentation](#documentation)
 6. [Contributor's Guide](#contributors-guide)
-    - [High Level Architecture](#high-level-architecture)
     - [Setting up a local development environment](#setting-up-a-local-development-environment)
-    - [linting/formatting](#lintingformatting)
+    - [Linting/formatting](#lintingformatting)
     - [Running tests](#running-tests)
     - [Automatically running checks on commit](#automatically-running-checks-on-commit)
-    - [Staging Environment](#staging-environment)
     - [Versioning](#versioning)
     - [Code Review](#code-review)
     - [Deployment](#deployment)
-    - [Additional Documentation](#additional-documentation)
-7. [Resources](#resources)
 
 ## Description
 
@@ -35,12 +31,11 @@ or on the command line to get data about Evergreen objects quickly and easily.
 ## Dependencies
 
 * Python 3.7 or later
-* Poetry 1.1 or later
 
 ## Installation
 
 ```bash
-$ poetry install
+$ pip install evergreen.py
 ```
 
 ## Usage
@@ -90,6 +85,9 @@ You can find the documentation [here](https://evergreen-ci.github.io/evergreen.p
 ## Contributor's Guide
 
 ### Setting up a local development environment
+
+#### Requirements
+* Poetry 1.1 or later
 
 You will need Evergreen credentials on your local machine to use this library or the attached CLI. You
 can set up your credentials by following the link [here](https://github.com/evergreen-ci/evergreen/wiki/Using-the-Command-Line-Tool#downloading-the-command-line-tool).
