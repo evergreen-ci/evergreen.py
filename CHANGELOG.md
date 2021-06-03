@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.0 - 2021-06-02
+- Update readme.
+
 ## 3.0.9 - 2021-05-24
 - Finish details around RecentVersions endpoint.
 
