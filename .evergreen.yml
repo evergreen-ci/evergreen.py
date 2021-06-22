@@ -124,6 +124,23 @@ tasks:
 
         COVERALLS_REPO_TOKEN=${coveralls_repo_token|} poetry run coveralls
 
+- name: evg_api_install
+  commands:
+  - command: shell.exec
+    params:
+      working_dir: src
+      script: |
+        set -o errexit
+        set -o verbose
+
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+
+        . venv/bin/activate
+
+        poetry install
+        poetry run evg-api --help
+
 - name: deploy
   patchable: false
   depends_on:
