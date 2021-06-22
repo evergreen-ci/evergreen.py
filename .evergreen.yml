@@ -143,7 +143,7 @@ tasks:
         . evg-api-cli-venv/bin/activate
 
         pip install --upgrade pip
-        pip install evg-api
+        pip install git+ssh://git@github.com/evergreen-ci/evergreen.py.git
 
         evg-api --help
 
