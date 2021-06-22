@@ -71,9 +71,9 @@ def list_patches(ctx, project, limit):
     fmt = ctx.obj["format"]
     patches = []
     for i, p in enumerate(api.patches_by_project(project)):
-        patches.append(p.json)
-        if limit and i > limit:
+        if limit and i >= limit:
             break
+        patches.append(p.json)
     click.echo(fmt_output(fmt, patches))
 
 
@@ -98,7 +98,7 @@ def list_versions(ctx, project: str, start: Optional[int], limit: Optional[int])
     api = ctx.obj["api"]
     fmt = ctx.obj["format"]
     version_list = api.versions_by_project(project, start=start, limit=limit)
-    versions_to_display = [version for version in islice(version_list, None, limit)]
+    versions_to_display = [version.json for version in islice(version_list, None, limit)]
 
     click.echo(fmt_output(fmt, versions_to_display))
 
