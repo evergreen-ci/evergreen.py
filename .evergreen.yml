@@ -141,7 +141,7 @@ tasks:
         . evg-api-cli-venv/bin/activate
 
         pip install --upgrade pip
-        pip install .
+        pip install ..
 
         evg-api --help
 
