@@ -7,6 +7,7 @@ buildvariants:
   - name: unit_tests
   - name: deploy
   - name: documentation
+  - name: evg_api_install
 
 functions:
   create virtualenv:
@@ -136,10 +137,8 @@ tasks:
         export LC_ALL=C.UTF-8
         export LANG=C.UTF-8
 
-        . venv/bin/activate
-
-        poetry install
-        poetry run evg-api --help
+        pip install evergreen.py
+        evg-api --help
 
 - name: deploy
   patchable: false
