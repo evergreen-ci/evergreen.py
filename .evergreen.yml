@@ -140,11 +140,8 @@ tasks:
         /opt/mongodbtoolchain/v3/bin/python3 -m venv evg-api-cli-venv
         . evg-api-cli-venv/bin/activate
 
-        ls
-        ls ..
-        
         pip install --upgrade pip
-        pip install ..
+        pip install .
 
         evg-api --help
 
