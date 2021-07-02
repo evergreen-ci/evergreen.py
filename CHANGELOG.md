@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.0 - 2021-07-02
+- Added support for module_code_changes on the patch object.
+
 ## 3.1.1 - 2021-06-21
 - Added testing for `evg-api` command.
 

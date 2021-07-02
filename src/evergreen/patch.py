@@ -59,6 +59,48 @@ class VariantsTasks(_BaseEvergreenObject):
         return self._task_set
 
 
+class FileDiff(_BaseEvergreenObject):
+    """Representation of a file diff for a patch."""
+
+    file_name = evg_attrib("file_name")
+    additions = evg_attrib("additions")
+    deletions = evg_attrib("deletions")
+    diff_link = evg_attrib("diff_link")
+    description = evg_attrib("description")
+
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
+        """
+        Create an instance of a file diff.
+
+        :param json: JSON representing the data.
+        :param api: Pointer to the evergreen API client.
+        """
+        super().__init__(json, api)
+
+
+class ModuleCodeChanges(_BaseEvergreenObject):
+    """Representation of the module code changes for a patch."""
+
+    branch_name = evg_attrib("branch_name")
+    html_link = evg_attrib("html_link")
+    raw_link = evg_attrib("raw_link")
+    commit_messages = evg_attrib("commit_messages")
+
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
+        """
+        Create an instance of the module code changes.
+
+        :param json: JSON representing the data.
+        :param api: Pointer to the evergreen API client.
+        """
+        super().__init__(json, api)
+
+    @property
+    def file_diffs(self) -> List[FileDiff]:
+        """Retrieve a list of the file diffs for this patch."""
+        return [FileDiff(diff, self._api) for diff in self.json["module_code_changes"]]
+
+
 class Patch(_BaseEvergreenObject):
     """Representation of an Evergreen patch."""
 
@@ -97,6 +139,15 @@ class Patch(_BaseEvergreenObject):
         :return: Github Patch Data for this patch.
         """
         return GithubPatchData(self.json["github_patch_data"], self._api)
+
+    @property
+    def module_code_changes(self) -> List[ModuleCodeChanges]:
+        """
+        Retrieve the modele code changes for this patch.
+
+        :return: Module code changes for this patch.
+        """
+        return [ModuleCodeChanges(module, self._api) for module in self.json["module_code_changes"]]
 
     @property
     def variants_tasks(self) -> List[VariantsTasks]:
