@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.patch &#8212; evergreen.py 3.1.1 documentation</title>
+    <title>evergreen.patch &#8212; evergreen.py 3.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -103,6 +103,48 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_task_set</span></div>
 
 
+<div class="viewcode-block" id="FileDiff"><a class="viewcode-back" href="../../evergreen.html#evergreen.patch.FileDiff">[docs]</a><span class="k">class</span> <span class="nc">FileDiff</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of a file diff for a patch.&quot;&quot;&quot;</span>
+
+    <span class="n">file_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;file_name&quot;</span><span class="p">)</span>
+    <span class="n">additions</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;additions&quot;</span><span class="p">)</span>
+    <span class="n">deletions</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;deletions&quot;</span><span class="p">)</span>
+    <span class="n">diff_link</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;diff_link&quot;</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an instance of a file diff.</span>
+
+<span class="sd">        :param json: JSON representing the data.</span>
+<span class="sd">        :param api: Pointer to the evergreen API client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ModuleCodeChanges"><a class="viewcode-back" href="../../evergreen.html#evergreen.patch.ModuleCodeChanges">[docs]</a><span class="k">class</span> <span class="nc">ModuleCodeChanges</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Representation of the module code changes for a patch.&quot;&quot;&quot;</span>
+
+    <span class="n">branch_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;branch_name&quot;</span><span class="p">)</span>
+    <span class="n">html_link</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;html_link&quot;</span><span class="p">)</span>
+    <span class="n">raw_link</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;raw_link&quot;</span><span class="p">)</span>
+    <span class="n">commit_messages</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;commit_messages&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an instance of the module code changes.</span>
+
+<span class="sd">        :param json: JSON representing the data.</span>
+<span class="sd">        :param api: Pointer to the evergreen API client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">file_diffs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FileDiff</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve a list of the file diffs for this patch.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">FileDiff</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;module_code_changes&quot;</span><span class="p">]]</span></div>
+
+
 <div class="viewcode-block" id="Patch"><a class="viewcode-back" href="../../evergreen.html#evergreen.patch.Patch">[docs]</a><span class="k">class</span> <span class="nc">Patch</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Representation of an Evergreen patch.&quot;&quot;&quot;</span>
 
@@ -141,6 +183,15 @@
 <span class="sd">        :return: Github Patch Data for this patch.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">GithubPatchData</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;github_patch_data&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">module_code_changes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ModuleCodeChanges</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the modele code changes for this patch.</span>
+
+<span class="sd">        :return: Module code changes for this patch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">ModuleCodeChanges</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;module_code_changes&quot;</span><span class="p">]]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">variants_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">VariantsTasks</span><span class="p">]:</span>

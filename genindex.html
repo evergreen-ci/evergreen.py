@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 3.1.1 documentation</title>
+    <title>Index &#8212; evergreen.py 3.2.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -98,6 +98,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.version.Requester.AD_HOC">AD_HOC (evergreen.version.Requester attribute)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.patch.FileDiff.additions">additions() (evergreen.patch.FileDiff property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.project.Project.admins">admins() (evergreen.project.Project property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.patch.Patch.alias">alias() (evergreen.patch.Patch property)</a>
@@ -114,10 +116,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.annotate">annotate() (evergreen.task.Task method)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.api.EvergreenApi.annotate_task">annotate_task() (evergreen.api.EvergreenApi method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.annotate_task">annotate_task() (evergreen.api.EvergreenApi method)</a>
+</li>
       <li><a href="evergreen.html#evergreen.config.EvgAuth.api_key">api_key() (evergreen.config.EvgAuth property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.arch">arch() (evergreen.distro.Distro property)</a>
@@ -192,8 +194,12 @@
         <li><a href="evergreen.html#evergreen.version.Version.branch">(evergreen.version.Version property)</a>
 </li>
       </ul></li>
-      <li><a href="evergreen.html#evergreen.project.Project.branch_name">branch_name() (evergreen.project.Project property)</a>
+      <li><a href="evergreen.html#evergreen.patch.ModuleCodeChanges.branch_name">branch_name() (evergreen.patch.ModuleCodeChanges property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.project.Project.branch_name">(evergreen.project.Project property)</a>
 </li>
+      </ul></li>
       <li><a href="evergreen.html#evergreen.build.Build">Build (class in evergreen.build)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.CachedEvergreenApi.build_by_id">build_by_id() (evergreen.api.CachedEvergreenApi method)</a>
@@ -262,6 +268,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.color">color (evergreen.api_requests.SlackAttachment attribute)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.patch.ModuleCodeChanges.commit_messages">commit_messages() (evergreen.patch.ModuleCodeChanges property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.project.Project.commit_queue">commit_queue() (evergreen.project.Project property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.commit_queue_for_project">commit_queue_for_project() (evergreen.api.EvergreenApi method)</a>
@@ -312,15 +320,23 @@
       </ul></li>
       <li><a href="evergreen.html#evergreen.project.Project.deactivated_previous">deactivated_previous() (evergreen.project.Project property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.patch.FileDiff.deletions">deletions() (evergreen.patch.FileDiff property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.task.Task.depends_on">depends_on() (evergreen.task.Task property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.StatusDetails.desc">desc() (evergreen.task.StatusDetails property)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.patch.Patch.description">description() (evergreen.patch.Patch property)</a>
+      <li><a href="evergreen.html#evergreen.patch.FileDiff.description">description() (evergreen.patch.FileDiff property)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.patch.Patch.description">(evergreen.patch.Patch property)</a>
 </li>
+      </ul></li>
       <li><a href="evergreen.html#evergreen.task.OomTrackerInfo.detected">detected() (evergreen.task.OomTrackerInfo property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.MountPoint.device_name">device_name() (evergreen.distro.MountPoint property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.patch.FileDiff.diff_link">diff_link() (evergreen.patch.FileDiff property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro.disabled">disabled() (evergreen.distro.Distro property)</a>
 </li>
@@ -330,6 +346,8 @@
         <li><a href="evergreen.html#evergreen.task.Task.dispatch_time">(evergreen.task.Task property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.build.StatusCounts.dispatched">dispatched() (evergreen.build.StatusCounts property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.build.Build.display_name">display_name() (evergreen.build.Build property)</a>
@@ -340,8 +358,6 @@
         <li><a href="evergreen.html#evergreen.task.Task.display_name">(evergreen.task.Task property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.task.Task.display_only">display_only() (evergreen.task.Task property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.alias.VariantAlias.display_tasks">display_tasks() (evergreen.alias.VariantAlias property)</a>
@@ -632,10 +648,16 @@
 </li>
       <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.fields">fields (evergreen.api_requests.SlackAttachment attribute)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.distro.Distro.finder_settings">finder_settings() (evergreen.distro.Distro property)</a>
+      <li><a href="evergreen.html#evergreen.patch.ModuleCodeChanges.file_diffs">file_diffs() (evergreen.patch.ModuleCodeChanges property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.patch.FileDiff.file_name">file_name() (evergreen.patch.FileDiff property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.patch.FileDiff">FileDiff (class in evergreen.patch)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.distro.Distro.finder_settings">finder_settings() (evergreen.distro.Distro property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.distro.FinderSettings">FinderSettings (class in evergreen.distro)</a>
 </li>
       <li><a href="evergreen.html#evergreen.build.Build.finish_time">finish_time() (evergreen.build.Build property)</a>
@@ -766,14 +788,14 @@
 </li>
       <li><a href="evergreen.html#evergreen.host.Host">Host (class in evergreen.host)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.host.Host.host_id">host_id() (evergreen.host.Host property)</a>
 
       <ul>
         <li><a href="evergreen.html#evergreen.task.Task.host_id">(evergreen.task.Task property)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.host.Host.host_type">host_type() (evergreen.host.Host property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.host.Host.host_url">host_url() (evergreen.host.Host property)</a>
@@ -781,6 +803,8 @@
       <li><a href="evergreen.html#evergreen.host.HostDistro">HostDistro (class in evergreen.host)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.StaticDistroSettings.hosts">hosts() (evergreen.distro.StaticDistroSettings property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.patch.ModuleCodeChanges.html_link">html_link() (evergreen.patch.ModuleCodeChanges property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -997,6 +1021,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.patch.Patch.module_code_changes">module_code_changes() (evergreen.patch.Patch property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.patch.ModuleCodeChanges">ModuleCodeChanges (class in evergreen.patch)</a>
+</li>
       <li><a href="evergreen.html#evergreen.commitqueue.CommitQueueItem.modules">modules() (evergreen.commitqueue.CommitQueueItem property)</a>
 
       <ul>
@@ -1231,6 +1259,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.patch.ModuleCodeChanges.raw_link">raw_link() (evergreen.patch.ModuleCodeChanges property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.config.read_evergreen_config">read_evergreen_config() (in module evergreen.config)</a>
 </li>
       <li><a href="evergreen.html#evergreen.config.read_evergreen_from_file">read_evergreen_from_file() (in module evergreen.config)</a>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.1.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.2.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -2098,6 +2098,43 @@ argument.</p>
 <span id="evergreen-patch-module"></span><h2>evergreen.patch module<a class="headerlink" href="#module-evergreen.patch" title="Permalink to this headline">¶</a></h2>
 <p>Representation of an evergreen patch.</p>
 <dl class="py class">
+<dt id="evergreen.patch.FileDiff">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.patch.</code><code class="sig-name descname">FileDiff</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/patch.html#FileDiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.patch.FileDiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a file diff for a patch.</p>
+<dl class="py method">
+<dt id="evergreen.patch.FileDiff.additions">
+<em class="property">property </em><code class="sig-name descname">additions</code><a class="headerlink" href="#evergreen.patch.FileDiff.additions" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of additions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.FileDiff.deletions">
+<em class="property">property </em><code class="sig-name descname">deletions</code><a class="headerlink" href="#evergreen.patch.FileDiff.deletions" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of deletions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.FileDiff.description">
+<em class="property">property </em><code class="sig-name descname">description</code><a class="headerlink" href="#evergreen.patch.FileDiff.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of description</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.FileDiff.diff_link">
+<em class="property">property </em><code class="sig-name descname">diff_link</code><a class="headerlink" href="#evergreen.patch.FileDiff.diff_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of diff_link</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.FileDiff.file_name">
+<em class="property">property </em><code class="sig-name descname">file_name</code><a class="headerlink" href="#evergreen.patch.FileDiff.file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of file_name</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="evergreen.patch.GithubPatchData">
 <em class="property">class </em><code class="sig-prename descclassname">evergreen.patch.</code><code class="sig-name descname">GithubPatchData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/patch.html#GithubPatchData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.patch.GithubPatchData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
@@ -2142,6 +2179,43 @@ argument.</p>
 <dt id="evergreen.patch.GithubPatchData.pr_number">
 <em class="property">property </em><code class="sig-name descname">pr_number</code><a class="headerlink" href="#evergreen.patch.GithubPatchData.pr_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of pr_number</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.patch.ModuleCodeChanges">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.patch.</code><code class="sig-name descname">ModuleCodeChanges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/patch.html#ModuleCodeChanges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.patch.ModuleCodeChanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of the module code changes for a patch.</p>
+<dl class="py method">
+<dt id="evergreen.patch.ModuleCodeChanges.branch_name">
+<em class="property">property </em><code class="sig-name descname">branch_name</code><a class="headerlink" href="#evergreen.patch.ModuleCodeChanges.branch_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of branch_name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.ModuleCodeChanges.commit_messages">
+<em class="property">property </em><code class="sig-name descname">commit_messages</code><a class="headerlink" href="#evergreen.patch.ModuleCodeChanges.commit_messages" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of commit_messages</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.ModuleCodeChanges.file_diffs">
+<em class="property">property </em><code class="sig-name descname">file_diffs</code><a class="headerlink" href="#evergreen.patch.ModuleCodeChanges.file_diffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a list of the file diffs for this patch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.ModuleCodeChanges.html_link">
+<em class="property">property </em><code class="sig-name descname">html_link</code><a class="headerlink" href="#evergreen.patch.ModuleCodeChanges.html_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of html_link</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.ModuleCodeChanges.raw_link">
+<em class="property">property </em><code class="sig-name descname">raw_link</code><a class="headerlink" href="#evergreen.patch.ModuleCodeChanges.raw_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of raw_link</p>
 </dd></dl>
 
 </dd></dl>
@@ -2223,6 +2297,17 @@ argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Github Patch Data for this patch.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.Patch.module_code_changes">
+<em class="property">property </em><code class="sig-name descname">module_code_changes</code><a class="headerlink" href="#evergreen.patch.Patch.module_code_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the modele code changes for this patch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Module code changes for this patch.</p>
 </dd>
 </dl>
 </dd></dl>
