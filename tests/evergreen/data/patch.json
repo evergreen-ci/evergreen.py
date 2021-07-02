@@ -1,184 +1,274 @@
 {
-    "patch_id": "5c95a20a7r42aa1eaf1a431e",
-    "description": "Running a patch build",
-    "project_id": "mongodb-mongo-master",
-    "branch": "mongodb-mongo-master",
-    "git_hash": "60c0441f919seasbes89s5333d17f1aff88f8",
-    "patch_number": 52,
-    "author": "john.snow",
-    "version": "5c95d20s77r2ai1eaf1a431e",
-    "status": "failed",
-    "create_time": "2019-03-23T06:28:19.500Z",
-    "start_time": "2019-03-23T06:28:19.500Z",
-    "finish_time": "2019-03-23T06:28:19.500Z",
-    "builds": [
-      "rhel-62-64-bit-mobile",
-      "embedded-sdk-macos"
-    ],
-    "tasks": [
-      "noPassthroughWithMongod_gen",
-      "generate_benchrun_embedded_files",
-      "failpoints",
-      "benchrun_embedded_queries",
-      "compile_all",
-      "unittests",
-      "integration_tests_standalone",
-      "benchrun_embedded_insert",
-      "jsCore_mobile",
-      "embedded_sdk_s3_put",
-      "powercycle_mobile",
-      "benchrun_embedded_remove",
-      "benchrun_embedded_update",
-      "aggregation_auth",
-      "jsCore_op_query",
-      "jstestfuzz_gen",
-      "jsCore",
-      "jsonSchema",
-      "jstestfuzz_concurrent_gen",
-      "serial_run",
-      "jsCore_auth",
-      "benchrun_embedded_misc",
-      "jsCore_minimum_batch_size",
-      "jsCore_compatibility",
-      "benchrun_embedded_aggregation",
-      "concurrency",
-      "aggregation",
-      "embedded_sdk_install_dev",
-      "embedded_sdk_tests_s3_put",
-      "compile",
-      "benchrun_embedded_mixed_and_multi",
-      "embedded_sdk_build_cdriver",
-      "embedded_sdk_s3_put_latest",
-      "disk_mobile",
-      "failpoints_auth",
-      "dbtest",
-      "embedded_sdk_run_tests",
-      "compile_unittests",
-      "jsCore_decimal",
-      "auth_gen",
-      "noPassthrough_gen",
-      "benchrun_embedded_commands",
-      "session_jscore_passthrough",
-      "compile_dbtest",
-      "embedded_sdk_install_tests",
-      "embedded_sdk_tests_s3_put_latest",
-      "aggregation_facet_unwind_passthrough"
-    ],
-    "variants_tasks": [
-      {
-        "name": "rhel-62-64-bit-mobile",
-        "tasks": [
-          "noPassthroughWithMongod_gen",
-          "generate_benchrun_embedded_files",
-          "failpoints",
-          "benchrun_embedded_queries",
-          "compile_all",
-          "unittests",
-          "integration_tests_standalone",
-          "benchrun_embedded_insert",
-          "jsCore_mobile",
-          "embedded_sdk_s3_put",
-          "powercycle_mobile",
-          "benchrun_embedded_remove",
-          "benchrun_embedded_update",
-          "aggregation_auth",
-          "jsCore_op_query",
-          "jstestfuzz_gen",
-          "jsCore",
-          "jsonSchema",
-          "jstestfuzz_concurrent_gen",
-          "serial_run",
-          "jsCore_auth",
-          "benchrun_embedded_misc",
-          "jsCore_minimum_batch_size",
-          "jsCore_compatibility",
-          "benchrun_embedded_aggregation",
-          "concurrency",
-          "aggregation",
-          "embedded_sdk_install_dev",
-          "embedded_sdk_tests_s3_put",
-          "compile",
-          "benchrun_embedded_mixed_and_multi",
-          "embedded_sdk_build_cdriver",
-          "embedded_sdk_s3_put_latest",
-          "disk_mobile",
-          "failpoints_auth",
-          "dbtest",
-          "embedded_sdk_run_tests",
-          "compile_unittests",
-          "jsCore_decimal",
-          "auth_gen",
-          "noPassthrough_gen",
-          "benchrun_embedded_commands",
-          "session_jscore_passthrough",
-          "compile_dbtest",
-          "embedded_sdk_install_tests",
-          "embedded_sdk_tests_s3_put_latest",
-          "aggregation_facet_unwind_passthrough"
-        ]
-      },
-      {
-        "name": "embedded-sdk-macos",
-        "tasks": [
-          "noPassthroughWithMongod_gen",
-          "generate_benchrun_embedded_files",
-          "failpoints",
-          "benchrun_embedded_queries",
-          "compile_all",
-          "unittests",
-          "integration_tests_standalone",
-          "benchrun_embedded_insert",
-          "jsCore_mobile",
-          "embedded_sdk_s3_put",
-          "powercycle_mobile",
-          "benchrun_embedded_remove",
-          "benchrun_embedded_update",
-          "aggregation_auth",
-          "jsCore_op_query",
-          "jstestfuzz_gen",
-          "jsCore",
-          "jsonSchema",
-          "jstestfuzz_concurrent_gen",
-          "serial_run",
-          "jsCore_auth",
-          "benchrun_embedded_misc",
-          "jsCore_minimum_batch_size",
-          "jsCore_compatibility",
-          "benchrun_embedded_aggregation",
-          "concurrency",
-          "aggregation",
-          "embedded_sdk_install_dev",
-          "embedded_sdk_tests_s3_put",
-          "compile",
-          "benchrun_embedded_mixed_and_multi",
-          "embedded_sdk_build_cdriver",
-          "embedded_sdk_s3_put_latest",
-          "disk_mobile",
-          "failpoints_auth",
-          "dbtest",
-          "embedded_sdk_run_tests",
-          "compile_unittests",
-          "jsCore_decimal",
-          "auth_gen",
-          "noPassthrough_gen",
-          "benchrun_embedded_commands",
-          "session_jscore_passthrough",
-          "compile_dbtest",
-          "embedded_sdk_install_tests",
-          "embedded_sdk_tests_s3_put_latest",
-          "aggregation_facet_unwind_passthrough"
-        ]
-      }
-    ],
-    "activated": true,
-    "alias": "required",
-    "github_patch_data": {
-      "pr_number": 0,
-      "base_owner": "",
-      "base_repo": "",
-      "head_owner": "",
-      "head_repo": "",
-      "head_hash": "",
-      "author": ""
+  "patch_id": "605257430305b964fa03ba95",
+  "description": "Commit Queue Merge: 'SERVER-54470 Use IDL to parse $collStats \u003c- Add limited $collStats invocations to API Version 1' into 'mongodb/mongo:master'",
+  "project_id": "mongodb-mongo-master",
+  "project_identifier": "mongodb-mongo-master",
+  "branch": "mongodb-mongo-master",
+  "git_hash": "a100482f36a17780de17a768da4c8bd74713f727",
+  "patch_number": 1657,
+  "author": "charlie.swanson",
+  "version": "605257430305b964fa03ba95",
+  "status": "succeeded",
+  "create_time": "2021-03-17T19:23:48.306Z",
+  "start_time": "2021-03-17T20:56:07.56Z",
+  "finish_time": "2021-03-17T21:35:10.338Z",
+  "builds": [
+    "enterprise-rhel-80-64-bit-dynamic-required",
+    "commit-queue",
+    "enterprise-ubuntu-dynamic-1804-clang-tidy-required",
+    "commit-queue-merge"
+  ],
+  "tasks": [
+    "validate_commit_message",
+    "run_dbtest",
+    "lint_pylinters",
+    "lint_eslint",
+    "archive_dist_test_debug",
+    "compile_dbtest",
+    "lint_yaml",
+    "lint_cpplint",
+    "compile_dist_test",
+    "archive_dist_test",
+    "lint_errorcodes",
+    "test_api_version_compatibility",
+    "clang_tidy",
+    "jsCore",
+    "compile_unittests",
+    "run_unittests",
+    "compile_all",
+    "lint_clang_format",
+    "lint_fuzzer_sanity_patch",
+    "merge-patch"
+  ],
+  "downstream_tasks": null,
+  "variants_tasks": [
+    {
+      "name": "enterprise-rhel-80-64-bit-dynamic-required",
+      "tasks": [
+        "compile_dist_test",
+        "run_dbtest",
+        "lint_pylinters",
+        "archive_dist_test",
+        "jsCore",
+        "compile_all",
+        "compile_unittests",
+        "lint_errorcodes",
+        "lint_clang_format",
+        "archive_dist_test_debug",
+        "run_unittests",
+        "compile_dbtest",
+        "lint_yaml",
+        "test_api_version_compatibility",
+        "lint_fuzzer_sanity_patch",
+        "lint_eslint",
+        "lint_cpplint"
+      ]
+    },
+    {
+      "name": "commit-queue",
+      "tasks": [
+        "validate_commit_message"
+      ]
+    },
+    {
+      "name": "enterprise-ubuntu-dynamic-1804-clang-tidy-required",
+      "tasks": [
+        "clang_tidy"
+      ]
+    },
+    {
+      "name": "commit-queue-merge",
+      "tasks": [
+        "merge-patch"
+      ]
     }
-  }
+  ],
+  "activated": true,
+  "alias": "__commit_queue",
+  "github_patch_data": {
+    "pr_number": 0,
+    "base_owner": "",
+    "base_repo": "",
+    "head_owner": "",
+    "head_repo": "",
+    "head_hash": "",
+    "author": ""
+  },
+  "module_code_changes": [
+    {
+      "branch_name": "mongodb-mongo-master",
+      "html_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?patch_number=0",
+      "raw_link": "https://evergreen.mongodb.com/rawdiff/605257430305b964fa03ba95?patch_number=0",
+      "commit_messages": [
+        "SERVER-54470 Use IDL to parse $collStats",
+        "Add limited $collStats invocations to API Version 1"
+      ],
+      "file_diffs": [
+        {
+          "file_name": "jstests/aggregation/sources/collStats/count.js",
+          "additions": 6,
+          "deletions": 2,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=jstests%2Faggregation%2Fsources%2FcollStats%2Fcount.js\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "jstests/aggregation/sources/collStats/query_exec_stats.js",
+          "additions": 2,
+          "deletions": 2,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=jstests%2Faggregation%2Fsources%2FcollStats%2Fquery_exec_stats.js\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/commands/dbcommands.cpp",
+          "additions": 3,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fcommands%2Fdbcommands.cpp\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/SConscript",
+          "additions": 5,
+          "deletions": 2,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2FSConscript\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_coll_stats.cpp",
+          "additions": 13,
+          "deletions": 57,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_coll_stats.cpp\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_coll_stats.h",
+          "additions": 18,
+          "deletions": 10,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_coll_stats.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_coll_stats.idl",
+          "additions": 69,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_coll_stats.idl\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_parsing_validators.cpp",
+          "additions": 46,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_parsing_validators.cpp\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_parsing_validators.h",
+          "additions": 38,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_parsing_validators.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/process_interface/common_mongod_process_interface.cpp",
+          "additions": 2,
+          "deletions": 2,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fprocess_interface%2Fcommon_mongod_process_interface.cpp\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/process_interface/common_mongod_process_interface.h",
+          "additions": 1,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fprocess_interface%2Fcommon_mongod_process_interface.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/process_interface/mongo_process_interface.h",
+          "additions": 2,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fprocess_interface%2Fmongo_process_interface.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/process_interface/mongos_process_interface.h",
+          "additions": 1,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fprocess_interface%2Fmongos_process_interface.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/process_interface/stub_mongo_process_interface.h",
+          "additions": 1,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fprocess_interface%2Fstub_mongo_process_interface.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/storage_stats_spec.idl",
+          "additions": 50,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fstorage_stats_spec.idl\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/stats/SConscript",
+          "additions": 2,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fstats%2FSConscript\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/stats/storage_stats.cpp",
+          "additions": 4,
+          "deletions": 13,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fstats%2Fstorage_stats.cpp\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "src/mongo/db/stats/storage_stats.h",
+          "additions": 3,
+          "deletions": 2,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fstats%2Fstorage_stats.h\u0026patch_number=0",
+          "description": "SERVER-54470 Use IDL to parse $collStats"
+        },
+        {
+          "file_name": "jstests/core/api_version_pipeline_stages.js",
+          "additions": 41,
+          "deletions": 6,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=jstests%2Fcore%2Fapi_version_pipeline_stages.js\u0026patch_number=0",
+          "description": "Add limited $collStats invocations to API Version 1"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_coll_stats.cpp",
+          "additions": 11,
+          "deletions": 1,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_coll_stats.cpp\u0026patch_number=0",
+          "description": "Add limited $collStats invocations to API Version 1"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/document_source_coll_stats.h",
+          "additions": 2,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Fdocument_source_coll_stats.h\u0026patch_number=0",
+          "description": "Add limited $collStats invocations to API Version 1"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/lite_parsed_document_source.h",
+          "additions": 13,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Flite_parsed_document_source.h\u0026patch_number=0",
+          "description": "Add limited $collStats invocations to API Version 1"
+        },
+        {
+          "file_name": "src/mongo/db/pipeline/lite_parsed_pipeline.cpp",
+          "additions": 4,
+          "deletions": 0,
+          "diff_link": "https://evergreen.mongodb.com/filediff/605257430305b964fa03ba95?file_name=src%2Fmongo%2Fdb%2Fpipeline%2Flite_parsed_pipeline.cpp\u0026patch_number=0",
+          "description": "Add limited $collStats invocations to API Version 1"
+        }
+      ]
+    }
+  ],
+  "parameters": null,
+  "can_enqueue_to_commit_queue": true,
+  "child_patches": null
+}

@@ -24,3 +24,12 @@ class TestPatch(object):
         sample_variant = sample_patch["variants_tasks"][0]
         variant_name = sample_variant["name"]
         assert patch.task_list_for_variant(variant_name) == set(sample_variant["tasks"])
+
+    def test_module_code_changes(self, sample_patch):
+        patch = Patch(sample_patch, None)
+        sample_code_changes = sample_patch["module_code_changes"][0]
+
+        assert patch.module_code_changes[0].branch_name == sample_code_changes["branch_name"]
+        assert (
+            patch.module_code_changes[0].commit_messages == sample_code_changes["commit_messages"]
+        )
