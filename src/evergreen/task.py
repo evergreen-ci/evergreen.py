@@ -110,6 +110,7 @@ class Task(_BaseEvergreenObject):
     dispatch_time = evg_datetime_attrib("dispatch_time")
     display_name = evg_attrib("display_name")
     display_only = evg_attrib("display_only")
+    display_status = evg_attrib("display_status")
     distro_id = evg_attrib("distro_id")
     est_wait_to_start_ms = evg_attrib("est_wait_to_start_ms")
     execution = evg_attrib("execution")
