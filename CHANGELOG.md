@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.1 = 2021-07-28
+- Added 'display_status' field to task object.
+
 ## 3.2.0 - 2021-07-02
 - Added support for module_code_changes on the patch object.
 
