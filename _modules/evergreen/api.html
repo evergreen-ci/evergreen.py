@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.2.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -933,7 +933,7 @@
             <span class="s2">&quot;task_id&quot;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">execution</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">request</span><span class="p">[</span><span class="s2">&quot;task_execution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">execution</span>
 
         <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
