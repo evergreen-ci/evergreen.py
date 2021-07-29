@@ -572,6 +572,27 @@ class TestTaskApi(object):
             url=expected_url, params=expected_params, timeout=None, data=expected_data, method="PUT"
         )
 
+    def test_annotate_task_with_zero_execution(self, mocked_api):
+        mocked_api.annotate_task(
+            "task_id",
+            execution=0,
+            message="hello world",
+            issues=[IssueLinkRequest(issue_key="key-1234", url="http://hello.world/key-1234")],
+        )
+        expected_url = mocked_api._create_url("/tasks/task_id/annotation")
+        expected_params = None
+        expected_data = json.dumps(
+            {
+                "task_id": "task_id",
+                "task_execution": 0,
+                "note": {"message": "hello world"},
+                "issues": [{"issue_key": "key-1234", "url": "http://hello.world/key-1234"}],
+            }
+        )
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=expected_data, method="PUT"
+        )
+
     def test_performance_results_by_task(self, mocked_api):
         mocked_api.performance_results_by_task("task_id")
         expected_url = mocked_api._create_plugin_url("/task/task_id/perf")
