@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.2 = 2021-07-29
+- Consider `execution=0` as a valid input in the "annotate_task" API call.
+
 ## 3.2.1 = 2021-07-28
 - Added 'display_status' field to task object.
 

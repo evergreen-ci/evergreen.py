@@ -889,7 +889,7 @@ class EvergreenApi(object):
             "task_id": task_id,
         }
 
-        if execution:
+        if execution is not None:
             request["task_execution"] = execution
 
         if message:
