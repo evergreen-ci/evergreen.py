@@ -721,6 +721,21 @@ class TestLogApi(object):
             assert line in streamed_data
 
 
+class TestUserPermissionsApi(object):
+    def test_permissions_for_user(self, mocked_api, mocked_api_response):
+        expected_url = mocked_api._create_url("/users/test.user/permissions")
+        permissions = [{"type": "project", "permissions": {"proj1": {"test": "test"}}}]
+        mocked_api_response.json.return_value = permissions
+        returned_permissions = mocked_api.permissions_for_user("test.user")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
+        )
+        assert len(returned_permissions) == 1
+        print(returned_permissions[0].resource_type, returned_permissions[0].permissions)
+        assert returned_permissions[0].resource_type == "project"
+        assert returned_permissions[0].permissions == permissions[0]["permissions"]
+
+
 class TestCachedEvergreenApi(object):
     def test_build_by_id_is_cached(self, mocked_cached_api):
         build_id = "some build id"

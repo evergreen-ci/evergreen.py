@@ -114,6 +114,12 @@ def sample_manifest():
 
 
 @pytest.fixture()
+def sample_permissions():
+    """Return sample user permissions json."""
+    return get_sample_json("user_permissions.json")
+
+
+@pytest.fixture()
 def sample_patch():
     """Return sample patch json."""
     return get_sample_json("patch.json")

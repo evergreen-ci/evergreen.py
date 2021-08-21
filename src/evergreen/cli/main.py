@@ -391,6 +391,25 @@ def manifest(ctx, project, commit):
     click.echo(fmt_output(fmt, manifest.json))
 
 
+@cli.command()
+@click.pass_context
+@click.option("--user-id", required=False, help="User whose permissions to fetch")
+def user_permissions(ctx, user_id):
+    """
+    Get the evergreen permissions for a given user.
+
+    Gets permissions for the current user if --user-id is not explicitly
+    specified.
+    """
+    api = ctx.obj["api"]
+    fmt = ctx.obj["format"]
+
+    if not user_id:
+        user_id = api._auth.username
+    permissions = api.permissions_for_user(user_id)
+    click.echo(fmt_output(fmt, [p.json for p in permissions]))
+
+
 def main():
     """Create command line application."""
     return cli(obj={})

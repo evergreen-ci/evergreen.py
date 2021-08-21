@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.3 = 2021-08-21
+- Add support for `give permissions to user` and `get user permissions` API endpoints.
+
 ## 3.2.2 = 2021-07-29
 - Consider `execution=0` as a valid input in the "annotate_task" API call.
 

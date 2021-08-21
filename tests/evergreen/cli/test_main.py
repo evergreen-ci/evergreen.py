@@ -1,6 +1,7 @@
 import json
 
 from evergreen import Manifest, TaskStats, TestStats, Version
+from evergreen.resource_type_permissions import ResourceTypePermissions
 
 try:
     from unittest.mock import MagicMock
@@ -21,6 +22,8 @@ output_formats = [
     None,
 ]
 
+TEST_AUTH_USERNAME = "test.user"
+
 
 @pytest.fixture(params=output_formats)
 def output_fmt(request):
@@ -30,6 +33,7 @@ def output_fmt(request):
 def _create_api_mock(monkeypatch):
     mock_generator = MagicMock()
     evg_api_mock = mock_generator.get_api.return_value
+    evg_api_mock._auth.username = TEST_AUTH_USERNAME
     monkeypatch.setattr(under_test, "EvergreenApi", mock_generator)
     return evg_api_mock
 
@@ -227,3 +231,24 @@ def test_manifest(monkeypatch, sample_manifest, output_fmt):
     assert sample_manifest["id"] in result.output
     assert "project" in mock_manifest.call_args[0]
     assert "commit" in mock_manifest.call_args[0]
+
+
+@pytest.mark.parametrize(
+    "cmd_list", [["user-permissions", "--user-id", "test.user"], ["user-permissions"]]
+)
+def test_user_permissions(cmd_list, monkeypatch, sample_permissions, output_fmt):
+    evg_api_mock = _create_api_mock(monkeypatch)
+    mock_permissions = MagicMock()
+    evg_api_mock.permissions_for_user = mock_permissions
+    evg_api_mock.permissions_for_user.return_value = [
+        ResourceTypePermissions(p, None) for p in sample_permissions
+    ]
+
+    runner = CliRunner()
+    if output_fmt:
+        cmd_list = [output_fmt] + cmd_list
+    result = runner.invoke(under_test.cli, cmd_list)
+    assert result.exit_code == 0
+    assert sample_permissions[0]["type"] in result.output
+    assert "test.user" in mock_permissions.call_args[0]
+    assert "permissions" in sample_permissions[0]

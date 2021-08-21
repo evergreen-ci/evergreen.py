@@ -1,0 +1,29 @@
+[
+  {
+    "type": "project",
+    "permissions": {
+      "CLOUDP-51714-1": {
+        "project_logs": 0,
+        "project_patches": 10,
+        "project_settings": 0,
+        "project_tasks": 30
+      },
+      "Greenbay": {
+        "project_git_tags": 10,
+        "project_logs": 10,
+        "project_patches": 10,
+        "project_settings": 0,
+        "project_task_annotations": 10,
+        "project_tasks": 30
+      },
+      "a-test-project": {
+        "project_git_tags": 10,
+        "project_logs": 10,
+        "project_patches": 10,
+        "project_settings": 10,
+        "project_task_annotations": 20,
+        "project_tasks": 20
+      }
+    }
+  }
+]
