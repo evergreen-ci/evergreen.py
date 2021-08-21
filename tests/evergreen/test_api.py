@@ -731,7 +731,6 @@ class TestUserPermissionsApi(object):
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
         assert len(returned_permissions) == 1
-        print(returned_permissions[0].resource_type, returned_permissions[0].permissions)
         assert returned_permissions[0].resource_type == "project"
         assert returned_permissions[0].permissions == permissions[0]["permissions"]
 
