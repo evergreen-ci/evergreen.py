@@ -29,7 +29,7 @@ class ResourceTypePermissions(_BaseEvergreenObject):
         """
         Create an instance of a resource type permission set.
 
-        :param json: Json of resource type permissions.
+        :param json: JSON of resource type permissions.
         :param api: Evergreen API.
         """
         super(ResourceTypePermissions, self).__init__(json, api)

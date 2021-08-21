@@ -1003,7 +1003,7 @@ class EvergreenApi(object):
         Get the permissions a user has on evergreen resources.
 
         :param user_id: Id of the user whose permissions to get.
-        :return: Permissions for the user.
+        :return: List of permissions the user has.
         """
         url = self._create_url(f"/users/{user_id}/permissions")
         raw_permissions = self._call_api(url).json()
@@ -1022,7 +1022,7 @@ class EvergreenApi(object):
         :param user_id: Id of the user to give permissions to.
         :param resource_type: An evergreen resource type that supports permissions.
         :param resources: A list of evergreen resources of type `resource_type`.
-        :param permissions: A list of permissions to grant.
+        :param permissions: Permissions to grant.
                             E.g. - [{"project_tasks": 30, "project_patches": 10}]
         """
         url = self._create_url(f"/users/{user_id}/permissions")
