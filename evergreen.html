@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.2.2 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.2.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -372,6 +372,23 @@ with value of a list of task names to configure for specified variant. See the d
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.api.EvergreenApi.give_permissions_to_user">
+<code class="sig-name descname">give_permissions_to_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">resource_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#evergreen.resource_type_permissions.PermissionableResourceType" title="evergreen.resource_type_permissions.PermissionableResourceType">evergreen.resource_type_permissions.PermissionableResourceType</a></span></em>, <em class="sig-param"><span class="n">resources</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">permissions</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.give_permissions_to_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.give_permissions_to_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grant a user permissions to evergreen resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> – Id of the user to give permissions to.</p></li>
+<li><p><strong>resource_type</strong> – An evergreen resource type that supports permissions.</p></li>
+<li><p><strong>resources</strong> – A list of evergreen resources of type <cite>resource_type</cite>.</p></li>
+<li><p><strong>permissions</strong> – Permissions to grant.
+E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.api.EvergreenApi.json_by_task">
 <code class="sig-name descname">json_by_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">json_key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.json_by_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.json_by_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the json reported for task {task_id} using the key {json_key}.</p>
@@ -533,6 +550,20 @@ with value of a list of task names to configure for specified variant. See the d
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Contents of ‘perf.json’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.permissions_for_user">
+<code class="sig-name descname">permissions_for_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#evergreen.resource_type_permissions.ResourceTypePermissions" title="evergreen.resource_type_permissions.ResourceTypePermissions">evergreen.resource_type_permissions.ResourceTypePermissions</a><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.permissions_for_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.permissions_for_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the permissions a user has on evergreen resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user_id</strong> – Id of the user whose permissions to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of permissions the user has.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2714,6 +2745,51 @@ argument.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-evergreen.resource_type_permissions">
+<span id="evergreen-resource-type-permissions-module"></span><h2>evergreen.resource_type_permissions module<a class="headerlink" href="#module-evergreen.resource_type_permissions" title="Permalink to this headline">¶</a></h2>
+<p>Evergreen representation of a user’s permissions.</p>
+<dl class="py class">
+<dt id="evergreen.resource_type_permissions.PermissionableResourceType">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.resource_type_permissions.</code><code class="sig-name descname">PermissionableResourceType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/resource_type_permissions.html#PermissionableResourceType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.resource_type_permissions.PermissionableResourceType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Represents resource types that a user can be granted permissions to.</p>
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.PermissionableResourceType.DISTRO">
+<code class="sig-name descname">DISTRO</code><em class="property"> = 'distro'</em><a class="headerlink" href="#evergreen.resource_type_permissions.PermissionableResourceType.DISTRO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.PermissionableResourceType.PROJECT">
+<code class="sig-name descname">PROJECT</code><em class="property"> = 'project'</em><a class="headerlink" href="#evergreen.resource_type_permissions.PermissionableResourceType.PROJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.PermissionableResourceType.SUPERUSER">
+<code class="sig-name descname">SUPERUSER</code><em class="property"> = 'superuser'</em><a class="headerlink" href="#evergreen.resource_type_permissions.PermissionableResourceType.SUPERUSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.resource_type_permissions.ResourceTypePermissions">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.resource_type_permissions.</code><code class="sig-name descname">ResourceTypePermissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/resource_type_permissions.html#ResourceTypePermissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.resource_type_permissions.ResourceTypePermissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a user’s permissions on resources of a specific type.</p>
+<dl class="py method">
+<dt id="evergreen.resource_type_permissions.ResourceTypePermissions.permissions">
+<em class="property">property </em><code class="sig-name descname">permissions</code><a class="headerlink" href="#evergreen.resource_type_permissions.ResourceTypePermissions.permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of permissions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.resource_type_permissions.ResourceTypePermissions.resource_type">
+<em class="property">property </em><code class="sig-name descname">resource_type</code><a class="headerlink" href="#evergreen.resource_type_permissions.ResourceTypePermissions.resource_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of type</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-evergreen.stats">
 <span id="evergreen-stats-module"></span><h2>evergreen.stats module<a class="headerlink" href="#module-evergreen.stats" title="Permalink to this headline">¶</a></h2>
 <p>Stats representation of evergreen.</p>
@@ -4257,6 +4333,7 @@ argument.</p>
 <li><a class="reference internal" href="#module-evergreen.patch">evergreen.patch module</a></li>
 <li><a class="reference internal" href="#module-evergreen.performance_results">evergreen.performance_results module</a></li>
 <li><a class="reference internal" href="#module-evergreen.project">evergreen.project module</a></li>
+<li><a class="reference internal" href="#module-evergreen.resource_type_permissions">evergreen.resource_type_permissions module</a></li>
 <li><a class="reference internal" href="#module-evergreen.stats">evergreen.stats module</a></li>
 <li><a class="reference internal" href="#module-evergreen.task">evergreen.task module</a></li>
 <li><a class="reference internal" href="#module-evergreen.task_annotations">evergreen.task_annotations module</a></li>

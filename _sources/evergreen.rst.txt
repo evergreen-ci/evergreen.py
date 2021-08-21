@@ -117,6 +117,14 @@ evergreen.project module
    :undoc-members:
    :show-inheritance:
 
+evergreen.resource\_type\_permissions module
+--------------------------------------------
+
+.. automodule:: evergreen.resource_type_permissions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 evergreen.stats module
 ----------------------
 

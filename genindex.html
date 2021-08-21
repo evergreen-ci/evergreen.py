@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 3.2.2 documentation</title>
+    <title>Index &#8212; evergreen.py 3.2.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -368,6 +368,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.Distro">Distro (class in evergreen.distro)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType.DISTRO">DISTRO (evergreen.resource_type_permissions.PermissionableResourceType attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.host.Host.distro">distro() (evergreen.host.Host property)</a>
 
       <ul>
@@ -549,6 +551,13 @@
 
       <ul>
         <li><a href="evergreen.html#module-evergreen.project">module</a>
+</li>
+      </ul></li>
+      <li>
+    evergreen.resource_type_permissions
+
+      <ul>
+        <li><a href="evergreen.html#module-evergreen.resource_type_permissions">module</a>
 </li>
       </ul></li>
       <li>
@@ -771,6 +780,8 @@
       <li><a href="evergreen.html#evergreen.patch.GithubPatchData">GithubPatchData (class in evergreen.patch)</a>
 </li>
       <li><a href="evergreen.html#evergreen.version.Requester.GITTER_REQUEST">GITTER_REQUEST (evergreen.version.Requester attribute)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.give_permissions_to_user">give_permissions_to_user() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.PlannerSettings.group_versions">group_versions() (evergreen.distro.PlannerSettings property)</a>
 </li>
@@ -1006,6 +1017,8 @@
 </li>
         <li><a href="evergreen.html#module-evergreen.project">evergreen.project</a>
 </li>
+        <li><a href="evergreen.html#module-evergreen.resource_type_permissions">evergreen.resource_type_permissions</a>
+</li>
         <li><a href="evergreen.html#module-evergreen.stats">evergreen.stats</a>
 </li>
         <li><a href="evergreen.html#module-evergreen.task">evergreen.task</a>
@@ -1183,12 +1196,12 @@
 </li>
       <li><a href="evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_undispatched">pct_tasks_undispatched() (evergreen.metrics.buildmetrics.BuildMetrics property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task">performance_results_by_task() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task_name">performance_results_by_task_name() (evergreen.api.EvergreenApi method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData">PerformanceData (class in evergreen.performance_results)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestBatch">PerformanceTestBatch (class in evergreen.performance_results)</a>
@@ -1196,6 +1209,12 @@
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestResult">PerformanceTestResult (class in evergreen.performance_results)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestRun">PerformanceTestRun (class in evergreen.performance_results)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType">PermissionableResourceType (class in evergreen.resource_type_permissions)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions.permissions">permissions() (evergreen.resource_type_permissions.ResourceTypePermissions property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.permissions_for_user">permissions_for_user() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.OomTrackerInfo.pids">pids() (evergreen.task.OomTrackerInfo property)</a>
 </li>
@@ -1216,6 +1235,8 @@
       <li><a href="evergreen.html#evergreen.project.Project.private">private() (evergreen.project.Project property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.project.Project">Project (class in evergreen.project)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType.PROJECT">PROJECT (evergreen.resource_type_permissions.PermissionableResourceType attribute)</a>
 </li>
       <li><a href="evergreen.html#evergreen.manifest.Manifest.project">project() (evergreen.manifest.Manifest property)</a>
 
@@ -1297,6 +1318,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions.resource_type">resource_type() (evergreen.resource_type_permissions.ResourceTypePermissions property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions">ResourceTypePermissions (class in evergreen.resource_type_permissions)</a>
+</li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.restart_task">restart_task() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task.Task.restarts">restarts() (evergreen.task.Task property)</a>
@@ -1448,6 +1473,8 @@
       <li><a href="evergreen.html#evergreen.task.StatusScore.SUCCESS">SUCCESS (evergreen.task.StatusScore attribute)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability.success_rate">success_rate() (evergreen.task_reliability.TaskReliability property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType.SUPERUSER">SUPERUSER (evergreen.resource_type_permissions.PermissionableResourceType attribute)</a>
 </li>
       <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.suspected_issues">suspected_issues() (evergreen.task_annotations.TaskAnnotation property)</a>
 </li>
