@@ -33,6 +33,7 @@ from evergreen.manifest import Manifest
 from evergreen.patch import Patch
 from evergreen.performance_results import PerformanceData
 from evergreen.project import Project
+from evergreen.resource_type_permissions import PermissionableResourceType, ResourceTypePermissions
 from evergreen.stats import TaskStats, TestStats
 from evergreen.task import Task
 from evergreen.task_annotations import TaskAnnotation
@@ -996,6 +997,41 @@ class EvergreenApi(object):
         """
         params = {"text": "true"}
         return self._stream_api(log_url, params)
+
+    def permissions_for_user(self, user_id: str) -> List[ResourceTypePermissions]:
+        """
+        Get the permissions a user has on evergreen resources.
+
+        :param user_id: Id of the user whose permissions to get.
+        :return: List of permissions the user has.
+        """
+        url = self._create_url(f"/users/{user_id}/permissions")
+        raw_permissions = self._call_api(url).json()
+        return [ResourceTypePermissions(r, self) for r in raw_permissions]
+
+    def give_permissions_to_user(
+        self,
+        user_id: str,
+        resource_type: PermissionableResourceType,
+        resources: List[str],
+        permissions: Dict[str, int],
+    ) -> None:
+        """
+        Grant a user permissions to evergreen resources.
+
+        :param user_id: Id of the user to give permissions to.
+        :param resource_type: An evergreen resource type that supports permissions.
+        :param resources: A list of evergreen resources of type `resource_type`.
+        :param permissions: Permissions to grant.
+                            E.g. - [{"project_tasks": 30, "project_patches": 10}]
+        """
+        url = self._create_url(f"/users/{user_id}/permissions")
+        payload = {
+            "resource_type": resource_type,
+            "resources": resources,
+            "permissions": permissions,
+        }
+        self._call_api(url, method="POST", data=json.dumps(payload))
 
     @classmethod
     def get_api(
