@@ -33,7 +33,11 @@ from evergreen.manifest import Manifest
 from evergreen.patch import Patch
 from evergreen.performance_results import PerformanceData
 from evergreen.project import Project
-from evergreen.resource_type_permissions import PermissionableResourceType, ResourceTypePermissions
+from evergreen.resource_type_permissions import (
+    PermissionableResourceType,
+    RemovablePermission,
+    ResourceTypePermissions,
+)
 from evergreen.stats import TaskStats, TestStats
 from evergreen.task import Task
 from evergreen.task_annotations import TaskAnnotation
@@ -1032,6 +1036,17 @@ class EvergreenApi(object):
             "permissions": permissions,
         }
         self._call_api(url, method="POST", data=json.dumps(payload))
+
+    def delete_user_permissions(self, user_id: str, resource_type: RemovablePermission) -> None:
+        """
+        Delete all permissions of a given type for a user.
+
+        :param user_id: Id of the user whose permissions to remove.
+        :param resource_type: A permission that can be removed.
+        """
+        url = self._create_url(f"/users/{user_id}/permissions")
+        payload = {"resource_type": resource_type}
+        self._call_api(url, method="DELETE", data=json.dumps(payload))
 
     @classmethod
     def get_api(
