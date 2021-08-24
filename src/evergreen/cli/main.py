@@ -422,12 +422,8 @@ def user_permissions(ctx, user_id):
 def delete_user_permissions(ctx, user_id, resource_type):
     """Delete all permissions of a given type for a user."""
     api = ctx.obj["api"]
-    fmt = ctx.obj["format"]
-
     api.delete_user_permissions(user_id, resource_type)
-    click.echo(
-        fmt_output(fmt, f"Sucessfully deleted {resource_type} permissions for user {user_id}")
-    )
+    click.echo(f"Sucessfully deleted {resource_type} permissions for user {user_id}")
 
 
 def main():
