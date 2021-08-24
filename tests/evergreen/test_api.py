@@ -13,6 +13,7 @@ from requests.exceptions import HTTPError
 import evergreen.api as under_test
 from evergreen.api_requests import IssueLinkRequest, SlackAttachment
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
+from evergreen.resource_type_permissions import PermissionableResourceType, RemovablePermission
 from evergreen.util import EVG_DATETIME_FORMAT, parse_evergreen_datetime
 from evergreen.version import Requester
 
@@ -724,7 +725,7 @@ class TestLogApi(object):
 class TestUserPermissionsApi(object):
     def test_permissions_for_user(self, mocked_api, mocked_api_response):
         expected_url = mocked_api._create_url("/users/test.user/permissions")
-        permissions = [{"type": "project", "permissions": {"proj1": {"test": "test"}}}]
+        permissions = [{"type": "project", "permissions": {"proj1": {"test": 1}}}]
         mocked_api_response.json.return_value = permissions
         returned_permissions = mocked_api.permissions_for_user("test.user")
         mocked_api.session.request.assert_called_with(
@@ -733,6 +734,32 @@ class TestUserPermissionsApi(object):
         assert len(returned_permissions) == 1
         assert returned_permissions[0].resource_type == "project"
         assert returned_permissions[0].permissions == permissions[0]["permissions"]
+
+    def test_give_permissions_to_user(self, mocked_api, mocked_api_response):
+        expected_url = mocked_api._create_url("/users/test.user/permissions")
+        resources = ["resource-1", "resource-2"]
+        permissions = {"proj1": {"test": 1}}
+        expected_data = json.dumps(
+            {
+                "resource_type": PermissionableResourceType.PROJECT.value,
+                "resources": resources,
+                "permissions": permissions,
+            }
+        )
+        mocked_api.give_permissions_to_user(
+            "test.user", PermissionableResourceType.PROJECT, resources, permissions
+        )
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=expected_data, method="POST",
+        )
+
+    def test_delete_user_permissions(self, mocked_api):
+        expected_url = mocked_api._create_url("/users/test.user/permissions")
+        expected_data = json.dumps({"resource_type": RemovablePermission.PROJECT.value})
+        mocked_api.delete_user_permissions("test.user", RemovablePermission.PROJECT)
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=expected_data, method="DELETE",
+        )
 
 
 class TestCachedEvergreenApi(object):

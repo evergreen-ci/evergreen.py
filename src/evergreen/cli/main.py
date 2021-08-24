@@ -410,6 +410,22 @@ def user_permissions(ctx, user_id):
     click.echo(fmt_output(fmt, [p.json for p in permissions]))
 
 
+@cli.command()
+@click.pass_context
+@click.option("--user-id", required=True, help="User whose permissions to remove")
+@click.option(
+    "--resource-type",
+    required=True,
+    type=click.Choice(["project", "distro", "superuser", "all"], case_sensitive=False),
+    help="Type of resource for which to delete permissions.",
+)
+def delete_user_permissions(ctx, user_id, resource_type):
+    """Delete all permissions of a given type for a user."""
+    api = ctx.obj["api"]
+    api.delete_user_permissions(user_id, resource_type)
+    click.echo(f"Sucessfully deleted {resource_type} permissions for user {user_id}")
+
+
 def main():
     """Create command line application."""
     return cli(obj={})

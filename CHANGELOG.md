@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.4 = 2021-08-24
+- Add support for `delete user permissions` API endpoint.
+- Test fixes.
+
 ## 3.2.3 = 2021-08-21
 - Add support for `give permissions to user` and `get user permissions` API endpoints.
 

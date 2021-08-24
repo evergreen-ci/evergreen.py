@@ -19,6 +19,15 @@ class PermissionableResourceType(str, Enum):
     SUPERUSER = "superuser"
 
 
+class RemovablePermission(str, Enum):
+    """Represents a permission that can be removed from a user."""
+
+    PROJECT = "project"
+    DISTRO = "distro"
+    SUPERUSER = "superuser"
+    ALL = "all"
+
+
 class ResourceTypePermissions(_BaseEvergreenObject):
     """Representation of a user's permissions on resources of a specific type."""
 
