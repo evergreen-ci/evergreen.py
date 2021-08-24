@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.2.3 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.2.4 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -77,7 +77,11 @@
 <span class="kn">from</span> <span class="nn">evergreen.patch</span> <span class="kn">import</span> <span class="n">Patch</span>
 <span class="kn">from</span> <span class="nn">evergreen.performance_results</span> <span class="kn">import</span> <span class="n">PerformanceData</span>
 <span class="kn">from</span> <span class="nn">evergreen.project</span> <span class="kn">import</span> <span class="n">Project</span>
-<span class="kn">from</span> <span class="nn">evergreen.resource_type_permissions</span> <span class="kn">import</span> <span class="n">PermissionableResourceType</span><span class="p">,</span> <span class="n">ResourceTypePermissions</span>
+<span class="kn">from</span> <span class="nn">evergreen.resource_type_permissions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PermissionableResourceType</span><span class="p">,</span>
+    <span class="n">RemovablePermission</span><span class="p">,</span>
+    <span class="n">ResourceTypePermissions</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">evergreen.stats</span> <span class="kn">import</span> <span class="n">TaskStats</span><span class="p">,</span> <span class="n">TestStats</span>
 <span class="kn">from</span> <span class="nn">evergreen.task</span> <span class="kn">import</span> <span class="n">Task</span>
 <span class="kn">from</span> <span class="nn">evergreen.task_annotations</span> <span class="kn">import</span> <span class="n">TaskAnnotation</span>
@@ -1076,6 +1080,17 @@
             <span class="s2">&quot;permissions&quot;</span><span class="p">:</span> <span class="n">permissions</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.delete_user_permissions"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.delete_user_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">delete_user_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">:</span> <span class="n">RemovablePermission</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete all permissions of a given type for a user.</span>
+
+<span class="sd">        :param user_id: Id of the user whose permissions to remove.</span>
+<span class="sd">        :param resource_type: A permission that can be removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/users/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">/permissions&quot;</span><span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="n">resource_type</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.get_api"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_api">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_api</span><span class="p">(</span>

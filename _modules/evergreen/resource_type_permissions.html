@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.resource_type_permissions &#8212; evergreen.py 3.2.3 documentation</title>
+    <title>evergreen.resource_type_permissions &#8212; evergreen.py 3.2.4 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -61,6 +61,15 @@
     <span class="n">PROJECT</span> <span class="o">=</span> <span class="s2">&quot;project&quot;</span>
     <span class="n">DISTRO</span> <span class="o">=</span> <span class="s2">&quot;distro&quot;</span>
     <span class="n">SUPERUSER</span> <span class="o">=</span> <span class="s2">&quot;superuser&quot;</span></div>
+
+
+<div class="viewcode-block" id="RemovablePermission"><a class="viewcode-back" href="../../evergreen.html#evergreen.resource_type_permissions.RemovablePermission">[docs]</a><span class="k">class</span> <span class="nc">RemovablePermission</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents a permission that can be removed from a user.&quot;&quot;&quot;</span>
+
+    <span class="n">PROJECT</span> <span class="o">=</span> <span class="s2">&quot;project&quot;</span>
+    <span class="n">DISTRO</span> <span class="o">=</span> <span class="s2">&quot;distro&quot;</span>
+    <span class="n">SUPERUSER</span> <span class="o">=</span> <span class="s2">&quot;superuser&quot;</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span></div>
 
 
 <div class="viewcode-block" id="ResourceTypePermissions"><a class="viewcode-back" href="../../evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions">[docs]</a><span class="k">class</span> <span class="nc">ResourceTypePermissions</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>

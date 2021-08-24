@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.2.3 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.2.4 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -329,6 +329,20 @@ with value of a list of task names to configure for specified variant. See the d
 <li><p><strong>task_id</strong> – Id of the task to update</p></li>
 <li><p><strong>activated</strong> – If specified, will update the task to specified value True or False</p></li>
 <li><p><strong>priority</strong> – If specified, will update the task’s priority to specified number</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.delete_user_permissions">
+<code class="sig-name descname">delete_user_permissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">resource_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#evergreen.resource_type_permissions.RemovablePermission" title="evergreen.resource_type_permissions.RemovablePermission">evergreen.resource_type_permissions.RemovablePermission</a></span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.delete_user_permissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.delete_user_permissions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all permissions of a given type for a user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> – Id of the user whose permissions to remove.</p></li>
+<li><p><strong>resource_type</strong> – A permission that can be removed.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2766,6 +2780,33 @@ argument.</p>
 <dl class="py attribute">
 <dt id="evergreen.resource_type_permissions.PermissionableResourceType.SUPERUSER">
 <code class="sig-name descname">SUPERUSER</code><em class="property"> = 'superuser'</em><a class="headerlink" href="#evergreen.resource_type_permissions.PermissionableResourceType.SUPERUSER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="evergreen.resource_type_permissions.RemovablePermission">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.resource_type_permissions.</code><code class="sig-name descname">RemovablePermission</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/resource_type_permissions.html#RemovablePermission"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.resource_type_permissions.RemovablePermission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Represents a permission that can be removed from a user.</p>
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.RemovablePermission.ALL">
+<code class="sig-name descname">ALL</code><em class="property"> = 'all'</em><a class="headerlink" href="#evergreen.resource_type_permissions.RemovablePermission.ALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.RemovablePermission.DISTRO">
+<code class="sig-name descname">DISTRO</code><em class="property"> = 'distro'</em><a class="headerlink" href="#evergreen.resource_type_permissions.RemovablePermission.DISTRO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.RemovablePermission.PROJECT">
+<code class="sig-name descname">PROJECT</code><em class="property"> = 'project'</em><a class="headerlink" href="#evergreen.resource_type_permissions.RemovablePermission.PROJECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.resource_type_permissions.RemovablePermission.SUPERUSER">
+<code class="sig-name descname">SUPERUSER</code><em class="property"> = 'superuser'</em><a class="headerlink" href="#evergreen.resource_type_permissions.RemovablePermission.SUPERUSER" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
