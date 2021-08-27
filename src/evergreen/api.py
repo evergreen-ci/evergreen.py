@@ -179,10 +179,11 @@ class EvergreenApi(object):
         start_time = time()
         with self.session.get(url=url, params=params, stream=True, timeout=self._timeout) as res:
             self._log_api_call_time(res, start_time)
-            self._raise_for_status(res)
 
             for line in res.iter_lines(decode_unicode=True):
                 yield line
+
+            self._raise_for_status(res)
 
     @staticmethod
     def _raise_for_status(response: requests.Response) -> None:

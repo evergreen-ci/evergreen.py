@@ -1,16 +1,19 @@
 # Changelog
 
-## 3.2.4 = 2021-08-24
+## 3.2.5 - 2021-08-27
+- Fix streaming API calls so they do not block.
+
+## 3.2.4 - 2021-08-24
 - Add support for `delete user permissions` API endpoint.
 - Test fixes.
 
-## 3.2.3 = 2021-08-21
+## 3.2.3 - 2021-08-21
 - Add support for `give permissions to user` and `get user permissions` API endpoints.
 
-## 3.2.2 = 2021-07-29
+## 3.2.2 - 2021-07-29
 - Consider `execution=0` as a valid input in the "annotate_task" API call.
 
-## 3.2.1 = 2021-07-28
+## 3.2.1 - 2021-07-28
 - Added 'display_status' field to task object.
 
 ## 3.2.0 - 2021-07-02
