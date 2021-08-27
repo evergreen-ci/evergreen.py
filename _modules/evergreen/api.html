@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.2.4 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.2.5 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -223,10 +223,11 @@
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">res</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_log_api_call_time</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">start_time</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_raise_for_status</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">iter_lines</span><span class="p">(</span><span class="n">decode_unicode</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
                 <span class="k">yield</span> <span class="n">line</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_raise_for_status</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_raise_for_status</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
