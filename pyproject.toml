@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evergreen.py"
-version = "3.2.6"
+version = "3.2.7"
 description = "Python client for the Evergreen API"
 authors = [
     "Alexander Costas <alexander.costas@mongodb.com>",
@@ -23,10 +23,10 @@ evg-api = "evergreen.cli.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
-Click = "^7"
-python-dateutil = "^2"
-PyYAML = "^5"
-requests = "^2"
+Click = ">=7"
+python-dateutil = ">=2"
+PyYAML = ">=5"
+requests = ">=2"
 structlog = ">=19"
 tenacity = ">=5"
 pydantic = ">=1"
