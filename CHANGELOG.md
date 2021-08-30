@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.6 - 2021-08-30
+- Fix error from using streaming response multiple times.
+
 ## 3.2.5 - 2021-08-27
 - Fix streaming API calls so they do not block.
 

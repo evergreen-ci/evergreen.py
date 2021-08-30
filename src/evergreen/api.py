@@ -183,8 +183,6 @@ class EvergreenApi(object):
             for line in res.iter_lines(decode_unicode=True):
                 yield line
 
-            self._raise_for_status(res)
-
     @staticmethod
     def _raise_for_status(response: requests.Response) -> None:
         """
