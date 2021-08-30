@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.7 - 2021-08-30
+- Relax dependencies
+
 ## 3.2.6 - 2021-08-30
 - Fix error from using streaming response multiple times.
 
