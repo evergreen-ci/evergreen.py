@@ -619,7 +619,7 @@ class EvergreenApi(object):
         :return: The list of matching tasks.
         """
         url = self._create_url(f"/projects/{project_id}/revisions/{commit_hash}/tasks")
-        return [Task(json, self) for json in self._call_api(url, params).json()]  # type: ignore[arg-type]
+        return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
 
     def task_stats_by_project(
         self,

@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.8 - 2021-09-02
+- Ensure `tasks_by_project_and_commit` endpoint paginates over all results.
+
 ## 3.2.7 - 2021-08-30
 - Relax dependencies
 
