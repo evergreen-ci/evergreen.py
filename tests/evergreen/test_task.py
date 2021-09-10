@@ -76,6 +76,7 @@ class TestTask(object):
     def test_getting_attributes(self, sample_task):
         task = Task(sample_task, None)
         assert sample_task["task_id"] == task.task_id
+        assert sample_task["project_identifier"] == task.project_identifier
         with pytest.raises(AttributeError):
             task.not_really_an_attribute
 
@@ -165,12 +166,6 @@ class TestTask(object):
         task = Task(sample_task, mock_api)
         log = task.retrieve_log("task_log")
         assert log == mock_api.retrieve_task_log.return_value
-
-    def test_get_project_identifier(self, sample_task):
-        mock_api = MagicMock()
-        task = Task(sample_task, mock_api)
-        identifier = task.get_project_identifier()
-        assert identifier == mock_api.project_by_id(task.project_id).identifier
 
     def test_retrieve_log_with_raw(self, sample_task):
         mock_api = MagicMock()
