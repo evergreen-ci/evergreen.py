@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.9 - 2021-09-10
+- Removed admin permission requirement for `project_identifier` access.
+
 ## 3.2.8 - 2021-09-02
 - Ensure `tasks_by_project_and_commit` endpoint paginates over all results.
 

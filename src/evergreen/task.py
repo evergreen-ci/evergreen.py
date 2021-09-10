@@ -164,6 +164,14 @@ class Task(_BaseEvergreenObject):
             self._logs_map = {key: value for key, value in self.json["logs"].items()}
         return self._logs_map
 
+    def get_project_identifier(self) -> str:
+        """
+        Return the human-readable project id. Can also be accessed as an attribute.
+
+        :return: Human-readable project id.
+        """
+        return self.project_identifier
+
     def retrieve_log(self, log_name: str, raw: bool = False) -> str:
         """
         Retrieve the contents of the specified log.
