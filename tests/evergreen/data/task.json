@@ -1,6 +1,7 @@
 {
   "task_id": "mongodb_mongo_master_linux_64_debug_aggregation_auth_patch_3a8290eef5c5934462b5cb84c9daded1b3073ad9_5c6469b6d6d80a06ba7b3aff_19_02_13_19_02_16",
   "project_id": "mongodb-mongo-master",
+  "project_identifier": "mongodb-mongo-master",
   "create_time": "2019-02-13T14:55:37.000Z",
   "dispatch_time": "2019-02-13T19:33:20.590Z",
   "scheduled_time": "2019-02-13T19:13:21.000Z",
