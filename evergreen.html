@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.2.8 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.2.9 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -3283,8 +3283,7 @@ If this is not a display task, returns None.</p>
 <dl class="py method">
 <dt id="evergreen.task.Task.get_project_identifier">
 <code class="sig-name descname">get_project_identifier</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/evergreen/task.html#Task.get_project_identifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.task.Task.get_project_identifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the human-readable project id from Evergreen.</p>
-<p>This requires the caller to be Admin on the project.</p>
+<dd><p>Return the human-readable project id. Can also be accessed as an attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Human-readable project id.</p>
@@ -3448,6 +3447,12 @@ If this is not a display task, returns None.</p>
 <dt id="evergreen.task.Task.project_id">
 <em class="property">property </em><code class="sig-name descname">project_id</code><a class="headerlink" href="#evergreen.task.Task.project_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of project_id</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.Task.project_identifier">
+<em class="property">property </em><code class="sig-name descname">project_identifier</code><a class="headerlink" href="#evergreen.task.Task.project_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of project_identifier</p>
 </dd></dl>
 
 <dl class="py method">
