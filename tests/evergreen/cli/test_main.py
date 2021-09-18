@@ -265,3 +265,14 @@ def test_delete_user_permissions(monkeypatch, output_fmt):
         cmd_list = [output_fmt] + cmd_list
     result = runner.invoke(under_test.cli, cmd_list)
     assert result.exit_code == 0
+
+
+def test_give_role_to_user(monkeypatch):
+    evg_api_mock = _create_api_mock(monkeypatch)
+    evg_api_mock.give_roles_to_user.return_value = {}
+
+    cmd_list = ["give-role-to-user", "--user-id", "test.user", "--role", "role1"]
+
+    runner = CliRunner()
+    result = runner.invoke(under_test.cli, cmd_list)
+    assert result.exit_code == 0

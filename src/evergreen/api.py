@@ -1036,6 +1036,22 @@ class EvergreenApi(object):
         }
         self._call_api(url, method="POST", data=json.dumps(payload))
 
+    def give_roles_to_user(self, user_id: str, roles: List[str], create_user: bool = False) -> None:
+        """
+        Add the specified role to the specified user.
+
+        :param user_id: Id of the user to give the roles to.
+        :param roles: A list of roles to give to the user.
+        :param create_user: If true, will also create a user document for the user.
+        """
+        url = self._create_url(f"/users/{user_id}/roles")
+        payload = {
+            "user_id": user_id,
+            "roles": roles,
+            "create_user": create_user,
+        }
+        self._call_api(url, method="POST", data=json.dumps(payload))
+
     def delete_user_permissions(self, user_id: str, resource_type: RemovablePermission) -> None:
         """
         Delete all permissions of a given type for a user.

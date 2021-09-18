@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.0 - 2021-09-17
+- Added support for `give roles to user` API endpoint.
+
 ## 3.2.9 - 2021-09-10
 - Removed admin permission requirement for `project_identifier` access.
 
