@@ -428,15 +428,15 @@ def delete_user_permissions(ctx, user_id, resource_type):
 
 @cli.command()
 @click.pass_context
-@click.option("--user-id", required=True, help="User to give the role to.")
+@click.option("--user-id", required=True, help="User to grant roles to.")
 @click.option(
-    "--role", required=True, help="Role to grant the user.",
+    "--role", required=True, multiple=True, help="Role to grant the user.",
 )
 def give_role_to_user(ctx, user_id, role):
-    """Grant a role to a user."""
+    """Grant roles to a user."""
     api = ctx.obj["api"]
-    api.give_roles_to_user(user_id, [role])
-    click.echo(f"Successfully granted role {role} to user {user_id}")
+    api.give_roles_to_user(user_id, list(role))
+    click.echo(f"Successfully granted roles {role} to user {user_id}")
 
 
 def main():
