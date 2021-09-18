@@ -271,7 +271,15 @@ def test_give_role_to_user(monkeypatch):
     evg_api_mock = _create_api_mock(monkeypatch)
     evg_api_mock.give_roles_to_user.return_value = {}
 
-    cmd_list = ["give-role-to-user", "--user-id", "test.user", "--role", "role1", "--role", "role2"]
+    cmd_list = [
+        "give-roles-to-user",
+        "--user-id",
+        "test.user",
+        "--role",
+        "role1",
+        "--role",
+        "role2",
+    ]
 
     runner = CliRunner()
     result = runner.invoke(under_test.cli, cmd_list)

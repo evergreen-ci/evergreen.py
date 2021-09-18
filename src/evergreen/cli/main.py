@@ -432,7 +432,7 @@ def delete_user_permissions(ctx, user_id, resource_type):
 @click.option(
     "--role", required=True, multiple=True, help="Role to grant the user.",
 )
-def give_role_to_user(ctx, user_id, role):
+def give_roles_to_user(ctx, user_id, role):
     """Grant roles to a user."""
     api = ctx.obj["api"]
     api.give_roles_to_user(user_id, list(role))
