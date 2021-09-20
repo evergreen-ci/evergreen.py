@@ -762,6 +762,20 @@ class TestUserPermissionsApi(object):
         )
 
 
+class TestRolesApi(object):
+    @pytest.mark.parametrize("create_user", [False, True])
+    def test_give_roles_to_user(self, mocked_api, create_user):
+        expected_url = mocked_api._create_url("/users/test.user/roles")
+        roles = ["role1", "role2"]
+        expected_data = json.dumps(
+            {"user_id": "test.user", "roles": roles, "create_user": create_user}
+        )
+        mocked_api.give_roles_to_user("test.user", roles, create_user)
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=expected_data, method="POST"
+        )
+
+
 class TestCachedEvergreenApi(object):
     def test_build_by_id_is_cached(self, mocked_cached_api):
         build_id = "some build id"
