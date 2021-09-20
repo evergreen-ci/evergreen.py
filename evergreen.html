@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.2.9 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.3.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -397,6 +397,21 @@ with value of a list of task names to configure for specified variant. See the d
 <li><p><strong>resources</strong> – A list of evergreen resources of type <cite>resource_type</cite>.</p></li>
 <li><p><strong>permissions</strong> – Permissions to grant.
 E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.give_roles_to_user">
+<code class="sig-name descname">give_roles_to_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">roles</span><span class="p">:</span> <span class="n">List<span class="p">[</span>str<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">create_user</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.give_roles_to_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.give_roles_to_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the specified role to the specified user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_id</strong> – Id of the user to give the roles to.</p></li>
+<li><p><strong>roles</strong> – A list of roles to give to the user.</p></li>
+<li><p><strong>create_user</strong> – If true, will also create a user document for the user.</p></li>
 </ul>
 </dd>
 </dl>
