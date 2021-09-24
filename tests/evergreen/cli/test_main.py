@@ -272,7 +272,7 @@ def test_user_permissions(cmd_list, monkeypatch, sample_permissions, output_fmt)
         ],
     ],
 )
-def test_delete_user_permissions_all(monkeypatch, output_fmt, cmd_list, resource_id):
+def test_delete_user_permissions(monkeypatch, output_fmt, cmd_list, resource_id):
     evg_api_mock = _create_api_mock(monkeypatch)
     evg_api_mock.delete_user_permissions.return_value = {}
 
