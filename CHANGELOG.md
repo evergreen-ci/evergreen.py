@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.1 - 2021-09-24
+- Delete user permissions endpoint now supports a resource_id param.
+
 ## 3.3.0 - 2021-09-17
 - Added support for `give roles to user` API endpoint.
 
