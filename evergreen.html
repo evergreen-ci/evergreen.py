@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.3.0 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.3.2 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -336,13 +336,15 @@ with value of a list of task names to configure for specified variant. See the d
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.delete_user_permissions">
-<code class="sig-name descname">delete_user_permissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">resource_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#evergreen.resource_type_permissions.RemovablePermission" title="evergreen.resource_type_permissions.RemovablePermission">evergreen.resource_type_permissions.RemovablePermission</a></span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.delete_user_permissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.delete_user_permissions" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete_user_permissions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">resource_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#evergreen.resource_type_permissions.RemovablePermission" title="evergreen.resource_type_permissions.RemovablePermission">evergreen.resource_type_permissions.RemovablePermission</a></span></em>, <em class="sig-param"><span class="n">resource_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.delete_user_permissions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.delete_user_permissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete all permissions of a given type for a user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>user_id</strong> – Id of the user whose permissions to remove.</p></li>
 <li><p><strong>resource_type</strong> – A permission that can be removed.</p></li>
+<li><p><strong>resource_id</strong> – Resource id for which to delete permissions. Required unless
+deleting all permissions.</p></li>
 </ul>
 </dd>
 </dl>
@@ -381,6 +383,17 @@ with value of a list of task names to configure for specified variant. See the d
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The task annotations for the given task, if any exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.get_users_for_role">
+<code class="sig-name descname">get_users_for_role</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">role</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.get_users_for_role"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.get_users_for_role" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of users having an evergreen role.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>role</strong> – Role to fetch users for.</p>
 </dd>
 </dl>
 </dd></dl>
