@@ -1069,6 +1069,15 @@ class EvergreenApi(object):
             payload["resource_id"] = resource_id
         self._call_api(url, method="DELETE", data=json.dumps(payload))
 
+    def get_users_for_role(self, role: str) -> List[str]:
+        """
+        Get a list of users having an evergreen role.
+
+        :param role: Role to fetch users for.
+        """
+        url = self._create_url(f"/roles/{role}/users")
+        return self._call_api(url, method="GET").json()
+
     @classmethod
     def get_api(
         cls,

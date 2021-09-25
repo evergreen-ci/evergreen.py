@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.2 - 2021-09-24
+- Add 'get users for role' endpoint.
+
 ## 3.3.1 - 2021-09-24
 - Delete user permissions endpoint now supports a resource_id param.
 

@@ -785,6 +785,16 @@ class TestRolesApi(object):
             url=expected_url, params=None, timeout=None, data=expected_data, method="POST"
         )
 
+    def test_get_users_for_role(self, mocked_api, mocked_api_response):
+        expected_url = mocked_api._create_url("/roles/testrole/users")
+        users = ["test1", "test2", "test3"]
+        mocked_api_response.json.return_value = {"users": users}
+        returned_response = mocked_api.get_users_for_role("testrole")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
+        )
+        assert returned_response == {"users": users}
+
 
 class TestCachedEvergreenApi(object):
     def test_build_by_id_is_cached(self, mocked_cached_api):

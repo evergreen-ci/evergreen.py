@@ -304,3 +304,17 @@ def test_give_role_to_user(monkeypatch):
     result = runner.invoke(under_test.cli, cmd_list)
     evg_api_mock.give_roles_to_user.assert_called_once_with("test.user", ["role1", "role2"])
     assert result.exit_code == 0
+
+
+def test_get_users_for_role(monkeypatch):
+    evg_api_mock = _create_api_mock(monkeypatch)
+    users = ["user1", "user2"]
+    evg_api_mock.get_users_for_role.return_value = {"users": users}
+
+    cmd_list = ["get-users-for-role", "--role", "testrole"]
+
+    runner = CliRunner()
+    result = runner.invoke(under_test.cli, cmd_list)
+    evg_api_mock.get_users_for_role.assert_called_once_with("testrole")
+    assert result.exit_code == 0
+    assert "user1" in result.output

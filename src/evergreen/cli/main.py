@@ -450,6 +450,18 @@ def give_roles_to_user(ctx, user_id, role):
     click.echo(f"Successfully granted roles {role} to user {user_id}")
 
 
+@cli.command()
+@click.pass_context
+@click.option(
+    "--role", required=True, help="Role to fetch users for.",
+)
+def get_users_for_role(ctx, role):
+    """Get users having an evergreen role."""
+    api = ctx.obj["api"]
+    users = api.get_users_for_role(role)
+    click.echo(users)
+
+
 def main():
     """Create command line application."""
     return cli(obj={})
