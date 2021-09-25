@@ -1076,7 +1076,7 @@ class EvergreenApi(object):
         :param role: Role to fetch users for.
         """
         url = self._create_url(f"/roles/{role}/users")
-        return self._call_api(url, method="GET").json()
+        return self._call_api(url, method="GET").json()["users"]
 
     @classmethod
     def get_api(

@@ -793,7 +793,7 @@ class TestRolesApi(object):
         mocked_api.session.request.assert_called_with(
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
-        assert returned_response == {"users": users}
+        assert returned_response == users
 
 
 class TestCachedEvergreenApi(object):
