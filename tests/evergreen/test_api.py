@@ -753,10 +753,20 @@ class TestUserPermissionsApi(object):
             url=expected_url, params=None, timeout=None, data=expected_data, method="POST",
         )
 
-    def test_delete_user_permissions(self, mocked_api):
+    def test_delete_user_permissions_all_resources(self, mocked_api):
         expected_url = mocked_api._create_url("/users/test.user/permissions")
         expected_data = json.dumps({"resource_type": RemovablePermission.PROJECT.value})
         mocked_api.delete_user_permissions("test.user", RemovablePermission.PROJECT)
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=expected_data, method="DELETE",
+        )
+
+    def test_delete_user_permissions_specific_resource(self, mocked_api):
+        expected_url = mocked_api._create_url("/users/test.user/permissions")
+        expected_data = json.dumps(
+            {"resource_type": RemovablePermission.PROJECT.value, "resource_id": "testresource"}
+        )
+        mocked_api.delete_user_permissions("test.user", RemovablePermission.PROJECT, "testresource")
         mocked_api.session.request.assert_called_with(
             url=expected_url, params=None, timeout=None, data=expected_data, method="DELETE",
         )

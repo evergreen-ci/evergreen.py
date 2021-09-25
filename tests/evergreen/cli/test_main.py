@@ -1,7 +1,7 @@
 import json
 
 from evergreen import Manifest, TaskStats, TestStats, Version
-from evergreen.resource_type_permissions import ResourceTypePermissions
+from evergreen.resource_type_permissions import RemovablePermission, ResourceTypePermissions
 
 try:
     from unittest.mock import MagicMock
@@ -254,16 +254,35 @@ def test_user_permissions(cmd_list, monkeypatch, sample_permissions, output_fmt)
     assert "permissions" in sample_permissions[0]
 
 
-def test_delete_user_permissions(monkeypatch, output_fmt):
+@pytest.mark.parametrize(
+    "cmd_list,resource_id",
+    [
+        [["delete-user-permissions", "--user-id", "test.user", "--resource-type", "project"], None],
+        [
+            [
+                "delete-user-permissions",
+                "--user-id",
+                "test.user",
+                "--resource-type",
+                "project",
+                "--resource-id",
+                "testresource",
+            ],
+            "testresource",
+        ],
+    ],
+)
+def test_delete_user_permissions(monkeypatch, output_fmt, cmd_list, resource_id):
     evg_api_mock = _create_api_mock(monkeypatch)
     evg_api_mock.delete_user_permissions.return_value = {}
-
-    cmd_list = ["delete-user-permissions", "--user-id", "test.user", "--resource-type", "project"]
 
     runner = CliRunner()
     if output_fmt:
         cmd_list = [output_fmt] + cmd_list
     result = runner.invoke(under_test.cli, cmd_list)
+    evg_api_mock.delete_user_permissions.assert_called_once_with(
+        "test.user", RemovablePermission.PROJECT, resource_id
+    )
     assert result.exit_code == 0
 
 

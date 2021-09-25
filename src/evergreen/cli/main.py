@@ -10,6 +10,7 @@ import click
 import yaml
 
 from evergreen import EvergreenApi
+from evergreen.resource_type_permissions import RemovablePermission
 
 DisplayFormat = Enum("DisplayFormat", "human json yaml")
 
@@ -419,11 +420,21 @@ def user_permissions(ctx, user_id):
     type=click.Choice(["project", "distro", "superuser", "all"], case_sensitive=False),
     help="Type of resource for which to delete permissions.",
 )
-def delete_user_permissions(ctx, user_id, resource_type):
+@click.option(
+    "--resource-id",
+    required=False,
+    help="Id of the resource for which to delete permissions. Required unless deleting all permissions.",
+)
+def delete_user_permissions(ctx, user_id, resource_type, resource_id):
     """Delete all permissions of a given type for a user."""
     api = ctx.obj["api"]
-    api.delete_user_permissions(user_id, resource_type)
-    click.echo(f"Sucessfully deleted {resource_type} permissions for user {user_id}")
+    api.delete_user_permissions(user_id, RemovablePermission(resource_type), resource_id)
+    if resource_id:
+        click.echo(
+            f"Sucessfully deleted {resource_type} permissions for user {user_id} on resource id {resource_id}"
+        )
+    else:
+        click.echo(f"Sucessfully deleted {resource_type} permissions for user {user_id}")
 
 
 @cli.command()

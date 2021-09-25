@@ -1052,15 +1052,21 @@ class EvergreenApi(object):
         }
         self._call_api(url, method="POST", data=json.dumps(payload))
 
-    def delete_user_permissions(self, user_id: str, resource_type: RemovablePermission) -> None:
+    def delete_user_permissions(
+        self, user_id: str, resource_type: RemovablePermission, resource_id: Optional[str] = None
+    ) -> None:
         """
         Delete all permissions of a given type for a user.
 
         :param user_id: Id of the user whose permissions to remove.
         :param resource_type: A permission that can be removed.
+        :param resource_id: Resource id for which to delete permissions. Required unless
+                            deleting all permissions.
         """
         url = self._create_url(f"/users/{user_id}/permissions")
-        payload = {"resource_type": resource_type}
+        payload = {"resource_type": resource_type.value}
+        if resource_id:
+            payload["resource_id"] = resource_id
         self._call_api(url, method="DELETE", data=json.dumps(payload))
 
     def get_users_for_role(self, role: str) -> List[str]:
