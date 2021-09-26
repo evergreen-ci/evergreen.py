@@ -2,6 +2,7 @@ import json
 
 from evergreen import Manifest, TaskStats, TestStats, Version
 from evergreen.resource_type_permissions import RemovablePermission, ResourceTypePermissions
+from evergreen.users_for_role import UsersForRole
 
 try:
     from unittest.mock import MagicMock
@@ -309,7 +310,7 @@ def test_give_role_to_user(monkeypatch):
 def test_get_users_for_role(monkeypatch):
     evg_api_mock = _create_api_mock(monkeypatch)
     users = ["user1", "user2"]
-    evg_api_mock.get_users_for_role.return_value = {"users": users}
+    evg_api_mock.get_users_for_role.return_value = UsersForRole({"users": users}, None)
 
     cmd_list = ["get-users-for-role", "--role", "testrole"]
 
