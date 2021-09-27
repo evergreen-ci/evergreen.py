@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.3 - 2021-09-25
+- Fixes inconsistency in `get users for role` endpoint's return type hint and returned data.
+
 ## 3.3.2 - 2021-09-24
 - Add 'get users for role' endpoint.
 

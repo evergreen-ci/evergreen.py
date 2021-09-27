@@ -43,6 +43,7 @@ from evergreen.task import Task
 from evergreen.task_annotations import TaskAnnotation
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
+from evergreen.users_for_role import UsersForRole
 from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
 from evergreen.version import RecentVersions, Requester, Version
 
@@ -1069,14 +1070,14 @@ class EvergreenApi(object):
             payload["resource_id"] = resource_id
         self._call_api(url, method="DELETE", data=json.dumps(payload))
 
-    def get_users_for_role(self, role: str) -> List[str]:
+    def get_users_for_role(self, role: str) -> UsersForRole:
         """
         Get a list of users having an evergreen role.
 
         :param role: Role to fetch users for.
         """
         url = self._create_url(f"/roles/{role}/users")
-        return self._call_api(url, method="GET").json()
+        return UsersForRole(self._call_api(url, method="GET").json(), self)
 
     @classmethod
     def get_api(

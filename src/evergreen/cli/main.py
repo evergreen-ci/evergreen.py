@@ -459,7 +459,7 @@ def get_users_for_role(ctx, role):
     """Get users having an evergreen role."""
     api = ctx.obj["api"]
     users = api.get_users_for_role(role)
-    click.echo(users)
+    click.echo(users.users)
 
 
 def main():
