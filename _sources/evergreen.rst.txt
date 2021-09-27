@@ -165,6 +165,14 @@ evergreen.tst module
    :undoc-members:
    :show-inheritance:
 
+evergreen.users\_for\_role module
+---------------------------------
+
+.. automodule:: evergreen.users_for_role
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 evergreen.util module
 ---------------------
 

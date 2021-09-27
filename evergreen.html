@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.3.2 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.3.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -389,7 +389,7 @@ deleting all permissions.</p></li>
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.get_users_for_role">
-<code class="sig-name descname">get_users_for_role</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">role</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>str<span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.get_users_for_role"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.get_users_for_role" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_users_for_role</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">role</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.users_for_role.UsersForRole" title="evergreen.users_for_role.UsersForRole">evergreen.users_for_role.UsersForRole</a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.get_users_for_role"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.get_users_for_role" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of users having an evergreen role.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -3916,6 +3916,23 @@ If this is not a display task, returns None.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-evergreen.users_for_role">
+<span id="evergreen-users-for-role-module"></span><h2>evergreen.users_for_role module<a class="headerlink" href="#module-evergreen.users_for_role" title="Permalink to this headline">¶</a></h2>
+<p>Representation of users having an evergreen role.</p>
+<dl class="py class">
+<dt id="evergreen.users_for_role.UsersForRole">
+<em class="property">class </em><code class="sig-prename descclassname">evergreen.users_for_role.</code><code class="sig-name descname">UsersForRole</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">Dict<span class="p">[</span>str<span class="p">, </span>Any<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n">EvergreenApi</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/users_for_role.html#UsersForRole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.users_for_role.UsersForRole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
+<p>Representation of a list of users having an evergreen role.</p>
+<dl class="py method">
+<dt id="evergreen.users_for_role.UsersForRole.users">
+<em class="property">property </em><code class="sig-name descname">users</code><a class="headerlink" href="#evergreen.users_for_role.UsersForRole.users" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of users</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="module-evergreen.util">
 <span id="evergreen-util-module"></span><h2>evergreen.util module<a class="headerlink" href="#module-evergreen.util" title="Permalink to this headline">¶</a></h2>
 <p>Useful utilities for interacting with Evergreen.</p>
@@ -4413,6 +4430,7 @@ argument.</p>
 <li><a class="reference internal" href="#module-evergreen.task_annotations">evergreen.task_annotations module</a></li>
 <li><a class="reference internal" href="#module-evergreen.task_reliability">evergreen.task_reliability module</a></li>
 <li><a class="reference internal" href="#module-evergreen.tst">evergreen.tst module</a></li>
+<li><a class="reference internal" href="#module-evergreen.users_for_role">evergreen.users_for_role module</a></li>
 <li><a class="reference internal" href="#module-evergreen.util">evergreen.util module</a></li>
 <li><a class="reference internal" href="#module-evergreen.version">evergreen.version module</a></li>
 <li><a class="reference internal" href="#module-evergreen">Module contents</a></li>
