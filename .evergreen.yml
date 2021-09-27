@@ -21,8 +21,10 @@ functions:
         export LC_ALL=C.UTF-8
         export LANG=C.UTF-8
 
-        virtualenv --python=python3 venv
+        /opt/mongodbtoolchain/v3/bin/python3 -m venv venv
         . venv/bin/activate
+        pip install --upgrade pip
+
         pip install poetry
         poetry install
 

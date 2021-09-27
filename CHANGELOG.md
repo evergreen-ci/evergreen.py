@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.4 - 2021-09-27
+- Fix evergreen testing environmental issue.
+
 ## 3.3.3 - 2021-09-25
 - Fixes inconsistency in `get users for role` endpoint's return type hint and returned data.
 
