@@ -10,7 +10,7 @@ import click
 import yaml
 
 from evergreen import EvergreenApi
-from evergreen.resource_type_permissions import RemovablePermission
+from evergreen.resource_type_permissions import PermissionableResourceType, RemovablePermission
 
 DisplayFormat = Enum("DisplayFormat", "human json yaml")
 
@@ -460,6 +460,24 @@ def get_users_for_role(ctx, role):
     api = ctx.obj["api"]
     users = api.get_users_for_role(role)
     click.echo(users.users)
+
+
+@cli.command()
+@click.pass_context
+@click.option("--resource-id", required=True, help="Resource id to fetch users for.")
+@click.option(
+    "--resource-type",
+    required=True,
+    type=click.Choice(["project", "distro", "superuser"], case_sensitive=False),
+    help="Type of resource.",
+)
+def all_user_permissions_for_resource(ctx, resource_id, resource_type):
+    """Get all user permissions to a resource."""
+    api = ctx.obj["api"]
+    user_permissions = api.all_user_permissions_for_resource(
+        resource_id, PermissionableResourceType(resource_type)
+    )
+    click.echo(user_permissions)
 
 
 def main():
