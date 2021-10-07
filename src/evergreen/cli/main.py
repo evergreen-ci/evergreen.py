@@ -464,7 +464,7 @@ def get_users_for_role(ctx, role):
 
 @cli.command()
 @click.pass_context
-@click.option("--resource-id", required=True, help="Resource id to fetch users for.")
+@click.option("--resource-id", required=True, help="Resource id to fetch user permissions for.")
 @click.option(
     "--resource-type",
     required=True,
