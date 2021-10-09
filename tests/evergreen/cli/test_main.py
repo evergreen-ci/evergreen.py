@@ -1,6 +1,7 @@
 import json
 
 from evergreen import Manifest, TaskStats, TestStats, Version
+from evergreen.resource_permissions import AllUserResourcePermissions
 from evergreen.resource_type_permissions import (
     PermissionableResourceType,
     RemovablePermission,
@@ -327,9 +328,9 @@ def test_get_users_for_role(monkeypatch):
 
 def test_all_user_permissions_for_resource(monkeypatch):
     evg_api_mock = _create_api_mock(monkeypatch)
-    evg_api_mock.all_user_permissions_for_resource.return_value = {
-        "test.user": {"project_tasks": 30, "project_patches": 10}
-    }
+    evg_api_mock.all_user_permissions_for_resource.return_value = AllUserResourcePermissions(
+        {"test.user": {"project_tasks": 30, "project_patches": 10}}, None
+    )
 
     cmd_list = [
         "all-user-permissions-for-resource",

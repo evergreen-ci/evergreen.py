@@ -33,6 +33,7 @@ from evergreen.manifest import Manifest
 from evergreen.patch import Patch
 from evergreen.performance_results import PerformanceData
 from evergreen.project import Project
+from evergreen.resource_permissions import AllUserResourcePermissions
 from evergreen.resource_type_permissions import (
     PermissionableResourceType,
     RemovablePermission,
@@ -1081,7 +1082,7 @@ class EvergreenApi(object):
 
     def all_user_permissions_for_resource(
         self, resource_id: str, resource_type: PermissionableResourceType
-    ) -> Dict[str, Dict[str, int]]:
+    ) -> AllUserResourcePermissions:
         """
         Get all users with their permissions to the resource.
 
@@ -1090,9 +1091,12 @@ class EvergreenApi(object):
         :return: A dict containing user: permissions mappings.
         """
         url = self._create_url("/users/permissions")
-        return self._call_api(
-            url, data=json.dumps({"resource_id": resource_id, "resource_type": resource_type})
-        ).json()
+        return AllUserResourcePermissions(
+            self._call_api(
+                url, data=json.dumps({"resource_id": resource_id, "resource_type": resource_type})
+            ).json(),
+            self,
+        )
 
     @classmethod
     def get_api(
