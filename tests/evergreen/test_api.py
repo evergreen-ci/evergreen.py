@@ -781,9 +781,7 @@ class TestUserPermissionsApi(object):
         returned_permissions = mocked_api.all_user_permissions_for_resource(
             "resource-1", PermissionableResourceType.PROJECT
         )
-        assert len(returned_permissions.permissions) == 1  # 1 user permission
-        assert returned_permissions.permissions[0].user == "user1"
-        assert returned_permissions.permissions[0].permissions == permissions["user1"]
+        assert returned_permissions == permissions
         mocked_api.session.request.assert_called_with(
             url=expected_url, params=None, timeout=None, data=expected_data, method="GET",
         )

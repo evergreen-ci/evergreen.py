@@ -477,7 +477,7 @@ def all_user_permissions_for_resource(ctx, resource_id, resource_type):
     user_permissions = api.all_user_permissions_for_resource(
         resource_id, PermissionableResourceType(resource_type)
     )
-    click.echo(user_permissions.json)
+    click.echo(user_permissions)
 
 
 def main():
