@@ -1085,11 +1085,10 @@ class EvergreenApi(object):
         """
         Get all users with their permissions to the resource.
 
-        :param resource_id: Id of the resource to get users for.
-        :param resource_type: Resource type of the resource.
-        :return: A dict containing user to permissions mappings.
-
         The returned dict has the following structure - 
+        
+        .. code-block:: python
+        
         {
           "username_1": {
              "project_tasks": 30,
@@ -1100,6 +1099,10 @@ class EvergreenApi(object):
              "project_patches": 10
           }
         }
+
+        :param resource_id: Id of the resource to get users for.
+        :param resource_type: Resource type of the resource.
+        :return: A dict containing user to permissions mappings.
         """
         url = self._create_url("/users/permissions")
         return self._call_api(
