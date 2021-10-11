@@ -1084,21 +1084,20 @@ class EvergreenApi(object):
     ) -> Dict[str, Dict[str, int]]:
         """
         Get all users with their permissions to the resource.
-
         The returned dict has the following structure - 
         
-        .. code-block:: python
+        .. code-block:: json
         
-        {
-          "username_1": {
-             "project_tasks": 30,
-             "project_patches": 10
-            },
-          "username_2": {
-             "project_settings": 20,
-             "project_patches": 10
-          }
-        }
+            {
+              "username_1": {
+                 "project_tasks": 30,
+                 "project_patches": 10
+                },
+              "username_2": {
+                 "project_settings": 20,
+                 "project_patches": 10
+              }
+            }
 
         :param resource_id: Id of the resource to get users for.
         :param resource_type: Resource type of the resource.
