@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.3.4 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.3.5 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -235,6 +235,36 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>List of all projects in evergreen.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.all_user_permissions_for_resource">
+<code class="sig-name descname">all_user_permissions_for_resource</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">resource_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">resource_type</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#evergreen.resource_type_permissions.PermissionableResourceType" title="evergreen.resource_type_permissions.PermissionableResourceType">evergreen.resource_type_permissions.PermissionableResourceType</a></span></em><span class="sig-paren">)</span> &#x2192; Dict<span class="p">[</span>str<span class="p">, </span>Dict<span class="p">[</span>str<span class="p">, </span>int<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.all_user_permissions_for_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.all_user_permissions_for_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all users with their permissions to the resource.</p>
+<p>The returned dict has the following structure -</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;username_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="nt">&quot;project_tasks&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+     <span class="nt">&quot;project_patches&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+  <span class="nt">&quot;username_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="nt">&quot;project_settings&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+     <span class="nt">&quot;project_patches&quot;</span><span class="p">:</span> <span class="mi">10</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resource_id</strong> – Id of the resource to get users for.</p></li>
+<li><p><strong>resource_type</strong> – Resource type of the resource.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dict containing user to permissions mappings.</p>
 </dd>
 </dl>
 </dd></dl>

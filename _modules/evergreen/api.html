@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.3.4 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.3.5 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -1122,6 +1122,36 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/roles/</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">/users&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">UsersForRole</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.all_user_permissions_for_resource"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_user_permissions_for_resource">[docs]</a>    <span class="k">def</span> <span class="nf">all_user_permissions_for_resource</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">:</span> <span class="n">PermissionableResourceType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all users with their permissions to the resource.</span>
+
+<span class="sd">        The returned dict has the following structure - </span>
+
+<span class="sd">        .. code-block:: json</span>
+
+<span class="sd">            {</span>
+<span class="sd">              &quot;username_1&quot;: {</span>
+<span class="sd">                 &quot;project_tasks&quot;: 30,</span>
+<span class="sd">                 &quot;project_patches&quot;: 10</span>
+<span class="sd">                },</span>
+<span class="sd">              &quot;username_2&quot;: {</span>
+<span class="sd">                 &quot;project_settings&quot;: 20,</span>
+<span class="sd">                 &quot;project_patches&quot;: 10</span>
+<span class="sd">              }</span>
+<span class="sd">            }</span>
+
+<span class="sd">        :param resource_id: Id of the resource to get users for.</span>
+<span class="sd">        :param resource_type: Resource type of the resource.</span>
+<span class="sd">        :return: A dict containing user to permissions mappings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/users/permissions&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="n">resource_id</span><span class="p">,</span> <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="n">resource_type</span><span class="p">})</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.get_api"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_api">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_api</span><span class="p">(</span>
