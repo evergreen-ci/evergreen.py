@@ -1,7 +1,11 @@
 import json
 
 from evergreen import Manifest, TaskStats, TestStats, Version
-from evergreen.resource_type_permissions import RemovablePermission, ResourceTypePermissions
+from evergreen.resource_type_permissions import (
+    PermissionableResourceType,
+    RemovablePermission,
+    ResourceTypePermissions,
+)
 from evergreen.users_for_role import UsersForRole
 
 try:
@@ -319,3 +323,26 @@ def test_get_users_for_role(monkeypatch):
     evg_api_mock.get_users_for_role.assert_called_once_with("testrole")
     assert result.exit_code == 0
     assert "user1" in result.output
+
+
+def test_all_user_permissions_for_resource(monkeypatch):
+    evg_api_mock = _create_api_mock(monkeypatch)
+    evg_api_mock.all_user_permissions_for_resource.return_value = {
+        "test.user": {"project_tasks": 30, "project_patches": 10}
+    }
+
+    cmd_list = [
+        "all-user-permissions-for-resource",
+        "--resource-id",
+        "r1",
+        "--resource-type",
+        "project",
+    ]
+
+    runner = CliRunner()
+    result = runner.invoke(under_test.cli, cmd_list)
+    evg_api_mock.all_user_permissions_for_resource.assert_called_once_with(
+        "r1", PermissionableResourceType.PROJECT
+    )
+    assert result.exit_code == 0
+    assert "test.user" in result.output

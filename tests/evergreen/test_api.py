@@ -771,6 +771,21 @@ class TestUserPermissionsApi(object):
             url=expected_url, params=None, timeout=None, data=expected_data, method="DELETE",
         )
 
+    def test_all_user_permissions_for_resource(self, mocked_api, mocked_api_response):
+        expected_url = mocked_api._create_url("/users/permissions")
+        expected_data = json.dumps(
+            {"resource_id": "resource-1", "resource_type": PermissionableResourceType.PROJECT.value}
+        )
+        permissions = {"user1": {"project_tasks": 10, "project_patches": 10}}
+        mocked_api_response.json.return_value = permissions
+        returned_permissions = mocked_api.all_user_permissions_for_resource(
+            "resource-1", PermissionableResourceType.PROJECT
+        )
+        assert returned_permissions == permissions
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=expected_data, method="GET",
+        )
+
 
 class TestRolesApi(object):
     @pytest.mark.parametrize("create_user", [False, True])

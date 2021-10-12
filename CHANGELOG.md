@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.5 - 2021-10-07
+- Add `get all user permissions for resource` endpoint.
+
 ## 3.3.4 - 2021-09-27
 - Fix evergreen testing environmental issue.
 

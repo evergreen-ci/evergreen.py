@@ -1079,6 +1079,36 @@ class EvergreenApi(object):
         url = self._create_url(f"/roles/{role}/users")
         return UsersForRole(self._call_api(url, method="GET").json(), self)
 
+    def all_user_permissions_for_resource(
+        self, resource_id: str, resource_type: PermissionableResourceType
+    ) -> Dict[str, Dict[str, int]]:
+        """
+        Get all users with their permissions to the resource.
+
+        The returned dict has the following structure - 
+
+        .. code-block:: json
+
+            {
+              "username_1": {
+                 "project_tasks": 30,
+                 "project_patches": 10
+                },
+              "username_2": {
+                 "project_settings": 20,
+                 "project_patches": 10
+              }
+            }
+
+        :param resource_id: Id of the resource to get users for.
+        :param resource_type: Resource type of the resource.
+        :return: A dict containing user to permissions mappings.
+        """
+        url = self._create_url("/users/permissions")
+        return self._call_api(
+            url, data=json.dumps({"resource_id": resource_id, "resource_type": resource_type})
+        ).json()
+
     @classmethod
     def get_api(
         cls,
