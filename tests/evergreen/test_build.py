@@ -17,7 +17,7 @@ class TestBuild(object):
         mock_api = MagicMock()
         build = Build(sample_build, mock_api)
         identifier = build.get_project_identifier()
-        assert identifier == mock_api.project_by_id(build.project_id).identifier
+        assert sample_build["project_identifier"] == identifier
 
     def test_get_tasks(self, sample_build):
         mock_api = MagicMock()

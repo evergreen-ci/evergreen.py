@@ -48,6 +48,7 @@ class Build(_BaseEvergreenObject):
 
     id = evg_attrib("_id")
     project_id = evg_attrib("project_id")
+    project_identifier = evg_attrib("project_identifier")
     create_time = evg_datetime_attrib("create_time")
     start_time = evg_datetime_attrib("start_time")
     finish_time = evg_datetime_attrib("finish_time")
@@ -83,13 +84,11 @@ class Build(_BaseEvergreenObject):
 
     def get_project_identifier(self) -> str:
         """
-        Retrieve the human-readable project id from Evergreen.
-
-        This requires the caller to be Admin on the project.
+        Return the human-readable project id. Can also be accessed as an attribute.
 
         :return: Human-readable project id.
         """
-        return self._api.project_by_id(self.project_id).identifier
+        return self.project_identifier
 
     def get_tasks(self, fetch_all_executions: bool = False) -> List["Task"]:
         """
