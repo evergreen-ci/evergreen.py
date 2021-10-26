@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.6 - 2021-10-26
+- Removed admin permission requirement for `project_identifier` access for build objects.
+
 ## 3.3.5 - 2021-10-07
 - Add `get all user permissions for resource` endpoint.
 

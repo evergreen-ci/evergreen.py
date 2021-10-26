@@ -1,6 +1,7 @@
 {
   "_id": "mongodb_mongo_master_enterprise_rhel_62_64_bit_6c28401a87f1a4a950b2b8cea6b58ef475fb7b4b_19_02_15_18_44_46",
   "project_id": "mongo",
+  "project_identifier": "mongodb-mongo-master",
   "create_time": "2019-02-15T18:44:46.000Z",
   "start_time": "2019-02-15T18:55:39.061Z",
   "finish_time": null,
