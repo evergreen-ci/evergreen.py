@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.build &#8212; evergreen.py 3.3.5 documentation</title>
+    <title>evergreen.build &#8212; evergreen.py 3.3.6 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -92,6 +92,7 @@
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;_id&quot;</span><span class="p">)</span>
     <span class="n">project_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;project_id&quot;</span><span class="p">)</span>
+    <span class="n">project_identifier</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;project_identifier&quot;</span><span class="p">)</span>
     <span class="n">create_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;create_time&quot;</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;start_time&quot;</span><span class="p">)</span>
     <span class="n">finish_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;finish_time&quot;</span><span class="p">)</span>
@@ -127,13 +128,11 @@
 
 <div class="viewcode-block" id="Build.get_project_identifier"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.get_project_identifier">[docs]</a>    <span class="k">def</span> <span class="nf">get_project_identifier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieve the human-readable project id from Evergreen.</span>
-
-<span class="sd">        This requires the caller to be Admin on the project.</span>
+<span class="sd">        Return the human-readable project id. Can also be accessed as an attribute.</span>
 
 <span class="sd">        :return: Human-readable project id.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">project_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="p">)</span><span class="o">.</span><span class="n">identifier</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_identifier</span></div>
 
 <div class="viewcode-block" id="Build.get_tasks"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.get_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Task&quot;</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
