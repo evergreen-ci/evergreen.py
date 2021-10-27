@@ -12,6 +12,8 @@ import yaml
 from evergreen import EvergreenApi
 from evergreen.resource_type_permissions import PermissionableResourceType, RemovablePermission
 
+DATE_FORMAT = "%Y-%m-%d"
+
 DisplayFormat = Enum("DisplayFormat", "human json yaml")
 
 
@@ -116,8 +118,20 @@ def send_slack_message(ctx, target: str, msg: str) -> None:
 
 @cli.command()
 @click.pass_context
-@click.option("-a", "--after-date", required=True)
-@click.option("-b", "--before-date", required=True)
+@click.option(
+    "-a",
+    "--after-date",
+    required=True,
+    type=click.DateTime(formats=[DATE_FORMAT]),
+    help="The earliest date to use 'YYYY-MM-DD'.",
+)
+@click.option(
+    "-b",
+    "--before-date",
+    required=True,
+    type=click.DateTime(formats=[DATE_FORMAT]),
+    help="The latest date to use 'YYYY-MM-DD'.",
+)
 @click.option("-p", "--project", required=True)
 @click.option("-d", "--distros", multiple=True)
 @click.option("--group-by")
@@ -164,8 +178,20 @@ def test_stats(
 
 @cli.command()
 @click.pass_context
-@click.option("-a", "--after-date", required=True)
-@click.option("-b", "--before-date", required=True)
+@click.option(
+    "-a",
+    "--after-date",
+    required=True,
+    type=click.DateTime(formats=[DATE_FORMAT]),
+    help="The earliest date to use 'YYYY-MM-DD'.",
+)
+@click.option(
+    "-b",
+    "--before-date",
+    required=True,
+    type=click.DateTime(formats=[DATE_FORMAT]),
+    help="The latest date to use 'YYYY-MM-DD'.",
+)
 @click.option("-p", "--project", required=True)
 @click.option("-d", "--distros", multiple=True)
 @click.option("--group-by")
@@ -216,8 +242,20 @@ RELIABILITY_GROUP_MAPPING = {
 
 @cli.command()
 @click.pass_context
-@click.option("-a", "--after-date", help="The earliest date to use. iso-8601 format.")
-@click.option("-b", "--before-date", help="The latest date to use. iso-8601 format.")
+@click.option(
+    "-a",
+    "--after-date",
+    required=True,
+    type=click.DateTime(formats=[DATE_FORMAT]),
+    help="The earliest date to use 'YYYY-MM-DD'.",
+)
+@click.option(
+    "-b",
+    "--before-date",
+    required=True,
+    type=click.DateTime(formats=[DATE_FORMAT]),
+    help="The latest date to use 'YYYY-MM-DD'.",
+)
 @click.option(
     "-p", "--project", required=True, help="The evergreen project, eg 'mongodb-mongo-master'"
 )
