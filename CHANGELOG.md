@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.7 - 2021-10-26
+- Fix return type of 'single_test_by_task_and_test_file' endpoint.
+
 ## 3.3.5 - 2021-10-07
 - Add `get all user permissions for resource` endpoint.
 
