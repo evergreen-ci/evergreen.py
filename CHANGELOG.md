@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.8 - 2021-10-27
+- Properly accept dates as input in command line utility.
+
 ## 3.3.7 - 2021-10-26
 - Fix return type of 'single_test_by_task_and_test_file' endpoint.
 

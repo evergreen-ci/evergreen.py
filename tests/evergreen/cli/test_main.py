@@ -1,4 +1,6 @@
+"""Unit tests for main.py."""
 import json
+from datetime import datetime
 
 from evergreen import Manifest, TaskStats, TestStats, Version
 from evergreen.resource_type_permissions import (
@@ -120,7 +122,7 @@ def test_test_stats(monkeypatch, sample_test_stats, output_fmt):
         TestStats(sample_test_stats, None) for _ in range(10)
     ]
 
-    cmd_list = ["test-stats", "-a", "after-date", "-b", "before-date", "-p", "project"]
+    cmd_list = ["test-stats", "-a", "2021-10-01", "-b", "2021-10-31", "-p", "project"]
 
     runner = CliRunner()
     if output_fmt:
@@ -128,8 +130,8 @@ def test_test_stats(monkeypatch, sample_test_stats, output_fmt):
     result = runner.invoke(under_test.cli, cmd_list)
     assert result.exit_code == 0
     assert sample_test_stats["test_file"] in result.output
-    assert "after-date" in mock_test_stats.call_args[0]
-    assert "before-date" in mock_test_stats.call_args[0]
+    assert datetime.fromisoformat("2021-10-01") in mock_test_stats.call_args[0]
+    assert datetime.fromisoformat("2021-10-31") in mock_test_stats.call_args[0]
     assert "project" in mock_test_stats.call_args[0]
 
 
@@ -141,7 +143,7 @@ def test_task_stats(monkeypatch, sample_task_stats, output_fmt):
         TaskStats(sample_task_stats, None) for _ in range(10)
     ]
 
-    cmd_list = ["task-stats", "-a", "after-date", "-b", "before-date", "-p", "project"]
+    cmd_list = ["task-stats", "-a", "2021-10-01", "-b", "2021-10-31", "-p", "project"]
 
     runner = CliRunner()
     if output_fmt:
@@ -149,8 +151,8 @@ def test_task_stats(monkeypatch, sample_task_stats, output_fmt):
     result = runner.invoke(under_test.cli, cmd_list)
     assert result.exit_code == 0
     assert sample_task_stats["task_name"] in result.output
-    assert "after-date" in mock_task_stats.call_args[0]
-    assert "before-date" in mock_task_stats.call_args[0]
+    assert datetime.fromisoformat("2021-10-01") in mock_task_stats.call_args[0]
+    assert datetime.fromisoformat("2021-10-31") in mock_task_stats.call_args[0]
     assert "project" in mock_task_stats.call_args[0]
 
 
@@ -162,7 +164,19 @@ def test_task_reliability(monkeypatch, sample_task_reliability, output_fmt):
         TaskStats(sample_task_reliability, None) for _ in range(10)
     ]
 
-    cmd_list = ["task-reliability", "-p", "project", "-t", "task1", "-t", "task2"]
+    cmd_list = [
+        "task-reliability",
+        "-p",
+        "project",
+        "-t",
+        "task1",
+        "-t",
+        "task2",
+        "-a",
+        "2021-10-01",
+        "-b",
+        "2021-10-31",
+    ]
 
     runner = CliRunner()
     if output_fmt:
@@ -172,6 +186,8 @@ def test_task_reliability(monkeypatch, sample_task_reliability, output_fmt):
     assert sample_task_reliability["task_name"] in result.output
     assert "project" in mock_task_reliability.call_args[0]
     assert ("task1", "task2") in mock_task_reliability.call_args[0]
+    assert datetime.fromisoformat("2021-10-01") in mock_task_reliability.call_args[0]
+    assert datetime.fromisoformat("2021-10-31") in mock_task_reliability.call_args[0]
 
 
 def test_version_stats(monkeypatch, output_fmt):
