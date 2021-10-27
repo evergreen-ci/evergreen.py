@@ -820,7 +820,7 @@ class EvergreenApi(object):
         url = self._create_url(f"/tasks/{task_id}/tests")
         return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
 
-    def single_test_by_task_and_test_file(self, task_id: str, test_file: str) -> Tst:
+    def single_test_by_task_and_test_file(self, task_id: str, test_file: str) -> List[Tst]:
         """
         Get a test for a given task.
 
@@ -829,7 +829,8 @@ class EvergreenApi(object):
         :return: the test for the specified task.
         """
         url = self._create_url(f"/tasks/{task_id}/tests")
-        return Tst(self._call_api(url, params={"test_name": test_file}).json(), self)
+        param = {"test_name": test_file}
+        return [Tst(test, self) for test in self._call_api(url, params=param).json()]
 
     def manifest_for_task(self, task_id: str) -> Manifest:
         """
@@ -1085,7 +1086,7 @@ class EvergreenApi(object):
         """
         Get all users with their permissions to the resource.
 
-        The returned dict has the following structure - 
+        The returned dict has the following structure -
 
         .. code-block:: json
 

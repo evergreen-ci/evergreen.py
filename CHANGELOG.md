@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.7 - 2021-10-26
+- Fix return type of 'single_test_by_task_and_test_file' endpoint.
+
 ## 3.3.6 - 2021-10-26
 - Removed admin permission requirement for `project_identifier` access for build objects.
 
