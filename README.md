@@ -8,11 +8,12 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 ## Table of contents
 
 1. [Description](#description)
-2. [Dependencies](#dependencies)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Documentation](#documentation)
-6. [Contributor's Guide](#contributors-guide)
+2. [Getting Help](#getting-help)
+3. [Dependencies](#dependencies)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Documentation](#documentation)
+7. [Contributor's Guide](#contributors-guide)
     - [Setting up a local development environment](#setting-up-a-local-development-environment)
     - [Linting/formatting](#lintingformatting)
     - [Running tests](#running-tests)
@@ -27,6 +28,29 @@ This is a Python client library for interacting with Evergreen and Evergreen obj
 supports the V2 version of Evergreen's api. It can be used either by Python code in a separate application
 or on the command line to get data about Evergreen objects quickly and easily.
 
+## Getting Help
+
+**What's the right channel to ask my question?**
+If you have a question about evergreen.py, please mention @dag-on-call in
+slack channel [#evergreen-users](https://mongodb.slack.com/messages/#evergreen-users/),
+or email us at
+dev-prod-dag@mongodb.com.
+
+**How can I request a change/report a bug in evergreen.py?**
+Create a [DAG ticket](https://jira.mongodb.org/projects/DAG).
+
+**What should I include in my ticket or #evergreen-users question?**
+Since #evergreen-users questions are interrupts,
+please include as much information as possible.
+This can help avoid long information-gathering threads.
+
+Please include the following:
+* **Motivation for Request**
+  * provide us the motivation for this change.
+* **Context**
+  * provide some background contexts for this issue.
+* **Description**
+  * provide some descriptions on how this issue happened.
 
 ## Dependencies
 
@@ -147,12 +171,3 @@ Add a PR comment with `evergreen merge` to trigger a merge.
 ### Deployment
 
 Deployment to production is automatically triggered on merges to master.
-
-### Additonal Resources
-
-If you have questions or issues about setting up or contribute to this project,
-below are the best ways to ask for help:
-
-email: dev-prod-dag@mongodb.com
-slack: [#server-testing](https://mongodb.slack.com/messages/#server-testing/)
-JIRA: create a DAG ticket.
