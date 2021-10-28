@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.3.9 - 2021-10-28
+- Add additional resources about 'ask for help' in README
+
 ## 3.3.8 - 2021-10-27
 - Properly accept dates as input in command line utility.
 

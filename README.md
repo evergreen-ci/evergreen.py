@@ -25,7 +25,7 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 
 This is a Python client library for interacting with Evergreen and Evergreen objects. It currently only
 supports the V2 version of Evergreen's api. It can be used either by Python code in a separate application
-or on the command line to get data about Evergreen objects quickly and easily. 
+or on the command line to get data about Evergreen objects quickly and easily.
 
 
 ## Dependencies
@@ -121,7 +121,7 @@ $ poetry run pytest --cov=src --cov-report=html
 
 ### Automatically running checks on commit
 
-This project has [pre-commit](https://pre-commit.com/) configured. Pre-commit will run 
+This project has [pre-commit](https://pre-commit.com/) configured. Pre-commit will run
 configured checks at git commit time. To enable pre-commit on your local repository run:
 
 ```bash
@@ -141,9 +141,18 @@ The version is found in the `pyproject.toml` file.
 
 ### Code Review
 
-This project uses the [Evergreen Commit Queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr). 
+This project uses the [Evergreen Commit Queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
 Add a PR comment with `evergreen merge` to trigger a merge.
 
 ### Deployment
 
 Deployment to production is automatically triggered on merges to master.
+
+### Additonal Resources
+
+If you have questions or issues about setting up or contribute to this project,
+below are the best ways to ask for help:
+
+email: dev-prod-dag@mongodb.com
+slack: [#server-testing](https://mongodb.slack.com/messages/#server-testing/)
+JIRA: create a DAG ticket.
