@@ -8,11 +8,12 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 ## Table of contents
 
 1. [Description](#description)
-2. [Dependencies](#dependencies)
-3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Documentation](#documentation)
-6. [Contributor's Guide](#contributors-guide)
+2. [Getting Help](#getting-help)
+3. [Dependencies](#dependencies)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Documentation](#documentation)
+7. [Contributor's Guide](#contributors-guide)
     - [Setting up a local development environment](#setting-up-a-local-development-environment)
     - [Linting/formatting](#lintingformatting)
     - [Running tests](#running-tests)
@@ -25,8 +26,31 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 
 This is a Python client library for interacting with Evergreen and Evergreen objects. It currently only
 supports the V2 version of Evergreen's api. It can be used either by Python code in a separate application
-or on the command line to get data about Evergreen objects quickly and easily. 
+or on the command line to get data about Evergreen objects quickly and easily.
 
+## Getting Help
+
+### What's the right channel to ask my question?
+If you have a question about evergreen.py, please mention @dag-on-call in
+slack channel [#evergreen-users](https://mongodb.slack.com/messages/#evergreen-users/),
+or email us at
+dev-prod-dag@mongodb.com.
+
+### How can I request a change/report a bug in evergreen.py?
+Create a [DAG ticket](https://jira.mongodb.org/projects/DAG).
+
+### What should I include in my ticket or #evergreen-users question?
+Since #evergreen-users questions are interrupts,
+please include as much information as possible.
+This can help avoid long information-gathering threads.
+
+Please include the following:
+* **Motivation for Request**
+  * provide us the motivation for this change.
+* **Context**
+  * provide some background contexts for this issue.
+* **Description**
+  * provide some descriptions on how this issue happened.
 
 ## Dependencies
 
@@ -121,7 +145,7 @@ $ poetry run pytest --cov=src --cov-report=html
 
 ### Automatically running checks on commit
 
-This project has [pre-commit](https://pre-commit.com/) configured. Pre-commit will run 
+This project has [pre-commit](https://pre-commit.com/) configured. Pre-commit will run
 configured checks at git commit time. To enable pre-commit on your local repository run:
 
 ```bash
@@ -141,7 +165,7 @@ The version is found in the `pyproject.toml` file.
 
 ### Code Review
 
-This project uses the [Evergreen Commit Queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr). 
+This project uses the [Evergreen Commit Queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
 Add a PR comment with `evergreen merge` to trigger a merge.
 
 ### Deployment
