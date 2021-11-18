@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.4.0 - 2021-11-18
+- Add ability to file a created ticket for a given task execution.
+
 ## 3.3.9 - 2021-10-28
 - Add additional resources about 'ask for help' in README
 
