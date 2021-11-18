@@ -554,6 +554,20 @@ class TestTaskApi(object):
         with pytest.raises(ValueError):
             mocked_api.get_task_annotation("task_id", execution=5, fetch_all_executions=True)
 
+    def test_file_ticket(self, mocked_api):
+        mocked_api.file_ticket_for_task(
+            task_id="task_id_3",
+            execution=5,
+            ticket_link="https://google.com",
+            ticket_key="fake-key",
+        )
+        expected_url = mocked_api._create_url("/tasks/task_id_3/created_ticket")
+        expected_params = {"execution": 5}
+        expected_data = json.dumps({"url": "https://google.com", "issue_key": "fake-key"})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=expected_params, timeout=None, data=expected_data, method="PUT"
+        )
+
     def test_annotate_task(self, mocked_api):
         mocked_api.annotate_task(
             "task_id",

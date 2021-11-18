@@ -871,6 +871,24 @@ class EvergreenApi(object):
             return []
         return [TaskAnnotation(annotation, self) for annotation in response.json()]
 
+    def file_ticket_for_task(
+        self, task_id: str, execution: int, ticket_link: str, ticket_key: str
+    ) -> None:
+        """
+        Update an Evergreen task with information about a ticket created from it.
+
+        :param task_id: The id of the task to update.
+        :param execution: The execution of the task to update.
+        :param ticket_link: The url link to the created ticket.
+        :param ticket_key: The key of the created ticket.
+        """
+        url = self._create_url(f"/tasks/{task_id}/created_ticket")
+        request: Dict[str, Any] = {"url": ticket_link, "issue_key": ticket_key}
+        params = {
+            "execution": execution,
+        }
+        self._call_api(url, method="PUT", data=json.dumps(request), params=params)
+
     def annotate_task(
         self,
         task_id: str,
