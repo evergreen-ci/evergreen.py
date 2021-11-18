@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.3.9 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.4.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -375,6 +375,22 @@ with value of a list of task names to configure for specified variant. See the d
 <li><p><strong>resource_type</strong> – A permission that can be removed.</p></li>
 <li><p><strong>resource_id</strong> – Resource id for which to delete permissions. Required unless
 deleting all permissions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.file_ticket_for_task">
+<code class="sig-name descname">file_ticket_for_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task_id</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">execution</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">ticket_link</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">ticket_key</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.file_ticket_for_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.file_ticket_for_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update an Evergreen task with information about a ticket created from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_id</strong> – The id of the task to update.</p></li>
+<li><p><strong>execution</strong> – The execution of the task to update.</p></li>
+<li><p><strong>ticket_link</strong> – The url link to the created ticket.</p></li>
+<li><p><strong>ticket_key</strong> – The key of the created ticket.</p></li>
 </ul>
 </dd>
 </dl>

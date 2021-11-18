@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.3.9 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.4.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -914,6 +914,24 @@
         <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;null&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">TaskAnnotation</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.file_ticket_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.file_ticket_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">file_ticket_for_task</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ticket_link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ticket_key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update an Evergreen task with information about a ticket created from it.</span>
+
+<span class="sd">        :param task_id: The id of the task to update.</span>
+<span class="sd">        :param execution: The execution of the task to update.</span>
+<span class="sd">        :param ticket_link: The url link to the created ticket.</span>
+<span class="sd">        :param ticket_key: The key of the created ticket.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/created_ticket&quot;</span><span class="p">)</span>
+        <span class="n">request</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">ticket_link</span><span class="p">,</span> <span class="s2">&quot;issue_key&quot;</span><span class="p">:</span> <span class="n">ticket_key</span><span class="p">}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;execution&quot;</span><span class="p">:</span> <span class="n">execution</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">request</span><span class="p">),</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.annotate_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.annotate_task">[docs]</a>    <span class="k">def</span> <span class="nf">annotate_task</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
