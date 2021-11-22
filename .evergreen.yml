@@ -8,6 +8,7 @@ buildvariants:
   - name: deploy
   - name: documentation
   - name: evg_api_install
+  - name: check_pypi_version
 
 functions:
   create virtualenv:
@@ -75,6 +76,18 @@ functions:
 
           poetry run gh-pusher --build-dir docs/build
 
+  check_version_update:
+    - command: shell.exec
+      params:
+        working_dir: src
+        script: |
+          set -o errexit
+          set -o verbose
+
+          wget -q https://github.com/dbradf/pypi-version-check/releases/download/v0.1.2/pypi-version-check
+          chmod +x pypi-version-check
+
+          ./pypi-version-check
 
 pre:
 - command: git.get_project
@@ -124,10 +137,15 @@ tasks:
 
         evg-api --help
 
+- name: check_pypi_version
+  commands:
+  - func: check_version_update
+
 - name: deploy
   patchable: false
   depends_on:
     - name: unit_tests
+    - name: check_pypi_version
   commands:
     - func: deploy
 
