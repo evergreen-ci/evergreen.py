@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.4.2 - 2021-11-22
+- Update dependencies
+
 ## 3.4.0 - 2021-11-18
 - Add ability to file a created ticket for a given task execution.
 
