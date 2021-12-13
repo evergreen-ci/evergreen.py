@@ -293,6 +293,16 @@ class EvergreenApi(object):
         host_list = self._paginate(url, params)
         return [Host(host, self) for host in host_list]  # type: ignore[arg-type]
 
+    def host_by_id(self, host_id: str = None) -> Host:
+        """
+        Get evergreen host by id.
+
+        :param host_id: host ids, 'i-000cba730e92eb85b'
+        :return: host document
+        """
+        url = self._create_url(f"/hosts/{host_id}")
+        return Host(self._paginate(url), self)  # type: ignore[arg-type]
+
     def configure_task(
         self, task_id: str, activated: Optional[bool] = None, priority: Optional[int] = None
     ) -> None:

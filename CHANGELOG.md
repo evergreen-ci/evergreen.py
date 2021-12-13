@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.4.3 - 2021-12-13
+- Add `host_by_id` endpoint.
+
 ## 3.4.2 - 2021-11-22
 - Update dependencies
 
