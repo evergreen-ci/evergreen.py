@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.4.3 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.4.4 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -330,14 +330,14 @@
 <span class="sd">        :return: List of all hosts in evergreen.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/hosts&quot;</span><span class="p">)</span>
         <span class="n">host_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">host_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.host_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.host_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">host_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Host</span><span class="p">:</span>
+<div class="viewcode-block" id="EvergreenApi.host_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.host_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">host_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Host</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get evergreen host by id.</span>
 
@@ -359,9 +359,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">activated</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">activated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;activated&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">activated</span>
-        <span class="k">if</span> <span class="n">priority</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">priority</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">)</span></div>
 
@@ -393,7 +393,7 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/projects&quot;</span><span class="p">)</span>
         <span class="n">project_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">projects</span> <span class="o">=</span> <span class="p">[</span><span class="n">Project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">project_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span>
-        <span class="k">if</span> <span class="n">project_filter_fn</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">project_filter_fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">project</span> <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">projects</span> <span class="k">if</span> <span class="n">project_filter_fn</span><span class="p">(</span><span class="n">project</span><span class="p">)]</span>
         <span class="k">return</span> <span class="n">projects</span></div>
 
@@ -436,7 +436,7 @@
             <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
             <span class="s2">&quot;msg&quot;</span><span class="p">:</span> <span class="n">msg</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="n">attachments</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">attachments</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;attachments&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">attachment</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">attachment</span> <span class="ow">in</span> <span class="n">attachments</span>
             <span class="p">]</span>
@@ -481,9 +481,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/versions&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;requester&quot;</span><span class="p">:</span> <span class="n">requester</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">start</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
-        <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limit</span>
         <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazy_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">Version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">version_list</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
@@ -539,9 +539,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/patches/</span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2">/configure&quot;</span><span class="p">)</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">variants</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
-        <span class="k">if</span> <span class="n">description</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">)</span></div>
@@ -579,9 +579,9 @@
 <span class="sd">        :param limit: If specified, limit the output per page.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">start_at</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">start_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_at</span>
-        <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limit</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/users/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">/patches&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">Patch</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">patch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazy_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span></div>
@@ -630,21 +630,21 @@
             <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">after_date</span><span class="p">),</span>
             <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">before_date</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_num_days</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
-        <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">requesters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span><span class="o">.</span><span class="n">stats_value</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">tests</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tests</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tests&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tests</span>
-        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tasks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
-        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">variants</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
-        <span class="k">if</span> <span class="n">distros</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">distros</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distros&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros</span>
-        <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
-        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/test_stats&quot;</span><span class="p">)</span>
         <span class="n">test_stats_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
@@ -659,7 +659,7 @@
 <span class="sd">        :return: The list of matching tasks.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/versions/tasks&quot;</span><span class="p">)</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">statuses</span><span class="p">}</span> <span class="k">if</span> <span class="n">statuses</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">statuses</span><span class="p">}</span> <span class="k">if</span> <span class="n">statuses</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Task</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">json</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.tasks_by_project_and_commit"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_commit">[docs]</a>    <span class="k">def</span> <span class="nf">tasks_by_project_and_commit</span><span class="p">(</span>
@@ -708,19 +708,19 @@
             <span class="s2">&quot;after_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">after_date</span><span class="p">),</span>
             <span class="s2">&quot;before_date&quot;</span><span class="p">:</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">before_date</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_num_days</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
-        <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">requesters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span><span class="o">.</span><span class="n">stats_value</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tasks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
-        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">variants</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
-        <span class="k">if</span> <span class="n">distros</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">distros</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distros&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros</span>
-        <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
-        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/task_stats&quot;</span><span class="p">)</span>
         <span class="n">task_stats_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
@@ -755,23 +755,23 @@
 <span class="sd">        :return: Patch queried for.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">after_date</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">after_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;after_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">after_date</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">before_date</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">before_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;before_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">format_evergreen_date</span><span class="p">(</span><span class="n">before_date</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">group_num_days</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_num_days</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_num_days&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_num_days</span>
-        <span class="k">if</span> <span class="n">requesters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">requesters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;requesters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">requesters</span><span class="o">.</span><span class="n">stats_value</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tasks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tasks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tasks</span>
-        <span class="k">if</span> <span class="n">variants</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">variants</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;variants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variants</span>
-        <span class="k">if</span> <span class="n">distros</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">distros</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distros&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distros</span>
-        <span class="k">if</span> <span class="n">group_by</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">group_by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;group_by&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_by</span>
-        <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;sort&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/task_reliability&quot;</span><span class="p">)</span>
@@ -850,7 +850,7 @@
 <span class="sd">        :return: Task queried for.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">fetch_all_executions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fetch_all_executions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fetch_all_executions&quot;</span><span class="p">:</span> <span class="n">fetch_all_executions</span><span class="p">}</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
@@ -867,9 +867,9 @@
 <span class="sd">        :return: List of tests for the specified task.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
-        <span class="k">if</span> <span class="n">execution</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;execution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">execution</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/tests&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Tst</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
@@ -915,9 +915,9 @@
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/annotations&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">execution</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;execution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">execution</span>
-        <span class="k">if</span> <span class="n">fetch_all_executions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fetch_all_executions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;fetch_all_executions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fetch_all_executions</span>
 
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
@@ -970,16 +970,16 @@
         <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">request</span><span class="p">[</span><span class="s2">&quot;task_execution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">execution</span>
 
-        <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">request</span><span class="p">[</span><span class="s2">&quot;note&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">issues</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">issues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">request</span><span class="p">[</span><span class="s2">&quot;issues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">issues</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">suspected_issues</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">suspected_issues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">request</span><span class="p">[</span><span class="s2">&quot;suspected_issues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="n">suspected_issues</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">metadata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">request</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">request</span><span class="p">))</span></div>
@@ -1139,7 +1139,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/users/</span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">/permissions&quot;</span><span class="p">)</span>
         <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="n">resource_type</span><span class="o">.</span><span class="n">value</span><span class="p">}</span>
-        <span class="k">if</span> <span class="n">resource_id</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resource_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;resource_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resource_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
 
@@ -1335,7 +1335,7 @@
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.4.2.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
   </div>
   
   </body>
