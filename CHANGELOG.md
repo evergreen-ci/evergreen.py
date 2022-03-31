@@ -1,5 +1,8 @@
 # Changelog
 
+# 3.4.4 - 2022-03-31
+- Add explicit `None` checks.
+
 ## 3.4.3 - 2021-12-13
 - Add `host_by_id` endpoint.
 
