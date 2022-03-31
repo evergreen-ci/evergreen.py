@@ -286,14 +286,14 @@ class EvergreenApi(object):
         :return: List of all hosts in evergreen.
         """
         params = {}
-        if status:
+        if status is not None:
             params["status"] = status
 
         url = self._create_url("/hosts")
         host_list = self._paginate(url, params)
         return [Host(host, self) for host in host_list]  # type: ignore[arg-type]
 
-    def host_by_id(self, host_id: str = None) -> Host:
+    def host_by_id(self, host_id: str) -> Host:
         """
         Get evergreen host by id.
 
@@ -315,9 +315,9 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/tasks/{task_id}")
         data: Dict[str, Union[bool, int]] = {}
-        if activated:
+        if activated is not None:
             data["activated"] = activated
-        if priority:
+        if priority is not None:
             data["priority"] = priority
         self._call_api(url, data=json.dumps(data), method="PATCH")
 
@@ -349,7 +349,7 @@ class EvergreenApi(object):
         url = self._create_url("/projects")
         project_list = self._paginate(url)
         projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
-        if project_filter_fn:
+        if project_filter_fn is not None:
             return [project for project in projects if project_filter_fn(project)]
         return projects
 
@@ -392,7 +392,7 @@ class EvergreenApi(object):
             "target": target,
             "msg": msg,
         }
-        if attachments:
+        if attachments is not None:
             data["attachments"] = [
                 attachment.dict(exclude_none=True, exclude_unset=True) for attachment in attachments
             ]
@@ -437,9 +437,9 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/projects/{project_id}/versions")
         params: Dict[str, Any] = {"requester": requester}
-        if start:
+        if start is not None:
             params["start"] = start
-        if limit:
+        if limit is not None:
             params["limit"] = limit
         version_list = self._lazy_paginate(url, params)
         return (Version(version, self) for version in version_list)  # type: ignore[arg-type]
@@ -495,9 +495,9 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/patches/{patch_id}/configure")
         data: Dict[str, Union[List, str]] = {}
-        if variants:
+        if variants is not None:
             data["variants"] = variants
-        if description:
+        if description is not None:
             data["description"] = description
 
         self._call_api(url, data=json.dumps(data), method="POST")
@@ -535,9 +535,9 @@ class EvergreenApi(object):
         :param limit: If specified, limit the output per page.
         """
         params: Dict[str, Any] = {}
-        if start_at:
+        if start_at is not None:
             params["start_at"] = start_at
-        if limit:
+        if limit is not None:
             params["limit"] = limit
         url = self._create_url(f"/users/{user_id}/patches")
         return (Patch(patch, self) for patch in self._lazy_paginate(url, params))
@@ -586,21 +586,21 @@ class EvergreenApi(object):
             "after_date": format_evergreen_date(after_date),
             "before_date": format_evergreen_date(before_date),
         }
-        if group_num_days:
+        if group_num_days is not None:
             params["group_num_days"] = group_num_days
-        if requesters:
+        if requesters is not None:
             params["requesters"] = requesters.stats_value()
-        if tests:
+        if tests is not None:
             params["tests"] = tests
-        if tasks:
+        if tasks is not None:
             params["tasks"] = tasks
-        if variants:
+        if variants is not None:
             params["variants"] = variants
-        if distros:
+        if distros is not None:
             params["distros"] = distros
-        if group_by:
+        if group_by is not None:
             params["group_by"] = group_by
-        if sort:
+        if sort is not None:
             params["sort"] = sort
         url = self._create_url(f"/projects/{project_id}/test_stats")
         test_stats_list = self._paginate(url, params)
@@ -615,7 +615,7 @@ class EvergreenApi(object):
         :return: The list of matching tasks.
         """
         url = self._create_url(f"/projects/{project_id}/versions/tasks")
-        params = {"status": statuses} if statuses else None
+        params = {"status": statuses} if statuses is not None else None
         return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
 
     def tasks_by_project_and_commit(
@@ -664,19 +664,19 @@ class EvergreenApi(object):
             "after_date": format_evergreen_date(after_date),
             "before_date": format_evergreen_date(before_date),
         }
-        if group_num_days:
+        if group_num_days is not None:
             params["group_num_days"] = group_num_days
-        if requesters:
+        if requesters is not None:
             params["requesters"] = requesters.stats_value()
-        if tasks:
+        if tasks is not None:
             params["tasks"] = tasks
-        if variants:
+        if variants is not None:
             params["variants"] = variants
-        if distros:
+        if distros is not None:
             params["distros"] = distros
-        if group_by:
+        if group_by is not None:
             params["group_by"] = group_by
-        if sort:
+        if sort is not None:
             params["sort"] = sort
         url = self._create_url(f"/projects/{project_id}/task_stats")
         task_stats_list = self._paginate(url, params)
@@ -711,23 +711,23 @@ class EvergreenApi(object):
         :return: Patch queried for.
         """
         params: Dict[str, Any] = {}
-        if after_date:
+        if after_date is not None:
             params["after_date"] = format_evergreen_date(after_date)
-        if before_date:
+        if before_date is not None:
             params["before_date"] = format_evergreen_date(before_date)
-        if group_num_days:
+        if group_num_days is not None:
             params["group_num_days"] = group_num_days
-        if requesters:
+        if requesters is not None:
             params["requesters"] = requesters.stats_value()
-        if tasks:
+        if tasks is not None:
             params["tasks"] = tasks
-        if variants:
+        if variants is not None:
             params["variants"] = variants
-        if distros:
+        if distros is not None:
             params["distros"] = distros
-        if group_by:
+        if group_by is not None:
             params["group_by"] = group_by
-        if sort:
+        if sort is not None:
             params["sort"] = sort
 
         url = self._create_url(f"/projects/{project_id}/task_reliability")
@@ -806,7 +806,7 @@ class EvergreenApi(object):
         :return: Task queried for.
         """
         params = None
-        if fetch_all_executions:
+        if fetch_all_executions is not None:
             params = {"fetch_all_executions": fetch_all_executions}
         url = self._create_url(f"/tasks/{task_id}")
         return Task(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
@@ -823,9 +823,9 @@ class EvergreenApi(object):
         :return: List of tests for the specified task.
         """
         params: Dict[str, Any] = {}
-        if status:
+        if status is not None:
             params["status"] = status
-        if execution:
+        if execution is not None:
             params["execution"] = execution
         url = self._create_url(f"/tasks/{task_id}/tests")
         return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
@@ -871,9 +871,9 @@ class EvergreenApi(object):
 
         url = self._create_url(f"/tasks/{task_id}/annotations")
         params: Dict[str, Any] = {}
-        if execution:
+        if execution is not None:
             params["execution"] = execution
-        if fetch_all_executions:
+        if fetch_all_executions is not None:
             params["fetch_all_executions"] = fetch_all_executions
 
         response = self._call_api(url, params)
@@ -926,16 +926,16 @@ class EvergreenApi(object):
         if execution is not None:
             request["task_execution"] = execution
 
-        if message:
+        if message is not None:
             request["note"] = {"message": message}
 
-        if issues:
+        if issues is not None:
             request["issues"] = [issue.as_dict() for issue in issues]
 
-        if suspected_issues:
+        if suspected_issues is not None:
             request["suspected_issues"] = [issue.as_dict() for issue in suspected_issues]
 
-        if metadata:
+        if metadata is not None:
             request["metadata"] = metadata
 
         self._call_api(url, method="PUT", data=json.dumps(request))
@@ -1095,7 +1095,7 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/users/{user_id}/permissions")
         payload = {"resource_type": resource_type.value}
-        if resource_id:
+        if resource_id is not None:
             payload["resource_id"] = resource_id
         self._call_api(url, method="DELETE", data=json.dumps(payload))
 
