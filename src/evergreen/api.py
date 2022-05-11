@@ -565,6 +565,7 @@ class EvergreenApi(object):
         distros: Optional[List[str]] = None,
         group_by: Optional[str] = None,
         sort: Optional[str] = None,
+        use_presto: Optional[bool] = None,
     ) -> List[TestStats]:
         """
         Get a patch by patch id.
@@ -580,6 +581,7 @@ class EvergreenApi(object):
         :param distros: Only include specified distros.
         :param group_by: How to group results (test_task_variant, test_task, or test)
         :param sort: How to sort results (earliest or latest).
+        :param use_presto: Use the presto data backend.
         :return: Patch queried for.
         """
         params: Dict[str, Any] = {
@@ -602,6 +604,8 @@ class EvergreenApi(object):
             params["group_by"] = group_by
         if sort is not None:
             params["sort"] = sort
+        if use_presto is not None:
+            params["use_presto"] = use_presto
         url = self._create_url(f"/projects/{project_id}/test_stats")
         test_stats_list = self._paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]  # type: ignore[arg-type]

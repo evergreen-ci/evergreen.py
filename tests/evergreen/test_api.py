@@ -343,7 +343,7 @@ class TestProjectApi(object):
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
-    def test_test_stats_by_project_with_requester(self, mocked_api):
+    def test_test_stats_by_project_with_requester_and_presto(self, mocked_api):
         after_date = "2019-01-01"
         before_date = "2019-02-01"
         expected_url = mocked_api._create_url("/projects/project_id/test_stats")
@@ -351,6 +351,7 @@ class TestProjectApi(object):
             "after_date": after_date,
             "before_date": before_date,
             "requesters": "patch",
+            "use_presto": True,
         }
 
         mocked_api.test_stats_by_project(
@@ -358,6 +359,7 @@ class TestProjectApi(object):
             from_iso_format(after_date),
             from_iso_format(before_date),
             requesters=Requester.PATCH_REQUEST,
+            use_presto=True,
         )
 
         mocked_api.session.request.assert_called_with(
