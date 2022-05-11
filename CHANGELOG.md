@@ -1,7 +1,9 @@
 # Changelog
 
-## 3.4.5 - 2022-05-11
+## 3.4.6 - 2022-05-11
+- Add `use_presto` parameter to the `test_stats_by_project` operation.
 
+## 3.4.5 - 2022-05-11
 - Add `project_identifier` field to `Version` objects.
 
 ## 3.4.4 - 2022-03-31
