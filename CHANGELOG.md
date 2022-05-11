@@ -1,6 +1,10 @@
 # Changelog
 
-# 3.4.4 - 2022-03-31
+## 3.4.5 - 2022-05-11
+
+- Add `project_identifier` field to `Version` objects.
+
+## 3.4.4 - 2022-03-31
 - Add explicit `None` checks.
 
 ## 3.4.3 - 2021-12-13
