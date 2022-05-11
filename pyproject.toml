@@ -1,15 +1,9 @@
 [tool.poetry]
 name = "evergreen.py"
-version = "3.4.4"
+version = "3.4.5"
 description = "Python client for the Evergreen API"
 authors = [
-    "Alexander Costas <alexander.costas@mongodb.com>",
-    "Cristopher Stauffer <cristopher.stauffer@mongodb.com>",
-    "David Bradford <david.bradford@mongodb.com>",
-    "Jeff Zambory <jeff.zambory@mongodb.com>",
-    "Jim O'Leary <jim.oleary@mongodb.com>",
-    "Lydia Stepanek <lydia.stepanek@mongodb.com>",
-    "Tausif Rahman <tausif.rahman@mongodb.com>"
+    "Dev Prod DAG <dev-prod-dag@mongodb.com>",
 ]
 license = "Apache-2.0"
 readme = "README.md"
