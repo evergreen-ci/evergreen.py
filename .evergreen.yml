@@ -84,7 +84,7 @@ functions:
           set -o errexit
           set -o verbose
 
-          wget -q https://github.com/dbradf/pypi-version-check/releases/download/v0.1.2/pypi-version-check
+          wget -q https://github.com/dbradf/pypi-version-check/releases/download/v0.3.0/pypi-version-check
           chmod +x pypi-version-check
 
           ./pypi-version-check
