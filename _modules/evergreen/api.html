@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.4.5 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.4.6 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -885,6 +885,16 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/tests&quot;</span><span class="p">)</span>
         <span class="n">param</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;test_name&quot;</span><span class="p">:</span> <span class="n">test_file</span><span class="p">}</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Tst</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">param</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.num_of_tests_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.num_of_tests_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">num_of_tests_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of tests that ran as part of the given task.</span>
+
+<span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :return: Number of tests for the specified task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/tests/count&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.manifest_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">manifest_for_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Manifest</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>

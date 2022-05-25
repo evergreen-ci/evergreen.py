@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.4.5 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.4.6 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -552,6 +552,20 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Manifest for the given task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.num_of_tests_by_task">
+<code class="sig-name descname"><span class="pre">num_of_tests_by_task</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.num_of_tests_by_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.num_of_tests_by_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of tests that ran as part of the given task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>task_id</strong> – Id of task to query for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of tests for the specified task.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3365,6 +3379,17 @@ If this is not a display task, returns None.</p>
 <dt id="evergreen.task.Task.get_manifest">
 <code class="sig-name descname"><span class="pre">get_manifest</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.manifest.Manifest" title="evergreen.manifest.Manifest"><span class="pre">evergreen.manifest.Manifest</span></a><a class="reference internal" href="_modules/evergreen/task.html#Task.get_manifest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.task.Task.get_manifest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the Manifest for this task.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.Task.get_num_of_tests">
+<code class="sig-name descname"><span class="pre">get_num_of_tests</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">int</span><a class="reference internal" href="_modules/evergreen/task.html#Task.get_num_of_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.task.Task.get_num_of_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of tests that ran as part of this task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Number of tests for the task.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
