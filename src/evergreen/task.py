@@ -339,6 +339,14 @@ class Task(_BaseEvergreenObject):
             execution=self.execution if execution is None else execution,
         )
 
+    def get_num_of_tests(self) -> int:
+        """
+        Get the number of tests that ran as part of this task.
+
+        :return: Number of tests for the task.
+        """
+        return self._api.num_of_tests_by_task(self.task_id)
+
     def get_execution_tasks(
         self, filter_fn: Optional[Callable[["Task"], bool]] = None
     ) -> Optional[List["Task"]]:

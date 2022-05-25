@@ -542,6 +542,13 @@ class TestTaskApi(object):
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
+    def test_num_of_tests_by_task(self, mocked_api):
+        mocked_api.num_of_tests_by_task("task_id")
+        expected_url = mocked_api._create_url("/tasks/task_id/tests/count")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
+        )
+
     def test_get_task_annotation(self, mocked_api):
         mocked_api.get_task_annotation("task_id", execution=5)
         expected_url = mocked_api._create_url("/tasks/task_id/annotations")
