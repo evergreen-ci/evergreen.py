@@ -228,6 +228,17 @@ class TestTask(object):
         assert "execution" in kwargs and kwargs["execution"] == expected
         assert tests == mock_api.tests_by_task.return_value
 
+    def test_get_num_of_tests(self, sample_task):
+        mock_api = MagicMock()
+        expected_num_of_tests = 2478
+        mock_api.num_of_tests_by_task.return_value = expected_num_of_tests
+        task = Task(sample_task, mock_api)
+
+        num_of_tests = task.get_num_of_tests()
+
+        mock_api.num_of_tests_by_task.assert_called_once()
+        assert num_of_tests == expected_num_of_tests
+
     @pytest.mark.parametrize(
         "status_string,status_score",
         [

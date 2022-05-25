@@ -842,6 +842,16 @@ class EvergreenApi(object):
         param = {"test_name": test_file}
         return [Tst(test, self) for test in self._call_api(url, params=param).json()]
 
+    def num_of_tests_by_task(self, task_id: str) -> int:
+        """
+        Get the number of tests that ran as part of the given task.
+
+        :param task_id: Id of task to query for.
+        :return: Number of tests for the specified task.
+        """
+        url = self._create_url(f"/tasks/{task_id}/tests/count")
+        return int(self._call_api(url).text)
+
     def manifest_for_task(self, task_id: str) -> Manifest:
         """
         Get the manifest for the given task.

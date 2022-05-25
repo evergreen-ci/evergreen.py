@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.6 - 2022-05-25
+
+- Add the number of tests that ran as part of the given task.
+
 ## 3.4.5 - 2022-05-11
 
 - Add `project_identifier` field to `Version` objects.
