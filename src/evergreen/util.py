@@ -7,7 +7,7 @@ from dateutil.parser import parse
 EVG_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 EVG_SHORT_DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 EVG_DATE_FORMAT = "%Y-%m-%d"
-EVG_DATE_INPUT_FORMAT = '"%Y-%m-%dT%H:%M:%S.000Z"'
+EVG_DATE_INPUT_FORMAT = "%Y-%m-%dT%H:%M:%S.000Z"
 
 
 def parse_evergreen_datetime(evg_date: Optional[Any]) -> Optional[datetime]:
