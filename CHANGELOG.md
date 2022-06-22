@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.4.7 - 2022-06-21
+
+- remove double quotes from date format 
+
 ## 3.4.6 - 2022-05-25
 
 - Add the number of tests that ran as part of the given task.
