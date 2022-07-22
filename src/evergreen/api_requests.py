@@ -9,10 +9,14 @@ class IssueLinkRequest(NamedTuple):
 
     issue_key: str
     url: str
+    confidence_score: Optional[float]
 
     def as_dict(self) -> Dict[str, str]:
         """Get a dictionary representation of the issue link."""
-        return {"issue_key": self.issue_key, "url": self.url}
+        data = {"issue_key": self.issue_key, "url": self.url}
+        if self.confidence_score is not None:
+            data["confidence_score"] = self.confidence_score
+        return data
 
 
 class SlackAttachmentField(BaseModel):

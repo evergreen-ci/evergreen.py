@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.0 - 2022-07-22
+
+- Added the ability to set a confidence when setting annotations.
+
 ## 3.4.6 - 2022-05-25
 
 - Add the number of tests that ran as part of the given task.
