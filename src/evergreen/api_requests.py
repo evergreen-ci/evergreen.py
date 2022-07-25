@@ -1,5 +1,5 @@
 """Objects for making requests to the API."""
-from typing import Dict, List, NamedTuple, Optional
+from typing import Any, Dict, List, NamedTuple, Optional
 
 from pydantic import BaseModel
 
@@ -9,10 +9,14 @@ class IssueLinkRequest(NamedTuple):
 
     issue_key: str
     url: str
+    confidence_score: Optional[float] = None
 
-    def as_dict(self) -> Dict[str, str]:
+    def as_dict(self) -> Dict[str, Any]:
         """Get a dictionary representation of the issue link."""
-        return {"issue_key": self.issue_key, "url": self.url}
+        data: Dict[str, Any] = {"issue_key": self.issue_key, "url": self.url}
+        if self.confidence_score is not None:
+            data["confidence_score"] = self.confidence_score
+        return data
 
 
 class SlackAttachmentField(BaseModel):
