@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.4.6 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.5.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -1037,13 +1037,19 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <p>Objects for making requests to the API.</p>
 <dl class="py class">
 <dt id="evergreen.api_requests.IssueLinkRequest">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></code><code class="sig-name descname"><span class="pre">IssueLinkRequest</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issue_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api_requests.html#IssueLinkRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></code><code class="sig-name descname"><span class="pre">IssueLinkRequest</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issue_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_score</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api_requests.html#IssueLinkRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
 <p>Issue to add to a task annotation.</p>
 <dl class="py method">
 <dt id="evergreen.api_requests.IssueLinkRequest.as_dict">
-<code class="sig-name descname"><span class="pre">as_dict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/evergreen/api_requests.html#IssueLinkRequest.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.as_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">as_dict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/evergreen/api_requests.html#IssueLinkRequest.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a dictionary representation of the issue link.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="evergreen.api_requests.IssueLinkRequest.confidence_score">
+<code class="sig-name descname"><span class="pre">confidence_score</span></code><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.confidence_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
 </dd></dl>
 
 <dl class="py attribute">
