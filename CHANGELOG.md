@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.1 - 2022-08-15
+
+- Fix pagination so that params are not dropped on future pages
+
 ## 3.5.0 - 2022-07-22
 
 - Added the ability to set a confidence when setting annotations.
