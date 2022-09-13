@@ -97,6 +97,7 @@ class Version(_BaseEvergreenObject):
     warnings = evg_attrib("warnings")
     ignored = evg_attrib("ignored")
     project_identifier = evg_attrib("project_identifier")
+    aborted = evg_attrib("aborted")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
