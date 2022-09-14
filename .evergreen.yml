@@ -26,7 +26,13 @@ functions:
         . venv/bin/activate
         pip install --upgrade pip
 
-        pip install poetry
+        pip install pipx
+
+        export PIPX_HOME="$HOME/pipx"
+        export PIPX_BIN_DIR="$HOME/pipx/bin"
+        export PATH="$PATH:$PIPX_BIN_DIR"
+
+        pipx install poetry
         poetry install
 
   deploy:
@@ -42,6 +48,7 @@ functions:
             exit 0
           fi
 
+          export PATH="$PATH:$HOME/pipx/bin"
           poetry publish --build --username ${pypi_user} --password ${pypi_password}
 
   build_docs:
@@ -53,6 +60,7 @@ functions:
           set -o verbose
           . venv/bin/activate
 
+          export PATH="$PATH:$HOME/pipx/bin"
           poetry run sphinx-apidoc -o docs/source src "*cli*"
           poetry run sphinx-build -W docs/source docs/build
           git clean -d -f
@@ -74,6 +82,7 @@ functions:
           export LC_ALL=C.UTF-8
           export LANG=C.UTF-8
 
+          export PATH="$PATH:$HOME/pipx/bin"
           poetry run gh-pusher --build-dir docs/build
 
   check_version_update:
@@ -115,6 +124,7 @@ tasks:
 
         . venv/bin/activate
 
+        export PATH="$PATH:$HOME/pipx/bin"
         RUN_SLOW_TESTS=1 poetry run pytest --cov=src --junitxml=junit-test-output.xml
 
 - name: evg_api_install
