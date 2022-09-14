@@ -26,13 +26,13 @@ functions:
         . venv/bin/activate
         pip install --upgrade pip
 
-        pip install pipx
+        pip install --disable-pip-version-check --quiet pipx==1.1.0
 
         export PIPX_HOME="$HOME/pipx"
         export PIPX_BIN_DIR="$HOME/pipx/bin"
         export PATH="$PATH:$PIPX_BIN_DIR"
 
-        pipx install poetry
+        pipx install poetry==1.2.0 --force
         poetry install
 
   deploy:
