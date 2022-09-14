@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.1 - 2022-09-13
+
+- Add `aborted` field to `Version` objects.
+
 ## 3.5.0 - 2022-07-22
 
 - Added the ability to set a confidence when setting annotations.
