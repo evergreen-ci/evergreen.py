@@ -33,7 +33,7 @@ functions:
         rm -rf "$PIPX_HOME"
 
         pip install --disable-pip-version-check --quiet pipx==1.1.0
-        pipx install poetry==1.2.0 --force
+        pipx install poetry==1.1.14 --force
         poetry install
 
   deploy:
