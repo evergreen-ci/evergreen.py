@@ -120,6 +120,7 @@ class Patch(_BaseEvergreenObject):
     tasks = evg_attrib("tasks")
     activated = evg_attrib("activated")
     alias = evg_attrib("alias")
+    commit_queue_position = evg_attrib("commit_queue_position")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
@@ -180,6 +181,14 @@ class Patch(_BaseEvergreenObject):
         :return: Version object.
         """
         return self._api.version_by_id(self.version)
+
+    def is_in_commit_queue(self) -> bool:
+        """
+        Check whether this patch is currently in the commit queue.
+
+        :return: True if in the commit queue, False otherwise.
+        """
+        return self.commit_queue_position is not None and self.commit_queue_position >= 0
 
     def __str__(self) -> str:
         """Get a human readable string version of the patch."""

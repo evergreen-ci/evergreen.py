@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.2 - 2022-09-19
+
+- Add `commit_queue_position` field to `Patch` objects.
+
 ## 3.5.1 - 2022-09-13
 
 - Add `aborted` field to `Version` objects.

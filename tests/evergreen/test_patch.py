@@ -33,3 +33,8 @@ class TestPatch(object):
         assert (
             patch.module_code_changes[0].commit_messages == sample_code_changes["commit_messages"]
         )
+
+    def test_commit_queue_patch(self, commit_queue_patch):
+        patch = Patch(commit_queue_patch, None)
+        assert patch.is_in_commit_queue()
+        assert patch.commit_queue_position == 5
