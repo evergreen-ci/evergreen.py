@@ -224,3 +224,9 @@ def sample_evergreen_auth(sample_evergreen_configuration):
 @pytest.fixture(params=(list(Requester)))
 def requester_value(request):
     return request.param
+
+
+@pytest.fixture()
+def commit_queue_patch():
+    """Return sample commit queue patch json."""
+    return get_sample_json("commit_queue_patch.json")
