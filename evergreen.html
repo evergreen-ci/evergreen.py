@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.5.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.5.2 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -2414,6 +2414,12 @@ argument.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="evergreen.patch.Patch.commit_queue_position">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">commit_queue_position</span></code><a class="headerlink" href="#evergreen.patch.Patch.commit_queue_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of commit_queue_position</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.patch.Patch.create_time">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">create_time</span></code><a class="headerlink" href="#evergreen.patch.Patch.create_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of create_time</p>
@@ -2455,6 +2461,17 @@ argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Github Patch Data for this patch.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.patch.Patch.is_in_commit_queue">
+<code class="sig-name descname"><span class="pre">is_in_commit_queue</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">bool</span><a class="reference internal" href="_modules/evergreen/patch.html#Patch.is_in_commit_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.patch.Patch.is_in_commit_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether this patch is currently in the commit queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if in the commit queue, False otherwise.</p>
 </dd>
 </dl>
 </dd></dl>
