@@ -6,6 +6,9 @@ import pytest
 
 from evergreen.task import (
     _EVG_DATE_FIELDS_IN_TASK,
+    EVG_FAILED_STATUS,
+    EVG_SETUP_FAILURE_STATUS_TYPE,
+    EVG_SUCCESS_STATUS,
     EVG_TEST_STATUS_TYPE,
     OomTrackerInfo,
     StatusScore,
@@ -300,3 +303,25 @@ class TestTask(object):
 
         assert manifest == mock_api.manifest_for_task.return_value
         mock_api.manifest_for_task.assert_called_with(task.task_id)
+
+    def test_task_is_setup_failure(self, sample_task):
+        sample_task["status_details"]["type"] = EVG_SETUP_FAILURE_STATUS_TYPE
+        sample_task["status"] = "failed"
+        task = Task(sample_task, None)
+        assert not task.is_success()
+        assert not task.is_system_failure()
+        assert not task.is_timeout()
+        assert not task.is_test_failure()
+        assert task.is_setup_failure()
+
+    @pytest.mark.parametrize("status_string", [EVG_SUCCESS_STATUS, EVG_FAILED_STATUS])
+    def test_task_is_completed(self, sample_task, status_string):
+        sample_task["status"] = status_string
+        task = Task(sample_task, None)
+        assert task.is_completed()
+
+    @pytest.mark.parametrize("status_string", ["started", "undispatched", "dispatched"])
+    def test_task_is_not_completed(self, sample_task, status_string):
+        sample_task["status"] = status_string
+        task = Task(sample_task, None)
+        assert not task.is_completed()

@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.3 - 2022-09-20
+
+- Add `is_setup_failure` and `is_completed` functions to `Task` objects.
+
 ## 3.5.2 - 2022-09-19
 
 - Add `commit_queue_position` field to `Patch` objects.

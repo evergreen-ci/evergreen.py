@@ -15,7 +15,9 @@ if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
     from evergreen.tst import Tst  # noqa: F401
 
+EVG_FAILED_STATUS = "failed"
 EVG_SUCCESS_STATUS = "success"
+EVG_SETUP_FAILURE_STATUS_TYPE = "setup"
 EVG_SYSTEM_FAILURE_STATUS = "system"
 EVG_UNDISPATCHED_STATUS = "undispatched"
 EVG_TEST_STATUS_TYPE = "test"
@@ -306,6 +308,24 @@ class Task(_BaseEvergreenObject):
         if not self.is_success() and self.status_details and self.status_details.timed_out:
             return self.status_details.timed_out
         return False
+
+    def is_setup_failure(self) -> bool:
+        """
+        Whether task is a setup failure.
+
+        :return: True if task is a setup failure.
+        """
+        if not self.is_success() and self.status_details and self.status_details.type:
+            return self.status_details.type == EVG_SETUP_FAILURE_STATUS_TYPE
+        return False
+
+    def is_completed(self) -> bool:
+        """
+        Whether task is completed.
+
+        :return: True if task is completed.
+        """
+        return self.status == EVG_SUCCESS_STATUS or self.status == EVG_FAILED_STATUS
 
     def has_oom(self) -> bool:
         """
