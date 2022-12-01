@@ -16,6 +16,8 @@ class Logs(_BaseEvergreenObject):
     url = evg_attrib("url")
     line_num = evg_attrib("line_num")
     url_raw = evg_attrib("url_raw")
+    url_lobster = evg_attrib("url_lobster")
+    url_parsley = evg_attrib("url_parsley")
     log_id = evg_attrib("log_id")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
