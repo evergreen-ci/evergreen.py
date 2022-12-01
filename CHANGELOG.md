@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.4 - 2022-12-01
+
+- Support new Test log fields.
+
 ## 3.5.3 - 2022-09-20
 
 - Add `is_setup_failure` and `is_completed` functions to `Task` objects.
