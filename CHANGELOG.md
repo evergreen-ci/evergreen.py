@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.5 - 2023-03-31
+
+- Add new `update_patch_status` command.
+
 ## 3.5.4 - 2022-12-01
 
 - Support new Test log fields.

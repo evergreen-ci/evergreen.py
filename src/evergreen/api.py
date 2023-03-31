@@ -478,6 +478,24 @@ class EvergreenApi(object):
         patches = self._lazy_paginate_by_date(url, params)
         return (Patch(patch, self) for patch in patches)  # type: ignore[arg-type]
 
+    def update_patch_status(
+        self, patch_id: str, activated: Optional[bool] = None, priority: Optional[int] = None
+    ) -> None:
+        """
+        Update a patch and set its status.
+
+        :param patch_id: Id of the patch to update
+        :param activated: If specified, will update the patch to specified value True or False
+        :param priority: If specified, will update the patch's priority to specified number
+        """
+        url = self._create_url(f"/patches/{patch_id}")
+        data: Dict[str, Union[bool, int]] = {}
+        if activated is not None:
+            data["activated"] = activated
+        if priority is not None:
+            data["priority"] = priority
+        self._call_api(url, data=json.dumps(data), method="PATCH")
+
     def configure_patch(
         self,
         patch_id: str,
