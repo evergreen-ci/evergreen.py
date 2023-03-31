@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.5.4 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.5.5 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -959,6 +959,21 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>List of tests for the specified task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.update_patch_status">
+<code class="sig-name descname"><span class="pre">update_patch_status</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activated</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.update_patch_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.update_patch_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a patch and set its status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch_id</strong> – Id of the patch to update</p></li>
+<li><p><strong>activated</strong> – If specified, will update the patch to specified value True or False</p></li>
+<li><p><strong>priority</strong> – If specified, will update the patch’s priority to specified number</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
