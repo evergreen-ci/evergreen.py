@@ -486,6 +486,45 @@ class TestPatchApi(object):
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
 
+    def test_update_patch_activate(self, mocked_api):
+        mocked_api.update_patch_status("patch_id", activated=True)
+        expected_url = mocked_api._create_url("/patches/patch_id")
+        expected_params = None
+        expected_data = json.dumps({"activated": True})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=expected_params,
+            timeout=None,
+            data=expected_data,
+            method="PATCH",
+        )
+
+    def test_update_patch_priority(self, mocked_api):
+        mocked_api.update_patch_status("patch_id", priority=100)
+        expected_url = mocked_api._create_url("/patches/patch_id")
+        expected_params = None
+        expected_data = json.dumps({"priority": 100})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=expected_params,
+            timeout=None,
+            data=expected_data,
+            method="PATCH",
+        )
+
+    def test_update_patch(self, mocked_api):
+        mocked_api.update_patch_status("patch_id", priority=100, activated=True)
+        expected_url = mocked_api._create_url("/patches/patch_id")
+        expected_params = None
+        expected_data = json.dumps({"activated": True, "priority": 100})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=expected_params,
+            timeout=None,
+            data=expected_data,
+            method="PATCH",
+        )
+
 
 class TestTaskApi(object):
     def test_task_by_id(self, mocked_api):
