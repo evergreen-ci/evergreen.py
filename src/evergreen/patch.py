@@ -1,7 +1,7 @@
 """Representation of an evergreen patch."""
 from __future__ import absolute_import
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
+from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, Optional, Set
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
@@ -99,6 +99,12 @@ class ModuleCodeChanges(_BaseEvergreenObject):
     def file_diffs(self) -> List[FileDiff]:
         """Retrieve a list of the file diffs for this patch."""
         return [FileDiff(diff, self._api) for diff in self.json["module_code_changes"]]
+
+
+class PatchCreationDetails(NamedTuple):
+    """Details of a patch creation."""
+
+    url: str
 
 
 class Patch(_BaseEvergreenObject):

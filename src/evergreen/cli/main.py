@@ -518,6 +518,32 @@ def all_user_permissions_for_resource(ctx, resource_id, resource_type):
     click.echo(user_permissions)
 
 
+@cli.command()
+@click.pass_context
+@click.option("--patch-id", required=True, help="Patch id to request diff for.")
+def patch_diff(ctx, patch_id):
+    """Get patch diff for a given patch."""
+    api = ctx.obj["api"]
+    diff = api.get_patch_diff(patch_id)
+    click.echo(diff)
+
+
+@cli.command()
+@click.pass_context
+@click.option("--diff-file", required=True, help="The path to the diff file.")
+@click.option("--description", required=True, help="The description of the build.")
+@click.option("--param", required=True, help="The params to pass to the build.")
+@click.option("--base", required=True, help="The base commit of the build.")
+@click.option("--project", required=True, help="The project of the build.")
+@click.option("--tasks", required=True, help="The tasks to execute.")
+@click.option("--variants", required=True, help="The variants to build against.")
+def patch_from_diff(ctx, diff_file, description, param, base, project, tasks, variants):
+    """Start a patch build based on the diff."""
+    api = ctx.obj["api"]
+    response = api.patch_from_diff(diff_file, param, base, tasks, project, description, variants)
+    click.echo(response)
+
+
 def main():
     """Create command line application."""
     return cli(obj={})
