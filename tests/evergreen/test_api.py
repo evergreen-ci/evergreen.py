@@ -543,6 +543,13 @@ class TestCreatePatchDiff:
         result = mocked_api.patch_from_diff(
             "path", "params", "base", "task", "project", "description", "variant"
         )
+
+        command = mock_run.call_args[0][0]
+
+        assert (
+            command
+            == "evergreen patch-file --diff-file path --description 'description' --param params --base base --tasks task --variants variant --project project -y -f"
+        )
         assert (
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"

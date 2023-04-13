@@ -852,14 +852,12 @@ class EvergreenApi(object):
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: _description_
         """
-        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --param {params} --base {base} --tasks {task} --variants {variant} --project {project} -y"
+        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --param {params} --base {base} --tasks {task} --variants {variant} --project {project} -y -f"
         process = subprocess.run(command, shell=True, check=True, capture_output=True)
-        print(process.stderr)
         match = re.search(EVERGREEN_URL_REGEX, str(process.stderr))
         if match is None:
             raise Exception(f"Unable to parse URL from command output: {str(process.stderr)}")
 
-        print(match.group(0))
         return PatchCreationDetails(url=match.group(0))
 
     def task_by_id(self, task_id: str, fetch_all_executions: Optional[bool] = None) -> Task:

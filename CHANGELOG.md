@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.5.6 - 2023-04-13
+
+- Add new `patch_from_diff` command.
+- Add new `get_patch_diff` command.
+
 ## 3.5.5 - 2023-03-31
 
 - Add new `update_patch_status` command.

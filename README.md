@@ -102,6 +102,14 @@ $ evg-api --json list-hosts
 }
 ```
 
+The `patch_from_diff` API required the evergreen CLI to be installed. Add the following to the host's DOCKERFILE:
+
+```bash
+RUN wget https://evergreen.mongodb.com/clients/linux_amd64/evergreen
+RUN chmod +x evergreen
+ENV PATH="/project:$PATH"
+```
+
 ## Documentation
 
 You can find the documentation [here](https://evergreen-ci.github.io/evergreen.py/).
