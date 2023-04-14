@@ -401,9 +401,7 @@ class EvergreenApi(object):
                 attachment.dict(exclude_none=True, exclude_unset=True) for attachment in attachments
             ]
         self._call_api(
-            url,
-            data=json.dumps(data),
-            method="POST",
+            url, data=json.dumps(data), method="POST",
         )
 
     def alias_for_version(
@@ -1322,10 +1320,7 @@ class RetryingEvergreenApi(EvergreenApi):
 
     @retry(
         retry=retry_if_exception_type(  # type: ignore[no-untyped-call]
-            (
-                requests.exceptions.HTTPError,
-                requests.exceptions.ConnectionError,
-            )
+            (requests.exceptions.HTTPError, requests.exceptions.ConnectionError,)
         ),
         stop=stop_after_attempt(MAX_RETRIES),  # type: ignore[no-untyped-call]
         wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),  # type: ignore[no-untyped-call]
