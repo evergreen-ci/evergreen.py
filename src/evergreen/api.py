@@ -3,6 +3,8 @@
 from __future__ import absolute_import
 
 import json
+import re
+import subprocess
 from contextlib import contextmanager
 from datetime import datetime
 from functools import lru_cache
@@ -30,7 +32,7 @@ from evergreen.config import (
 from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
-from evergreen.patch import Patch
+from evergreen.patch import Patch, PatchCreationDetails
 from evergreen.performance_results import PerformanceData
 from evergreen.project import Project
 from evergreen.resource_type_permissions import (
@@ -61,6 +63,8 @@ DEFAULT_LIMIT = 100
 MAX_RETRIES = 3
 START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
+
+EVERGREEN_URL_REGEX = "(https?)://evergreen..*?(?=\\\\n)"
 
 
 class EvergreenApi(object):
@@ -814,6 +818,52 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/patches/{patch_id}")
         return Patch(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
+
+    def get_patch_diff(self, patch_id: str) -> str:
+        """
+        Get the diff for a given patch.
+
+        :param patch_id: The id of the patch to request the diff for.
+        :return: The diff of the patch represented as a JSON string.
+        """
+        url = self._create_url(f"/patches/{patch_id}/raw")
+        return json.dumps(self._call_api(url, method="GET").json())
+
+    def patch_from_diff(
+        self,
+        diff_file_path: str,
+        params: str,
+        base: str,
+        task: str,
+        project: str,
+        description: str,
+        variant: str,
+        author: Optional[str] = None,
+    ) -> PatchCreationDetails:
+        """
+        Start a patch build based on a diff.
+
+        :param diff_file_path: The path to the diff.
+        :param params: The params to pass to the build.
+        :param base: The build's base commit.
+        :param task: The task(s) to run.
+        :param project: The project to start the build for.
+        :param description: A description of the build.
+        :param variant: The variant(s) to build against.
+        :raises Exception: If a build URL is not produced we raise an exception with the output included.
+        :return: _description_
+        """
+        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --param {params} --base {base} --tasks {task} --variants {variant} --project {project} -y -f"
+        if author is not None:
+            command = f"{command} --author {author}"
+
+        process = subprocess.run(command, shell=True, capture_output=True)
+
+        match = re.search(EVERGREEN_URL_REGEX, str(process.stderr))
+        if match is None:
+            raise Exception(f"Unable to parse URL from command output: {str(process.stderr)}")
+
+        return PatchCreationDetails(url=match.group(0))
 
     def task_by_id(self, task_id: str, fetch_all_executions: Optional[bool] = None) -> Task:
         """
