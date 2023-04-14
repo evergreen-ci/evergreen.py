@@ -537,10 +537,13 @@ def patch_diff(ctx, patch_id):
 @click.option("--project", required=True, help="The project of the build.")
 @click.option("--tasks", required=True, help="The tasks to execute.")
 @click.option("--variants", required=True, help="The variants to build against.")
-def patch_from_diff(ctx, diff_file, description, param, base, project, tasks, variants):
+@click.option("--author", required=False, default=None, help="Indicate the author of the patch.")
+def patch_from_diff(ctx, diff_file, description, param, base, project, tasks, variants, author):
     """Start a patch build based on the diff."""
     api = ctx.obj["api"]
-    response = api.patch_from_diff(diff_file, param, base, tasks, project, description, variants)
+    response = api.patch_from_diff(
+        diff_file, param, base, tasks, project, description, variants, author
+    )
     click.echo(response)
 
 

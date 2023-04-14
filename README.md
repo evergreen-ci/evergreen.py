@@ -102,7 +102,7 @@ $ evg-api --json list-hosts
 }
 ```
 
-The `patch_from_diff` API required the evergreen CLI to be installed. Add the following to the host's DOCKERFILE:
+The `patch_from_diff` API requires the Evergreen CLI to be installed. Add the following to the host's DOCKERFILE:
 
 ```bash
 RUN wget https://evergreen.mongodb.com/clients/linux_amd64/evergreen
