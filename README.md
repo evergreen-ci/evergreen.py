@@ -14,13 +14,13 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 5. [Usage](#usage)
 6. [Documentation](#documentation)
 7. [Contributor's Guide](#contributors-guide)
-    - [Setting up a local development environment](#setting-up-a-local-development-environment)
-    - [Linting/formatting](#lintingformatting)
-    - [Running tests](#running-tests)
-    - [Automatically running checks on commit](#automatically-running-checks-on-commit)
-    - [Versioning](#versioning)
-    - [Code Review](#code-review)
-    - [Deployment](#deployment)
+   - [Setting up a local development environment](#setting-up-a-local-development-environment)
+   - [Linting/formatting](#lintingformatting)
+   - [Running tests](#running-tests)
+   - [Automatically running checks on commit](#automatically-running-checks-on-commit)
+   - [Versioning](#versioning)
+   - [Code Review](#code-review)
+   - [Deployment](#deployment)
 
 ## Description
 
@@ -31,30 +31,34 @@ or on the command line to get data about Evergreen objects quickly and easily.
 ## Getting Help
 
 ### What's the right channel to ask my question?
+
 If you have a question about evergreen.py, please mention @dag-on-call in
 slack channel [#evergreen-users](https://mongodb.slack.com/messages/#evergreen-users/),
 or email us at
 dev-prod-dag@mongodb.com.
 
 ### How can I request a change/report a bug in evergreen.py?
+
 Create a [DAG ticket](https://jira.mongodb.org/projects/DAG).
 
 ### What should I include in my ticket or #evergreen-users question?
+
 Since #evergreen-users questions are interrupts,
 please include as much information as possible.
 This can help avoid long information-gathering threads.
 
 Please include the following:
-* **Motivation for Request**
-  * provide us the motivation for this change.
-* **Context**
-  * provide some background contexts for this issue.
-* **Description**
-  * provide some descriptions on how this issue happened.
+
+- **Motivation for Request**
+  - provide us the motivation for this change.
+- **Context**
+  - provide some background contexts for this issue.
+- **Description**
+  - provide some descriptions on how this issue happened.
 
 ## Dependencies
 
-* Python 3.7 or later
+- Python 3.7 or later
 
 ## Installation
 
@@ -67,6 +71,7 @@ $ pip install evergreen.py
 This client can be used either in code or directly via the command line.
 
 In code:
+
 ```python
 >> from evergreen.api import EvgAuth, EvergreenApi
 >> api = EvergreenApi.get_api(EvgAuth('david.bradford', '***'))
@@ -76,6 +81,7 @@ In code:
 ```
 
 Cli:
+
 ```bash
 $ evg-api --json list-hosts
 {
@@ -102,12 +108,37 @@ $ evg-api --json list-hosts
 }
 ```
 
-The `patch_from_diff` API requires the Evergreen CLI to be installed. Add the following to the host's DOCKERFILE:
+The `patch_from_diff` API requires the Evergreen CLI to be installed.
+
+Add the following to the host's DOCKERFILE:
 
 ```bash
 RUN wget https://evergreen.mongodb.com/clients/linux_amd64/evergreen
 RUN chmod +x evergreen
 ENV PATH="/project:$PATH"
+```
+
+You will need to provide an .evergreen.yml file with credentials to use the CLI. Assuming you are using the [web-app](https://github.com/10gen/helm-charts/tree/master/charts/web-app) chart this can be done by [mounting](https://kanopy.corp.mongodb.com/docs/getting_started/application_configuration/#configuration-filesvolumes) [kubernetes secrets](https://kanopy.corp.mongodb.com/docs/cheatsheet/#interacting-with-kubernetes-secrets) in your pod.
+
+Store the secret in the cluster:
+
+```bash
+kubectl create secret generic <secret_name> --from-file .evergreen.yml --namespace <namespace>
+```
+
+In environments/deployment.yml configure the file to be mounted and linked to the correct location:
+
+```yaml
+volumeSecrets:
+  - name: <secret_name>
+    path: /etc/secrets
+lifecycle:
+  postStart:
+    type: exec
+    command:
+      - /bin/sh
+      - -c
+      - ln -sf /etc/secrets/.evergreen.yml
 ```
 
 ## Documentation
@@ -119,7 +150,8 @@ You can find the documentation [here](https://evergreen-ci.github.io/evergreen.p
 ### Setting up a local development environment
 
 #### Requirements
-* Poetry 1.1 or later
+
+- Poetry 1.1 or later
 
 You will need Evergreen credentials on your local machine to use this library or the attached CLI. You
 can set up your credentials by following the link [here](https://github.com/evergreen-ci/evergreen/wiki/Using-the-Command-Line-Tool#downloading-the-command-line-tool).
