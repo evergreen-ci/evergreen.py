@@ -107,6 +107,7 @@ class Task(_BaseEvergreenObject):
     activated_by = evg_attrib("activated_by")
     build_id = evg_attrib("build_id")
     build_variant = evg_attrib("build_variant")
+    build_variant_display_name = evg_attrib("build_variant_display_name")
     create_time = evg_datetime_attrib("create_time")
     depends_on = evg_attrib("depends_on")
     dispatch_time = evg_datetime_attrib("dispatch_time")

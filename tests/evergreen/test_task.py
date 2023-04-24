@@ -325,3 +325,8 @@ class TestTask(object):
         sample_task["status"] = status_string
         task = Task(sample_task, None)
         assert not task.is_completed()
+
+    def test_task_build_variant_display_name(self, sample_task):
+        task = Task(sample_task, None)
+
+        assert task.build_variant_display_name == "Linux 64 Debug"
