@@ -11,7 +11,7 @@ import requests
 from requests.exceptions import HTTPError
 
 import evergreen.api as under_test
-from evergreen.api_requests import IssueLinkRequest, SlackAttachment
+from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
 from evergreen.resource_type_permissions import PermissionableResourceType, RemovablePermission
 from evergreen.util import EVG_DATETIME_FORMAT, parse_evergreen_datetime
@@ -681,6 +681,7 @@ class TestTaskApi(object):
             "task_id",
             message="hello world",
             issues=[IssueLinkRequest(issue_key="key-1234", url="http://hello.world/key-1234")],
+            metadata_links=[MetadataLinkRequest(url="https://www.mongodb.com", text="mongodb")],
         )
         expected_url = mocked_api._create_url("/tasks/task_id/annotation")
         expected_params = None
@@ -689,6 +690,7 @@ class TestTaskApi(object):
                 "task_id": "task_id",
                 "note": {"message": "hello world"},
                 "issues": [{"issue_key": "key-1234", "url": "http://hello.world/key-1234"}],
+                "metadata_links": [{"url": "https://www.mongodb.com", "text": "mongodb"}],
             }
         )
         mocked_api.session.request.assert_called_with(
