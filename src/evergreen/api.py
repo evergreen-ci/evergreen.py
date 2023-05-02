@@ -18,7 +18,7 @@ from structlog.stdlib import LoggerFactory
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from evergreen.alias import VariantAlias
-from evergreen.api_requests import IssueLinkRequest, SlackAttachment
+from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import (
@@ -985,6 +985,7 @@ class EvergreenApi(object):
         issues: Optional[List[IssueLinkRequest]] = None,
         suspected_issues: Optional[List[IssueLinkRequest]] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        metadata_links: Optional[List[MetadataLinkRequest]] = None,
     ) -> None:
         """
         Annotate the specified task.
@@ -995,6 +996,7 @@ class EvergreenApi(object):
         :param issues: Issues to attach to the annotation.
         :param suspected_issues: Suspected issues to add to the annotation.
         :param metadata: Extra metadata to add to the issue.
+        :param metadata_links: Metadata link to add to the annotation.
         """
         url = self._create_url(f"/tasks/{task_id}/annotation")
         request: Dict[str, Any] = {
@@ -1015,6 +1017,9 @@ class EvergreenApi(object):
 
         if metadata is not None:
             request["metadata"] = metadata
+
+        if metadata_links is not None:
+            request["metadata_links"] = [link._asdict() for link in metadata_links]
 
         self._call_api(url, method="PUT", data=json.dumps(request))
 

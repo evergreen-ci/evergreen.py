@@ -19,6 +19,13 @@ class IssueLinkRequest(NamedTuple):
         return data
 
 
+class MetadataLinkRequest(NamedTuple):
+    """Metadata Link to add to a task annotation."""
+
+    url: str
+    text: str
+
+
 class SlackAttachmentField(BaseModel):
     """
     Slack fields that get displayed in a table-like format.

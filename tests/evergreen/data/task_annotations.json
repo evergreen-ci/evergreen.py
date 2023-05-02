@@ -10,6 +10,17 @@
       "requester": "api"
     }
   },
+  "metadata_links": [
+    {
+      "url": "https://www.mongodb.com",
+      "text": "MongoDB",
+      "source": {
+        "author": "evergreen",
+        "time": "2020-12-02T22:02:41.329Z",
+        "requester": "api"
+      }
+    }
+  ],
   "issues": [
     {
       "url": "http://issues.com/ISSUE-1234",

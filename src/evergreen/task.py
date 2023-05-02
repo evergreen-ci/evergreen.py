@@ -6,7 +6,7 @@ from datetime import timedelta
 from enum import IntEnum
 from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, List, Optional
 
-from evergreen.api_requests import IssueLinkRequest
+from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.manifest import Manifest
 from evergreen.task_annotations import TaskAnnotation
@@ -418,6 +418,7 @@ class Task(_BaseEvergreenObject):
         issues: Optional[List[IssueLinkRequest]] = None,
         suspected_issues: Optional[List[IssueLinkRequest]] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        metadata_links: Optional[List[MetadataLinkRequest]] = None,
     ) -> None:
         """
         Annotate the specified task.
@@ -426,9 +427,16 @@ class Task(_BaseEvergreenObject):
         :param issues: Issues to attach to the annotation.
         :param suspected_issues: Suspected issues to add to the annotation.
         :param metadata: Extra metadata to add to the issue.
+        :param metadata_links: Metadata links to add to the annotation.
         """
         self._api.annotate_task(
-            self.task_id, self.execution, message, issues, suspected_issues, metadata
+            self.task_id,
+            self.execution,
+            message,
+            issues,
+            suspected_issues,
+            metadata,
+            metadata_links,
         )
 
     def __repr__(self) -> str:

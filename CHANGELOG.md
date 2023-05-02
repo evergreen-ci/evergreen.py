@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.9 - 2023-05-02
+
+- Add `metadata_links` to `TaskAnnotation`
+
 ## 3.5.8 - 2023-04-21
 
 - Add `build_variant_display_name` to `Task`

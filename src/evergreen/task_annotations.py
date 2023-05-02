@@ -50,6 +50,22 @@ class Note(_BaseEvergreenObject):
         return Source(self.json["source"], self._api)
 
 
+class MetadataLink(_BaseEvergreenObject):
+    """Representation of a metadata link associated with a task annotation."""
+
+    url = evg_attrib("url")
+    text = evg_attrib("text")
+
+    def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
+        """Create an instance of a task annotation metadata link."""
+        super().__init__(json, api)
+
+    @property
+    def source(self) -> Source:
+        """Get the source of this metadata link."""
+        return Source(self.json["source"], self._api)
+
+
 class TaskAnnotation(_BaseEvergreenObject):
     """Representation of a task annotation."""
 
@@ -79,3 +95,8 @@ class TaskAnnotation(_BaseEvergreenObject):
     def note(self) -> Note:
         """Get a note about this annotation."""
         return Note(self.json.get("note", {}), self._api)
+
+    @property
+    def metadata_links(self) -> List[MetadataLink]:
+        """Get metadata links for this annotation."""
+        return [MetadataLink(link, self._api) for link in self.json.get("metadata_links", [])]
