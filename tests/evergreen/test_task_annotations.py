@@ -13,3 +13,18 @@ class TestTaskAnnotation(object):
         assert len(task_annotation.suspected_issues) == len(
             sample_task_annotation["suspected_issues"]
         )
+
+        # Metadata Links assertions
+        assert len(task_annotation.metadata_links) == 1
+        assert (
+            task_annotation.metadata_links[0].url
+            == sample_task_annotation["metadata_links"][0]["url"]
+        )
+        assert (
+            task_annotation.metadata_links[0].text
+            == sample_task_annotation["metadata_links"][0]["text"]
+        )
+        assert (
+            task_annotation.metadata_links[0].source.json
+            == sample_task_annotation["metadata_links"][0]["source"]
+        )
