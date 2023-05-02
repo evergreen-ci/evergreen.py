@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 3.5.8 documentation</title>
+    <title>Index &#8212; evergreen.py 3.5.9 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -1012,6 +1012,12 @@
       </ul></li>
       <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.metadata">metadata() (evergreen.task_annotations.TaskAnnotation property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.task_annotations.TaskAnnotation.metadata_links">metadata_links() (evergreen.task_annotations.TaskAnnotation property)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.task_annotations.MetadataLink">MetadataLink (class in evergreen.task_annotations)</a>
+</li>
+      <li><a href="evergreen.html#evergreen.api_requests.MetadataLinkRequest">MetadataLinkRequest (class in evergreen.api_requests)</a>
+</li>
       <li><a href="evergreen.errors.html#evergreen.errors.exceptions.MetricsException">MetricsException</a>
 </li>
       <li><a href="evergreen.html#evergreen.distro.PlannerSettings.minimum_hosts">minimum_hosts() (evergreen.distro.PlannerSettings property)</a>
@@ -1454,6 +1460,8 @@
       <li><a href="evergreen.html#evergreen.task_annotations.IssueLink.source">source() (evergreen.task_annotations.IssueLink property)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.task_annotations.MetadataLink.source">(evergreen.task_annotations.MetadataLink property)</a>
+</li>
         <li><a href="evergreen.html#evergreen.task_annotations.Note.source">(evergreen.task_annotations.Note property)</a>
 </li>
       </ul></li>
@@ -1617,10 +1625,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.distro.Distro.teardown">teardown() (evergreen.distro.Distro property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.test_batch">test_batch() (evergreen.performance_results.PerformanceData property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.stats.TestStats.test_file">test_file() (evergreen.stats.TestStats property)</a>
@@ -1649,7 +1657,13 @@
 </li>
       <li><a href="evergreen.html#evergreen.stats.TestStats">TestStats (class in evergreen.stats)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.text">text (evergreen.api_requests.SlackAttachment attribute)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.MetadataLinkRequest.text">text (evergreen.api_requests.MetadataLinkRequest attribute)</a>
+
+      <ul>
+        <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.text">(evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="evergreen.html#evergreen.task_annotations.MetadataLink.text">text() (evergreen.task_annotations.MetadataLink property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestResult.thread_level">thread_level() (evergreen.performance_results.PerformanceTestResult property)</a>
 </li>
@@ -1710,6 +1724,8 @@
       <li><a href="evergreen.html#evergreen.api_requests.IssueLinkRequest.url">url (evergreen.api_requests.IssueLinkRequest attribute)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.api_requests.MetadataLinkRequest.url">(evergreen.api_requests.MetadataLinkRequest attribute)</a>
+</li>
         <li><a href="evergreen.html#evergreen.patch.PatchCreationDetails.url">(evergreen.patch.PatchCreationDetails attribute)</a>
 </li>
       </ul></li>
@@ -1719,6 +1735,8 @@
         <li><a href="evergreen.html#evergreen.task.Artifact.url">(evergreen.task.Artifact property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.task_annotations.IssueLink.url">(evergreen.task_annotations.IssueLink property)</a>
+</li>
+        <li><a href="evergreen.html#evergreen.task_annotations.MetadataLink.url">(evergreen.task_annotations.MetadataLink property)</a>
 </li>
         <li><a href="evergreen.html#evergreen.tst.Logs.url">(evergreen.tst.Logs property)</a>
 </li>
