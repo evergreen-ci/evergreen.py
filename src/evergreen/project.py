@@ -19,6 +19,7 @@ class Project(_BaseEvergreenObject):
     display_name = evg_attrib("display_name")
     enabled = evg_attrib("enabled")
     identifier = evg_attrib("identifier")
+    id = evg_attrib("id")
     owner_name = evg_attrib("owner_name")
     private = evg_attrib("private")
     remote_path = evg_attrib("remote_path")

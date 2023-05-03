@@ -4,6 +4,7 @@
     "display_name": "The project (master)",
     "enabled": true,
     "identifier": "project 1",
+    "id": "project id 1",
     "owner_name": "10gen",
     "private": true,
     "remote_path": ".evergreen.yml",
