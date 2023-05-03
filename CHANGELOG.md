@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.0 - 2023-05-03
+
+- Add `id` to `Project`
+
 ## 3.5.9 - 2023-05-02
 
 - Add `metadata_links` to `TaskAnnotation`

@@ -185,6 +185,7 @@ class TestProjectApi(object):
 
         assert len(projects) == 1
         assert projects[0].identifier == "project 2"
+        assert projects[0].id == "project id 2"
 
     def test_project_by_id(self, mocked_api):
         mocked_api.project_by_id("project_id")
