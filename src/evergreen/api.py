@@ -164,10 +164,23 @@ class EvergreenApi(object):
         :return: response from api server.
         """
         start_time = time()
+        LOGGER.debug(
+            "Request to be sent",
+            url=url,
+            params=params,
+            timeout=self._timeout,
+            data=data,
+            method=method,
+        )
         response = self.session.request(
             url=url, params=params, timeout=self._timeout, data=data, method=method
         )
 
+        LOGGER.debug(
+            "Response received",
+            response_status_code=response.status_code,
+            response_text=response.text,
+        )
         self._log_api_call_time(response, start_time)
 
         self._raise_for_status(response)
