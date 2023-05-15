@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.1 - 2023-05-15
+
+- Log request and response in `_call_api` function.
+
 ## 3.6.0 - 2023-05-03
 
 - Add `id` to `Project`
