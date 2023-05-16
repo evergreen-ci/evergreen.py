@@ -97,7 +97,7 @@ class EvergreenApi(object):
     def with_session(self) -> Generator["EvergreenApi", None, None]:
         """Yield an instance of the API client with a shared session."""
         session = self._create_session()
-        evg_api = EvergreenApi(self._api_server, self._auth, self._timeout, session)
+        evg_api = EvergreenApi(self._api_server, self._auth, self._timeout, session, self._debug)
         yield evg_api
 
     @property
@@ -1300,9 +1300,10 @@ class CachedEvergreenApi(EvergreenApi):
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
+        debug: bool = False,
     ) -> None:
         """Create an Evergreen Api object."""
-        super(CachedEvergreenApi, self).__init__(api_server, auth, timeout)
+        super(CachedEvergreenApi, self).__init__(api_server, auth, timeout, debug=debug)
 
     @lru_cache(maxsize=CACHE_SIZE)
     def build_by_id(self, build_id: str) -> Build:  # type: ignore[override]
@@ -1342,9 +1343,10 @@ class RetryingEvergreenApi(EvergreenApi):
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
+        debug: bool = False,
     ) -> None:
         """Create an Evergreen Api object."""
-        super(RetryingEvergreenApi, self).__init__(api_server, auth, timeout)
+        super(RetryingEvergreenApi, self).__init__(api_server, auth, timeout, debug=debug)
 
     @retry(
         retry=retry_if_exception_type(  # type: ignore[no-untyped-call]
