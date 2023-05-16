@@ -76,7 +76,7 @@ class EvergreenApi(object):
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
         session: Optional[requests.Session] = None,
-        debug: bool = False,
+        log_on_error: bool = False,
     ) -> None:
         """
         Create a _BaseEvergreenApi object.
@@ -85,19 +85,21 @@ class EvergreenApi(object):
         :param auth: EvgAuth object with auth information.
         :param timeout: Time (in sec) to wait before considering a call as failed.
         :param session: Session to use for requests.
-        :param debug: Flag to use for debug logs.
+        :param log_on_error: Flag to use for error logs.
         """
         self._timeout = timeout
         self._api_server = api_server
         self._auth = auth
         self._session = session
-        self._debug = debug
+        self._log_on_error = log_on_error
 
     @contextmanager
     def with_session(self) -> Generator["EvergreenApi", None, None]:
         """Yield an instance of the API client with a shared session."""
         session = self._create_session()
-        evg_api = EvergreenApi(self._api_server, self._auth, self._timeout, session, self._debug)
+        evg_api = EvergreenApi(
+            self._api_server, self._auth, self._timeout, session, self._log_on_error
+        )
         yield evg_api
 
     @property
@@ -167,25 +169,23 @@ class EvergreenApi(object):
         :return: response from api server.
         """
         start_time = time()
-        if self._debug:
-            LOGGER.info(
-                "Request to be sent",
-                url=url,
-                params=params,
-                timeout=self._timeout,
-                data=data,
-                method=method,
-            )
+        LOGGER.debug(
+            "Request to be sent",
+            url=url,
+            params=params,
+            timeout=self._timeout,
+            data=data,
+            method=method,
+        )
         response = self.session.request(
             url=url, params=params, timeout=self._timeout, data=data, method=method
         )
 
-        if self._debug:
-            LOGGER.info(
-                "Response received",
-                response_status_code=response.status_code,
-                response_text=response.text,
-            )
+        LOGGER.debug(
+            "Response received",
+            response_status_code=response.status_code,
+            response_text=response.text,
+        )
         self._log_api_call_time(response, start_time)
 
         self._raise_for_status(response)
@@ -206,8 +206,7 @@ class EvergreenApi(object):
             for line in res.iter_lines(decode_unicode=True):
                 yield line
 
-    @staticmethod
-    def _raise_for_status(response: requests.Response) -> None:
+    def _raise_for_status(self, response: requests.Response) -> None:
         """
         Raise an exception with the evergreen message if it exists.
 
@@ -216,11 +215,15 @@ class EvergreenApi(object):
         try:
             json_data = response.json()
             if response.status_code >= 400 and "error" in json_data:
-                LOGGER.error(
-                    "Response received",
-                    response_status_code=response.status_code,
-                    response_text=response.text,
-                )
+                if self._log_on_error:
+                    LOGGER.error(
+                        "Error found in json",
+                        request_url=response.request.url,
+                        request_method=response.request.method,
+                        request_body=response.request.body,
+                        response_status_code=response.status_code,
+                        response_text=response.text,
+                    )
                 raise requests.exceptions.HTTPError(json_data["error"], response=response)
         except JSONDecodeError:
             pass
@@ -1300,10 +1303,12 @@ class CachedEvergreenApi(EvergreenApi):
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
-        debug: bool = False,
+        log_on_error: bool = False,
     ) -> None:
         """Create an Evergreen Api object."""
-        super(CachedEvergreenApi, self).__init__(api_server, auth, timeout, debug=debug)
+        super(CachedEvergreenApi, self).__init__(
+            api_server, auth, timeout, log_on_error=log_on_error
+        )
 
     @lru_cache(maxsize=CACHE_SIZE)
     def build_by_id(self, build_id: str) -> Build:  # type: ignore[override]
@@ -1343,10 +1348,12 @@ class RetryingEvergreenApi(EvergreenApi):
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
-        debug: bool = False,
+        log_on_error: bool = False,
     ) -> None:
         """Create an Evergreen Api object."""
-        super(RetryingEvergreenApi, self).__init__(api_server, auth, timeout, debug=debug)
+        super(RetryingEvergreenApi, self).__init__(
+            api_server, auth, timeout, log_on_error=log_on_error
+        )
 
     @retry(
         retry=retry_if_exception_type(  # type: ignore[no-untyped-call]
