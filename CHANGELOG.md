@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.2 - 2023-05-18
+
+- Add logging in `Version` constructor.
+
 ## 3.6.1 - 2023-05-15
 
 - Log request and response in `_call_api` function.
