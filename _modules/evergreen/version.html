@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.version &#8212; evergreen.py 3.6.1 documentation</title>
+    <title>evergreen.version &#8212; evergreen.py 3.6.2 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -49,6 +49,8 @@
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
+<span class="kn">import</span> <span class="nn">structlog</span>
+
 <span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
 <span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
 <span class="kn">from</span> <span class="nn">evergreen.manifest</span> <span class="kn">import</span> <span class="n">ManifestModule</span>
@@ -58,6 +60,9 @@
     <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
     <span class="kn">from</span> <span class="nn">evergreen.manifest</span> <span class="kn">import</span> <span class="n">Manifest</span>
     <span class="kn">from</span> <span class="nn">evergreen.patch</span> <span class="kn">import</span> <span class="n">Patch</span>  <span class="c1"># noqa: F401</span>
+
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Requester"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester">[docs]</a><span class="k">class</span> <span class="nc">Requester</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
@@ -155,6 +160,17 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">build_variants_map</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">bvs</span><span class="p">[</span><span class="s2">&quot;build_variant&quot;</span><span class="p">]:</span> <span class="n">bvs</span><span class="p">[</span><span class="s2">&quot;build_id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">bvs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;build_variants_status&quot;</span><span class="p">]</span>
             <span class="p">}</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;build_variants_map initialized for version&quot;</span><span class="p">,</span>
+                <span class="n">version_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="p">,</span>
+                <span class="n">build_variants_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">build_variants_map</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;build_variants_status either empty or not found for version&quot;</span><span class="p">,</span>
+                <span class="n">version_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">build_variants_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildVariantStatus</span><span class="p">]:</span>
