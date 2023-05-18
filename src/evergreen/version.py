@@ -5,6 +5,8 @@ from __future__ import absolute_import
 from enum import Enum
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
+import structlog
+
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 from evergreen.build import Build
 from evergreen.manifest import ManifestModule
@@ -14,6 +16,9 @@ if TYPE_CHECKING:
     from evergreen.api import EvergreenApi
     from evergreen.manifest import Manifest
     from evergreen.patch import Patch  # noqa: F401
+
+
+LOGGER = structlog.getLogger(__name__)
 
 
 class Requester(str, Enum):
@@ -111,6 +116,17 @@ class Version(_BaseEvergreenObject):
             self.build_variants_map = {
                 bvs["build_variant"]: bvs["build_id"] for bvs in self.json["build_variants_status"]
             }
+            LOGGER.debug(
+                "build_variants_map initialized for version",
+                version_id=self.version_id,
+                build_variants_map=self.build_variants_map,
+            )
+        else:
+            LOGGER.error(
+                "build_variants_status either empty or not found for version",
+                version_id=self.version_id,
+                json=self.json,
+            )
 
     @property
     def build_variants_status(self) -> List[BuildVariantStatus]:

@@ -183,6 +183,9 @@ class EvergreenApi(object):
 
         LOGGER.debug(
             "Response received",
+            request_url=response.request.url,
+            request_method=response.request.method,
+            request_body=response.request.body,
             response_status_code=response.status_code,
             response_text=response.text,
         )
