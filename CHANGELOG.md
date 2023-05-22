@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.3 - 2023-05-22
+
+- Change `get_patch_diff` to return plain text.
+
 ## 3.6.2 - 2023-05-18
 
 - Add logging in `Version` constructor.

@@ -853,10 +853,10 @@ class EvergreenApi(object):
         Get the diff for a given patch.
 
         :param patch_id: The id of the patch to request the diff for.
-        :return: The diff of the patch represented as a JSON string.
+        :return: The diff of the patch represented as plain text.
         """
         url = self._create_url(f"/patches/{patch_id}/raw")
-        return json.dumps(self._call_api(url, method="GET").json())
+        return self._call_api(url, method="GET").text
 
     def patch_from_diff(
         self,
