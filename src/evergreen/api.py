@@ -14,6 +14,7 @@ from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Opt
 
 import requests
 import structlog
+from requests.exceptions import HTTPError
 from structlog.stdlib import LoggerFactory
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
@@ -949,7 +950,7 @@ class EvergreenApi(object):
         url = self._create_url(f"/tasks/{task_id}/tests/count")
         return int(self._call_api(url).text)
 
-    def manifest_for_task(self, task_id: str) -> Manifest:
+    def manifest_for_task(self, task_id: str) -> Optional[Manifest]:
         """
         Get the manifest for the given task.
 
@@ -957,7 +958,15 @@ class EvergreenApi(object):
         :return: Manifest for the given task.
         """
         url = self._create_url(f"/tasks/{task_id}/manifest")
-        return Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
+
+        manifest: Optional[Manifest] = None
+        try:
+            manifest = Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
+        except HTTPError as e:
+            if "no manifest found for version" not in e.response.json()["message"]:
+                raise e
+
+        return manifest
 
     def get_task_annotation(
         self,

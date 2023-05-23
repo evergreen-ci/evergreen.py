@@ -396,7 +396,7 @@ class Task(_BaseEvergreenObject):
 
         return None
 
-    def get_manifest(self) -> Manifest:
+    def get_manifest(self) -> Optional[Manifest]:
         """Get the Manifest for this task."""
         return self._api.manifest_for_task(self.task_id)
 
