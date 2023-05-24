@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.4 - 2023-05-22
+
+- Change `manifest_for_task` to return `Optional[Manifest]` in the case a manifest does not exist for the task.
+
 ## 3.6.3 - 2023-05-22
 
 - Change `get_patch_diff` to return plain text.

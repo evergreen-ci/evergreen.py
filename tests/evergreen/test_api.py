@@ -612,6 +612,29 @@ class TestTaskApi(object):
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
 
+    def test_manifest_for_task_does_not_exist(self, mocked_api):
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"message": "no manifest found for version"}
+        mocked_api._session.request.side_effect = HTTPError(response=mock_response)
+        response = mocked_api.manifest_for_task("task_id")
+        expected_url = mocked_api._create_url("/tasks/task_id/manifest")
+        assert response is None
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
+        )
+
+    def test_manifest_for_task_throws_exception(self, mocked_api):
+        mock_response = MagicMock()
+        mock_response.json.return_value = {"message": "unhandled exception"}
+        mocked_api._session.request.side_effect = HTTPError(response=mock_response)
+
+        with pytest.raises(HTTPError) as _:
+            mocked_api.manifest_for_task("task_id")
+            expected_url = mocked_api._create_url("/tasks/task_id/manifest")
+            mocked_api.session.request.assert_called_with(
+                url=expected_url, params=None, timeout=None, data=None, method="GET"
+            )
+
     def test_tests_by_task(self, mocked_api):
         mocked_api.tests_by_task("task_id")
         expected_url = mocked_api._create_url("/tasks/task_id/tests")
