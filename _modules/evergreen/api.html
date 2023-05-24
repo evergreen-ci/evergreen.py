@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.3 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.4 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -58,6 +58,7 @@
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">structlog</span>
+<span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="kn">import</span> <span class="n">HTTPError</span>
 <span class="kn">from</span> <span class="nn">structlog.stdlib</span> <span class="kn">import</span> <span class="n">LoggerFactory</span>
 <span class="kn">from</span> <span class="nn">tenacity</span> <span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">retry_if_exception_type</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span>
 
@@ -993,7 +994,7 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/tests/count&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.manifest_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">manifest_for_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Manifest</span><span class="p">:</span>
+<div class="viewcode-block" id="EvergreenApi.manifest_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">manifest_for_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Manifest</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the manifest for the given task.</span>
 
@@ -1001,7 +1002,15 @@
 <span class="sd">        :return: Manifest for the given task.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/manifest&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+        <span class="n">manifest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Manifest</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">manifest</span> <span class="o">=</span> <span class="n">Manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;no manifest found for version&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;message&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="n">manifest</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.get_task_annotation"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_task_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">get_task_annotation</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
