@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.4 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.5 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -503,6 +503,8 @@
         <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span><span class="p">,</span>
         <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">revision_start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">revision_end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the versions created in the specified project.</span>
@@ -511,6 +513,8 @@
 <span class="sd">        :param requester: Type of versions to query.</span>
 <span class="sd">        :param start: Optional. The revision order number to start after, for pagination.</span>
 <span class="sd">        :param limit: Optional. The number of versions to be returned per page of pagination.</span>
+<span class="sd">        :param revision_start: Optional. The version order number to start at, for pagination.</span>
+<span class="sd">        :param revision_end: Optional. The version order number to end at, for pagination.</span>
 <span class="sd">        :return: Generator of versions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/versions&quot;</span><span class="p">)</span>
@@ -519,6 +523,10 @@
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
         <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limit</span>
+        <span class="k">if</span> <span class="n">revision_start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;revision_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">revision_start</span>
+        <span class="k">if</span> <span class="n">revision_end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;revision_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">revision_end</span>
         <span class="n">version_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazy_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">Version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">version_list</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 

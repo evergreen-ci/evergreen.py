@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.6.4 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.6.5 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -1034,7 +1034,7 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.versions_by_project">
-<code class="sig-name descname"><span class="pre">versions_by_project</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">project_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">requester:</span> <span class="pre">evergreen.version.Requester</span> <span class="pre">=</span> <span class="pre">&lt;Requester.GITTER_REQUEST:</span> <span class="pre">'gitter_request'&gt;</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">limit:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version"><span class="pre">evergreen.version.Version</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">versions_by_project</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">project_id:</span> <span class="pre">str</span></em>, <em class="sig-param"><span class="pre">requester:</span> <span class="pre">evergreen.version.Requester</span> <span class="pre">=</span> <span class="pre">&lt;Requester.GITTER_REQUEST:</span> <span class="pre">'gitter_request'&gt;</span></em>, <em class="sig-param"><span class="pre">start:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">limit:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">revision_start:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">revision_end:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version"><span class="pre">evergreen.version.Version</span></a><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.versions_by_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.versions_by_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the versions created in the specified project.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1043,6 +1043,8 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <li><p><strong>requester</strong> – Type of versions to query.</p></li>
 <li><p><strong>start</strong> – Optional. The revision order number to start after, for pagination.</p></li>
 <li><p><strong>limit</strong> – Optional. The number of versions to be returned per page of pagination.</p></li>
+<li><p><strong>revision_start</strong> – Optional. The version order number to start at, for pagination.</p></li>
+<li><p><strong>revision_end</strong> – Optional. The version order number to end at, for pagination.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
