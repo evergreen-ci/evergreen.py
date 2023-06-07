@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.5 - 2023-06-07
+
+- Added `revision_start` and `revision_end` to `versions_by_project`.
+
 ## 3.6.4 - 2023-05-22
 
 - Change `manifest_for_task` to return `Optional[Manifest]` in the case a manifest does not exist for the task.

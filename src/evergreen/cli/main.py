@@ -96,11 +96,22 @@ def list_projects(ctx):
 @click.option("--project", required=True)
 @click.option("--start", type=int)
 @click.option("--limit", type=int)
-def list_versions(ctx, project: str, start: Optional[int], limit: Optional[int]) -> None:
+@click.option("--revision_start", type=int)
+@click.option("--revision_end", type=int)
+def list_versions(
+    ctx,
+    project: str,
+    start: Optional[int],
+    limit: Optional[int],
+    revision_start: Optional[int],
+    revision_end: Optional[int],
+) -> None:
     """Get the versions for the given project."""
     api = ctx.obj["api"]
     fmt = ctx.obj["format"]
-    version_list = api.versions_by_project(project, start=start, limit=limit)
+    version_list = api.versions_by_project(
+        project, start=start, limit=limit, revision_start=revision_start, revision_end=revision_end
+    )
     versions_to_display = [version.json for version in islice(version_list, None, limit)]
 
     click.echo(fmt_output(fmt, versions_to_display))
