@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.7 - 2023-07-12
+
+- Add `tasks_by_project_and_name`.
+
 ## 3.6.5 - 2023-06-07
 
 - Added `revision_start` and `revision_end` to `versions_by_project`.
