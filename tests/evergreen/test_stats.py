@@ -16,6 +16,8 @@ class TestTaskStats(object):
     def test_get_attributes(self, sample_task_stats):
         task_stats = TaskStats(sample_task_stats, None)
         assert task_stats.task_name == sample_task_stats["task_name"]
+        assert task_stats.variant == sample_task_stats["variant"]
         assert task_stats.num_fail == sample_task_stats["num_failed"]
         assert task_stats.num_pass == sample_task_stats["num_success"]
+        assert task_stats.num_total == sample_task_stats["num_total"]
         assert task_stats.avg_duration_pass == sample_task_stats["avg_duration_success"]
