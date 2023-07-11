@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.6 - 2023-07-11
+
+- Add `num_total` to `TaskStats`.
+
 ## 3.6.5 - 2023-06-07
 
 - Added `revision_start` and `revision_end` to `versions_by_project`.
