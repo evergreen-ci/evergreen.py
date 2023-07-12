@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.6 - 2023-07-11
+## 3.6.6 - 2023-07-12
 
 - Add `num_total` to `TaskStats`.
 
