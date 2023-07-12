@@ -41,6 +41,7 @@ class TaskStats(_BaseEvergreenObject):
     date = evg_date_attrib("date")
     num_pass = evg_attrib("num_success")
     num_fail = evg_attrib("num_failed")
+    num_total = evg_attrib("num_total")
     avg_duration_pass = evg_attrib("avg_duration_success")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
