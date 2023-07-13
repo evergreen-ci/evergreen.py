@@ -425,21 +425,21 @@ class TestProjectApi(object):
     def test_tasks_by_project_and_name(self, mocked_api):
         mocked_api.tasks_by_project_and_name("project_id", "task_name")
         expected_url = mocked_api._create_url("/projects/project_id/tasks/task_name")
+        expected_data = json.dumps({})
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params={}, timeout=None, data=None, method="GET"
+            url=expected_url, params=None, timeout=None, data=expected_data, method="GET"
         )
 
-    def test_tasks_by_project_and_name_with_params(self, mocked_api):
+    def test_tasks_by_project_and_name_with_data(self, mocked_api):
         mocked_api.tasks_by_project_and_name(
             "project_id", "task_name", build_variant="build_variant", num_versions=50, start_at=10
         )
         expected_url = mocked_api._create_url("/projects/project_id/tasks/task_name")
+        expected_data = json.dumps(
+            {"build_variant": "build_variant", "num_versions": 50, "start_at": 10}
+        )
         mocked_api.session.request.assert_called_with(
-            url=expected_url,
-            params={"build_variant": "build_variant", "num_versions": 50, "start_at": 10},
-            timeout=None,
-            data=None,
-            method="GET",
+            url=expected_url, params=None, timeout=None, data=expected_data, method="GET",
         )
 
 

@@ -709,15 +709,17 @@ class EvergreenApi(object):
         :param num_versions: The number of latest versions to be searched. Defaults to 20.
         :param start_at: The version order number to start returning results after.
         """
-        params: Dict[str, Any] = {}
+        data: Dict[str, Any] = {}
         if build_variant is not None:
-            params["build_variant"] = build_variant
+            data["build_variant"] = build_variant
         if num_versions is not None:
-            params["num_versions"] = num_versions
+            data["num_versions"] = num_versions
         if start_at is not None:
-            params["start_at"] = start_at
+            data["start_at"] = start_at
         url = self._create_url(f"/projects/{project_id}/tasks/{task_name}")
-        return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
+        return [
+            Task(task_json, self) for task_json in self._call_api(url, data=json.dumps(data)).json()
+        ]
 
     def task_stats_by_project(
         self,
