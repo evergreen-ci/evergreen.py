@@ -692,6 +692,35 @@ class EvergreenApi(object):
         url = self._create_url(f"/projects/{project_id}/revisions/{commit_hash}/tasks")
         return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
 
+    def tasks_by_project_and_name(
+        self,
+        project_id: str,
+        task_name: str,
+        build_variant: Optional[str] = None,
+        num_versions: Optional[int] = None,
+        start_at: Optional[int] = None,
+    ) -> List[Task]:
+        """
+        Get all the tasks for a project by task name.
+
+        :param project_id: Id of project to query.
+        :param task_name: Name of task to query for.
+        :param build_variant: Only include tasks that have run on this build variant.
+        :param num_versions: The number of latest versions to be searched. Defaults to 20.
+        :param start_at: The version order number to start returning results after.
+        """
+        data: Dict[str, Any] = {}
+        if build_variant is not None:
+            data["build_variant"] = build_variant
+        if num_versions is not None:
+            data["num_versions"] = num_versions
+        if start_at is not None:
+            data["start_at"] = start_at
+        url = self._create_url(f"/projects/{project_id}/tasks/{task_name}")
+        return [
+            Task(task_json, self) for task_json in self._call_api(url, data=json.dumps(data)).json()
+        ]
+
     def task_stats_by_project(
         self,
         project_id: str,

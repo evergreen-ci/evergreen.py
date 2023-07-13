@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.7 - 2023-07-13
+
+- Add `tasks_by_project_and_name`.
+
 ## 3.6.6 - 2023-07-12
 
 - Add `num_total` to `TaskStats`.
