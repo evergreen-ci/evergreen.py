@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.6.7 - 2023-07-12
+## 3.6.7 - 2023-07-13
 
 - Add `tasks_by_project_and_name`.
 
