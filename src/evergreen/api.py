@@ -8,6 +8,7 @@ import subprocess
 from contextlib import contextmanager
 from datetime import datetime
 from functools import lru_cache
+from http import HTTPStatus
 from json.decoder import JSONDecodeError
 from time import time
 from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
@@ -1000,7 +1001,7 @@ class EvergreenApi(object):
         try:
             manifest = Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
         except HTTPError as e:
-            if "no manifest found for version" not in e.response.json()["message"]:
+            if e.response.status_code != HTTPStatus.NOT_FOUND:
                 raise e
 
         return manifest
