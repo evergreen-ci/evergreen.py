@@ -3,6 +3,7 @@ import os
 import sys
 from copy import deepcopy
 from datetime import datetime, timedelta
+from http import HTTPStatus
 from json.decoder import JSONDecodeError
 from unittest.mock import MagicMock, patch
 
@@ -634,7 +635,7 @@ class TestTaskApi(object):
 
     def test_manifest_for_task_does_not_exist(self, mocked_api):
         mock_response = MagicMock()
-        mock_response.json.return_value = {"message": "no manifest found for version"}
+        mock_response.status_code = HTTPStatus.NOT_FOUND
         mocked_api._session.request.side_effect = HTTPError(response=mock_response)
         response = mocked_api.manifest_for_task("task_id")
         expected_url = mocked_api._create_url("/tasks/task_id/manifest")

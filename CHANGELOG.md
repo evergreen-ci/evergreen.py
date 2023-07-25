@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.8 - 2023-07-24
+
+- Fix bug in `manifest_for_task` to return `Optional[Manifest]` in the case a manifest is not found.
+
 ## 3.6.7 - 2023-07-13
 
 - Add `tasks_by_project_and_name`.
