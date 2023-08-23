@@ -165,7 +165,7 @@ class VersionMetrics(object):
 
         return n_tasks / self.total_tasks
 
-    def _count_build(self, build: "Build", task_filter_fn: Optional[Callable]) -> None:
+    def _count_build(self, build: "Build", task_filter_fn: Optional[Callable] = None) -> None:
         """
         Add stats for the given build to the metrics.
 

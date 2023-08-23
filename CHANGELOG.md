@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.7.0 - 2023-08-23
+
+- Add asyncio support with `AsyncEvergreenApi` and `AsyncRetryingEvergreenApi`
+- Minimum supported python version of 3.7
+
 ## 3.6.8 - 2023-07-24
 
 - Fix bug in `manifest_for_task` to return `Optional[Manifest]` in the case a manifest is not found.

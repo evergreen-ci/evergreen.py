@@ -4,8 +4,10 @@ from unittest.mock import MagicMock
 
 import pytest
 import yaml
+from aioresponses import aioresponses
 
 from evergreen.api import CachedEvergreenApi, EvergreenApi, RetryingEvergreenApi
+from evergreen.async_api import AsyncEvergreenApi, AsyncRetryingEvergreenApi
 from evergreen.config import EvgAuth
 from evergreen.version import Requester
 
@@ -192,6 +194,26 @@ def mocked_retrying_api():
     response_mock = MagicMock()
     response_mock.status_code = 200
     api._session.request.return_value = response_mock
+    return api
+
+
+@pytest.fixture
+def mock_aioresponse():
+    with aioresponses() as m:
+        yield m
+
+
+@pytest.fixture()
+def mocked_async_api():
+    """Return an Evergreen API with a mocked session."""
+    api = AsyncEvergreenApi()
+    return api
+
+
+@pytest.fixture()
+def mocked_async_retrying_api():
+    """Return an Evergreen API with a mocked session."""
+    api = AsyncRetryingEvergreenApi()
     return api
 
 

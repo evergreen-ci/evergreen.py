@@ -2,24 +2,24 @@
 """API for interacting with evergreen."""
 from __future__ import absolute_import
 
+import asyncio
 import json
 import re
-import subprocess
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from datetime import datetime
-from functools import lru_cache
 from http import HTTPStatus
 from json.decoder import JSONDecodeError
 from time import time
-from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
+from typing import Any, AsyncGenerator, Callable, Dict, List, Mapping, Optional, Union, cast
 
-import requests
 import structlog
-from requests.exceptions import HTTPError
+from aiohttp import ClientConnectionError, ClientResponse, ClientResponseError, ClientSession
 from structlog.stdlib import LoggerFactory
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from evergreen.alias import VariantAlias
+from evergreen.api import EVERGREEN_URL_REGEX, EvergreenApi
 from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
@@ -48,14 +48,8 @@ from evergreen.task_annotations import TaskAnnotation
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.users_for_role import UsersForRole
-from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
+from evergreen.util import evergreen_input_to_output, format_evergreen_date
 from evergreen.version import RecentVersions, Requester, Version
-
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse  # type: ignore
-
 
 structlog.configure(logger_factory=LoggerFactory())
 LOGGER = structlog.getLogger(__name__)
@@ -66,10 +60,17 @@ MAX_RETRIES = 3
 START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
 
-EVERGREEN_URL_REGEX = "(https?)://evergreen..*?(?=\\\\n)"
+
+@dataclass(eq=True, frozen=True)
+class EvergreenResponse:
+    """Container object for parsing responses."""
+
+    next_url: Optional[str] = None
+    text: Optional[str] = None
+    json: Optional[Union[List[Dict[str, Any]], Dict[str, Any]]] = None
 
 
-class EvergreenApi(object):
+class AsyncEvergreenApi(EvergreenApi):
     """Base methods for building API objects."""
 
     def __init__(
@@ -77,7 +78,7 @@ class EvergreenApi(object):
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
-        session: Optional[requests.Session] = None,
+        session: Optional[ClientSession] = None,
         log_on_error: bool = False,
     ) -> None:
         """
@@ -89,42 +90,41 @@ class EvergreenApi(object):
         :param session: Session to use for requests.
         :param log_on_error: Flag to use for error logs.
         """
-        self._timeout = timeout
-        self._api_server = api_server
-        self._auth = auth
-        self._session = session
-        self._log_on_error = log_on_error
+        super().__init__(api_server, auth, timeout, None, log_on_error)
+        self._async_session = session
 
-    @contextmanager
-    def with_session(self) -> Generator["EvergreenApi", None, None]:
+    @asynccontextmanager
+    async def with_async_session(self) -> AsyncGenerator["AsyncEvergreenApi", None]:
         """Yield an instance of the API client with a shared session."""
-        session = self._create_session()
-        evg_api = EvergreenApi(
-            self._api_server, self._auth, self._timeout, session, self._log_on_error
-        )
-        yield evg_api
+        headers = {}
+        auth = self._auth
+        if auth:
+            headers["Api-User"] = auth.username
+            headers["Api-Key"] = auth.api_key
+        async with self.async_session() as session:  # type: ignore[attr-defined,misc]
+            api = AsyncEvergreenApi(self._api_server, self._auth, self._timeout, session)
+            yield api
 
-    @property
-    def session(self) -> requests.Session:
+    @asynccontextmanager
+    async def async_session(self) -> AsyncGenerator[ClientSession, None]:
         """
         Get the shared session if it exists, else create a new session.
 
         :return: Session to query the API with.
         """
-        if self._session:
-            return self._session
+        if self._async_session:
+            yield self._async_session
+        else:
+            yield await self._create_async_session()
 
-        return self._create_session()
-
-    def _create_session(self) -> requests.Session:
+    async def _create_async_session(self) -> ClientSession:
         """Create a new session to query the API with."""
-        session = requests.Session()
-        adapter = requests.adapters.HTTPAdapter()
-        session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
+        headers = {}
         auth = self._auth
         if auth:
-            session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
-        return session
+            headers["Api-User"] = auth.username
+            headers["Api-Key"] = auth.api_key
+        return ClientSession(headers=headers)
 
     def _create_url(self, endpoint: str) -> str:
         """
@@ -145,7 +145,7 @@ class EvergreenApi(object):
         return f"{self._api_server}/plugin/json{endpoint}"
 
     @staticmethod
-    def _log_api_call_time(response: requests.Response, start_time: float) -> None:
+    def _async_log_api_call_time(response: ClientResponse, start_time: float) -> None:
         """
         Log how long the api call took.
 
@@ -154,17 +154,19 @@ class EvergreenApi(object):
         """
         duration = round(time() - start_time, 2)
         if duration > 10:
-            LOGGER.info("Request completed.", url=response.request.url, duration=duration)
+            LOGGER.info("Request completed.", url=response.url, duration=duration)
         else:
-            LOGGER.debug("Request completed.", url=response.request.url, duration=duration)
+            LOGGER.debug("Request completed.", url=response.url, duration=duration)
 
-    def _call_api(
+    async def _async_call_api(
         self,
         url: str,
-        params: Optional[Dict] = None,
+        params: Optional[Mapping[str, Any]] = None,
         method: str = "GET",
         data: Optional[str] = None,
-    ) -> requests.Response:
+        to_json: bool = False,
+        to_text: bool = False,
+    ) -> EvergreenResponse:
         """
         Make a call to the evergreen api.
 
@@ -174,33 +176,27 @@ class EvergreenApi(object):
         :param data: Extra data to send to the endpoint.
         :return: response from api server.
         """
-        start_time = time()
-        LOGGER.debug(
-            "Request to be sent",
-            url=url,
-            params=params,
-            timeout=self._timeout,
-            data=data,
-            method=method,
-        )
-        response = self.session.request(
-            url=url, params=params, timeout=self._timeout, data=data, method=method
-        )
+        async with self.async_session() as session:  # pylint: disable=not-callable
+            start_time = time()
+            async with session.request(
+                url=url, params=params, data=data, method=method
+            ) as response:
+                self._async_log_api_call_time(response, start_time)
+                await self._async_raise_for_status(response)
+                next_url = None
+                if "next" in response.links and "url" in response.links["next"]:
+                    next_url = str(response.links["next"]["url"])
+                if to_json:
+                    response_json = await response.json()
+                    return EvergreenResponse(next_url=next_url, json=response_json)
+                if to_text:
+                    response_text = await response.text()
+                    return EvergreenResponse(next_url=next_url, text=response_text)
+                return EvergreenResponse(next_url=next_url)
 
-        LOGGER.debug(
-            "Response received",
-            request_url=response.request.url,
-            request_method=response.request.method,
-            request_body=response.request.body,
-            response_status_code=response.status_code,
-            response_text=response.text,
-        )
-        self._log_api_call_time(response, start_time)
-
-        self._raise_for_status(response)
-        return response
-
-    def _stream_api(self, url: str, params: Optional[Dict] = None) -> Iterable:
+    async def _async_stream_api(
+        self, url: str, params: Optional[Mapping[str, Any]] = None
+    ) -> AsyncGenerator:
         """
         Make a streaming call to an api.
 
@@ -208,39 +204,52 @@ class EvergreenApi(object):
         :param params: url parameters
         :return: Iterable over the lines of the returned content.
         """
-        start_time = time()
-        with self.session.get(url=url, params=params, stream=True, timeout=self._timeout) as res:
-            self._log_api_call_time(res, start_time)
+        headers = {}
+        auth = self._auth
+        if auth:
+            headers["Api-User"] = auth.username
+            headers["Api-Key"] = auth.api_key
+        async with self.async_session() as session:  # pylint: disable=not-callable
+            start_time = time()
+            async with session.get(url=url, params=params, timeout=self._timeout) as response:
+                self._async_log_api_call_time(response, start_time)
+                async for data, _ in response.content.iter_chunks():
+                    yield data.decode("utf-8")
 
-            for line in res.iter_lines(decode_unicode=True):
-                yield line
-
-    def _raise_for_status(self, response: requests.Response) -> None:
+    async def _async_raise_for_status(self, response: ClientResponse) -> None:
         """
         Raise an exception with the evergreen message if it exists.
 
         :param response: response from evergreen api.
         """
         try:
-            json_data = response.json()
-            if response.status_code >= 400 and "error" in json_data:
+            json_data = await response.json()
+            if response.status >= 400 and "error" in json_data:
                 if self._log_on_error:
+                    body = await response.json()
+                    text = await response.text()
                     LOGGER.error(
                         "Error found in json",
-                        request_url=response.request.url,
-                        request_method=response.request.method,
-                        request_body=response.request.body,
-                        response_status_code=response.status_code,
-                        response_text=response.text,
+                        request_url=response.url,
+                        request_method=response.method,
+                        request_body=body,
+                        response_status_code=response.status,
+                        response_text=text,
                     )
-                raise requests.exceptions.HTTPError(json_data["error"], response=response)
+                raise ClientResponseError(
+                    status=response.status,
+                    message=json_data["error"],
+                    history=(response,),
+                    headers=response.headers,
+                    request_info=response.request_info,
+                )
         except JSONDecodeError:
             pass
 
         response.raise_for_status()
 
-    def _paginate(
-        self, url: str, params: Optional[Dict] = None
+    async def _async_paginate(
+        self, url: str, params: Optional[Mapping[str, Any]] = None
     ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
         """
         Paginate until all results are returned and return a list of all JSON results.
@@ -249,18 +258,21 @@ class EvergreenApi(object):
         :param params: parameters to pass to request.
         :return: json list of all results.
         """
-        response = self._call_api(url, params)
-        json_data = response.json()
-        while "next" in response.links:
+        response = await self._async_call_api(url, params, to_json=True)
+        json_data = [response.json]
+        while response.next_url:
             if params and "limit" in params and len(json_data) >= params["limit"]:
                 break
-            response = self._call_api(response.links["next"]["url"])
-            if response.json():
-                json_data.extend(response.json())
+            response = await self._async_call_api(response.next_url, to_json=True)
+            if response.json:
+                json_data.append(response.json)
+        if len(json_data) == 1:
+            return json_data[0]  # type: ignore[return-value]
+        return json_data  # type: ignore[return-value]
 
-        return json_data
-
-    def _lazy_paginate(self, url: str, params: Optional[Dict] = None) -> Iterable:
+    async def _async_lazy_paginate(
+        self, url: str, params: Optional[Mapping[str, Any]] = None
+    ) -> AsyncGenerator[Any, None]:
         """
         Lazy paginate, the results are returned lazily.
 
@@ -275,18 +287,19 @@ class EvergreenApi(object):
 
         next_url = url
         while True:
-            response = self._call_api(next_url, params)
-            json_response = response.json()
+            response = await self._async_call_api(next_url, params, to_json=True)
+            json_response = response.json
             if not json_response:
                 break
             for result in json_response:
                 yield result
-            if "next" not in response.links:
+            if not response.next_url:
                 break
+            next_url = response.next_url
 
-            next_url = response.links["next"]["url"]
-
-    def _lazy_paginate_by_date(self, url: str, params: Optional[Dict] = None) -> Iterable:
+    async def _async_lazy_paginate_by_date(
+        self, url: str, params: Optional[Mapping[str, Any]] = None
+    ) -> AsyncGenerator[Any, None]:
         """
         Paginate based on date, the results are returned lazily.
 
@@ -298,26 +311,26 @@ class EvergreenApi(object):
             params = {
                 "limit": DEFAULT_LIMIT,
             }
-
         while True:
-            data = self._call_api(url, params).json()
+            response = await self._async_call_api(url, params, to_json=True)
+            data = response.json
             if not data:
                 break
             for result in data:
                 yield result
-            params["start_at"] = evergreen_input_to_output(data[-1]["create_time"])
+            params["start_at"] = evergreen_input_to_output(data[-1]["create_time"])  # type: ignore[index]
 
-    def all_distros(self) -> List[Distro]:
+    async def all_distros(self) -> List[Distro]:  # type: ignore[override]
         """
         Get all distros in evergreen.
 
         :return: List of all distros in evergreen.
         """
         url = self._create_url("/distros")
-        distro_list = self._paginate(url)
+        distro_list = await self._async_paginate(url)
         return [Distro(distro, self) for distro in distro_list]  # type: ignore[arg-type]
 
-    def all_hosts(self, status: Optional[str] = None) -> List[Host]:
+    async def all_hosts(self, status: Optional[str] = None) -> List[Host]:  # type: ignore[override]
         """
         Get all hosts in evergreen.
 
@@ -329,10 +342,10 @@ class EvergreenApi(object):
             params["status"] = status
 
         url = self._create_url("/hosts")
-        host_list = self._paginate(url, params)
+        host_list = await self._async_paginate(url, params)
         return [Host(host, self) for host in host_list]  # type: ignore[arg-type]
 
-    def host_by_id(self, host_id: str) -> Host:
+    async def host_by_id(self, host_id: Optional[str] = None) -> Host:  # type: ignore[override]
         """
         Get evergreen host by id.
 
@@ -340,9 +353,10 @@ class EvergreenApi(object):
         :return: host document
         """
         url = self._create_url(f"/hosts/{host_id}")
-        return Host(self._paginate(url), self)  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return Host(data, self)  # type: ignore[arg-type]
 
-    def configure_task(
+    async def configure_task(  # type: ignore[override]
         self, task_id: str, activated: Optional[bool] = None, priority: Optional[int] = None
     ) -> None:
         """
@@ -358,27 +372,27 @@ class EvergreenApi(object):
             data["activated"] = activated
         if priority is not None:
             data["priority"] = priority
-        self._call_api(url, data=json.dumps(data), method="PATCH")
+        await self._async_call_api(url, data=json.dumps(data), method="PATCH")
 
-    def restart_task(self, task_id: str) -> None:
+    async def restart_task(self, task_id: str) -> None:  # type: ignore[override]
         """
         Restart a task.
 
         :param task_id: Id of the task to restart
         """
         url = self._create_url(f"/tasks/{task_id}/restart")
-        self._call_api(url, method="POST")
+        await self._async_call_api(url, method="POST")
 
-    def abort_task(self, task_id: str) -> None:
+    async def abort_task(self, task_id: str) -> None:  # type: ignore[override]
         """
         Abort a task.
 
         :param task_id: Id of the task to abort
         """
         url = self._create_url(f"/tasks/{task_id}/abort")
-        self._call_api(url, method="POST")
+        await self._async_call_api(url, method="POST")
 
-    def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:
+    async def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:  # type: ignore[override]
         """
         Get all projects in evergreen.
 
@@ -386,13 +400,13 @@ class EvergreenApi(object):
         :return: List of all projects in evergreen.
         """
         url = self._create_url("/projects")
-        project_list = self._paginate(url)
+        project_list = await self._async_paginate(url)
         projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
         if project_filter_fn is not None:
             return [project for project in projects if project_filter_fn(project)]
         return projects
 
-    def project_by_id(self, project_id: str) -> Project:
+    async def project_by_id(self, project_id: str) -> Project:  # type: ignore[override]
         """
         Get a project by project_id.
 
@@ -400,9 +414,10 @@ class EvergreenApi(object):
         :return: Project specified.
         """
         url = self._create_url(f"/projects/{project_id}")
-        return Project(self._paginate(url), self)  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return Project(data, self)  # type: ignore[arg-type]
 
-    def recent_versions_by_project(
+    async def recent_versions_by_project(  # type: ignore[override]
         self, project_id: str, params: Optional[Dict] = None
     ) -> RecentVersions:
         """
@@ -413,10 +428,11 @@ class EvergreenApi(object):
         :return: List of recent versions.
         """
         url = self._create_url(f"/projects/{project_id}/recent_versions")
-        resp = self._call_api(url, params)
-        return RecentVersions(resp.json(), self)  # type: ignore[arg-type]
+        response = await self._async_call_api(url, params, to_json=True)
+        data = response.json
+        return RecentVersions(data, self)  # type: ignore[arg-type]
 
-    def send_slack_message(
+    async def send_slack_message(  # type: ignore[override]
         self, target: str, msg: str, attachments: Optional[List[SlackAttachment]] = None
     ) -> None:
         """
@@ -435,11 +451,9 @@ class EvergreenApi(object):
             data["attachments"] = [
                 attachment.dict(exclude_none=True, exclude_unset=True) for attachment in attachments
             ]
-        self._call_api(
-            url, data=json.dumps(data), method="POST",
-        )
+        await self._async_call_api(url, data=json.dumps(data), method="POST")
 
-    def alias_for_version(
+    async def alias_for_version(  # type: ignore[override]
         self, version_id: str, alias: str, include_deps: bool = False
     ) -> List[VariantAlias]:
         """
@@ -450,23 +464,21 @@ class EvergreenApi(object):
         :param include_deps: If true, will also select tasks that are dependencies.
         :return: List of Variant alias details.
         """
-        params = {"version": version_id, "alias": alias, "include_deps": include_deps}
+        params = {"version": version_id, "alias": alias, "include_deps": str(include_deps).lower()}
         url = self._create_url("/projects/test_alias")
-        variant_alias_list = self._paginate(url, params)
+        variant_alias_list = await self._async_paginate(url, params)
         return [
             VariantAlias(cast(Dict[str, Any], variant_alias), self)
             for variant_alias in variant_alias_list
         ]
 
-    def versions_by_project(
+    async def versions_by_project(  # type: ignore[override]
         self,
         project_id: str,
         requester: Requester = Requester.GITTER_REQUEST,
         start: Optional[int] = None,
         limit: Optional[int] = None,
-        revision_start: Optional[int] = None,
-        revision_end: Optional[int] = None,
-    ) -> Iterator[Version]:
+    ) -> AsyncGenerator[Version, None]:
         """
         Get the versions created in the specified project.
 
@@ -474,31 +486,56 @@ class EvergreenApi(object):
         :param requester: Type of versions to query.
         :param start: Optional. The revision order number to start after, for pagination.
         :param limit: Optional. The number of versions to be returned per page of pagination.
-        :param revision_start: Optional. The version order number to start at, for pagination.
-        :param revision_end: Optional. The version order number to end at, for pagination.
-        :return: Generator of versions.
+        :return: AsyncGenerator of versions.
         """
         url = self._create_url(f"/projects/{project_id}/versions")
-        params: Dict[str, Any] = {"requester": requester}
+        params: Dict[str, Any] = {"requester": requester.value}
         if start is not None:
             params["start"] = start
         if limit is not None:
             params["limit"] = limit
-        if revision_start is not None:
-            params["revision_start"] = revision_start
-        if revision_end is not None:
-            params["revision_end"] = revision_end
-        version_list = self._lazy_paginate(url, params)
-        return (Version(version, self) for version in version_list)  # type: ignore[arg-type]
+        async for version in self._async_lazy_paginate(url, params):
+            yield Version(version, self)
 
-    def versions_by_project_time_window(
+    # pylint: disable=no-self-use
+    async def iterate_by_time_window(  # type: ignore[override]
+        self,
+        generator: AsyncGenerator[Any, None],
+        before: datetime,
+        after: datetime,
+        time_attr: str,
+    ) -> AsyncGenerator[Any, None]:
+        """
+        Iterate over a window of time.
+
+        For a given iterator, generate the items that are within the specified time window.
+        Note: Since most evergreen iterators start with the most recent items and then look backwards
+        in time, `start` and `end` refer to the start and end of when items will be seen (i.e. `start`
+        should be later in time than `end` since we will start seeing new items first.
+        :param generator: Iterator to window.
+        :param before: Return items earlier than this timestamp.
+        :param after: Return items later than this timestamp.
+        :param time_attr: Attribute of items in the iterator containing timestamp to check.
+        :return: Iterator for items in the given time window.
+        """
+        async for item in generator:
+            item_time = getattr(item, time_attr)
+            if item_time > before:
+                continue
+
+            if item_time < after:
+                break
+
+            yield item
+
+    async def versions_by_project_time_window(  # type: ignore[override]
         self,
         project_id: str,
         before: datetime,
         after: datetime,
         requester: Requester = Requester.GITTER_REQUEST,
         time_attr: str = "create_time",
-    ) -> Iterable[Version]:
+    ) -> AsyncGenerator[Version, None]:
         """
         Get an iterator over the patches for the given time window.
 
@@ -509,11 +546,13 @@ class EvergreenApi(object):
         :param time_attr: Attributes to use to window timestamps.
         :return: Iterator for the given time window.
         """
-        return iterate_by_time_window(
-            self.versions_by_project(project_id, requester), before, after, time_attr
-        )
+        data = self.versions_by_project(project_id, requester)
+        async for version in self.iterate_by_time_window(data, before, after, time_attr):
+            yield version
 
-    def patches_by_project(self, project_id: str, params: Optional[Dict] = None) -> Iterable[Patch]:
+    async def patches_by_project(  # type: ignore[override]
+        self, project_id: str, params: Optional[Mapping[str, Any]] = None
+    ) -> AsyncGenerator[Patch, None]:
         """
         Get a list of patches for the specified project.
 
@@ -522,10 +561,10 @@ class EvergreenApi(object):
         :return: List of recent patches.
         """
         url = self._create_url(f"/projects/{project_id}/patches")
-        patches = self._lazy_paginate_by_date(url, params)
-        return (Patch(patch, self) for patch in patches)  # type: ignore[arg-type]
+        async for patch in self._async_lazy_paginate_by_date(url, params):
+            yield Patch(patch, self)
 
-    def update_patch_status(
+    async def update_patch_status(  # type: ignore[override]
         self, patch_id: str, activated: Optional[bool] = None, priority: Optional[int] = None
     ) -> None:
         """
@@ -541,12 +580,12 @@ class EvergreenApi(object):
             data["activated"] = activated
         if priority is not None:
             data["priority"] = priority
-        self._call_api(url, data=json.dumps(data), method="PATCH")
+        await self._async_call_api(url, data=json.dumps(data), method="PATCH")
 
-    def configure_patch(
+    async def configure_patch(  # type: ignore[override]
         self,
         patch_id: str,
-        variants: List[Dict[str, Union[str, List[str]]]],
+        variants: Optional[List[Mapping[str, Union[str, List[str]]]]] = None,
         description: Optional[str] = None,
     ) -> None:
         """
@@ -560,21 +599,20 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/patches/{patch_id}/configure")
         data: Dict[str, Union[List, str]] = {}
-        if variants is not None:
+        if variants:
             data["variants"] = variants
-        if description is not None:
+        if description:
             data["description"] = description
+        await self._async_call_api(url, data=json.dumps(data), method="POST")
 
-        self._call_api(url, data=json.dumps(data), method="POST")
-
-    def patches_by_project_time_window(
+    async def patches_by_project_time_window(  # type: ignore[override]
         self,
         project_id: str,
         before: datetime,
         after: datetime,
-        params: Optional[Dict] = None,
+        params: Optional[Mapping[str, Any]] = None,
         time_attr: str = "create_time",
-    ) -> Iterable[Patch]:
+    ) -> AsyncGenerator[Patch, None]:
         """
         Get an iterator over the patches for the given time window.
 
@@ -585,13 +623,13 @@ class EvergreenApi(object):
         :param time_attr: Attributes to use to window timestamps.
         :return: Iterator for the given time window.
         """
-        return iterate_by_time_window(
-            self.patches_by_project(project_id, params), before, after, time_attr
-        )
+        data = self.patches_by_project(project_id, params)
+        async for patch in self.iterate_by_time_window(data, before, after, time_attr):
+            yield patch
 
-    def patches_by_user(
+    async def patches_by_user(  # type: ignore[override]
         self, user_id: str, start_at: Optional[datetime] = None, limit: Optional[int] = None
-    ) -> Iterable[Patch]:
+    ) -> AsyncGenerator[Patch, None]:
         """
         Get an iterable of recent patches by the given user.
 
@@ -605,9 +643,10 @@ class EvergreenApi(object):
         if limit is not None:
             params["limit"] = limit
         url = self._create_url(f"/users/{user_id}/patches")
-        return (Patch(patch, self) for patch in self._lazy_paginate(url, params))
+        async for patch in self._async_lazy_paginate(url, params):
+            yield Patch(patch, self)
 
-    def commit_queue_for_project(self, project_id: str) -> CommitQueue:
+    async def commit_queue_for_project(self, project_id: str) -> CommitQueue:  # type: ignore[override]
         """
         Get the current commit queue for the specified project.
 
@@ -615,9 +654,10 @@ class EvergreenApi(object):
         :return: Current commit queue for project.
         """
         url = self._create_url(f"/commit_queue/{project_id}")
-        return CommitQueue(self._paginate(url), self)  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return CommitQueue(data, self)  # type: ignore[arg-type]
 
-    def test_stats_by_project(
+    async def test_stats_by_project(  # type: ignore[override]
         self,
         project_id: str,
         after_date: datetime,
@@ -668,10 +708,12 @@ class EvergreenApi(object):
         if sort is not None:
             params["sort"] = sort
         url = self._create_url(f"/projects/{project_id}/test_stats")
-        test_stats_list = self._paginate(url, params)
+        test_stats_list = await self._async_paginate(url, params)
         return [TestStats(test_stat, self) for test_stat in test_stats_list]  # type: ignore[arg-type]
 
-    def tasks_by_project(self, project_id: str, statuses: Optional[List[str]] = None) -> List[Task]:
+    async def tasks_by_project(  # type: ignore[override]
+        self, project_id: str, statuses: Optional[List[str]] = None
+    ) -> List[Task]:
         """
         Get all the tasks for a project.
 
@@ -680,10 +722,11 @@ class EvergreenApi(object):
         :return: The list of matching tasks.
         """
         url = self._create_url(f"/projects/{project_id}/versions/tasks")
-        params = {"status": statuses} if statuses is not None else None
-        return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
+        params = {"status": statuses} if statuses is not None else {}
+        data = await self._async_paginate(url, params)
+        return [Task(json, self) for json in data]  # type: ignore[arg-type]
 
-    def tasks_by_project_and_commit(
+    async def tasks_by_project_and_commit(  # type: ignore[override]
         self, project_id: str, commit_hash: str, params: Optional[Dict] = None
     ) -> List[Task]:
         """
@@ -695,9 +738,10 @@ class EvergreenApi(object):
         :return: The list of matching tasks.
         """
         url = self._create_url(f"/projects/{project_id}/revisions/{commit_hash}/tasks")
-        return [Task(json, self) for json in self._paginate(url, params)]  # type: ignore[arg-type]
+        data = await self._async_paginate(url, params)
+        return [Task(json, self) for json in data]  # type: ignore[arg-type]
 
-    def tasks_by_project_and_name(
+    async def tasks_by_project_and_name(  # type: ignore[override]
         self,
         project_id: str,
         task_name: str,
@@ -722,11 +766,10 @@ class EvergreenApi(object):
         if start_at is not None:
             data["start_at"] = start_at
         url = self._create_url(f"/projects/{project_id}/tasks/{task_name}")
-        return [
-            Task(task_json, self) for task_json in self._call_api(url, data=json.dumps(data)).json()
-        ]
+        response = await self._async_call_api(url, data=json.dumps(data), to_json=True)
+        return [Task(task_json, self) for task_json in response.json]  # type: ignore[arg-type,union-attr]
 
-    def task_stats_by_project(
+    async def task_stats_by_project(  # type: ignore[override]
         self,
         project_id: str,
         after_date: datetime,
@@ -773,10 +816,10 @@ class EvergreenApi(object):
         if sort is not None:
             params["sort"] = sort
         url = self._create_url(f"/projects/{project_id}/task_stats")
-        task_stats_list = self._paginate(url, params)
+        task_stats_list = await self._async_paginate(url, params)
         return [TaskStats(task_stat, self) for task_stat in task_stats_list]  # type: ignore[arg-type]
 
-    def task_reliability_by_project(
+    async def task_reliability_by_project(  # type: ignore[override]
         self,
         project_id: str,
         after_date: Optional[datetime] = None,
@@ -825,12 +868,12 @@ class EvergreenApi(object):
             params["sort"] = sort
 
         url = self._create_url(f"/projects/{project_id}/task_reliability")
-        task_reliability_scores = self._paginate(url, params)
+        task_reliability_scores = await self._async_paginate(url, params)
         return [
             TaskReliability(task_reliability, self) for task_reliability in task_reliability_scores  # type: ignore[arg-type]
         ]
 
-    def build_by_id(self, build_id: str) -> Build:
+    async def build_by_id(self, build_id: str) -> Build:  # type: ignore[override]
         """
         Get a build by id.
 
@@ -838,9 +881,10 @@ class EvergreenApi(object):
         :return: Build queried for.
         """
         url = self._create_url(f"/builds/{build_id}")
-        return Build(self._paginate(url), self)  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return Build(data, self)  # type: ignore[arg-type]
 
-    def tasks_by_build(
+    async def tasks_by_build(  # type: ignore[override]
         self, build_id: str, fetch_all_executions: Optional[bool] = None
     ) -> List[Task]:
         """
@@ -855,10 +899,10 @@ class EvergreenApi(object):
             params["fetch_all_executions"] = 1
 
         url = self._create_url(f"/builds/{build_id}/tasks")
-        task_list = self._paginate(url, params)
+        task_list = await self._async_paginate(url, params)
         return [Task(task, self) for task in task_list]  # type: ignore[arg-type]
 
-    def version_by_id(self, version_id: str) -> Version:
+    async def version_by_id(self, version_id: str) -> Version:  # type: ignore[override]
         """
         Get version by version id.
 
@@ -866,9 +910,12 @@ class EvergreenApi(object):
         :return: Version queried for.
         """
         url = self._create_url(f"/versions/{version_id}")
-        return Version(self._paginate(url), self)  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return Version(data, self)  # type: ignore[arg-type]
 
-    def builds_by_version(self, version_id: str, params: Optional[Dict] = None) -> List[Build]:
+    async def builds_by_version(  # type: ignore[override]
+        self, version_id: str, params: Optional[Dict] = None
+    ) -> List[Build]:
         """
         Get all builds for a given Evergreen version_id.
 
@@ -877,10 +924,10 @@ class EvergreenApi(object):
         :return: List of builds for the specified version.
         """
         url = self._create_url(f"/versions/{version_id}/builds")
-        build_list = self._paginate(url, params)
+        build_list = await self._async_paginate(url, params)
         return [Build(build, self) for build in build_list]  # type: ignore[arg-type]
 
-    def patch_by_id(self, patch_id: str, params: Optional[Dict] = None) -> Patch:
+    async def patch_by_id(self, patch_id: str, params: Optional[Mapping[str, Any]] = None) -> Patch:  # type: ignore[override]
         """
         Get a patch by patch id.
 
@@ -889,9 +936,11 @@ class EvergreenApi(object):
         :return: Patch queried for.
         """
         url = self._create_url(f"/patches/{patch_id}")
-        return Patch(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
+        response = await self._async_call_api(url, params, to_json=True)
+        data = response.json
+        return Patch(data, self)  # type: ignore[arg-type]
 
-    def get_patch_diff(self, patch_id: str) -> str:
+    async def get_patch_diff(self, patch_id: str) -> str:  # type: ignore[override]
         """
         Get the diff for a given patch.
 
@@ -899,9 +948,10 @@ class EvergreenApi(object):
         :return: The diff of the patch represented as plain text.
         """
         url = self._create_url(f"/patches/{patch_id}/raw")
-        return self._call_api(url, method="GET").text
+        response = await self._async_call_api(url, method="GET", to_text=True)
+        return response.text  # type: ignore[return-value]
 
-    def patch_from_diff(
+    async def patch_from_diff(  # type: ignore[override]
         self,
         diff_file_path: str,
         params: str,
@@ -929,14 +979,16 @@ class EvergreenApi(object):
         if author is not None:
             command = f"{command} --author {author}"
 
-        process = subprocess.run(command, shell=True, capture_output=True)
-        match = re.search(EVERGREEN_URL_REGEX, str(process.stderr))
+        process = await asyncio.create_subprocess_shell(command, stderr=asyncio.subprocess.PIPE)
+        _, stderr = await process.communicate()
+
+        match = re.search(EVERGREEN_URL_REGEX, str(stderr))
         if match is None:
-            raise Exception(f"Unable to parse URL from command output: {str(process.stderr)}")
+            raise Exception(f"Unable to parse URL from command output: {stderr.decode()}")
 
         return PatchCreationDetails(url=match.group(0))
 
-    def task_by_id(self, task_id: str, fetch_all_executions: bool = False) -> Task:
+    async def task_by_id(self, task_id: str, fetch_all_executions: bool = False) -> Task:  # type: ignore[override]
         """
         Get a task by task_id.
 
@@ -946,11 +998,13 @@ class EvergreenApi(object):
         """
         params = None
         if fetch_all_executions:
-            params = {"fetch_all_executions": fetch_all_executions}
+            params = {"fetch_all_executions": "true"}
         url = self._create_url(f"/tasks/{task_id}")
-        return Task(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
+        response = await self._async_call_api(url, params, to_json=True)
+        data = response.json
+        return Task(data, self)  # type: ignore[arg-type]
 
-    def tests_by_task(
+    async def tests_by_task(  # type: ignore[override]
         self, task_id: str, status: Optional[str] = None, execution: Optional[int] = None
     ) -> List[Tst]:
         """
@@ -967,9 +1021,10 @@ class EvergreenApi(object):
         if execution is not None:
             params["execution"] = execution
         url = self._create_url(f"/tasks/{task_id}/tests")
-        return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
+        data = await self._async_paginate(url, params)
+        return [Tst(test, self) for test in data]  # type: ignore[arg-type]
 
-    def single_test_by_task_and_test_file(self, task_id: str, test_file: str) -> List[Tst]:
+    async def single_test_by_task_and_test_file(self, task_id: str, test_file: str) -> List[Tst]:  # type: ignore[override]
         """
         Get a test for a given task.
 
@@ -978,10 +1033,14 @@ class EvergreenApi(object):
         :return: the test for the specified task.
         """
         url = self._create_url(f"/tasks/{task_id}/tests")
-        param = {"test_name": test_file}
-        return [Tst(test, self) for test in self._call_api(url, params=param).json()]
+        params = {"test_name": test_file}
+        response = await self._async_call_api(url, params, to_json=True)
+        return [
+            Tst(test, self)  # type: ignore[arg-type]
+            for test in response.json  # type: ignore[union-attr]
+        ]
 
-    def num_of_tests_by_task(self, task_id: str) -> int:
+    async def num_of_tests_by_task(self, task_id: str) -> int:  # type: ignore[override]
         """
         Get the number of tests that ran as part of the given task.
 
@@ -989,9 +1048,11 @@ class EvergreenApi(object):
         :return: Number of tests for the specified task.
         """
         url = self._create_url(f"/tasks/{task_id}/tests/count")
-        return int(self._call_api(url).text)
+        response = await self._async_call_api(url, to_text=True)
+        data = response.text
+        return int(data)  # type: ignore[arg-type]
 
-    def manifest_for_task(self, task_id: str) -> Optional[Manifest]:
+    async def manifest_for_task(self, task_id: str) -> Manifest:  # type: ignore[override]
         """
         Get the manifest for the given task.
 
@@ -1002,14 +1063,15 @@ class EvergreenApi(object):
 
         manifest: Optional[Manifest] = None
         try:
-            manifest = Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
-        except HTTPError as e:
-            if e.response.status_code != HTTPStatus.NOT_FOUND:
+            response = await self._async_call_api(url, to_json=True)
+            data = response.json
+            manifest = Manifest(data, self)  # type: ignore[arg-type]
+        except ClientResponseError as e:
+            if e.status != HTTPStatus.NOT_FOUND:
                 raise e
+        return manifest  # type: ignore[return-value]
 
-        return manifest
-
-    def get_task_annotation(
+    async def get_task_annotation(  # type: ignore[override]
         self, task_id: str, execution: Optional[int] = None, fetch_all_executions: bool = False,
     ) -> List[TaskAnnotation]:
         """
@@ -1029,13 +1091,13 @@ class EvergreenApi(object):
             params["execution"] = execution
         if fetch_all_executions:
             params["fetch_all_executions"] = fetch_all_executions
-
-        response = self._call_api(url, params)
-        if response.text.strip() == "null":
+        response = await self._async_call_api(url, params, to_text=True)
+        data = response.text
+        if not data or data.strip() == "null":
             return []
-        return [TaskAnnotation(annotation, self) for annotation in response.json()]
+        return [TaskAnnotation(annotation, self) for annotation in json.loads(data)]  # type: ignore[arg-type]
 
-    def file_ticket_for_task(
+    async def file_ticket_for_task(  # type: ignore[override]
         self, task_id: str, execution: int, ticket_link: str, ticket_key: str
     ) -> None:
         """
@@ -1051,9 +1113,9 @@ class EvergreenApi(object):
         params = {
             "execution": execution,
         }
-        self._call_api(url, method="PUT", data=json.dumps(request), params=params)
+        await self._async_call_api(url, method="PUT", data=json.dumps(request), params=params)
 
-    def annotate_task(
+    async def annotate_task(  # type: ignore[override]
         self,
         task_id: str,
         execution: Optional[int] = None,
@@ -1072,7 +1134,6 @@ class EvergreenApi(object):
         :param issues: Issues to attach to the annotation.
         :param suspected_issues: Suspected issues to add to the annotation.
         :param metadata: Extra metadata to add to the issue.
-        :param metadata_links: Metadata link to add to the annotation.
         """
         url = self._create_url(f"/tasks/{task_id}/annotation")
         request: Dict[str, Any] = {
@@ -1097,9 +1158,9 @@ class EvergreenApi(object):
         if metadata_links is not None:
             request["metadata_links"] = [link._asdict() for link in metadata_links]
 
-        self._call_api(url, method="PUT", data=json.dumps(request))
+        await self._async_call_api(url, method="PUT", data=json.dumps(request))
 
-    def performance_results_by_task(self, task_id: str) -> PerformanceData:
+    async def performance_results_by_task(self, task_id: str) -> PerformanceData:  # type: ignore[override]
         """
         Get the 'perf.json' performance results for a given task_id.
 
@@ -1107,9 +1168,10 @@ class EvergreenApi(object):
         :return: Contents of 'perf.json'
         """
         url = self._create_plugin_url(f"/task/{task_id}/perf")
-        return PerformanceData(self._paginate(url), self)  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return PerformanceData(data, self)  # type: ignore[arg-type]
 
-    def performance_results_by_task_name(
+    async def performance_results_by_task_name(  # type: ignore[override]
         self, task_id: str, task_name: str
     ) -> List[PerformanceData]:
         """
@@ -1120,9 +1182,10 @@ class EvergreenApi(object):
         :return: Contents of 'perf.json'
         """
         url = f"{self._api_server}/api/2/task/{task_id}/json/history/{task_name}/perf"
-        return [PerformanceData(result, self) for result in self._paginate(url)]  # type: ignore[arg-type]
+        data = await self._async_paginate(url)
+        return [PerformanceData(result, self) for result in data]  # type: ignore[arg-type]
 
-    def json_by_task(self, task_id: str, json_key: str) -> Dict[str, Any]:
+    async def json_by_task(self, task_id: str, json_key: str) -> Mapping[str, Any]:  # type: ignore[override]
         """
         Get the json reported for task {task_id} using the key {json_key}.
 
@@ -1131,11 +1194,12 @@ class EvergreenApi(object):
         :return: The json published for that task.
         """
         url = self._create_plugin_url(f"/task/{task_id}/{json_key}")
-        return cast(Dict[str, Any], self._paginate(url))
+        data = await self._async_paginate(url)
+        return cast(Mapping[str, Any], data)
 
-    def json_history_for_task(
+    async def json_history_for_task(  # type: ignore[override]
         self, task_id: str, task_name: str, json_key: str
-    ) -> List[Dict[str, Any]]:
+    ) -> List[Mapping[str, Any]]:
         """
         Get the history of json reported for task {task_id} using the key {json_key}.
 
@@ -1145,18 +1209,10 @@ class EvergreenApi(object):
         :return: A chronological list of json published for that task.
         """
         url = f"{self._api_server}/api/2/task/{task_id}/json/history/{task_name}/{json_key}"
-        return cast(List[Dict[str, Any]], self._paginate(url))
+        data = await self._async_paginate(url)
+        return cast(List[Mapping[str, Any]], data)
 
-    def _create_old_url(self, endpoint: str) -> str:
-        """
-        Build a url for an pre-v2 endpoint.
-
-        :param endpoint: endpoint to build url for.
-        :return: An string pointing to the given endpoint.
-        """
-        return f"{self._api_server}/{endpoint}"
-
-    def manifest(self, project_id: str, revision: str) -> Manifest:
+    async def manifest(self, project_id: str, revision: str) -> Manifest:  # type: ignore[override]
         """
         Get the manifest for the given revision.
 
@@ -1165,9 +1221,11 @@ class EvergreenApi(object):
         :return: Manifest of the given revision of the given project.
         """
         url = self._create_old_url(f"plugin/manifest/get/{project_id}/{revision}")
-        return Manifest(self._call_api(url).json(), self)  # type: ignore[arg-type]
+        response = await self._async_call_api(url, to_json=True)
+        data = response.json
+        return Manifest(data, self)  # type: ignore[arg-type]
 
-    def retrieve_task_log(self, log_url: str, raw: bool = False) -> str:
+    async def retrieve_task_log(self, log_url: str, raw: bool = False) -> str:  # type: ignore[override]
         """
         Get the request log file from a task.
 
@@ -1178,9 +1236,10 @@ class EvergreenApi(object):
         params = {}
         if raw:
             params["text"] = "true"
-        return self._call_api(log_url, params=params).text
+        response = await self._async_call_api(log_url, params=params, to_text=True)
+        return response.text if response.text else ""
 
-    def stream_log(self, log_url: str) -> Iterable:
+    async def stream_log(self, log_url: str) -> AsyncGenerator:  # type: ignore[override]
         """
         Stream the given log url as a python generator.
 
@@ -1188,9 +1247,10 @@ class EvergreenApi(object):
         :return: Iterable for contents of log_url.
         """
         params = {"text": "true"}
-        return self._stream_api(log_url, params)
+        async for log in self._async_stream_api(log_url, params):
+            yield log
 
-    def permissions_for_user(self, user_id: str) -> List[ResourceTypePermissions]:
+    async def permissions_for_user(self, user_id: str) -> List[ResourceTypePermissions]:  # type: ignore[override]
         """
         Get the permissions a user has on evergreen resources.
 
@@ -1198,15 +1258,16 @@ class EvergreenApi(object):
         :return: List of permissions the user has.
         """
         url = self._create_url(f"/users/{user_id}/permissions")
-        raw_permissions = self._call_api(url).json()
-        return [ResourceTypePermissions(r, self) for r in raw_permissions]
+        response = await self._async_call_api(url, to_json=True)
+        raw_permissions = response.json
+        return [ResourceTypePermissions(r, self) for r in raw_permissions]  # type: ignore[arg-type,union-attr]
 
-    def give_permissions_to_user(
+    async def give_permissions_to_user(  # type: ignore[override]
         self,
         user_id: str,
         resource_type: PermissionableResourceType,
         resources: List[str],
-        permissions: Dict[str, int],
+        permissions: Mapping[str, int],
     ) -> None:
         """
         Grant a user permissions to evergreen resources.
@@ -1223,9 +1284,11 @@ class EvergreenApi(object):
             "resources": resources,
             "permissions": permissions,
         }
-        self._call_api(url, method="POST", data=json.dumps(payload))
+        await self._async_call_api(url, method="POST", data=json.dumps(payload))
 
-    def give_roles_to_user(self, user_id: str, roles: List[str], create_user: bool = False) -> None:
+    async def give_roles_to_user(  # type: ignore[override]
+        self, user_id: str, roles: List[str], create_user: bool = False
+    ) -> None:
         """
         Add the specified role to the specified user.
 
@@ -1239,9 +1302,9 @@ class EvergreenApi(object):
             "roles": roles,
             "create_user": create_user,
         }
-        self._call_api(url, method="POST", data=json.dumps(payload))
+        await self._async_call_api(url, method="POST", data=json.dumps(payload))
 
-    def delete_user_permissions(
+    async def delete_user_permissions(  # type: ignore[override]
         self, user_id: str, resource_type: RemovablePermission, resource_id: Optional[str] = None
     ) -> None:
         """
@@ -1256,20 +1319,22 @@ class EvergreenApi(object):
         payload = {"resource_type": resource_type.value}
         if resource_id is not None:
             payload["resource_id"] = resource_id
-        self._call_api(url, method="DELETE", data=json.dumps(payload))
+        await self._async_call_api(url, method="DELETE", data=json.dumps(payload))
 
-    def get_users_for_role(self, role: str) -> UsersForRole:
+    async def get_users_for_role(self, role: str) -> UsersForRole:  # type: ignore[override]
         """
         Get a list of users having an evergreen role.
 
         :param role: Role to fetch users for.
         """
         url = self._create_url(f"/roles/{role}/users")
-        return UsersForRole(self._call_api(url, method="GET").json(), self)
+        response = await self._async_call_api(url, to_json=True)
+        data = response.json
+        return UsersForRole(data, self)  # type: ignore[arg-type]
 
-    def all_user_permissions_for_resource(
+    async def all_user_permissions_for_resource(  # type: ignore[override]
         self, resource_id: str, resource_type: PermissionableResourceType
-    ) -> Dict[str, Dict[str, int]]:
+    ) -> Mapping[str, Dict[str, int]]:
         """
         Get all users with their permissions to the resource.
 
@@ -1293,9 +1358,12 @@ class EvergreenApi(object):
         :return: A dict containing user to permissions mappings.
         """
         url = self._create_url("/users/permissions")
-        return self._call_api(
-            url, data=json.dumps({"resource_id": resource_id, "resource_type": resource_type})
-        ).json()
+        response = await self._async_call_api(
+            url,
+            data=json.dumps({"resource_id": resource_id, "resource_type": resource_type}),
+            to_json=True,
+        )
+        return response.json if response.json else {}  # type: ignore[return-value]
 
     @classmethod
     def get_api(
@@ -1304,7 +1372,7 @@ class EvergreenApi(object):
         use_config_file: bool = False,
         config_file: Optional[str] = None,
         timeout: Optional[int] = DEFAULT_NETWORK_TIMEOUT_SEC,
-    ) -> "EvergreenApi":
+    ) -> "AsyncEvergreenApi":
         """
         Get an evergreen api instance based on config file settings.
 
@@ -1312,9 +1380,9 @@ class EvergreenApi(object):
         :param use_config_file: attempt to read auth from default config file.
         :param config_file: config file with authentication information.
         :param timeout: Network timeout.
-        :return: EvergreenApi instance.
+        :return: AsyncEvergreenApi instance.
         """
-        kwargs = EvergreenApi._setup_kwargs(
+        kwargs = AsyncEvergreenApi._setup_kwargs(
             timeout=timeout, auth=auth, use_config_file=use_config_file, config_file=config_file
         )
         return cls(**kwargs)
@@ -1345,81 +1413,24 @@ class EvergreenApi(object):
         return kwargs
 
 
-class CachedEvergreenApi(EvergreenApi):
-    """Access to the Evergreen API server that caches certain calls."""
-
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-        log_on_error: bool = False,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(CachedEvergreenApi, self).__init__(
-            api_server, auth, timeout, log_on_error=log_on_error
-        )
-
-    @lru_cache(maxsize=CACHE_SIZE)
-    def build_by_id(self, build_id: str) -> Build:  # type: ignore[override]
-        """
-        Get a build by id.
-
-        :param build_id: build id to query.
-        :return: Build queried for.
-        """
-        return super(CachedEvergreenApi, self).build_by_id(build_id)
-
-    @lru_cache(maxsize=CACHE_SIZE)
-    def version_by_id(self, version_id: str) -> Version:  # type: ignore[override]
-        """
-        Get version by version id.
-
-        :param version_id: Id of version to query.
-        :return: Version queried for.
-        """
-        return super(CachedEvergreenApi, self).version_by_id(version_id)
-
-    def clear_caches(self) -> None:
-        """Clear the cache."""
-        cached_functions = [
-            self.build_by_id,
-            self.version_by_id,
-        ]
-        for fn in cached_functions:
-            fn.cache_clear()  # type: ignore[attr-defined]
-
-
-class RetryingEvergreenApi(EvergreenApi):
+class AsyncRetryingEvergreenApi(AsyncEvergreenApi):
     """An Evergreen Api that retries failed calls."""
 
-    def __init__(
-        self,
-        api_server: str = DEFAULT_API_SERVER,
-        auth: Optional[EvgAuth] = None,
-        timeout: Optional[int] = None,
-        log_on_error: bool = False,
-    ) -> None:
-        """Create an Evergreen Api object."""
-        super(RetryingEvergreenApi, self).__init__(
-            api_server, auth, timeout, log_on_error=log_on_error
-        )
-
     @retry(
-        retry=retry_if_exception_type(  # type: ignore[no-untyped-call]
-            (requests.exceptions.HTTPError, requests.exceptions.ConnectionError,)
-        ),
-        stop=stop_after_attempt(MAX_RETRIES),  # type: ignore[no-untyped-call]
-        wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),  # type: ignore[no-untyped-call]
+        retry=retry_if_exception_type((ClientResponseError, ClientConnectionError,)),
+        stop=stop_after_attempt(MAX_RETRIES),
+        wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),
         reraise=True,
     )
-    def _call_api(
+    async def _async_call_api(
         self,
         url: str,
-        params: Optional[Dict] = None,
+        params: Optional[Mapping[str, Any]] = None,
         method: str = "GET",
         data: Optional[str] = None,
-    ) -> requests.Response:
+        to_json: bool = False,
+        text: bool = False,
+    ) -> EvergreenResponse:
         """
         Call into the evergreen api.
 
@@ -1429,4 +1440,4 @@ class RetryingEvergreenApi(EvergreenApi):
         :param data: Extra data to send to the endpoint.
         :return: Result from calling API.
         """
-        return super(RetryingEvergreenApi, self)._call_api(url, params, method, data)
+        return await super()._async_call_api(url, params, method, data, to_json, text)
