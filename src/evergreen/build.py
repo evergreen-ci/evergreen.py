@@ -107,7 +107,7 @@ class Build(_BaseEvergreenObject):
         """
         return self.status in COMPLETED_STATES
 
-    def get_metrics(self, task_filter_fn: Callable = None) -> Optional[BuildMetrics]:
+    def get_metrics(self, task_filter_fn: Optional[Callable] = None) -> Optional[BuildMetrics]:
         """
         Get metrics for the build.
 
