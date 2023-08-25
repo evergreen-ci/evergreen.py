@@ -126,26 +126,8 @@ class AsyncEvergreenApi(EvergreenApi):
             headers["Api-Key"] = auth.api_key
         return ClientSession(headers=headers)
 
-    def _create_url(self, endpoint: str) -> str:
-        """
-        Format a call to a v2 REST API endpoint.
-
-        :param endpoint: endpoint to call.
-        :return: Full url to get endpoint.
-        """
-        return f"{self._api_server}/rest/v2{endpoint}"
-
-    def _create_plugin_url(self, endpoint: str) -> str:
-        """
-        Format the a call to a plugin endpoint.
-
-        :param endpoint: endpoint to call.
-        :return: Full url to get endpoint.
-        """
-        return f"{self._api_server}/plugin/json{endpoint}"
-
     @staticmethod
-    def _async_log_api_call_time(response: ClientResponse, start_time: float) -> None:
+    def _log_api_call_time(response: ClientResponse, start_time: float) -> None:  # type: ignore[override]
         """
         Log how long the api call took.
 
@@ -181,7 +163,7 @@ class AsyncEvergreenApi(EvergreenApi):
             async with session.request(
                 url=url, params=params, data=data, method=method
             ) as response:
-                self._async_log_api_call_time(response, start_time)
+                self._log_api_call_time(response, start_time)
                 await self._async_raise_for_status(response)
                 next_url = None
                 if "next" in response.links and "url" in response.links["next"]:
@@ -212,7 +194,7 @@ class AsyncEvergreenApi(EvergreenApi):
         async with self.async_session() as session:  # pylint: disable=not-callable
             start_time = time()
             async with session.get(url=url, params=params, timeout=self._timeout) as response:
-                self._async_log_api_call_time(response, start_time)
+                self._log_api_call_time(response, start_time)
                 async for data, _ in response.content.iter_chunks():
                     yield data.decode("utf-8")
 
