@@ -39,6 +39,14 @@ class Artifact(_BaseEvergreenObject):
         """Create an instance of an evergreen task artifact."""
         super(Artifact, self).__init__(json, api)
 
+    def stream(self) -> Iterable[str]:
+        """
+        Retrieve an iterator of the streamed contents of this artifact.
+
+        :return: Iterable to stream contents of artifact.
+        """
+        return self._api._stream_api(self.url)
+
 
 class StatusScore(IntEnum):
     """Integer score of the task status."""
