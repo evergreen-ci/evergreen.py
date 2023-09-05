@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.6.9 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.6.10 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -604,8 +604,8 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.patch_from_diff">
-<code class="sig-name descname"><span class="pre">patch_from_diff</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_file_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.patch.PatchCreationDetails" title="evergreen.patch.PatchCreationDetails"><span class="pre">evergreen.patch.PatchCreationDetails</span></a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patch_from_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patch_from_diff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start a patch build based on a diff.</p>
+<code class="sig-name descname"><span class="pre">patch_from_diff</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_file_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.patch.PatchCreationDetails" title="evergreen.patch.PatchCreationDetails"><span class="pre">evergreen.patch.PatchCreationDetails</span></a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patch_from_diff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patch_from_diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a patch build based on a patch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -616,13 +616,41 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <li><p><strong>project</strong> – The project to start the build for.</p></li>
 <li><p><strong>description</strong> – A description of the build.</p></li>
 <li><p><strong>variant</strong> – The variant(s) to build against.</p></li>
+<li><p><strong>version_id</strong> – The version id this build is based on.</p></li>
+<li><p><strong>author</strong> – The author to attribute for the build.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>Exception</strong> – If a build URL is not produced we raise an exception with the output included.</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>_description_</p>
+<dd class="field-odd"><p>The patch creation details.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.patch_from_patch_id">
+<code class="sig-name descname"><span class="pre">patch_from_patch_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.patch.PatchCreationDetails" title="evergreen.patch.PatchCreationDetails"><span class="pre">evergreen.patch.PatchCreationDetails</span></a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.patch_from_patch_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.patch_from_patch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a patch build based on a diff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch_id</strong> – The patch_id to base this build on.</p></li>
+<li><p><strong>params</strong> – The params to pass to the build.</p></li>
+<li><p><strong>base</strong> – The build’s base commit.</p></li>
+<li><p><strong>task</strong> – The task(s) to run.</p></li>
+<li><p><strong>project</strong> – The project to start the build for.</p></li>
+<li><p><strong>description</strong> – A description of the build.</p></li>
+<li><p><strong>variant</strong> – The variant(s) to build against.</p></li>
+<li><p><strong>author</strong> – The author to attribute for the build.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – If a build URL is not produced we raise an exception with the output included.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The patch creation details.</p>
 </dd>
 </dl>
 </dd></dl>
