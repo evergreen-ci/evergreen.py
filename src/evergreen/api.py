@@ -897,9 +897,63 @@ class EvergreenApi(object):
         url = self._create_url(f"/patches/{patch_id}/raw")
         return self._call_api(url, method="GET").text
 
+    def _execute_patch_file_command(
+        self, command: str, author: Optional[str] = None
+    ) -> PatchCreationDetails:
+        """
+        Execute a patch file command.
+
+        :param command: The command
+        :param author: An author to attribute the patch to.
+        :raises Exception: Exception if command has unexpected output
+        :return: The patch creation details.
+        """
+        if author is not None:
+            command = f"{command} --author {author}"
+
+        process = subprocess.run(command, shell=True, capture_output=True)
+
+        match = re.search(EVERGREEN_URL_REGEX, str(process.stderr))
+        if match is None:
+            raise Exception(
+                f"Unable to parse URL from command output: {str(process.stderr)}. \nExecuted command: {command}"
+            )
+
+        return PatchCreationDetails(url=match.group(0))
+
     def patch_from_diff(
         self,
         diff_file_path: str,
+        params: str,
+        base: str,
+        task: str,
+        project: str,
+        description: str,
+        variant: str,
+        version_id: str,
+        author: Optional[str] = None,
+    ) -> PatchCreationDetails:
+        """
+        Start a patch build based on a patch.
+
+        :param diff_file_path: The path to the diff.
+        :param params: The params to pass to the build.
+        :param base: The build's base commit.
+        :param task: The task(s) to run.
+        :param project: The project to start the build for.
+        :param description: A description of the build.
+        :param variant: The variant(s) to build against.
+        :param version_id: The version id this build is based on.
+        :param author: The author to attribute for the build.
+        :raises Exception: If a build URL is not produced we raise an exception with the output included.
+        :return: The patch creation details.
+        """
+        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --param {params} --base {base} --tasks {task} --variants {variant} --project {project} -y -f --param reuse_compile_from={version_id}"
+        return self._execute_patch_file_command(command, author)
+
+    def patch_from_patch_id(
+        self,
+        patch_id: str,
         params: str,
         base: str,
         task: str,
@@ -911,27 +965,19 @@ class EvergreenApi(object):
         """
         Start a patch build based on a diff.
 
-        :param diff_file_path: The path to the diff.
+        :param patch_id: The patch_id to base this build on.
         :param params: The params to pass to the build.
         :param base: The build's base commit.
         :param task: The task(s) to run.
         :param project: The project to start the build for.
         :param description: A description of the build.
         :param variant: The variant(s) to build against.
+        :param author: The author to attribute for the build.
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
-        :return: _description_
+        :return: The patch creation details.
         """
-        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --param {params} --base {base} --tasks {task} --variants {variant} --project {project} -y -f"
-        if author is not None:
-            command = f"{command} --author {author}"
-
-        process = subprocess.run(command, shell=True, capture_output=True)
-
-        match = re.search(EVERGREEN_URL_REGEX, str(process.stderr))
-        if match is None:
-            raise Exception(f"Unable to parse URL from command output: {str(process.stderr)}")
-
-        return PatchCreationDetails(url=match.group(0))
+        command = f"evergreen patch-file --diff-patchId {patch_id} --description '{description}' --param {params} --tasks {task} --variants {variant} --project {project} -y -f --param reuse_compile_from={patch_id}"
+        return self._execute_patch_file_command(command, author)
 
     def task_by_id(self, task_id: str, fetch_all_executions: Optional[bool] = None) -> Task:
         """

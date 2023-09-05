@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.6.10 - 2023-08-31
+
+- Add `patch_from_patch_id` command.
+- Use `reuse_compile_from` param on patch diffs.
+
 ## 3.6.9 - 2023-07-28
 
 - Add `stream` function for `Artifact`.
