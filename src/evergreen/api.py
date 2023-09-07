@@ -78,7 +78,7 @@ class EvergreenApi(object):
         timeout: Optional[int] = None,
         session: Optional[requests.Session] = None,
         log_on_error: bool = False,
-        configure_logging: bool = True 
+        configure_logging: bool = True,
     ) -> None:
         """
         Create a _BaseEvergreenApi object.
@@ -98,7 +98,6 @@ class EvergreenApi(object):
 
         if configure_logging:
             structlog.configure(logger_factory=LoggerFactory())
-            
 
     @contextmanager
     def with_session(self) -> Generator["EvergreenApi", None, None]:
