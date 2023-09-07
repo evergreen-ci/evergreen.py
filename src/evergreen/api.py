@@ -57,7 +57,6 @@ except ImportError:
     from urllib.parse import urlparse  # type: ignore
 
 
-structlog.configure(logger_factory=LoggerFactory())
 LOGGER = structlog.getLogger(__name__)
 
 CACHE_SIZE = 5000
@@ -79,6 +78,7 @@ class EvergreenApi(object):
         timeout: Optional[int] = None,
         session: Optional[requests.Session] = None,
         log_on_error: bool = False,
+        configure_logging: bool = True 
     ) -> None:
         """
         Create a _BaseEvergreenApi object.
@@ -88,12 +88,17 @@ class EvergreenApi(object):
         :param timeout: Time (in sec) to wait before considering a call as failed.
         :param session: Session to use for requests.
         :param log_on_error: Flag to use for error logs.
+        :param configure_logging: Indication if the package should configure logging.
         """
         self._timeout = timeout
         self._api_server = api_server
         self._auth = auth
         self._session = session
         self._log_on_error = log_on_error
+
+        if configure_logging:
+            structlog.configure(logger_factory=LoggerFactory())
+            
 
     @contextmanager
     def with_session(self) -> Generator["EvergreenApi", None, None]:
