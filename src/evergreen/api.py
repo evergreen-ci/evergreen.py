@@ -78,7 +78,7 @@ class EvergreenApi(object):
         timeout: Optional[int] = None,
         session: Optional[requests.Session] = None,
         log_on_error: bool = False,
-        configure_logging: bool = True,
+        use_default_logger_factory: bool = True,
     ) -> None:
         """
         Create a _BaseEvergreenApi object.
@@ -88,7 +88,7 @@ class EvergreenApi(object):
         :param timeout: Time (in sec) to wait before considering a call as failed.
         :param session: Session to use for requests.
         :param log_on_error: Flag to use for error logs.
-        :param configure_logging: Indication if the package should configure logging.
+        :param use_default_logger_factory: Indicate if the module should configure the default logger factory.
         """
         self._timeout = timeout
         self._api_server = api_server
@@ -96,7 +96,7 @@ class EvergreenApi(object):
         self._session = session
         self._log_on_error = log_on_error
 
-        if configure_logging:
+        if use_default_logger_factory:
             structlog.configure(logger_factory=LoggerFactory())
 
     @contextmanager
