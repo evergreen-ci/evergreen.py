@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.10 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.11 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -101,7 +101,6 @@
     <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>  <span class="c1"># type: ignore</span>
 
 
-<span class="n">structlog</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">logger_factory</span><span class="o">=</span><span class="n">LoggerFactory</span><span class="p">())</span>
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <span class="n">CACHE_SIZE</span> <span class="o">=</span> <span class="mi">5000</span>
@@ -123,6 +122,7 @@
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">session</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">use_default_logger_factory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a _BaseEvergreenApi object.</span>
@@ -132,12 +132,16 @@
 <span class="sd">        :param timeout: Time (in sec) to wait before considering a call as failed.</span>
 <span class="sd">        :param session: Session to use for requests.</span>
 <span class="sd">        :param log_on_error: Flag to use for error logs.</span>
+<span class="sd">        :param use_default_logger_factory: Indicate if the module should configure the default logger factory.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span> <span class="o">=</span> <span class="n">api_server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span> <span class="o">=</span> <span class="n">auth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">session</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span> <span class="o">=</span> <span class="n">log_on_error</span>
+
+        <span class="k">if</span> <span class="n">use_default_logger_factory</span><span class="p">:</span>
+            <span class="n">structlog</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">logger_factory</span><span class="o">=</span><span class="n">LoggerFactory</span><span class="p">())</span>
 
 <div class="viewcode-block" id="EvergreenApi.with_session"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.with_session">[docs]</a>    <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">with_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="s2">&quot;EvergreenApi&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
