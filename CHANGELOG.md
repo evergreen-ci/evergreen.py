@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.11 - 2023-09-07
+
+- Moved structlog configuration to within constructor.
+
 ## 3.6.10 - 2023-08-31
 
 - Add `patch_from_patch_id` command.
