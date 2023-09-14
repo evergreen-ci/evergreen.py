@@ -1,7 +1,7 @@
 """Representation of an evergreen patch."""
 from __future__ import absolute_import
 
-from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, Optional, Set
+from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, Optional, Set, Union
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
 
@@ -84,7 +84,7 @@ class ModuleCodeChanges(_BaseEvergreenObject):
     branch_name = evg_attrib("branch_name")
     html_link = evg_attrib("html_link")
     raw_link = evg_attrib("raw_link")
-    commit_messages = evg_attrib("commit_messages")
+    commit_messages: Union[property, List[Any]] = evg_attrib("commit_messages") or []
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """
