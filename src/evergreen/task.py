@@ -134,6 +134,7 @@ class Task(_BaseEvergreenObject):
     ingest_time = evg_datetime_attrib("ingest_time")
     mainline = evg_attrib("mainline")
     order = evg_attrib("order")
+    parent_task_id = evg_attrib("parent_task_id")
     project_id = evg_attrib("project_id")
     project_identifier = evg_attrib("project_identifier")
     priority = evg_attrib("priority")

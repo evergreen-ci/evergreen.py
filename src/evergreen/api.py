@@ -983,15 +983,23 @@ class EvergreenApi(object):
         command = f"evergreen patch-file --diff-patchId {patch_id} --description '{description}' --param {params} --tasks {task} --variants {variant} --project {project} -y -f --param reuse_compile_from={patch_id}"
         return self._execute_patch_file_command(command, author)
 
-    def task_by_id(self, task_id: str, fetch_all_executions: Optional[bool] = None) -> Task:
+    def task_by_id(
+        self,
+        task_id: str,
+        execution: Optional[int] = None,
+        fetch_all_executions: Optional[bool] = None,
+    ) -> Task:
         """
         Get a task by task_id.
 
         :param task_id: Id of task to query for.
+        :param execution: Will query for a specific task execution
         :param fetch_all_executions: Should all executions of the task be fetched.
         :return: Task queried for.
         """
         params = None
+        if execution is not None:
+            params = {"execution": execution}
         if fetch_all_executions is not None:
             params = {"fetch_all_executions": fetch_all_executions}
         url = self._create_url(f"/tasks/{task_id}")
