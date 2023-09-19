@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.6.11 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.6.12 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -870,12 +870,13 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 
 <dl class="py method">
 <dt id="evergreen.api.EvergreenApi.task_by_id">
-<code class="sig-name descname"><span class="pre">task_by_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fetch_all_executions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task"><span class="pre">evergreen.task.Task</span></a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.task_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.task_by_id" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">task_by_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fetch_all_executions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execution</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.task.Task" title="evergreen.task.Task"><span class="pre">evergreen.task.Task</span></a><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.task_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.task_by_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a task by task_id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>task_id</strong> – Id of task to query for.</p></li>
+<li><p><strong>execution</strong> – Will query for a specific task execution</p></li>
 <li><p><strong>fetch_all_executions</strong> – Should all executions of the task be fetched.</p></li>
 </ul>
 </dd>
@@ -3762,6 +3763,12 @@ If this is not a display task, returns None.</p>
 <dt id="evergreen.task.Task.order">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">order</span></code><a class="headerlink" href="#evergreen.task.Task.order" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of order</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.task.Task.parent_task_id">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">parent_task_id</span></code><a class="headerlink" href="#evergreen.task.Task.parent_task_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of parent_task_id</p>
 </dd></dl>
 
 <dl class="py method">

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.11 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.12 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -1027,17 +1027,25 @@
         <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;evergreen patch-file --diff-patchId </span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2"> --description &#39;</span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&#39; --param </span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="s2"> --tasks </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2"> --variants </span><span class="si">{</span><span class="n">variant</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">project</span><span class="si">}</span><span class="s2"> -y -f --param reuse_compile_from=</span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_patch_file_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">author</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.task_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.task_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">task_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span><span class="p">:</span>
+<div class="viewcode-block" id="EvergreenApi.task_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.task_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">task_by_id</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a task by task_id.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
+<span class="sd">        :param execution: Will query for a specific task execution</span>
 <span class="sd">        :param fetch_all_executions: Should all executions of the task be fetched.</span>
 <span class="sd">        :return: Task queried for.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;execution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">execution</span>
         <span class="k">if</span> <span class="n">fetch_all_executions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fetch_all_executions&quot;</span><span class="p">:</span> <span class="n">fetch_all_executions</span><span class="p">}</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;fetch_all_executions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fetch_all_executions</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/tasks/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
