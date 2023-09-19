@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.6.12 - 2023-09-19
+
+- Add optional `execution` param to `task_by_id` command
+- Add `parent_task_id` variable to `Task` object
+
 ## 3.6.11 - 2023-09-07
 
 - Moved structlog configuration to within constructor.
