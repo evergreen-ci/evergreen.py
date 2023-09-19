@@ -986,8 +986,8 @@ class EvergreenApi(object):
     def task_by_id(
         self,
         task_id: str,
-        execution: Optional[int] = None,
         fetch_all_executions: Optional[bool] = None,
+        execution: Optional[int] = None,
     ) -> Task:
         """
         Get a task by task_id.
@@ -997,11 +997,11 @@ class EvergreenApi(object):
         :param fetch_all_executions: Should all executions of the task be fetched.
         :return: Task queried for.
         """
-        params = None
+        params: Dict[str, Any] = {}
         if execution is not None:
-            params = {"execution": execution}
+            params["execution"] = execution
         if fetch_all_executions is not None:
-            params = {"fetch_all_executions": fetch_all_executions}
+            params["fetch_all_executions"] = fetch_all_executions
         url = self._create_url(f"/tasks/{task_id}")
         return Task(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
 
