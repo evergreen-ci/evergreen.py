@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.13 - 2023-09-20
+
+- Added parameter in `get_api` for logging on error.
+
 ## 3.6.12 - 2023-09-19
 
 - Add optional `execution` param to `task_by_id` command

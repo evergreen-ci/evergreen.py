@@ -1362,6 +1362,7 @@ class EvergreenApi(object):
         use_config_file: bool = False,
         config_file: Optional[str] = None,
         timeout: Optional[int] = DEFAULT_NETWORK_TIMEOUT_SEC,
+        log_on_error: bool = False,
     ) -> "EvergreenApi":
         """
         Get an evergreen api instance based on config file settings.
@@ -1371,9 +1372,14 @@ class EvergreenApi(object):
         :param config_file: config file with authentication information.
         :param timeout: Network timeout.
         :return: EvergreenApi instance.
+        :param log_on_error: Flag to use for error logs.
         """
         kwargs = EvergreenApi._setup_kwargs(
-            timeout=timeout, auth=auth, use_config_file=use_config_file, config_file=config_file
+            timeout=timeout,
+            auth=auth,
+            use_config_file=use_config_file,
+            config_file=config_file,
+            log_on_error=log_on_error,
         )
         return cls(**kwargs)
 
@@ -1383,8 +1389,9 @@ class EvergreenApi(object):
         use_config_file: bool = False,
         config_file: Optional[str] = None,
         timeout: Optional[int] = DEFAULT_NETWORK_TIMEOUT_SEC,
+        log_on_error: bool = False,
     ) -> Dict:
-        kwargs = {"auth": auth, "timeout": timeout}
+        kwargs = {"auth": auth, "timeout": timeout, "log_on_error": log_on_error}
         config = None
         if use_config_file:
             config = read_evergreen_config()
