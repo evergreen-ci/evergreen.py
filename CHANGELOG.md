@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.14
+
+- Fix bug in `Version` to always initialize member `build_variants_map`.
+
 ## 3.6.13 - 2023-09-20
 
 - Added parameter in `get_api` for logging on error.

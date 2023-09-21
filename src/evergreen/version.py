@@ -127,6 +127,7 @@ class Version(_BaseEvergreenObject):
                 version_id=self.version_id,
                 json=self.json,
             )
+            self.build_variants_map = {}
 
     @property
     def build_variants_status(self) -> List[BuildVariantStatus]:
