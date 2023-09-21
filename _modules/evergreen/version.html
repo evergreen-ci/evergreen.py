@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.version &#8212; evergreen.py 3.6.13 documentation</title>
+    <title>evergreen.version &#8212; evergreen.py 3.6.14 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -171,6 +171,7 @@
                 <span class="n">version_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="p">,</span>
                 <span class="n">json</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">build_variants_map</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">build_variants_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildVariantStatus</span><span class="p">]:</span>
