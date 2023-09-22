@@ -1,0 +1,7 @@
+{
+    "name": "mongodb-arm64.tar.gz",
+    "url": "https://mciuploads.s3.amazonaws.com/dsi/sys_perf_7e36a45d31a6d5f2c1edcd1a4f009a86bd209210/7e36a45d31a6d5f2c1edcd1a4f009a86bd209210/linux/mongodb-arm64-sys_perf_7e36a45d31a6d5f2c1edcd1a4f009a86bd209210.tar.gz",
+    "visibility": "",
+    "ignore_for_fetch": false,
+    "content_type": "application/x-gzip"
+}
