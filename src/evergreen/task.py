@@ -26,6 +26,8 @@ _EVG_DATE_FIELDS_IN_TASK = frozenset(
     ["create_time", "dispatch_time", "finish_time", "ingest_time", "scheduled_time", "start_time"]
 )
 
+_BINARY_TYPES = ["application"]
+
 
 class Artifact(_BaseEvergreenObject):
     """Representation of a task artifact from evergreen."""
@@ -34,18 +36,41 @@ class Artifact(_BaseEvergreenObject):
     url = evg_attrib("url")
     visibility = evg_attrib("visibility")
     ignore_for_fetch = evg_attrib("ignore_for_fetch")
+    content_type = evg_attrib("content_type")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task artifact."""
         super(Artifact, self).__init__(json, api)
 
-    def stream(self) -> Iterable[str]:
+    def stream(
+        self,
+        decode_unicode: bool = True,
+        chunk_size: Optional[int] = None,
+        is_binary: Optional[bool] = None,
+    ) -> Iterable[str]:
         """
         Retrieve an iterator of the streamed contents of this artifact.
 
+        :param decode_unicode: determines if we decode as unicode
+        :param chunk_size: the size of the chunks to be read
+        :param is_binary: explicit variable, overrides information from content type
         :return: Iterable to stream contents of artifact.
         """
-        return self._api._stream_api(self.url)
+        if is_binary is None:
+            is_binary = self._is_binary()
+
+        return self._api._stream_api(
+            self.url, decode_unicode=decode_unicode, chunk_size=chunk_size, is_binary=is_binary,
+        )
+
+    def _is_binary(self) -> bool:
+        """Determine if an artifact is binary based on content_type."""
+        _type, subtype = self.content_type.split("/")
+
+        if _type in _BINARY_TYPES:
+            return True
+        else:
+            return False
 
 
 class StatusScore(IntEnum):

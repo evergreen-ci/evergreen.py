@@ -26,6 +26,18 @@ def get_sample_yaml(file):
 
 
 @pytest.fixture()
+def sample_binary_artifact():
+    """Return sample artifact that is a binary."""
+    return get_sample_json("binary_artifact.json")
+
+
+@pytest.fixture()
+def sample_nonbinary_artifact():
+    """Return sample artifact that is a binary."""
+    return get_sample_json("nonbinary_artifact.json")
+
+
+@pytest.fixture()
 def sample_host():
     """Return sample host json."""
     return get_sample_json("host.json")

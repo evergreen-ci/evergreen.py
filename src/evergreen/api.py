@@ -200,20 +200,34 @@ class EvergreenApi(object):
         self._raise_for_status(response)
         return response
 
-    def _stream_api(self, url: str, params: Dict = None) -> Iterable:
+    def _stream_api(
+        self,
+        url: str,
+        params: Optional[Dict] = None,
+        decode_unicode: bool = True,
+        chunk_size: Optional[int] = None,
+        is_binary: bool = False,
+    ) -> Iterable:
         """
-        Make a streaming call to an api.
+        Make a streaming call based on if artifact is binary or nonbinary.
 
         :param url: url to call
         :param params: url parameters
+        :param decode_unicode: determines if we decode as unicode
+        :param chunk_size: the size of the chunks to be read
+        :param is_binary: is the data being streamed a binary object
         :return: Iterable over the lines of the returned content.
         """
         start_time = time()
+
         with self.session.get(url=url, params=params, stream=True, timeout=self._timeout) as res:
             self._log_api_call_time(res, start_time)
-
-            for line in res.iter_lines(decode_unicode=True):
-                yield line
+            if is_binary:
+                for line in res.iter_content(chunk_size=chunk_size, decode_unicode=decode_unicode):
+                    yield line
+            else:
+                for line in res.iter_lines(decode_unicode=decode_unicode):
+                    yield line
 
     def _raise_for_status(self, response: requests.Response) -> None:
         """

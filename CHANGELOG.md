@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.15
+
+- Added support for binary and nonbinary artifact streams.
+
 ## 3.6.14
 
 - Fix bug in `Version` to always initialize member `build_variants_map`.
