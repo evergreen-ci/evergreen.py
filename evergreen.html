@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.6.14 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.6.15 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -3232,6 +3232,12 @@ argument.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.base._BaseEvergreenObject</span></code></p>
 <p>Representation of a task artifact from evergreen.</p>
 <dl class="py method">
+<dt id="evergreen.task.Artifact.content_type">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">content_type</span></code><a class="headerlink" href="#evergreen.task.Artifact.content_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>value of content_type</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="evergreen.task.Artifact.ignore_for_fetch">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">ignore_for_fetch</span></code><a class="headerlink" href="#evergreen.task.Artifact.ignore_for_fetch" title="Permalink to this definition">¶</a></dt>
 <dd><p>value of ignore_for_fetch</p>
@@ -3245,11 +3251,18 @@ argument.</p>
 
 <dl class="py method">
 <dt id="evergreen.task.Artifact.stream">
-<code class="sig-name descname"><span class="pre">stream</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/evergreen/task.html#Artifact.stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.task.Artifact.stream" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">stream</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decode_unicode</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_binary</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="_modules/evergreen/task.html#Artifact.stream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.task.Artifact.stream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve an iterator of the streamed contents of this artifact.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Iterable to stream contents of artifact.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>decode_unicode</strong> – determines if we decode as unicode</p></li>
+<li><p><strong>chunk_size</strong> – the size of the chunks to be read</p></li>
+<li><p><strong>is_binary</strong> – explicit variable, overrides information from content type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Iterable to stream contents of artifact.</p>
 </dd>
 </dl>
 </dd></dl>
