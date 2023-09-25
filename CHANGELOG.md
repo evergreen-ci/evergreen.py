@@ -2,7 +2,7 @@
 
 ## 3.6.15
 
-- Added parameter in `get_api` for logging on error.
+- Added support for binary and nonbinary artifact streams.
 
 ## 3.6.14
 

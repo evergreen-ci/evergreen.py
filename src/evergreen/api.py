@@ -203,9 +203,9 @@ class EvergreenApi(object):
     def _stream_api(
         self,
         url: str,
-        params: Dict = None,
+        params: Optional[Dict] = None,
         decode_unicode: bool = True,
-        chunk_size: int = None,
+        chunk_size: Optional[int] = None,
         is_binary: bool = False,
     ) -> Iterable:
         """

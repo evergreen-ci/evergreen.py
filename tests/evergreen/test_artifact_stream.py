@@ -51,3 +51,14 @@ class TestArtifactStream(object):
         mocked_res.iter_lines.assert_called_once()
         mocked_res.iter_content.assert_not_called()
         assert stream_output == RESPONSE_DATA
+
+    def test_artifact_stream_override(self, sample_binary_artifact, mocked_api, mocked_res):
+        mocked_api.session.get = MagicMock(return_value=mocked_res)
+        artifact = Artifact(sample_binary_artifact, mocked_api)
+        artifact._is_binary = MagicMock()
+
+        stream_output = list(artifact.stream(is_binary=False))
+        artifact._is_binary.assert_not_called()
+        mocked_res.iter_lines.assert_called_once()
+        mocked_res.iter_content.assert_not_called()
+        assert stream_output == RESPONSE_DATA

@@ -42,19 +42,25 @@ class Artifact(_BaseEvergreenObject):
         """Create an instance of an evergreen task artifact."""
         super(Artifact, self).__init__(json, api)
 
-    def stream(self, decode_unicode: bool = True, chunk_size: int = None,) -> Iterable[str]:
+    def stream(
+        self,
+        decode_unicode: bool = True,
+        chunk_size: Optional[int] = None,
+        is_binary: Optional[bool] = None,
+    ) -> Iterable[str]:
         """
         Retrieve an iterator of the streamed contents of this artifact.
 
         :param decode_unicode: determines if we decode as unicode
         :param chunk_size: the size of the chunks to be read
+        :param is_binary: explicit variable, overrides information from content type
         :return: Iterable to stream contents of artifact.
         """
+        if is_binary is None:
+            is_binary = self._is_binary()
+
         return self._api._stream_api(
-            self.url,
-            decode_unicode=decode_unicode,
-            chunk_size=chunk_size,
-            is_binary=self._is_binary(),
+            self.url, decode_unicode=decode_unicode, chunk_size=chunk_size, is_binary=is_binary,
         )
 
     def _is_binary(self) -> bool:
