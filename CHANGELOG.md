@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.16 - 2023-11-14
+
+- Added support for sending emails.
+
 ## 3.6.15
 
 - Added support for binary and nonbinary artifact streams.
