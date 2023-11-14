@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen package &#8212; evergreen.py 3.6.15 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.6.16 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -808,6 +808,24 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Contents of specified log file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="evergreen.api.EvergreenApi.send_email">
+<code class="sig-name descname"><span class="pre">send_email</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recipients</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_plain_text</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.send_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.send_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an email to a user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>recipients</strong> – Who to send the email to.</p></li>
+<li><p><strong>sender</strong> – Who the email should be sent on behalf of.</p></li>
+<li><p><strong>subject</strong> – The subject of the email to send.</p></li>
+<li><p><strong>body</strong> – What should be in the body of the email.</p></li>
+<li><p><strong>is_plain_text</strong> – If the email is in plain text or not. If true, will be text/plain. text/html otherwise.</p></li>
+<li><p><strong>headers</strong> – What email headers to attach.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
