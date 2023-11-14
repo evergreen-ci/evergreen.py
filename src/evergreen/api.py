@@ -453,6 +453,43 @@ class EvergreenApi(object):
             url, data=json.dumps(data), method="POST",
         )
 
+    def send_email(
+        self,
+        recipients: List[str],
+        sender: Optional[str] = None,
+        subject: Optional[str] = None,
+        body: Optional[str] = None,
+        is_plain_text: Optional[bool] = None,
+        headers: Optional[Dict[str, List[str]]] = None,
+    ) -> None:
+        """
+        Send an email to a user.
+
+        :param recipients: Who to send the email to.
+        :param sender: Who the email should be sent on behalf of.
+        :param subject: The subject of the email to send.
+        :param body: What should be in the body of the email.
+        :param is_plain_text: If the email is in plain text or not. If true, will be text/plain. text/html otherwise.
+        :param headers: What email headers to attach.
+        """
+        url = self._create_url("/notifications/email")
+        data: Dict[str, Any] = {
+            "recipients": recipients,
+        }
+        if sender is not None:
+            data["sender"] = sender
+        if subject is not None:
+            data["subject"] = subject
+        if body is not None:
+            data["body"] = body
+        if is_plain_text is not None:
+            data["is_plain_text"] = is_plain_text
+        if headers is not None:
+            data["headers"] = headers
+        self._call_api(
+            url, data=json.dumps(data), method="POST",
+        )
+
     def alias_for_version(
         self, version_id: str, alias: str, include_deps: bool = False
     ) -> List[VariantAlias]:

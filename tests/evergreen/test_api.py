@@ -377,6 +377,17 @@ class TestProjectApi(object):
             method="GET",
         )
 
+    def test_email(self, mocked_api):
+        recipients = ["@fake-user"]
+        body = "I'm a fake message"
+        subject = "I'm a fake subject"
+        mocked_api.send_email(recipients=recipients, subject=subject, body=body)
+        expected_url = mocked_api._create_url("/notifications/email")
+        expected_data = json.dumps({"recipients": recipients, "subject": subject, "body": body})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, timeout=None, data=expected_data, method="POST", params=None
+        )
+
     def test_send_slack_message(self, mocked_api):
         target = "@fake-user"
         msg = "I'm a fake message"
