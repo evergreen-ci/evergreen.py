@@ -38,7 +38,9 @@ def read_evergreen_config() -> Optional[Dict]:
     for filename in [filename for filename in CONFIG_FILE_LOCATIONS if os.path.isfile(filename)]:
         return read_evergreen_from_file(filename)
 
-    return None
+    raise FileNotFoundError(
+        f"The Evergreen config file cannot be found at the following locations:\n {CONFIG_FILE_LOCATIONS}"
+    )
 
 
 def get_auth_from_config(config: Dict) -> EvgAuth:
