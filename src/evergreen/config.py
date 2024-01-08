@@ -40,7 +40,6 @@ def read_evergreen_config() -> Optional[Dict]:
     return None
 
 
-
 def get_auth_from_config(config: Dict) -> EvgAuth:
     """
     Get the evergreen authentication from the specified config dict.
