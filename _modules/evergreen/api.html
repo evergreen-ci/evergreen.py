@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.16 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.17 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -1490,6 +1490,8 @@
         <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">use_config_file</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">read_evergreen_config</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;The Evergreen config file cannot be found.&quot;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">config_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">read_evergreen_from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
 
