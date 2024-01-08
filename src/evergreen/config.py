@@ -37,7 +37,6 @@ def read_evergreen_config() -> Optional[Dict]:
     """
     for filename in [filename for filename in CONFIG_FILE_LOCATIONS if os.path.isfile(filename)]:
         return read_evergreen_from_file(filename)
-
     return None
 
 
