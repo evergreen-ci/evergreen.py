@@ -1446,6 +1446,10 @@ class EvergreenApi(object):
         config = None
         if use_config_file:
             config = read_evergreen_config()
+            if config is None:
+                raise FileNotFoundError(
+                    "The Evergreen config file cannot be found."
+                )
         elif config_file is not None:
             config = read_evergreen_from_file(config_file)
 
