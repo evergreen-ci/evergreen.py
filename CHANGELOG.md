@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.6.17 - 2024-01-08
+- added error handling for missing config.
+
 ## 3.6.16 - 2023-11-14
 
 - Added support for sending emails.
