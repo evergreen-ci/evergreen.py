@@ -105,6 +105,7 @@ class PatchCreationDetails(NamedTuple):
     """Details of a patch creation."""
 
     url: str
+    id: str
 
 
 class Patch(_BaseEvergreenObject):

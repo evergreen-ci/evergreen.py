@@ -1,7 +1,12 @@
 # Changelog
 
+## 3.6.18 - 2024-01-10
+
+- Added `id` field to `PatchCreationDetails`.
+
 ## 3.6.17 - 2024-01-08
-- added error handling for missing config.
+
+- Added error handling for missing config.
 
 ## 3.6.16 - 2023-11-14
 
