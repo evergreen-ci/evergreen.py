@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.17 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.18 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -109,7 +109,8 @@
 <span class="n">START_WAIT_TIME_SEC</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">MAX_WAIT_TIME_SEC</span> <span class="o">=</span> <span class="mi">5</span>
 
-<span class="n">EVERGREEN_URL_REGEX</span> <span class="o">=</span> <span class="s2">&quot;(https?)://evergreen..*?(?=</span><span class="se">\\\\</span><span class="s2">n)&quot;</span>
+<span class="n">EVERGREEN_URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(https?)://evergreen\..*?(?=</span><span class="se">\\</span><span class="s2">n)&quot;</span><span class="p">)</span>
+<span class="n">EVERGREEN_PATCH_ID_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=ID : )\w</span><span class="si">{24}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="EvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">EvergreenApi</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -1011,14 +1012,17 @@
             <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2"> --author </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 
-        <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">EVERGREEN_URL_REGEX</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">url_match</span> <span class="o">=</span> <span class="n">EVERGREEN_URL_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">id_match</span> <span class="o">=</span> <span class="n">EVERGREEN_PATCH_ID_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">url_match</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">id_match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unable to parse URL from command output: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">Executed command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Unable to parse URL or ID from command output: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">Executed command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">PatchCreationDetails</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">PatchCreationDetails</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="n">id_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
 
 <div class="viewcode-block" id="EvergreenApi.patch_from_diff"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patch_from_diff">[docs]</a>    <span class="k">def</span> <span class="nf">patch_from_diff</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
