@@ -65,7 +65,9 @@ MAX_RETRIES = 3
 START_WAIT_TIME_SEC = 2
 MAX_WAIT_TIME_SEC = 5
 
-EVERGREEN_URL_REGEX = "(https?)://evergreen..*?(?=\\\\n)"
+# EVERGREEN_URL_REGEX = re.compile(r"Build : (\S+)(?=\s|$)", re.MULTILINE)
+EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\\n)")
+EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
 
 
 class EvergreenApi(object):
@@ -967,14 +969,17 @@ class EvergreenApi(object):
             command = f"{command} --author {author}"
 
         process = subprocess.run(command, shell=True, capture_output=True)
+        output = str(process.stderr)
 
-        match = re.search(EVERGREEN_URL_REGEX, str(process.stderr))
-        if match is None:
+        url_match = EVERGREEN_URL_REGEX.search(output)
+        id_match = EVERGREEN_PATCH_ID_REGEX.search(output)
+
+        if url_match is None or id_match is None:
             raise Exception(
-                f"Unable to parse URL from command output: {str(process.stderr)}. \nExecuted command: {command}"
+                f"Unable to parse URL or ID from command output: {str(process.stderr)}. \nExecuted command: {command}"
             )
 
-        return PatchCreationDetails(url=match.group(0))
+        return PatchCreationDetails(url=url_match.group(0), id=id_match.group(0))
 
     def patch_from_diff(
         self,

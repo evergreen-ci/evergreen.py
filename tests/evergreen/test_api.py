@@ -587,6 +587,7 @@ class TestCreatePatchDiff:
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
         )
+        assert result.id == "64387ca457e85ac95a3da12f"
 
     @patch("evergreen.api.subprocess.run",)
     def test_patch_from_diff_valid_with_author(self, mock_run, mocked_api):
@@ -616,6 +617,7 @@ class TestCreatePatchDiff:
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
         )
+        assert result.id == "64387ca457e85ac95a3da12f"
 
     @patch("evergreen.api.subprocess.run",)
     def test_patch_from_diff_invalid(self, mock_run, mocked_api):
@@ -648,6 +650,7 @@ class TestCreatePatchDiff:
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
         )
+        assert result.id == "64387ca457e85ac95a3da12f"
 
 
 class TestTaskApi(object):
