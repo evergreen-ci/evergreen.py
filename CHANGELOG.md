@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.6.19 - 2024-01-24
+
+- Added `parameters` field to `Version`.
+- Modified the `patch_from_diff` and `patch_from_patch_id` methods to include a parameters field to set parameters on the patch. 
+
 ## 3.6.18 - 2024-01-10
 
 - Added `id` field to `PatchCreationDetails`.
