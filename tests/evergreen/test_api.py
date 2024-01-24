@@ -573,15 +573,19 @@ class TestCreatePatchDiff:
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
         mock_run.return_value = mock_stdout
 
+        params = {
+            "runtime_params_json": '{"v": 0, "enable_profiling": true}',
+            "reuse_compile_from": "build_id",
+        }
         result = mocked_api.patch_from_diff(
-            "path", "params", "base", "task", "project", "description", "variant", "build_id"
+            "path", params, "base", "task", "project", "description", "variant"
         )
 
         command = mock_run.call_args[0][0]
 
         assert (
             command
-            == "evergreen patch-file --diff-file path --description 'description' --param params --base base --tasks task --variants variant --project project -y -f --param reuse_compile_from=build_id"
+            == "evergreen patch-file --diff-file path --description 'description' --base base --tasks task --variants variant --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f"
         )
         assert (
             result.url
@@ -595,23 +599,19 @@ class TestCreatePatchDiff:
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
         mock_run.return_value = mock_stdout
 
+        params = {
+            "runtime_params_json": '{"v": 0, "enable_profiling": true}',
+            "reuse_compile_from": "build_id",
+        }
         result = mocked_api.patch_from_diff(
-            "path",
-            "params",
-            "base",
-            "task",
-            "project",
-            "description",
-            "variant",
-            "build_id",
-            "author",
+            "path", params, "base", "task", "project", "description", "variant", "author",
         )
 
         command = mock_run.call_args[0][0]
 
         assert (
             command
-            == "evergreen patch-file --diff-file path --description 'description' --param params --base base --tasks task --variants variant --project project -y -f --param reuse_compile_from=build_id --author author"
+            == "evergreen patch-file --diff-file path --description 'description' --base base --tasks task --variants variant --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f --author author"
         )
         assert (
             result.url
@@ -627,7 +627,7 @@ class TestCreatePatchDiff:
 
         with pytest.raises(Exception):
             mocked_api.patch_from_diff(
-                "path", "params", "base", "task", "project", "description", "variant"
+                "path", {}, "base", "task", "project", "description", "variant"
             )
 
     @patch("evergreen.api.subprocess.run",)
@@ -636,15 +636,19 @@ class TestCreatePatchDiff:
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
         mock_run.return_value = mock_stdout
 
+        params = {
+            "runtime_params_json": '{"v": 0, "enable_profiling": true}',
+            "reuse_compile_from": "build_id",
+        }
         result = mocked_api.patch_from_patch_id(
-            "build_id", "params", "base", "task", "project", "description", "variant"
+            "build_id", params, "task", "project", "description", "variant"
         )
 
         command = mock_run.call_args[0][0]
 
         assert (
             command
-            == "evergreen patch-file --diff-patchId build_id --description 'description' --param params --tasks task --variants variant --project project -y -f --param reuse_compile_from=build_id"
+            == "evergreen patch-file --diff-patchId build_id --description 'description' --tasks task --variants variant --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f"
         )
         assert (
             result.url

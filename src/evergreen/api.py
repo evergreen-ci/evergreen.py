@@ -983,13 +983,12 @@ class EvergreenApi(object):
     def patch_from_diff(
         self,
         diff_file_path: str,
-        params: str,
+        params: dict[str, str],
         base: str,
         task: str,
         project: str,
         description: str,
         variant: str,
-        version_id: str,
         author: Optional[str] = None,
     ) -> PatchCreationDetails:
         """
@@ -1002,19 +1001,18 @@ class EvergreenApi(object):
         :param project: The project to start the build for.
         :param description: A description of the build.
         :param variant: The variant(s) to build against.
-        :param version_id: The version id this build is based on.
         :param author: The author to attribute for the build.
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
-        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --param {params} --base {base} --tasks {task} --variants {variant} --project {project} -y -f --param reuse_compile_from={version_id}"
+        unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
+        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --base {base} --tasks {task} --variants {variant} --project {project} {unpacked_params} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def patch_from_patch_id(
         self,
         patch_id: str,
-        params: str,
-        base: str,
+        params: dict[str, str],
         task: str,
         project: str,
         description: str,
@@ -1035,7 +1033,8 @@ class EvergreenApi(object):
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
-        command = f"evergreen patch-file --diff-patchId {patch_id} --description '{description}' --param {params} --tasks {task} --variants {variant} --project {project} -y -f --param reuse_compile_from={patch_id}"
+        unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
+        command = f"evergreen patch-file --diff-patchId {patch_id} --description '{description}' --tasks {task} --variants {variant} --project {project} {unpacked_params} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def task_by_id(
