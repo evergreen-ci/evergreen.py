@@ -164,7 +164,11 @@ class EvergreenApi(object):
             LOGGER.debug("Request completed.", url=response.request.url, duration=duration)
 
     def _call_api(
-        self, url: str, params: Dict = None, method: str = "GET", data: Optional[str] = None
+        self,
+        url: str,
+        params: Optional[Dict] = None,
+        method: str = "GET",
+        data: Optional[str] = None,
     ) -> requests.Response:
         """
         Make a call to the evergreen api.
@@ -255,7 +259,7 @@ class EvergreenApi(object):
         response.raise_for_status()
 
     def _paginate(
-        self, url: str, params: Dict = None
+        self, url: str, params: Optional[Dict] = None
     ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
         """
         Paginate until all results are returned and return a list of all JSON results.
@@ -275,7 +279,7 @@ class EvergreenApi(object):
 
         return json_data
 
-    def _lazy_paginate(self, url: str, params: Dict = None) -> Iterable:
+    def _lazy_paginate(self, url: str, params: Optional[Dict] = None) -> Iterable:
         """
         Lazy paginate, the results are returned lazily.
 
@@ -301,7 +305,7 @@ class EvergreenApi(object):
 
             next_url = response.links["next"]["url"]
 
-    def _lazy_paginate_by_date(self, url: str, params: Dict = None) -> Iterable:
+    def _lazy_paginate_by_date(self, url: str, params: Optional[Dict] = None) -> Iterable:
         """
         Paginate based on date, the results are returned lazily.
 
@@ -565,7 +569,7 @@ class EvergreenApi(object):
             self.versions_by_project(project_id, requester), before, after, time_attr
         )
 
-    def patches_by_project(self, project_id: str, params: Dict = None) -> Iterable[Patch]:
+    def patches_by_project(self, project_id: str, params: Optional[Dict] = None) -> Iterable[Patch]:
         """
         Get a list of patches for the specified project.
 
@@ -624,7 +628,7 @@ class EvergreenApi(object):
         project_id: str,
         before: datetime,
         after: datetime,
-        params: Dict = None,
+        params: Optional[Dict] = None,
         time_attr: str = "create_time",
     ) -> Iterable[Patch]:
         """
@@ -932,7 +936,7 @@ class EvergreenApi(object):
         build_list = self._paginate(url, params)
         return [Build(build, self) for build in build_list]  # type: ignore[arg-type]
 
-    def patch_by_id(self, patch_id: str, params: Dict = None) -> Patch:
+    def patch_by_id(self, patch_id: str, params: Optional[Dict] = None) -> Patch:
         """
         Get a patch by patch id.
 
@@ -1535,7 +1539,11 @@ class RetryingEvergreenApi(EvergreenApi):
         reraise=True,
     )
     def _call_api(
-        self, url: str, params: Dict = None, method: str = "GET", data: Optional[str] = None
+        self,
+        url: str,
+        params: Optional[Dict] = None,
+        method: str = "GET",
+        data: Optional[str] = None,
     ) -> requests.Response:
         """
         Call into the evergreen api.

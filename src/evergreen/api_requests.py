@@ -59,12 +59,12 @@ class SlackAttachment(BaseModel):
     fields: Array of SlackAttachmentFields that get displayed in a table-like format.
     """
 
-    title: Optional[str]
-    title_link: Optional[str]
-    text: Optional[str]
-    fallback: Optional[str]
-    mrkdwn_in: Optional[List[str]]
-    color: Optional[str]
-    author_name: Optional[str]
-    author_icon: Optional[str]
-    fields: Optional[List[SlackAttachmentField]]
+    title: Optional[str] = None
+    title_link: Optional[str] = None
+    text: Optional[str] = None
+    fallback: Optional[str] = None
+    mrkdwn_in: Optional[List[str]] = None
+    color: Optional[str] = None
+    author_name: Optional[str] = None
+    author_icon: Optional[str] = None
+    fields: Optional[List[SlackAttachmentField]] = None

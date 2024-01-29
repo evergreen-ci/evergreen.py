@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.6.20 - 2024-01-29
+
+- Changed log level to `debug` in `Version` constructor.
+- Upgraded libraries.
+
 ## 3.6.19 - 2024-01-24
 
 - Added `parameters` field to `Version`.
