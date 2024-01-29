@@ -123,7 +123,7 @@ class Version(_BaseEvergreenObject):
                 build_variants_map=self.build_variants_map,
             )
         else:
-            LOGGER.error(
+            LOGGER.debug(
                 "build_variants_status either empty or not found for version",
                 version_id=self.version_id,
                 json=self.json,
