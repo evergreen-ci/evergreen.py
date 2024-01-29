@@ -1,17 +1,19 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.resource_type_permissions &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>evergreen.resource_type_permissions &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -56,7 +58,7 @@
 
 
 <div class="viewcode-block" id="PermissionableResourceType"><a class="viewcode-back" href="../../evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType">[docs]</a><span class="k">class</span> <span class="nc">PermissionableResourceType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represents resource types that a user can be granted permissions to.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents resource types that a user can be granted permissions to.&quot;&quot;&quot;</span>
 
     <span class="n">PROJECT</span> <span class="o">=</span> <span class="s2">&quot;project&quot;</span>
     <span class="n">DISTRO</span> <span class="o">=</span> <span class="s2">&quot;distro&quot;</span>
@@ -64,7 +66,7 @@
 
 
 <div class="viewcode-block" id="RemovablePermission"><a class="viewcode-back" href="../../evergreen.html#evergreen.resource_type_permissions.RemovablePermission">[docs]</a><span class="k">class</span> <span class="nc">RemovablePermission</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represents a permission that can be removed from a user.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a permission that can be removed from a user.&quot;&quot;&quot;</span>
 
     <span class="n">PROJECT</span> <span class="o">=</span> <span class="s2">&quot;project&quot;</span>
     <span class="n">DISTRO</span> <span class="o">=</span> <span class="s2">&quot;distro&quot;</span>
@@ -73,13 +75,13 @@
 
 
 <div class="viewcode-block" id="ResourceTypePermissions"><a class="viewcode-back" href="../../evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions">[docs]</a><span class="k">class</span> <span class="nc">ResourceTypePermissions</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of a user&#39;s permissions on resources of a specific type.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of a user&#39;s permissions on resources of a specific type.&quot;&quot;&quot;</span>
 
     <span class="n">resource_type</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
     <span class="n">permissions</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;permissions&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of a resource type permission set.</span>
 
 <span class="sd">        :param json: JSON of resource type permissions.</span>
@@ -104,19 +106,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

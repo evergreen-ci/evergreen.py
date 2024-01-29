@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.metrics package &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>evergreen.metrics package &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/readable.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="evergreen.errors package" href="evergreen.errors.html" />
@@ -46,230 +49,230 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="evergreen-metrics-package">
-<h1>evergreen.metrics package<a class="headerlink" href="#evergreen-metrics-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-evergreen.metrics.buildmetrics">
-<span id="evergreen-metrics-buildmetrics-module"></span><h2>evergreen.metrics.buildmetrics module<a class="headerlink" href="#module-evergreen.metrics.buildmetrics" title="Permalink to this headline">¶</a></h2>
+  <section id="evergreen-metrics-package">
+<h1>evergreen.metrics package<a class="headerlink" href="#evergreen-metrics-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-evergreen.metrics.buildmetrics">
+<span id="evergreen-metrics-buildmetrics-module"></span><h2>evergreen.metrics.buildmetrics module<a class="headerlink" href="#module-evergreen.metrics.buildmetrics" title="Permalink to this heading">¶</a></h2>
 <p>Metrics for Evergreen builds.</p>
 <dl class="py class">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.metrics.buildmetrics.</span></code><code class="sig-name descname"><span class="pre">BuildMetrics</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Build</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/metrics/buildmetrics.html#BuildMetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.metrics.buildmetrics.</span></span><span class="sig-name descname"><span class="pre">BuildMetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">build</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="evergreen.html#evergreen.build.Build" title="evergreen.build.Build"><span class="pre">Build</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/metrics/buildmetrics.html#BuildMetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Metrics about an evergreen build.</p>
 <dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.as_dict">
-<code class="sig-name descname"><span class="pre">as_dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_children</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><a class="reference internal" href="_modules/evergreen/metrics/buildmetrics.html#BuildMetrics.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.as_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/evergreen/metrics/buildmetrics.html#BuildMetrics.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide a dictionary representation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>include_children</strong> – Include child tasks in dictionary.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Dictionary of metrics.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.calculate">
-<code class="sig-name descname"><span class="pre">calculate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_filter_fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics" title="evergreen.metrics.buildmetrics.BuildMetrics"><span class="pre">evergreen.metrics.buildmetrics.BuildMetrics</span></a><a class="reference internal" href="_modules/evergreen/metrics/buildmetrics.html#BuildMetrics.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.calculate" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_filter_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics" title="evergreen.metrics.buildmetrics.BuildMetrics"><span class="pre">BuildMetrics</span></a></span></span><a class="reference internal" href="_modules/evergreen/metrics/buildmetrics.html#BuildMetrics.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.calculate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate metrics for the given build.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>task_filter_fn</strong> – function to filter tasks included for metrics, should accept a task
 argument.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>self.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.create_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">create_time</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.create_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.create_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.create_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time the first task of the build was created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time first task was created.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.end_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">end_time</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.end_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.end_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.end_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time last task of build was completed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time last task was completed.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.makespan">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">makespan</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.makespan" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.makespan">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">makespan</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">timedelta</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.makespan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wall clock duration of build.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Timedelta duration of build.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_failed">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_display_tasks_failed</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_failed" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_failed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_display_tasks_failed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_failed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of failed display tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of failed display tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_success">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_display_tasks_success</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_success" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_success">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_display_tasks_success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of successful display tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of successful display tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_system_failure">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_display_tasks_system_failure</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_system_failure" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_system_failure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_display_tasks_system_failure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_system_failure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of system failure display tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of system failure display tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_timed_out">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_display_tasks_timed_out</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_timed_out" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_timed_out">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_display_tasks_timed_out</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_timed_out" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of timeout display tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of timeout display tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_undispatched">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_display_tasks_undispatched</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_undispatched" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_undispatched">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_display_tasks_undispatched</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_undispatched" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of undispatched display_tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of undispatched display_tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_failed">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_failed</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_failed" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_failed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_failed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_failed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of failed tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of failed tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_success">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_success</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_success" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_success">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of successful tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of successful tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_system_failure">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_system_failure</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_system_failure" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_system_failure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_system_failure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_system_failure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of system failure tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of system failure tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_timed_out">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_timed_out</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_timed_out" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_timed_out">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_timed_out</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_timed_out" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of timeout tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of timeout tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_undispatched">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_undispatched</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_undispatched" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_undispatched">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_undispatched</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_undispatched" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of undispatched tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of undispatched tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.start_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">start_time</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.start_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.start_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.start_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time first task of build was started.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time first task was started.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">total_display_tasks</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_display_tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the total display tasks in the build.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>total display tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.total_tasks">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">total_tasks</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.total_tasks" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.total_tasks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.total_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the total tasks in the build.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>total tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.buildmetrics.BuildMetrics.wait_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">wait_time</span></code><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.wait_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.buildmetrics.BuildMetrics.wait_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">timedelta</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.buildmetrics.BuildMetrics.wait_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wall clock duration until build was started.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Timedelta duration until build was started.</p>
 </dd>
 </dl>
@@ -277,149 +280,149 @@ argument.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-evergreen.metrics.versionmetrics">
-<span id="evergreen-metrics-versionmetrics-module"></span><h2>evergreen.metrics.versionmetrics module<a class="headerlink" href="#module-evergreen.metrics.versionmetrics" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-evergreen.metrics.versionmetrics">
+<span id="evergreen-metrics-versionmetrics-module"></span><h2>evergreen.metrics.versionmetrics module<a class="headerlink" href="#module-evergreen.metrics.versionmetrics" title="Permalink to this heading">¶</a></h2>
 <p>Metrics for an evergreen version.</p>
 <dl class="py class">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.metrics.versionmetrics.</span></code><code class="sig-name descname"><span class="pre">VersionMetrics</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/metrics/versionmetrics.html#VersionMetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.metrics.versionmetrics.</span></span><span class="sig-name descname"><span class="pre">VersionMetrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="evergreen.html#evergreen.version.Version" title="evergreen.version.Version"><span class="pre">Version</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/metrics/versionmetrics.html#VersionMetrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Metrics about an evergreen version.</p>
 <dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.as_dict">
-<code class="sig-name descname"><span class="pre">as_dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_children</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><a class="reference internal" href="_modules/evergreen/metrics/versionmetrics.html#VersionMetrics.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.as_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/evergreen/metrics/versionmetrics.html#VersionMetrics.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide a dictionary representation.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>include_children</strong> – Include child build tasks in dictionary.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Dictionary of metrics.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.calculate">
-<code class="sig-name descname"><span class="pre">calculate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_filter_fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics" title="evergreen.metrics.versionmetrics.VersionMetrics"><span class="pre">evergreen.metrics.versionmetrics.VersionMetrics</span></a><a class="reference internal" href="_modules/evergreen/metrics/versionmetrics.html#VersionMetrics.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.calculate" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_filter_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics" title="evergreen.metrics.versionmetrics.VersionMetrics"><span class="pre">VersionMetrics</span></a></span></span><a class="reference internal" href="_modules/evergreen/metrics/versionmetrics.html#VersionMetrics.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.calculate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate metrics for the given build.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>task_filter_fn</strong> – function to filter tasks included for metrics, should accept a task
 argument.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>self.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.create_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">create_time</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.create_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.create_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.create_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time the first task of the version was created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time first task was created.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.end_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">end_time</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.end_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.end_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.end_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time last task of version was completed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time last task was completed.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.makespan">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">makespan</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.makespan" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.makespan">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">makespan</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.makespan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wall clock duration of version.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Duration of version in seconds.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_failure">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_failure</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_failure" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_failure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_failure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_failure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of failure tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of failure tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_success">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_success</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_success" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_success">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of successful tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of successful tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_system_failure">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_system_failure</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_system_failure" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_system_failure">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_system_failure</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_system_failure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of system failure tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of system failure tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_timeout">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">pct_tasks_timeout</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_timeout" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_timeout">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pct_tasks_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_timeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the percentage of timeout tasks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Percentage of timeout tasks.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.start_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">start_time</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.start_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.start_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.start_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time first task of version was started.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time first task was started.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.total_tasks">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">total_tasks</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.total_tasks" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.total_tasks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.total_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the total tasks in the version.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>total tasks</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="evergreen.metrics.versionmetrics.VersionMetrics.wait_time">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">wait_time</span></code><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.wait_time" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.metrics.versionmetrics.VersionMetrics.wait_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.metrics.versionmetrics.VersionMetrics.wait_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wall clock duration until version was started.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Duration until version was started in seconds.</p>
 </dd>
 </dl>
@@ -427,11 +430,11 @@ argument.</p>
 
 </dd></dl>
 
-</div>
-<div class="section" id="module-evergreen.metrics">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-evergreen.metrics" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+<section id="module-evergreen.metrics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-evergreen.metrics" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -440,17 +443,60 @@ argument.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">evergreen.metrics package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-evergreen.metrics.buildmetrics">evergreen.metrics.buildmetrics module</a></li>
-<li><a class="reference internal" href="#module-evergreen.metrics.versionmetrics">evergreen.metrics.versionmetrics module</a></li>
+<li><a class="reference internal" href="#module-evergreen.metrics.buildmetrics">evergreen.metrics.buildmetrics module</a><ul>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics"><code class="docutils literal notranslate"><span class="pre">BuildMetrics</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.as_dict"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.as_dict()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.calculate"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.calculate()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.create_time"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.create_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.end_time"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.end_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.makespan"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.makespan</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_failed"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_display_tasks_failed</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_success"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_display_tasks_success</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_system_failure"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_display_tasks_system_failure</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_timed_out"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_display_tasks_timed_out</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_display_tasks_undispatched"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_display_tasks_undispatched</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_failed"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_tasks_failed</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_success"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_tasks_success</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_system_failure"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_tasks_system_failure</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_timed_out"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_tasks_timed_out</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.pct_tasks_undispatched"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.pct_tasks_undispatched</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.start_time"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.start_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.total_display_tasks</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.total_tasks"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.total_tasks</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.buildmetrics.BuildMetrics.wait_time"><code class="docutils literal notranslate"><span class="pre">BuildMetrics.wait_time</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-evergreen.metrics.versionmetrics">evergreen.metrics.versionmetrics module</a><ul>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics"><code class="docutils literal notranslate"><span class="pre">VersionMetrics</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.as_dict"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.as_dict()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.calculate"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.calculate()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.create_time"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.create_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.end_time"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.end_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.makespan"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.makespan</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_failure"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.pct_tasks_failure</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_success"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.pct_tasks_success</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_system_failure"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.pct_tasks_system_failure</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.pct_tasks_timeout"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.pct_tasks_timeout</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.start_time"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.start_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.total_tasks"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.total_tasks</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.metrics.versionmetrics.VersionMetrics.wait_time"><code class="docutils literal notranslate"><span class="pre">VersionMetrics.wait_time</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-evergreen.metrics">Module contents</a></li>
 </ul>
 </li>
 </ul>
-<h3>Related Topics</h3>
+
+  </div><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation index</a><ul>
   <li><a href="modules.html">src</a><ul>
@@ -471,19 +517,19 @@ argument.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

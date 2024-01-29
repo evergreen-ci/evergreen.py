@@ -1,17 +1,19 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.distro &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>evergreen.distro &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -60,14 +62,14 @@
 
 
 <div class="viewcode-block" id="MountPoint"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.MountPoint">[docs]</a><span class="k">class</span> <span class="nc">MountPoint</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of Mount Point in distro settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of Mount Point in distro settings.&quot;&quot;&quot;</span>
 
     <span class="n">device_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;device_name&quot;</span><span class="p">)</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">)</span>
     <span class="n">virtual_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;virtual_name&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of the mount point.</span>
 
 <span class="sd">        :param json: Json of mount point.</span>
@@ -77,10 +79,10 @@
 
 
 <div class="viewcode-block" id="StaticDistroSettings"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.StaticDistroSettings">[docs]</a><span class="k">class</span> <span class="nc">StaticDistroSettings</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of Evergreen static distro settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of Evergreen static distro settings.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of the distro settings for static images.</span>
 
 <span class="sd">        :param json: Json of distro settings.</span>
@@ -90,7 +92,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve Hosts of static distro.</span>
 
 <span class="sd">        :return: hosts of static distro.</span>
@@ -101,12 +103,12 @@
 
 
 <div class="viewcode-block" id="DockerDistroSettings"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.DockerDistroSettings">[docs]</a><span class="k">class</span> <span class="nc">DockerDistroSettings</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of docker distro settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of docker distro settings.&quot;&quot;&quot;</span>
 
     <span class="n">image_url</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;image_url&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of the distro settings for docker.</span>
 
 <span class="sd">        :param json: Json of distro settings.</span>
@@ -116,7 +118,7 @@
 
 
 <div class="viewcode-block" id="AwsDistroSettings"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.AwsDistroSettings">[docs]</a><span class="k">class</span> <span class="nc">AwsDistroSettings</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of AWS Distro Settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of AWS Distro Settings.&quot;&quot;&quot;</span>
 
     <span class="n">ami</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;ami&quot;</span><span class="p">)</span>
     <span class="n">aws_access_key_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;aws_access_key_id&quot;</span><span class="p">)</span>
@@ -134,7 +136,7 @@
     <span class="n">vpc_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;vpc_name&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of the distro settings.</span>
 
 <span class="sd">        :param json: Json of the distro settings.</span>
@@ -144,7 +146,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">mount_points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MountPoint</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve list of mount points for the distro.</span>
 
 <span class="sd">        :return: List of mount points.</span>
@@ -155,7 +157,7 @@
 
 
 <div class="viewcode-block" id="PlannerSettings"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.PlannerSettings">[docs]</a><span class="k">class</span> <span class="nc">PlannerSettings</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of planner settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of planner settings.&quot;&quot;&quot;</span>
 
     <span class="n">version</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span>
     <span class="n">minimum_hosts</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;minimum_hosts&quot;</span><span class="p">)</span>
@@ -167,7 +169,7 @@
     <span class="n">task_ordering</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_ordering&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of planner settings for a distro.</span>
 
 <span class="sd">        :param json: planner settings json.</span>
@@ -177,12 +179,12 @@
 
 
 <div class="viewcode-block" id="FinderSettings"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.FinderSettings">[docs]</a><span class="k">class</span> <span class="nc">FinderSettings</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of finder settings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of finder settings.&quot;&quot;&quot;</span>
 
     <span class="n">version</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of finder settings for a distro.</span>
 
 <span class="sd">        :param json: finder settings json.</span>
@@ -192,7 +194,7 @@
 
 
 <div class="viewcode-block" id="Distro"><a class="viewcode-back" href="../../evergreen.html#evergreen.distro.Distro">[docs]</a><span class="k">class</span> <span class="nc">Distro</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Representation of an Evergreen Distro.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of an Evergreen Distro.&quot;&quot;&quot;</span>
 
     <span class="n">_PROVIDER_MAP</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">AWS_ON_DEMAND_PROVIDER</span><span class="p">:</span> <span class="n">AwsDistroSettings</span><span class="p">,</span>
@@ -225,7 +227,7 @@
     <span class="n">container_pool</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;container_pool&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of a distro.</span>
 
 <span class="sd">        :param json: Json of a distro.</span>
@@ -236,7 +238,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the settings for the distro.</span>
 
 <span class="sd">        :return: settings for distro.</span>
@@ -249,7 +251,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expansions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve dict of expansions for distro.</span>
 
 <span class="sd">        :return: dict of expansions.</span>
@@ -260,7 +262,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">planner_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlannerSettings</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve planner settings for distro.</span>
 
 <span class="sd">        :return: planner settings.</span>
@@ -269,7 +271,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">finder_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FinderSettings</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve finder settings for distro.</span>
 
 <span class="sd">        :return: finder settings.</span>
@@ -293,19 +295,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

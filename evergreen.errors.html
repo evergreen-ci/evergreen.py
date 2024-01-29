@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.errors package &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>evergreen.errors package &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/readable.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="evergreen.metrics package" href="evergreen.metrics.html" />
@@ -50,40 +53,40 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="evergreen-errors-package">
-<h1>evergreen.errors package<a class="headerlink" href="#evergreen-errors-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-evergreen.errors.exceptions">
-<span id="evergreen-errors-exceptions-module"></span><h2>evergreen.errors.exceptions module<a class="headerlink" href="#module-evergreen.errors.exceptions" title="Permalink to this headline">¶</a></h2>
+  <section id="evergreen-errors-package">
+<h1>evergreen.errors package<a class="headerlink" href="#evergreen-errors-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-evergreen.errors.exceptions">
+<span id="evergreen-errors-exceptions-module"></span><h2>evergreen.errors.exceptions module<a class="headerlink" href="#module-evergreen.errors.exceptions" title="Permalink to this heading">¶</a></h2>
 <p>Exceptions for the evergreen module.</p>
 <dl class="py exception">
-<dt id="evergreen.errors.exceptions.ActiveTaskMetricsException">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></code><code class="sig-name descname"><span class="pre">ActiveTaskMetricsException</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/errors/exceptions.html#ActiveTaskMetricsException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.ActiveTaskMetricsException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#evergreen.errors.exceptions.MetricsException" title="evergreen.errors.exceptions.MetricsException"><code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.errors.exceptions.MetricsException</span></code></a></p>
+<dt class="sig sig-object py" id="evergreen.errors.exceptions.ActiveTaskMetricsException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></span><span class="sig-name descname"><span class="pre">ActiveTaskMetricsException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="evergreen.html#evergreen.task.Task" title="evergreen.task.Task"><span class="pre">Task</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/errors/exceptions.html#ActiveTaskMetricsException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.ActiveTaskMetricsException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#evergreen.errors.exceptions.MetricsException" title="evergreen.errors.exceptions.MetricsException"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetricsException</span></code></a></p>
 <p>An exception when a task is in progress during metrics collection.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="evergreen.errors.exceptions.EvergreenException">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></code><code class="sig-name descname"><span class="pre">EvergreenException</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/errors/exceptions.html#EvergreenException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.EvergreenException" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="evergreen.errors.exceptions.EvergreenException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></span><span class="sig-name descname"><span class="pre">EvergreenException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/errors/exceptions.html#EvergreenException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.EvergreenException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>An exception coming from the evergreen client.</p>
 </dd></dl>
 
 <dl class="py exception">
-<dt id="evergreen.errors.exceptions.MetricsException">
-<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></code><code class="sig-name descname"><span class="pre">MetricsException</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/errors/exceptions.html#MetricsException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.MetricsException" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#evergreen.errors.exceptions.EvergreenException" title="evergreen.errors.exceptions.EvergreenException"><code class="xref py py-class docutils literal notranslate"><span class="pre">evergreen.errors.exceptions.EvergreenException</span></code></a></p>
+<dt class="sig sig-object py" id="evergreen.errors.exceptions.MetricsException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></span><span class="sig-name descname"><span class="pre">MetricsException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/errors/exceptions.html#MetricsException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.MetricsException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#evergreen.errors.exceptions.EvergreenException" title="evergreen.errors.exceptions.EvergreenException"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvergreenException</span></code></a></p>
 <p>An exception with metrics collection.</p>
 </dd></dl>
 
-</div>
-<div class="section" id="module-evergreen.errors">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-evergreen.errors" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+<section id="module-evergreen.errors">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-evergreen.errors" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -92,16 +95,23 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">evergreen.errors package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-evergreen.errors.exceptions">evergreen.errors.exceptions module</a></li>
+<li><a class="reference internal" href="#module-evergreen.errors.exceptions">evergreen.errors.exceptions module</a><ul>
+<li><a class="reference internal" href="#evergreen.errors.exceptions.ActiveTaskMetricsException"><code class="docutils literal notranslate"><span class="pre">ActiveTaskMetricsException</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.errors.exceptions.EvergreenException"><code class="docutils literal notranslate"><span class="pre">EvergreenException</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.errors.exceptions.MetricsException"><code class="docutils literal notranslate"><span class="pre">MetricsException</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-evergreen.errors">Module contents</a></li>
 </ul>
 </li>
 </ul>
-<h3>Related Topics</h3>
+
+  </div><h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation index</a><ul>
   <li><a href="modules.html">src</a><ul>
@@ -123,19 +133,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

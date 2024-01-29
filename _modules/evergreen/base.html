@@ -1,17 +1,19 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.base &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>evergreen.base &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -59,7 +61,7 @@
 
 
 <div class="viewcode-block" id="evg_attrib"><a class="viewcode-back" href="../../evergreen.html#evergreen.base.evg_attrib">[docs]</a><span class="k">def</span> <span class="nf">evg_attrib</span><span class="p">(</span><span class="n">attrib_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">type_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">property</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an attribute for the given evergreen property.</span>
 
 <span class="sd">    This creates an attribute for the class that looks up the value via json. It is used to</span>
@@ -81,7 +83,7 @@
 
 
 <div class="viewcode-block" id="evg_datetime_attrib"><a class="viewcode-back" href="../../evergreen.html#evergreen.base.evg_datetime_attrib">[docs]</a><span class="k">def</span> <span class="nf">evg_datetime_attrib</span><span class="p">(</span><span class="n">attrib_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">property</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a datetime attribute for the given evergreen property.</span>
 
 <span class="sd">    :param attrib_name: Name of attribute.</span>
@@ -90,7 +92,7 @@
 
 
 <div class="viewcode-block" id="evg_short_datetime_attrib"><a class="viewcode-back" href="../../evergreen.html#evergreen.base.evg_short_datetime_attrib">[docs]</a><span class="k">def</span> <span class="nf">evg_short_datetime_attrib</span><span class="p">(</span><span class="n">attrib_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">property</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a shortened datetime attribute for the given evergreen property.</span>
 
 <span class="sd">    :param attrib_name: Name of attribute.</span>
@@ -99,7 +101,7 @@
 
 
 <div class="viewcode-block" id="evg_date_attrib"><a class="viewcode-back" href="../../evergreen.html#evergreen.base.evg_date_attrib">[docs]</a><span class="k">def</span> <span class="nf">evg_date_attrib</span><span class="p">(</span><span class="n">attrib_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">property</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a date attribute for the given evergreen property.</span>
 
 <span class="sd">    :param attrib_name: Name of attribute.</span>
@@ -108,16 +110,16 @@
 
 
 <span class="k">class</span> <span class="nc">_BaseEvergreenObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Common evergreen object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Common evergreen object.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="n">json</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_api</span> <span class="o">=</span> <span class="n">api</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_date_fields</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_is_field_a_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if given field is a date.</span>
 
 <span class="sd">        :param item: field to check.</span>
@@ -126,7 +128,7 @@
         <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_date_fields</span> <span class="ow">and</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_date_fields</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Lookup an attribute if it exists.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lookup an attribute if it exists.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="s2">&quot;json&quot;</span> <span class="ow">and</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_field_a_date</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">parse_evergreen_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="n">item</span><span class="p">])</span>
@@ -158,19 +160,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

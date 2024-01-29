@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>src &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>src &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/readable.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="evergreen package" href="evergreen.html" />
@@ -48,8 +51,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="src">
-<h1>src<a class="headerlink" href="#src" title="Permalink to this headline">¶</a></h1>
+  <section id="src">
+<h1>src<a class="headerlink" href="#src" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="evergreen.html">evergreen package</a><ul>
@@ -70,34 +73,780 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="evergreen.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.alias">evergreen.alias module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.api">evergreen.api module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.api_requests">evergreen.api_requests module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.base">evergreen.base module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.build">evergreen.build module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.commitqueue">evergreen.commitqueue module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.config">evergreen.config module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.distro">evergreen.distro module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.host">evergreen.host module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.manifest">evergreen.manifest module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.patch">evergreen.patch module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.performance_results">evergreen.performance_results module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.project">evergreen.project module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.resource_type_permissions">evergreen.resource_type_permissions module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.stats">evergreen.stats module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.task">evergreen.task module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.task_annotations">evergreen.task_annotations module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.task_reliability">evergreen.task_reliability module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.tst">evergreen.tst module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.users_for_role">evergreen.users_for_role module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.util">evergreen.util module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.version">evergreen.version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.alias">evergreen.alias module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.alias.DisplayTaskAlias"><code class="docutils literal notranslate"><span class="pre">DisplayTaskAlias</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.alias.DisplayTaskAlias.execution_tasks"><code class="docutils literal notranslate"><span class="pre">DisplayTaskAlias.execution_tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.alias.DisplayTaskAlias.name"><code class="docutils literal notranslate"><span class="pre">DisplayTaskAlias.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.alias.VariantAlias"><code class="docutils literal notranslate"><span class="pre">VariantAlias</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.alias.VariantAlias.display_tasks"><code class="docutils literal notranslate"><span class="pre">VariantAlias.display_tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.alias.VariantAlias.tasks"><code class="docutils literal notranslate"><span class="pre">VariantAlias.tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.alias.VariantAlias.variant"><code class="docutils literal notranslate"><span class="pre">VariantAlias.variant</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.api">evergreen.api module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api.CachedEvergreenApi"><code class="docutils literal notranslate"><span class="pre">CachedEvergreenApi</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.CachedEvergreenApi.build_by_id"><code class="docutils literal notranslate"><span class="pre">CachedEvergreenApi.build_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.CachedEvergreenApi.clear_caches"><code class="docutils literal notranslate"><span class="pre">CachedEvergreenApi.clear_caches()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.CachedEvergreenApi.version_by_id"><code class="docutils literal notranslate"><span class="pre">CachedEvergreenApi.version_by_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi"><code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.abort_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.abort_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.alias_for_version"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.alias_for_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.all_distros"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_distros()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.all_hosts"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_hosts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.all_projects"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_projects()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.all_user_permissions_for_resource"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_user_permissions_for_resource()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.annotate_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.annotate_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.build_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.build_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.builds_by_version"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.builds_by_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.commit_queue_for_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.commit_queue_for_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.configure_patch"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.configure_patch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.configure_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.configure_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.delete_user_permissions"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.delete_user_permissions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.file_ticket_for_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.file_ticket_for_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_api"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_api()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_patch_diff"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_patch_diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_task_annotation"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_task_annotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_users_for_role"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_users_for_role()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.give_permissions_to_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.give_permissions_to_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.give_roles_to_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.give_roles_to_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.host_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.host_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.json_by_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.json_by_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.json_history_for_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.json_history_for_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.manifest"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.manifest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.manifest_for_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.manifest_for_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.num_of_tests_by_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.num_of_tests_by_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.patch_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.patch_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.patch_from_diff"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.patch_from_diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.patch_from_patch_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.patch_from_patch_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.patches_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.patches_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.patches_by_project_time_window"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.patches_by_project_time_window()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.patches_by_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.patches_by_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.performance_results_by_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task_name"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.performance_results_by_task_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.permissions_for_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.permissions_for_user()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.project_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.project_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.recent_versions_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.recent_versions_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.restart_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.restart_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.retrieve_task_log"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.retrieve_task_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.send_email"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.send_email()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.send_slack_message"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.send_slack_message()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.session"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.session</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.single_test_by_task_and_test_file"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.single_test_by_task_and_test_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.stream_log"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.stream_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.task_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.task_reliability_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_reliability_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.task_stats_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_stats_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_build"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tasks_by_build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tasks_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_commit"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tasks_by_project_and_commit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_name"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tasks_by_project_and_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.test_stats_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.test_stats_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.tests_by_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tests_by_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.update_patch_status"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.update_patch_status()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.version_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.version_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.versions_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.versions_by_project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.versions_by_project_time_window"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.versions_by_project_time_window()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.with_session"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.with_session()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api.RetryingEvergreenApi"><code class="docutils literal notranslate"><span class="pre">RetryingEvergreenApi</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.api_requests">evergreen.api_requests module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.IssueLinkRequest"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.IssueLinkRequest.as_dict"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.as_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.IssueLinkRequest.confidence_score"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.confidence_score</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.IssueLinkRequest.issue_key"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.issue_key</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.IssueLinkRequest.url"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.MetadataLinkRequest"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.MetadataLinkRequest.text"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.MetadataLinkRequest.url"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment"><code class="docutils literal notranslate"><span class="pre">SlackAttachment</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.author_icon"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.author_icon</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.author_name"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.author_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.color"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.fallback"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.fallback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.fields"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.model_config"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.model_fields"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.mrkdwn_in"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.mrkdwn_in</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.text"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.title"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment.title_link"><code class="docutils literal notranslate"><span class="pre">SlackAttachment.title_link</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField.model_config"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField.model_fields"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField.short"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField.short</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField.title"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField.title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachmentField.value"><code class="docutils literal notranslate"><span class="pre">SlackAttachmentField.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.base">evergreen.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.base.evg_attrib"><code class="docutils literal notranslate"><span class="pre">evg_attrib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.base.evg_date_attrib"><code class="docutils literal notranslate"><span class="pre">evg_date_attrib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.base.evg_datetime_attrib"><code class="docutils literal notranslate"><span class="pre">evg_datetime_attrib()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.base.evg_short_datetime_attrib"><code class="docutils literal notranslate"><span class="pre">evg_short_datetime_attrib()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.build">evergreen.build module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.build.Build"><code class="docutils literal notranslate"><span class="pre">Build</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.activated"><code class="docutils literal notranslate"><span class="pre">Build.activated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.activated_by"><code class="docutils literal notranslate"><span class="pre">Build.activated_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.activated_time"><code class="docutils literal notranslate"><span class="pre">Build.activated_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.actual_makespan_ms"><code class="docutils literal notranslate"><span class="pre">Build.actual_makespan_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.branch"><code class="docutils literal notranslate"><span class="pre">Build.branch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.build_variant"><code class="docutils literal notranslate"><span class="pre">Build.build_variant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.create_time"><code class="docutils literal notranslate"><span class="pre">Build.create_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.display_name"><code class="docutils literal notranslate"><span class="pre">Build.display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.finish_time"><code class="docutils literal notranslate"><span class="pre">Build.finish_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.get_metrics"><code class="docutils literal notranslate"><span class="pre">Build.get_metrics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.get_project_identifier"><code class="docutils literal notranslate"><span class="pre">Build.get_project_identifier()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.get_tasks"><code class="docutils literal notranslate"><span class="pre">Build.get_tasks()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.get_version"><code class="docutils literal notranslate"><span class="pre">Build.get_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.git_hash"><code class="docutils literal notranslate"><span class="pre">Build.git_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.id"><code class="docutils literal notranslate"><span class="pre">Build.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.is_completed"><code class="docutils literal notranslate"><span class="pre">Build.is_completed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.order"><code class="docutils literal notranslate"><span class="pre">Build.order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.origin"><code class="docutils literal notranslate"><span class="pre">Build.origin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.predicted_makespan_ms"><code class="docutils literal notranslate"><span class="pre">Build.predicted_makespan_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.project_id"><code class="docutils literal notranslate"><span class="pre">Build.project_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.project_identifier"><code class="docutils literal notranslate"><span class="pre">Build.project_identifier</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.start_time"><code class="docutils literal notranslate"><span class="pre">Build.start_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.status"><code class="docutils literal notranslate"><span class="pre">Build.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.status_counts"><code class="docutils literal notranslate"><span class="pre">Build.status_counts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.tasks"><code class="docutils literal notranslate"><span class="pre">Build.tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.time_taken_ms"><code class="docutils literal notranslate"><span class="pre">Build.time_taken_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.Build.version"><code class="docutils literal notranslate"><span class="pre">Build.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts"><code class="docutils literal notranslate"><span class="pre">StatusCounts</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.dispatched"><code class="docutils literal notranslate"><span class="pre">StatusCounts.dispatched</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.failed"><code class="docutils literal notranslate"><span class="pre">StatusCounts.failed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.inactivate"><code class="docutils literal notranslate"><span class="pre">StatusCounts.inactivate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.started"><code class="docutils literal notranslate"><span class="pre">StatusCounts.started</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.succeeded"><code class="docutils literal notranslate"><span class="pre">StatusCounts.succeeded</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.timed_out"><code class="docutils literal notranslate"><span class="pre">StatusCounts.timed_out</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.build.StatusCounts.undispatched"><code class="docutils literal notranslate"><span class="pre">StatusCounts.undispatched</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.commitqueue">evergreen.commitqueue module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.commitqueue.CommitQueue"><code class="docutils literal notranslate"><span class="pre">CommitQueue</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.commitqueue.CommitQueue.queue"><code class="docutils literal notranslate"><span class="pre">CommitQueue.queue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.commitqueue.CommitQueue.queue_id"><code class="docutils literal notranslate"><span class="pre">CommitQueue.queue_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.commitqueue.CommitQueueItem"><code class="docutils literal notranslate"><span class="pre">CommitQueueItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.commitqueue.CommitQueueItem.issue"><code class="docutils literal notranslate"><span class="pre">CommitQueueItem.issue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.commitqueue.CommitQueueItem.modules"><code class="docutils literal notranslate"><span class="pre">CommitQueueItem.modules</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.config">evergreen.config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.EvgAuth"><code class="docutils literal notranslate"><span class="pre">EvgAuth</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.EvgAuth.api_key"><code class="docutils literal notranslate"><span class="pre">EvgAuth.api_key</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.EvgAuth.username"><code class="docutils literal notranslate"><span class="pre">EvgAuth.username</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.get_auth"><code class="docutils literal notranslate"><span class="pre">get_auth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.get_auth_from_config"><code class="docutils literal notranslate"><span class="pre">get_auth_from_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.read_evergreen_config"><code class="docutils literal notranslate"><span class="pre">read_evergreen_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.read_evergreen_from_file"><code class="docutils literal notranslate"><span class="pre">read_evergreen_from_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.distro">evergreen.distro module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.ami"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.ami</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.aws_access_key_id"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.aws_access_key_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.aws_access_secret_id"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.aws_access_secret_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.bid_price"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.bid_price</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.instance_type"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.instance_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.ipv6"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.ipv6</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.is_vpc"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.is_vpc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.key_name"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.key_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.mount_points"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.mount_points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.region"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.region</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.security_group"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.security_group</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.security_group_ids"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.security_group_ids</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.subnet_id"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.subnet_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.user_data"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.user_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.AwsDistroSettings.vpc_name"><code class="docutils literal notranslate"><span class="pre">AwsDistroSettings.vpc_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro"><code class="docutils literal notranslate"><span class="pre">Distro</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.arch"><code class="docutils literal notranslate"><span class="pre">Distro.arch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.bootstrap_method"><code class="docutils literal notranslate"><span class="pre">Distro.bootstrap_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.client_dir"><code class="docutils literal notranslate"><span class="pre">Distro.client_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.clone_method"><code class="docutils literal notranslate"><span class="pre">Distro.clone_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.communication_method"><code class="docutils literal notranslate"><span class="pre">Distro.communication_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.container_pool"><code class="docutils literal notranslate"><span class="pre">Distro.container_pool</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.curator_dir"><code class="docutils literal notranslate"><span class="pre">Distro.curator_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.disabled"><code class="docutils literal notranslate"><span class="pre">Distro.disabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.expansions"><code class="docutils literal notranslate"><span class="pre">Distro.expansions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.finder_settings"><code class="docutils literal notranslate"><span class="pre">Distro.finder_settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.image_id"><code class="docutils literal notranslate"><span class="pre">Distro.image_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.jasper_credentials_path"><code class="docutils literal notranslate"><span class="pre">Distro.jasper_credentials_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.name"><code class="docutils literal notranslate"><span class="pre">Distro.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.planner_settings"><code class="docutils literal notranslate"><span class="pre">Distro.planner_settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.pool_size"><code class="docutils literal notranslate"><span class="pre">Distro.pool_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.provider"><code class="docutils literal notranslate"><span class="pre">Distro.provider</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.settings"><code class="docutils literal notranslate"><span class="pre">Distro.settings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.setup"><code class="docutils literal notranslate"><span class="pre">Distro.setup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.setup_as_sudo"><code class="docutils literal notranslate"><span class="pre">Distro.setup_as_sudo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.shell_path"><code class="docutils literal notranslate"><span class="pre">Distro.shell_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.ssh_key"><code class="docutils literal notranslate"><span class="pre">Distro.ssh_key</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.ssh_options"><code class="docutils literal notranslate"><span class="pre">Distro.ssh_options</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.teardown"><code class="docutils literal notranslate"><span class="pre">Distro.teardown</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.user"><code class="docutils literal notranslate"><span class="pre">Distro.user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.user_spawn_allowed"><code class="docutils literal notranslate"><span class="pre">Distro.user_spawn_allowed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.Distro.work_dir"><code class="docutils literal notranslate"><span class="pre">Distro.work_dir</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.DockerDistroSettings"><code class="docutils literal notranslate"><span class="pre">DockerDistroSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.DockerDistroSettings.image_url"><code class="docutils literal notranslate"><span class="pre">DockerDistroSettings.image_url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.FinderSettings"><code class="docutils literal notranslate"><span class="pre">FinderSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.FinderSettings.version"><code class="docutils literal notranslate"><span class="pre">FinderSettings.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.MountPoint"><code class="docutils literal notranslate"><span class="pre">MountPoint</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.MountPoint.device_name"><code class="docutils literal notranslate"><span class="pre">MountPoint.device_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.MountPoint.size"><code class="docutils literal notranslate"><span class="pre">MountPoint.size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.MountPoint.virtual_name"><code class="docutils literal notranslate"><span class="pre">MountPoint.virtual_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings"><code class="docutils literal notranslate"><span class="pre">PlannerSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.acceptable_host_idle_time"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.acceptable_host_idle_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.group_versions"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.group_versions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.maximum_hosts"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.maximum_hosts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.minimum_hosts"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.minimum_hosts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.patch_zipper_factor"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.patch_zipper_factor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.target_time"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.target_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.task_ordering"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.task_ordering</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.PlannerSettings.version"><code class="docutils literal notranslate"><span class="pre">PlannerSettings.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.distro.StaticDistroSettings"><code class="docutils literal notranslate"><span class="pre">StaticDistroSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.distro.StaticDistroSettings.hosts"><code class="docutils literal notranslate"><span class="pre">StaticDistroSettings.hosts</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.host">evergreen.host module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.host.Host"><code class="docutils literal notranslate"><span class="pre">Host</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.distro"><code class="docutils literal notranslate"><span class="pre">Host.distro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.get_build"><code class="docutils literal notranslate"><span class="pre">Host.get_build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.get_version"><code class="docutils literal notranslate"><span class="pre">Host.get_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.host_id"><code class="docutils literal notranslate"><span class="pre">Host.host_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.host_type"><code class="docutils literal notranslate"><span class="pre">Host.host_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.host_url"><code class="docutils literal notranslate"><span class="pre">Host.host_url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.provisioned"><code class="docutils literal notranslate"><span class="pre">Host.provisioned</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.running_task"><code class="docutils literal notranslate"><span class="pre">Host.running_task</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.started_by"><code class="docutils literal notranslate"><span class="pre">Host.started_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.status"><code class="docutils literal notranslate"><span class="pre">Host.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.user"><code class="docutils literal notranslate"><span class="pre">Host.user</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.Host.user_host"><code class="docutils literal notranslate"><span class="pre">Host.user_host</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.host.HostDistro"><code class="docutils literal notranslate"><span class="pre">HostDistro</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.HostDistro.distro_id"><code class="docutils literal notranslate"><span class="pre">HostDistro.distro_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.HostDistro.image_id"><code class="docutils literal notranslate"><span class="pre">HostDistro.image_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.HostDistro.provider"><code class="docutils literal notranslate"><span class="pre">HostDistro.provider</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask"><code class="docutils literal notranslate"><span class="pre">RunningTask</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.build_id"><code class="docutils literal notranslate"><span class="pre">RunningTask.build_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.dispatch_time"><code class="docutils literal notranslate"><span class="pre">RunningTask.dispatch_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.get_build"><code class="docutils literal notranslate"><span class="pre">RunningTask.get_build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.get_version"><code class="docutils literal notranslate"><span class="pre">RunningTask.get_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.name"><code class="docutils literal notranslate"><span class="pre">RunningTask.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.task_id"><code class="docutils literal notranslate"><span class="pre">RunningTask.task_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.host.RunningTask.version_id"><code class="docutils literal notranslate"><span class="pre">RunningTask.version_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.manifest">evergreen.manifest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.manifest.Manifest"><code class="docutils literal notranslate"><span class="pre">Manifest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.Manifest.branch"><code class="docutils literal notranslate"><span class="pre">Manifest.branch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.Manifest.id"><code class="docutils literal notranslate"><span class="pre">Manifest.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.Manifest.modules"><code class="docutils literal notranslate"><span class="pre">Manifest.modules</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.Manifest.project"><code class="docutils literal notranslate"><span class="pre">Manifest.project</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.Manifest.revision"><code class="docutils literal notranslate"><span class="pre">Manifest.revision</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule"><code class="docutils literal notranslate"><span class="pre">ManifestModule</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule.branch"><code class="docutils literal notranslate"><span class="pre">ManifestModule.branch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule.owner"><code class="docutils literal notranslate"><span class="pre">ManifestModule.owner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule.repo"><code class="docutils literal notranslate"><span class="pre">ManifestModule.repo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule.revision"><code class="docutils literal notranslate"><span class="pre">ManifestModule.revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule.url"><code class="docutils literal notranslate"><span class="pre">ManifestModule.url</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.patch">evergreen.patch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.patch.FileDiff"><code class="docutils literal notranslate"><span class="pre">FileDiff</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.FileDiff.additions"><code class="docutils literal notranslate"><span class="pre">FileDiff.additions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.FileDiff.deletions"><code class="docutils literal notranslate"><span class="pre">FileDiff.deletions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.FileDiff.description"><code class="docutils literal notranslate"><span class="pre">FileDiff.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.FileDiff.diff_link"><code class="docutils literal notranslate"><span class="pre">FileDiff.diff_link</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.FileDiff.file_name"><code class="docutils literal notranslate"><span class="pre">FileDiff.file_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData"><code class="docutils literal notranslate"><span class="pre">GithubPatchData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.author"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.base_owner"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.base_owner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.base_repo"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.base_repo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.head_hash"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.head_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.head_owner"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.head_owner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.head_repo"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.head_repo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.GithubPatchData.pr_number"><code class="docutils literal notranslate"><span class="pre">GithubPatchData.pr_number</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.patch.ModuleCodeChanges"><code class="docutils literal notranslate"><span class="pre">ModuleCodeChanges</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.ModuleCodeChanges.branch_name"><code class="docutils literal notranslate"><span class="pre">ModuleCodeChanges.branch_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.ModuleCodeChanges.commit_messages"><code class="docutils literal notranslate"><span class="pre">ModuleCodeChanges.commit_messages</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.ModuleCodeChanges.file_diffs"><code class="docutils literal notranslate"><span class="pre">ModuleCodeChanges.file_diffs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.ModuleCodeChanges.html_link"><code class="docutils literal notranslate"><span class="pre">ModuleCodeChanges.html_link</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.ModuleCodeChanges.raw_link"><code class="docutils literal notranslate"><span class="pre">ModuleCodeChanges.raw_link</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch"><code class="docutils literal notranslate"><span class="pre">Patch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.activated"><code class="docutils literal notranslate"><span class="pre">Patch.activated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.alias"><code class="docutils literal notranslate"><span class="pre">Patch.alias</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.author"><code class="docutils literal notranslate"><span class="pre">Patch.author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.branch"><code class="docutils literal notranslate"><span class="pre">Patch.branch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.builds"><code class="docutils literal notranslate"><span class="pre">Patch.builds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.commit_queue_position"><code class="docutils literal notranslate"><span class="pre">Patch.commit_queue_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.create_time"><code class="docutils literal notranslate"><span class="pre">Patch.create_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.description"><code class="docutils literal notranslate"><span class="pre">Patch.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.finish_time"><code class="docutils literal notranslate"><span class="pre">Patch.finish_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.get_version"><code class="docutils literal notranslate"><span class="pre">Patch.get_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.git_hash"><code class="docutils literal notranslate"><span class="pre">Patch.git_hash</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.github_patch_data"><code class="docutils literal notranslate"><span class="pre">Patch.github_patch_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.is_in_commit_queue"><code class="docutils literal notranslate"><span class="pre">Patch.is_in_commit_queue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.module_code_changes"><code class="docutils literal notranslate"><span class="pre">Patch.module_code_changes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.patch_id"><code class="docutils literal notranslate"><span class="pre">Patch.patch_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.patch_number"><code class="docutils literal notranslate"><span class="pre">Patch.patch_number</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.project_id"><code class="docutils literal notranslate"><span class="pre">Patch.project_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.start_time"><code class="docutils literal notranslate"><span class="pre">Patch.start_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.status"><code class="docutils literal notranslate"><span class="pre">Patch.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.task_list_for_variant"><code class="docutils literal notranslate"><span class="pre">Patch.task_list_for_variant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.tasks"><code class="docutils literal notranslate"><span class="pre">Patch.tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.variants_tasks"><code class="docutils literal notranslate"><span class="pre">Patch.variants_tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.Patch.version"><code class="docutils literal notranslate"><span class="pre">Patch.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.patch.PatchCreationDetails"><code class="docutils literal notranslate"><span class="pre">PatchCreationDetails</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.PatchCreationDetails.id"><code class="docutils literal notranslate"><span class="pre">PatchCreationDetails.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.PatchCreationDetails.url"><code class="docutils literal notranslate"><span class="pre">PatchCreationDetails.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.patch.VariantsTasks"><code class="docutils literal notranslate"><span class="pre">VariantsTasks</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.VariantsTasks.name"><code class="docutils literal notranslate"><span class="pre">VariantsTasks.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.patch.VariantsTasks.tasks"><code class="docutils literal notranslate"><span class="pre">VariantsTasks.tasks</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.performance_results">evergreen.performance_results module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData"><code class="docutils literal notranslate"><span class="pre">PerformanceData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.create_time"><code class="docutils literal notranslate"><span class="pre">PerformanceData.create_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.name"><code class="docutils literal notranslate"><span class="pre">PerformanceData.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.order"><code class="docutils literal notranslate"><span class="pre">PerformanceData.order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.project_id"><code class="docutils literal notranslate"><span class="pre">PerformanceData.project_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.revision"><code class="docutils literal notranslate"><span class="pre">PerformanceData.revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.tag"><code class="docutils literal notranslate"><span class="pre">PerformanceData.tag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.task_id"><code class="docutils literal notranslate"><span class="pre">PerformanceData.task_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.task_name"><code class="docutils literal notranslate"><span class="pre">PerformanceData.task_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.test_batch"><code class="docutils literal notranslate"><span class="pre">PerformanceData.test_batch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.variant"><code class="docutils literal notranslate"><span class="pre">PerformanceData.variant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceData.version_id"><code class="docutils literal notranslate"><span class="pre">PerformanceData.version_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch.end"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch.errors"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch.errors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch.start"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch.storage_engine"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch.storage_engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch.test_runs"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch.test_runs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestBatch.test_runs_matching"><code class="docutils literal notranslate"><span class="pre">PerformanceTestBatch.test_runs_matching()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestResult"><code class="docutils literal notranslate"><span class="pre">PerformanceTestResult</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestResult.mean_value"><code class="docutils literal notranslate"><span class="pre">PerformanceTestResult.mean_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestResult.measurement"><code class="docutils literal notranslate"><span class="pre">PerformanceTestResult.measurement</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestResult.recorded_values"><code class="docutils literal notranslate"><span class="pre">PerformanceTestResult.recorded_values</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestResult.thread_level"><code class="docutils literal notranslate"><span class="pre">PerformanceTestResult.thread_level</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestRun"><code class="docutils literal notranslate"><span class="pre">PerformanceTestRun</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestRun.end"><code class="docutils literal notranslate"><span class="pre">PerformanceTestRun.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestRun.start"><code class="docutils literal notranslate"><span class="pre">PerformanceTestRun.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestRun.test_name"><code class="docutils literal notranslate"><span class="pre">PerformanceTestRun.test_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestRun.test_results"><code class="docutils literal notranslate"><span class="pre">PerformanceTestRun.test_results</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.performance_results.PerformanceTestRun.workload"><code class="docutils literal notranslate"><span class="pre">PerformanceTestRun.workload</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.project">evergreen.project module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.admins"><code class="docutils literal notranslate"><span class="pre">Project.admins</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.batch_time"><code class="docutils literal notranslate"><span class="pre">Project.batch_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.branch_name"><code class="docutils literal notranslate"><span class="pre">Project.branch_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.commit_queue"><code class="docutils literal notranslate"><span class="pre">Project.commit_queue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.deactivated_previous"><code class="docutils literal notranslate"><span class="pre">Project.deactivated_previous</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.display_name"><code class="docutils literal notranslate"><span class="pre">Project.display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.enabled"><code class="docutils literal notranslate"><span class="pre">Project.enabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.id"><code class="docutils literal notranslate"><span class="pre">Project.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.identifier"><code class="docutils literal notranslate"><span class="pre">Project.identifier</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.most_recent_version"><code class="docutils literal notranslate"><span class="pre">Project.most_recent_version()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.owner_name"><code class="docutils literal notranslate"><span class="pre">Project.owner_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.pr_testing_enabled"><code class="docutils literal notranslate"><span class="pre">Project.pr_testing_enabled</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.private"><code class="docutils literal notranslate"><span class="pre">Project.private</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.remote_path"><code class="docutils literal notranslate"><span class="pre">Project.remote_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.repo_name"><code class="docutils literal notranslate"><span class="pre">Project.repo_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.tracked"><code class="docutils literal notranslate"><span class="pre">Project.tracked</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.project.Project.tracks_push_events"><code class="docutils literal notranslate"><span class="pre">Project.tracks_push_events</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.resource_type_permissions">evergreen.resource_type_permissions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType"><code class="docutils literal notranslate"><span class="pre">PermissionableResourceType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType.DISTRO"><code class="docutils literal notranslate"><span class="pre">PermissionableResourceType.DISTRO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType.PROJECT"><code class="docutils literal notranslate"><span class="pre">PermissionableResourceType.PROJECT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.PermissionableResourceType.SUPERUSER"><code class="docutils literal notranslate"><span class="pre">PermissionableResourceType.SUPERUSER</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.RemovablePermission"><code class="docutils literal notranslate"><span class="pre">RemovablePermission</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.RemovablePermission.ALL"><code class="docutils literal notranslate"><span class="pre">RemovablePermission.ALL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.RemovablePermission.DISTRO"><code class="docutils literal notranslate"><span class="pre">RemovablePermission.DISTRO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.RemovablePermission.PROJECT"><code class="docutils literal notranslate"><span class="pre">RemovablePermission.PROJECT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.RemovablePermission.SUPERUSER"><code class="docutils literal notranslate"><span class="pre">RemovablePermission.SUPERUSER</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions"><code class="docutils literal notranslate"><span class="pre">ResourceTypePermissions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions.permissions"><code class="docutils literal notranslate"><span class="pre">ResourceTypePermissions.permissions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.resource_type_permissions.ResourceTypePermissions.resource_type"><code class="docutils literal notranslate"><span class="pre">ResourceTypePermissions.resource_type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.stats">evergreen.stats module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats"><code class="docutils literal notranslate"><span class="pre">TaskStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.avg_duration_pass"><code class="docutils literal notranslate"><span class="pre">TaskStats.avg_duration_pass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.date"><code class="docutils literal notranslate"><span class="pre">TaskStats.date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.distro"><code class="docutils literal notranslate"><span class="pre">TaskStats.distro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.num_fail"><code class="docutils literal notranslate"><span class="pre">TaskStats.num_fail</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.num_pass"><code class="docutils literal notranslate"><span class="pre">TaskStats.num_pass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.num_total"><code class="docutils literal notranslate"><span class="pre">TaskStats.num_total</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.task_name"><code class="docutils literal notranslate"><span class="pre">TaskStats.task_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TaskStats.variant"><code class="docutils literal notranslate"><span class="pre">TaskStats.variant</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats"><code class="docutils literal notranslate"><span class="pre">TestStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.avg_duration_pass"><code class="docutils literal notranslate"><span class="pre">TestStats.avg_duration_pass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.date"><code class="docutils literal notranslate"><span class="pre">TestStats.date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.distro"><code class="docutils literal notranslate"><span class="pre">TestStats.distro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.num_fail"><code class="docutils literal notranslate"><span class="pre">TestStats.num_fail</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.num_pass"><code class="docutils literal notranslate"><span class="pre">TestStats.num_pass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.task_name"><code class="docutils literal notranslate"><span class="pre">TestStats.task_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.test_file"><code class="docutils literal notranslate"><span class="pre">TestStats.test_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.test_name"><code class="docutils literal notranslate"><span class="pre">TestStats.test_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.stats.TestStats.variant"><code class="docutils literal notranslate"><span class="pre">TestStats.variant</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.task">evergreen.task module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact"><code class="docutils literal notranslate"><span class="pre">Artifact</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact.content_type"><code class="docutils literal notranslate"><span class="pre">Artifact.content_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact.ignore_for_fetch"><code class="docutils literal notranslate"><span class="pre">Artifact.ignore_for_fetch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact.name"><code class="docutils literal notranslate"><span class="pre">Artifact.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact.stream"><code class="docutils literal notranslate"><span class="pre">Artifact.stream()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact.url"><code class="docutils literal notranslate"><span class="pre">Artifact.url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Artifact.visibility"><code class="docutils literal notranslate"><span class="pre">Artifact.visibility</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task.OomTrackerInfo"><code class="docutils literal notranslate"><span class="pre">OomTrackerInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.OomTrackerInfo.detected"><code class="docutils literal notranslate"><span class="pre">OomTrackerInfo.detected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.OomTrackerInfo.pids"><code class="docutils literal notranslate"><span class="pre">OomTrackerInfo.pids</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task.StatusDetails"><code class="docutils literal notranslate"><span class="pre">StatusDetails</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusDetails.desc"><code class="docutils literal notranslate"><span class="pre">StatusDetails.desc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusDetails.oom_tracker_info"><code class="docutils literal notranslate"><span class="pre">StatusDetails.oom_tracker_info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusDetails.status"><code class="docutils literal notranslate"><span class="pre">StatusDetails.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusDetails.timed_out"><code class="docutils literal notranslate"><span class="pre">StatusDetails.timed_out</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusDetails.type"><code class="docutils literal notranslate"><span class="pre">StatusDetails.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore"><code class="docutils literal notranslate"><span class="pre">StatusScore</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore.FAILURE"><code class="docutils literal notranslate"><span class="pre">StatusScore.FAILURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore.FAILURE_SYSTEM"><code class="docutils literal notranslate"><span class="pre">StatusScore.FAILURE_SYSTEM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore.FAILURE_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">StatusScore.FAILURE_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore.SUCCESS"><code class="docutils literal notranslate"><span class="pre">StatusScore.SUCCESS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore.UNDISPATCHED"><code class="docutils literal notranslate"><span class="pre">StatusScore.UNDISPATCHED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.StatusScore.get_task_status_score"><code class="docutils literal notranslate"><span class="pre">StatusScore.get_task_status_score()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.activated"><code class="docutils literal notranslate"><span class="pre">Task.activated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.activated_by"><code class="docutils literal notranslate"><span class="pre">Task.activated_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.annotate"><code class="docutils literal notranslate"><span class="pre">Task.annotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.artifacts"><code class="docutils literal notranslate"><span class="pre">Task.artifacts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.build_id"><code class="docutils literal notranslate"><span class="pre">Task.build_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.build_variant"><code class="docutils literal notranslate"><span class="pre">Task.build_variant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.build_variant_display_name"><code class="docutils literal notranslate"><span class="pre">Task.build_variant_display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.create_time"><code class="docutils literal notranslate"><span class="pre">Task.create_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.depends_on"><code class="docutils literal notranslate"><span class="pre">Task.depends_on</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.dispatch_time"><code class="docutils literal notranslate"><span class="pre">Task.dispatch_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.display_name"><code class="docutils literal notranslate"><span class="pre">Task.display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.display_only"><code class="docutils literal notranslate"><span class="pre">Task.display_only</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.display_status"><code class="docutils literal notranslate"><span class="pre">Task.display_status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.distro_id"><code class="docutils literal notranslate"><span class="pre">Task.distro_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.est_wait_to_start_ms"><code class="docutils literal notranslate"><span class="pre">Task.est_wait_to_start_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.execution"><code class="docutils literal notranslate"><span class="pre">Task.execution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.execution_tasks"><code class="docutils literal notranslate"><span class="pre">Task.execution_tasks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.expected_duration_ms"><code class="docutils literal notranslate"><span class="pre">Task.expected_duration_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.finish_time"><code class="docutils literal notranslate"><span class="pre">Task.finish_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.generate_task"><code class="docutils literal notranslate"><span class="pre">Task.generate_task</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.generated_by"><code class="docutils literal notranslate"><span class="pre">Task.generated_by</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_execution"><code class="docutils literal notranslate"><span class="pre">Task.get_execution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_execution_or_self"><code class="docutils literal notranslate"><span class="pre">Task.get_execution_or_self()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_execution_tasks"><code class="docutils literal notranslate"><span class="pre">Task.get_execution_tasks()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_manifest"><code class="docutils literal notranslate"><span class="pre">Task.get_manifest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_num_of_tests"><code class="docutils literal notranslate"><span class="pre">Task.get_num_of_tests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_oom_pids"><code class="docutils literal notranslate"><span class="pre">Task.get_oom_pids()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_project_identifier"><code class="docutils literal notranslate"><span class="pre">Task.get_project_identifier()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_status_score"><code class="docutils literal notranslate"><span class="pre">Task.get_status_score()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_task_annotation"><code class="docutils literal notranslate"><span class="pre">Task.get_task_annotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.get_tests"><code class="docutils literal notranslate"><span class="pre">Task.get_tests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.has_oom"><code class="docutils literal notranslate"><span class="pre">Task.has_oom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.host_id"><code class="docutils literal notranslate"><span class="pre">Task.host_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.ingest_time"><code class="docutils literal notranslate"><span class="pre">Task.ingest_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_active"><code class="docutils literal notranslate"><span class="pre">Task.is_active()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_completed"><code class="docutils literal notranslate"><span class="pre">Task.is_completed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_setup_failure"><code class="docutils literal notranslate"><span class="pre">Task.is_setup_failure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_success"><code class="docutils literal notranslate"><span class="pre">Task.is_success()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_system_failure"><code class="docutils literal notranslate"><span class="pre">Task.is_system_failure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_test_failure"><code class="docutils literal notranslate"><span class="pre">Task.is_test_failure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_timeout"><code class="docutils literal notranslate"><span class="pre">Task.is_timeout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.is_undispatched"><code class="docutils literal notranslate"><span class="pre">Task.is_undispatched()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.log_map"><code class="docutils literal notranslate"><span class="pre">Task.log_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.mainline"><code class="docutils literal notranslate"><span class="pre">Task.mainline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.order"><code class="docutils literal notranslate"><span class="pre">Task.order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.parent_task_id"><code class="docutils literal notranslate"><span class="pre">Task.parent_task_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.priority"><code class="docutils literal notranslate"><span class="pre">Task.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.project_id"><code class="docutils literal notranslate"><span class="pre">Task.project_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.project_identifier"><code class="docutils literal notranslate"><span class="pre">Task.project_identifier</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.restarts"><code class="docutils literal notranslate"><span class="pre">Task.restarts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.retrieve_log"><code class="docutils literal notranslate"><span class="pre">Task.retrieve_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.revision"><code class="docutils literal notranslate"><span class="pre">Task.revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.scheduled_time"><code class="docutils literal notranslate"><span class="pre">Task.scheduled_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.start_time"><code class="docutils literal notranslate"><span class="pre">Task.start_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.status"><code class="docutils literal notranslate"><span class="pre">Task.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.status_details"><code class="docutils literal notranslate"><span class="pre">Task.status_details</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.stream_log"><code class="docutils literal notranslate"><span class="pre">Task.stream_log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.task_group"><code class="docutils literal notranslate"><span class="pre">Task.task_group</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.task_group_max_hosts"><code class="docutils literal notranslate"><span class="pre">Task.task_group_max_hosts</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.task_id"><code class="docutils literal notranslate"><span class="pre">Task.task_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.time_taken_ms"><code class="docutils literal notranslate"><span class="pre">Task.time_taken_ms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.version_id"><code class="docutils literal notranslate"><span class="pre">Task.version_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.wait_time"><code class="docutils literal notranslate"><span class="pre">Task.wait_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task.Task.wait_time_once_unblocked"><code class="docutils literal notranslate"><span class="pre">Task.wait_time_once_unblocked()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.task_annotations">evergreen.task_annotations module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.IssueLink"><code class="docutils literal notranslate"><span class="pre">IssueLink</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.IssueLink.issue_key"><code class="docutils literal notranslate"><span class="pre">IssueLink.issue_key</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.IssueLink.source"><code class="docutils literal notranslate"><span class="pre">IssueLink.source</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.IssueLink.url"><code class="docutils literal notranslate"><span class="pre">IssueLink.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.MetadataLink"><code class="docutils literal notranslate"><span class="pre">MetadataLink</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.MetadataLink.source"><code class="docutils literal notranslate"><span class="pre">MetadataLink.source</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.MetadataLink.text"><code class="docutils literal notranslate"><span class="pre">MetadataLink.text</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.MetadataLink.url"><code class="docutils literal notranslate"><span class="pre">MetadataLink.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Note"><code class="docutils literal notranslate"><span class="pre">Note</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Note.message"><code class="docutils literal notranslate"><span class="pre">Note.message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Note.source"><code class="docutils literal notranslate"><span class="pre">Note.source</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Source"><code class="docutils literal notranslate"><span class="pre">Source</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Source.author"><code class="docutils literal notranslate"><span class="pre">Source.author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Source.requester"><code class="docutils literal notranslate"><span class="pre">Source.requester</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.Source.time"><code class="docutils literal notranslate"><span class="pre">Source.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.issues"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.issues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.metadata"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.metadata_links"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.metadata_links</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.note"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.note</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.suspected_issues"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.suspected_issues</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.task_execution"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.task_execution</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_annotations.TaskAnnotation.task_id"><code class="docutils literal notranslate"><span class="pre">TaskAnnotation.task_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.task_reliability">evergreen.task_reliability module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability"><code class="docutils literal notranslate"><span class="pre">TaskReliability</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.avg_duration_pass"><code class="docutils literal notranslate"><span class="pre">TaskReliability.avg_duration_pass</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.distro"><code class="docutils literal notranslate"><span class="pre">TaskReliability.distro</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_failed"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_failed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_setup_failed"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_setup_failed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_success"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_success</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_system_failed"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_system_failed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_test_failed"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_test_failed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_timeout"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.num_total"><code class="docutils literal notranslate"><span class="pre">TaskReliability.num_total</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.success_rate"><code class="docutils literal notranslate"><span class="pre">TaskReliability.success_rate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.task_name"><code class="docutils literal notranslate"><span class="pre">TaskReliability.task_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.test_file"><code class="docutils literal notranslate"><span class="pre">TaskReliability.test_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.task_reliability.TaskReliability.variant"><code class="docutils literal notranslate"><span class="pre">TaskReliability.variant</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.tst">evergreen.tst module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs"><code class="docutils literal notranslate"><span class="pre">Logs</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.line_num"><code class="docutils literal notranslate"><span class="pre">Logs.line_num</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.log_id"><code class="docutils literal notranslate"><span class="pre">Logs.log_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.stream"><code class="docutils literal notranslate"><span class="pre">Logs.stream()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.url"><code class="docutils literal notranslate"><span class="pre">Logs.url</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.url_lobster"><code class="docutils literal notranslate"><span class="pre">Logs.url_lobster</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.url_parsley"><code class="docutils literal notranslate"><span class="pre">Logs.url_parsley</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Logs.url_raw"><code class="docutils literal notranslate"><span class="pre">Logs.url_raw</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst"><code class="docutils literal notranslate"><span class="pre">Tst</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.end_time"><code class="docutils literal notranslate"><span class="pre">Tst.end_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.exit_code"><code class="docutils literal notranslate"><span class="pre">Tst.exit_code</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.logs"><code class="docutils literal notranslate"><span class="pre">Tst.logs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.start_time"><code class="docutils literal notranslate"><span class="pre">Tst.start_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.status"><code class="docutils literal notranslate"><span class="pre">Tst.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.task_id"><code class="docutils literal notranslate"><span class="pre">Tst.task_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.tst.Tst.test_file"><code class="docutils literal notranslate"><span class="pre">Tst.test_file</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.users_for_role">evergreen.users_for_role module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.users_for_role.UsersForRole"><code class="docutils literal notranslate"><span class="pre">UsersForRole</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.users_for_role.UsersForRole.users"><code class="docutils literal notranslate"><span class="pre">UsersForRole.users</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.util">evergreen.util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.evergreen_input_to_output"><code class="docutils literal notranslate"><span class="pre">evergreen_input_to_output()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.format_evergreen_date"><code class="docutils literal notranslate"><span class="pre">format_evergreen_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.format_evergreen_datetime"><code class="docutils literal notranslate"><span class="pre">format_evergreen_datetime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.iterate_by_time_window"><code class="docutils literal notranslate"><span class="pre">iterate_by_time_window()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.parse_evergreen_date"><code class="docutils literal notranslate"><span class="pre">parse_evergreen_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.parse_evergreen_datetime"><code class="docutils literal notranslate"><span class="pre">parse_evergreen_datetime()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.util.parse_evergreen_short_datetime"><code class="docutils literal notranslate"><span class="pre">parse_evergreen_short_datetime()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.version">evergreen.version module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.version.BuildVariantStatus"><code class="docutils literal notranslate"><span class="pre">BuildVariantStatus</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.BuildVariantStatus.build_id"><code class="docutils literal notranslate"><span class="pre">BuildVariantStatus.build_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.BuildVariantStatus.build_variant"><code class="docutils literal notranslate"><span class="pre">BuildVariantStatus.build_variant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.BuildVariantStatus.get_build"><code class="docutils literal notranslate"><span class="pre">BuildVariantStatus.get_build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersionRow"><code class="docutils literal notranslate"><span class="pre">RecentVersionRow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersionRow.build_variant"><code class="docutils literal notranslate"><span class="pre">RecentVersionRow.build_variant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersionRow.builds"><code class="docutils literal notranslate"><span class="pre">RecentVersionRow.builds</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersions"><code class="docutils literal notranslate"><span class="pre">RecentVersions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersions.build_variants"><code class="docutils literal notranslate"><span class="pre">RecentVersions.build_variants</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersions.row_map"><code class="docutils literal notranslate"><span class="pre">RecentVersions.row_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersions.rows"><code class="docutils literal notranslate"><span class="pre">RecentVersions.rows</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.RecentVersions.versions"><code class="docutils literal notranslate"><span class="pre">RecentVersions.versions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.version.Requester"><code class="docutils literal notranslate"><span class="pre">Requester</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.AD_HOC"><code class="docutils literal notranslate"><span class="pre">Requester.AD_HOC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.GITHUB_PULL_REQUEST"><code class="docutils literal notranslate"><span class="pre">Requester.GITHUB_PULL_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.GITTER_REQUEST"><code class="docutils literal notranslate"><span class="pre">Requester.GITTER_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.MERGE_TEST"><code class="docutils literal notranslate"><span class="pre">Requester.MERGE_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.PATCH_REQUEST"><code class="docutils literal notranslate"><span class="pre">Requester.PATCH_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.TRIGGER_REQUEST"><code class="docutils literal notranslate"><span class="pre">Requester.TRIGGER_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.UNKNOWN"><code class="docutils literal notranslate"><span class="pre">Requester.UNKNOWN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.evg_value"><code class="docutils literal notranslate"><span class="pre">Requester.evg_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Requester.stats_value"><code class="docutils literal notranslate"><span class="pre">Requester.stats_value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.version.Version"><code class="docutils literal notranslate"><span class="pre">Version</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.aborted"><code class="docutils literal notranslate"><span class="pre">Version.aborted</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.author"><code class="docutils literal notranslate"><span class="pre">Version.author</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.author_email"><code class="docutils literal notranslate"><span class="pre">Version.author_email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.branch"><code class="docutils literal notranslate"><span class="pre">Version.branch</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.build_by_variant"><code class="docutils literal notranslate"><span class="pre">Version.build_by_variant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.build_variants_status"><code class="docutils literal notranslate"><span class="pre">Version.build_variants_status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.create_time"><code class="docutils literal notranslate"><span class="pre">Version.create_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.errors"><code class="docutils literal notranslate"><span class="pre">Version.errors</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.finish_time"><code class="docutils literal notranslate"><span class="pre">Version.finish_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.get_builds"><code class="docutils literal notranslate"><span class="pre">Version.get_builds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.get_manifest"><code class="docutils literal notranslate"><span class="pre">Version.get_manifest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.get_metrics"><code class="docutils literal notranslate"><span class="pre">Version.get_metrics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.get_modules"><code class="docutils literal notranslate"><span class="pre">Version.get_modules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.get_patch"><code class="docutils literal notranslate"><span class="pre">Version.get_patch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.ignored"><code class="docutils literal notranslate"><span class="pre">Version.ignored</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.is_completed"><code class="docutils literal notranslate"><span class="pre">Version.is_completed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.is_patch"><code class="docutils literal notranslate"><span class="pre">Version.is_patch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.message"><code class="docutils literal notranslate"><span class="pre">Version.message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.order"><code class="docutils literal notranslate"><span class="pre">Version.order</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.parameters"><code class="docutils literal notranslate"><span class="pre">Version.parameters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.project"><code class="docutils literal notranslate"><span class="pre">Version.project</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.project_identifier"><code class="docutils literal notranslate"><span class="pre">Version.project_identifier</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.repo"><code class="docutils literal notranslate"><span class="pre">Version.repo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.requester"><code class="docutils literal notranslate"><span class="pre">Version.requester</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.revision"><code class="docutils literal notranslate"><span class="pre">Version.revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.start_time"><code class="docutils literal notranslate"><span class="pre">Version.start_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.status"><code class="docutils literal notranslate"><span class="pre">Version.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.version_id"><code class="docutils literal notranslate"><span class="pre">Version.version_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.version.Version.warnings"><code class="docutils literal notranslate"><span class="pre">Version.warnings</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -123,19 +872,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

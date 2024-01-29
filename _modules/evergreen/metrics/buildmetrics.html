@@ -1,17 +1,19 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.metrics.buildmetrics &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <title>evergreen.metrics.buildmetrics &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/readable.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -64,10 +66,10 @@
 
 
 <div class="viewcode-block" id="BuildMetrics"><a class="viewcode-back" href="../../../evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics">[docs]</a><span class="k">class</span> <span class="nc">BuildMetrics</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Metrics about an evergreen build.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Metrics about an evergreen build.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build</span><span class="p">:</span> <span class="s2">&quot;Build&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of build metrics.</span>
 
 <span class="sd">        :param build: Build to analyze.</span>
@@ -97,7 +99,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_display_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BuildMetrics.calculate"><a class="viewcode-back" href="../../../evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMetrics&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate metrics for the given build.</span>
 
 <span class="sd">        :param task_filter_fn: function to filter tasks included for metrics, should accept a task</span>
@@ -121,7 +123,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the total tasks in the build.</span>
 
 <span class="sd">        :return: total tasks.</span>
@@ -130,7 +132,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_tasks_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of successful tasks.</span>
 
 <span class="sd">        :return: Percentage of successful tasks.</span>
@@ -139,7 +141,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_tasks_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of undispatched tasks.</span>
 
 <span class="sd">        :return: Percentage of undispatched tasks.</span>
@@ -148,7 +150,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_tasks_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of failed tasks.</span>
 
 <span class="sd">        :return: Percentage of failed tasks.</span>
@@ -157,7 +159,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_tasks_timed_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of timeout tasks.</span>
 
 <span class="sd">        :return: Percentage of timeout tasks.</span>
@@ -166,7 +168,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_tasks_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of system failure tasks.</span>
 
 <span class="sd">        :return: Percentage of system failure tasks.</span>
@@ -175,7 +177,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the total display tasks in the build.</span>
 
 <span class="sd">        :return: total display tasks.</span>
@@ -188,7 +190,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_display_tasks_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of successful display tasks.</span>
 
 <span class="sd">        :return: Percentage of successful display tasks.</span>
@@ -197,7 +199,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_display_tasks_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of undispatched display_tasks.</span>
 
 <span class="sd">        :return: Percentage of undispatched display_tasks.</span>
@@ -206,7 +208,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_display_tasks_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of failed display tasks.</span>
 
 <span class="sd">        :return: Percentage of failed display tasks.</span>
@@ -215,7 +217,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_display_tasks_timed_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of timeout display tasks.</span>
 
 <span class="sd">        :return: Percentage of timeout display tasks.</span>
@@ -224,7 +226,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">pct_display_tasks_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of system failure display tasks.</span>
 
 <span class="sd">        :return: Percentage of system failure display tasks.</span>
@@ -233,7 +235,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">create_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time the first task of the build was created.</span>
 
 <span class="sd">        :return: Time first task was created.</span>
@@ -244,7 +246,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time first task of build was started.</span>
 
 <span class="sd">        :return: Time first task was started.</span>
@@ -255,7 +257,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time last task of build was completed.</span>
 
 <span class="sd">        :return: Time last task was completed.</span>
@@ -266,7 +268,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">makespan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wall clock duration of build.</span>
 
 <span class="sd">        :return: Timedelta duration of build.</span>
@@ -277,7 +279,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wall clock duration until build was started.</span>
 
 <span class="sd">        :return: Timedelta duration until build was started.</span>
@@ -287,7 +289,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the percent of n_tasks out of total.</span>
 
 <span class="sd">        :param n_tasks: Number of tasks to calculate percent of.</span>
@@ -298,7 +300,7 @@
         <span class="k">return</span> <span class="n">n_tasks</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_tasks</span>
 
     <span class="k">def</span> <span class="nf">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the percent of display n_tasks out of display total.</span>
 
 <span class="sd">        :param n_tasks: Number of display tasks to calculate percent of.</span>
@@ -309,7 +311,7 @@
         <span class="k">return</span> <span class="n">n_tasks</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_display_tasks</span>
 
     <span class="k">def</span> <span class="nf">_count_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="s2">&quot;Task&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add stats for the given task to the metrics.</span>
 
 <span class="sd">        :param task: Task to add.</span>
@@ -382,7 +384,7 @@
                 <span class="k">continue</span>
 
 <div class="viewcode-block" id="BuildMetrics.as_dict"><a class="viewcode-back" href="../../../evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.as_dict">[docs]</a>    <span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_children</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Provide a dictionary representation.</span>
 
 <span class="sd">        :param include_children: Include child tasks in dictionary.</span>
@@ -421,22 +423,22 @@
         <span class="k">return</span> <span class="n">metric</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create string version of metrics.</span>
 
 <span class="sd">        :return: String version of the metrics.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;Build Id: </span><span class="si">{build_id}</span><span class="s2"></span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;Build Id: </span><span class="si">{build_id}</span>
 <span class="s2">        Total Processing Time: </span><span class="si">{total_processing_time:.2f}</span><span class="s2">s (</span><span class="si">{total_processing_time_min:.2f}</span><span class="s2">m)</span>
 <span class="s2">        Makespan: </span><span class="si">{makespan:.2f}</span><span class="s2">s (</span><span class="si">{makespan_min:.2f}</span><span class="s2">m)</span>
 <span class="s2">        Wait Time: </span><span class="si">{waittime:.2f}</span><span class="s2">s (</span><span class="si">{waittime_min:.2f}</span><span class="s2">m)</span>
-<span class="s2">        Total Tasks: </span><span class="si">{total_tasks}</span><span class="s2"></span>
+<span class="s2">        Total Tasks: </span><span class="si">{total_tasks}</span>
 <span class="s2">        Successful Tasks: </span><span class="si">{success_count}</span><span class="s2"> (</span><span class="si">{success_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        Undispatched Tasks: </span><span class="si">{undispatched_count}</span><span class="s2"> (</span><span class="si">{undispatched_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        Failed Tasks: </span><span class="si">{failed_count}</span><span class="s2"> (</span><span class="si">{failed_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        Timeout Tasks: </span><span class="si">{timeout_count}</span><span class="s2"> (</span><span class="si">{timeout_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        System Failure Tasks: </span><span class="si">{system_failure_count}</span><span class="s2"> (</span><span class="si">{system_failure_pct:.2%}</span><span class="s2">)</span>
-<span class="s2">        Total Display Tasks: </span><span class="si">{total_display_tasks}</span><span class="s2"></span>
+<span class="s2">        Total Display Tasks: </span><span class="si">{total_display_tasks}</span>
 <span class="s2">        Successful Display Tasks: </span><span class="si">{success_display_count}</span><span class="s2"> (</span><span class="si">{success_display_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        Undispatched Display Tasks: </span><span class="si">{undispatched_display_count}</span><span class="s2"> (</span><span class="si">{undispatched_display_pct:.2%}</span><span class="s2">)</span>
 <span class="s2">        Failed Display Tasks: </span><span class="si">{failed_display_count}</span><span class="s2"> (</span><span class="si">{failed_display_pct:.2%}</span><span class="s2">)</span>
@@ -491,19 +493,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>

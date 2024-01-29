@@ -1,17 +1,19 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.19 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/readable.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <title>evergreen.api &#8212; evergreen.py 3.6.20 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -114,7 +116,7 @@
 
 
 <div class="viewcode-block" id="EvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">EvergreenApi</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base methods for building API objects.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base methods for building API objects.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -125,7 +127,7 @@
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">use_default_logger_factory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a _BaseEvergreenApi object.</span>
 
 <span class="sd">        :param api_server: URI of Evergreen API server.</span>
@@ -146,7 +148,7 @@
 
 <div class="viewcode-block" id="EvergreenApi.with_session"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.with_session">[docs]</a>    <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">with_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="s2">&quot;EvergreenApi&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Yield an instance of the API client with a shared session.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield an instance of the API client with a shared session.&quot;&quot;&quot;</span>
         <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_session</span><span class="p">()</span>
         <span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span>
@@ -155,7 +157,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the shared session if it exists, else create a new session.</span>
 
 <span class="sd">        :return: Session to query the API with.</span>
@@ -166,7 +168,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_session</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Create a new session to query the API with.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new session to query the API with.&quot;&quot;&quot;</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
         <span class="n">adapter</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="p">()</span>
         <span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://&quot;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
@@ -176,7 +178,7 @@
         <span class="k">return</span> <span class="n">session</span>
 
     <span class="k">def</span> <span class="nf">_create_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Format a call to a v2 REST API endpoint.</span>
 
 <span class="sd">        :param endpoint: endpoint to call.</span>
@@ -185,7 +187,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/rest/v2</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">_create_plugin_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Format the a call to a plugin endpoint.</span>
 
 <span class="sd">        :param endpoint: endpoint to call.</span>
@@ -195,7 +197,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_log_api_call_time</span><span class="p">(</span><span class="n">response</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Log how long the api call took.</span>
 
 <span class="sd">        :param response: Response from API.</span>
@@ -208,9 +210,13 @@
             <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Request completed.&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">duration</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_call_api</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make a call to the evergreen api.</span>
 
 <span class="sd">        :param url: Url of call to make.</span>
@@ -253,7 +259,7 @@
         <span class="n">chunk_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">is_binary</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make a streaming call based on if artifact is binary or nonbinary.</span>
 
 <span class="sd">        :param url: url to call</span>
@@ -275,7 +281,7 @@
                     <span class="k">yield</span> <span class="n">line</span>
 
     <span class="k">def</span> <span class="nf">_raise_for_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Raise an exception with the evergreen message if it exists.</span>
 
 <span class="sd">        :param response: response from evergreen api.</span>
@@ -299,9 +305,9 @@
         <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_paginate</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Paginate until all results are returned and return a list of all JSON results.</span>
 
 <span class="sd">        :param url: url to make request to.</span>
@@ -319,8 +325,8 @@
 
         <span class="k">return</span> <span class="n">json_data</span>
 
-    <span class="k">def</span> <span class="nf">_lazy_paginate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_lazy_paginate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Lazy paginate, the results are returned lazily.</span>
 
 <span class="sd">        :param url: URL to query.</span>
@@ -345,8 +351,8 @@
 
             <span class="n">next_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">][</span><span class="s2">&quot;url&quot;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">_lazy_paginate_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">_lazy_paginate_by_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Paginate based on date, the results are returned lazily.</span>
 
 <span class="sd">        :param url: URL to query.</span>
@@ -367,7 +373,7 @@
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evergreen_input_to_output</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;create_time&quot;</span><span class="p">])</span>
 
 <div class="viewcode-block" id="EvergreenApi.all_distros"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_distros">[docs]</a>    <span class="k">def</span> <span class="nf">all_distros</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Distro</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all distros in evergreen.</span>
 
 <span class="sd">        :return: List of all distros in evergreen.</span>
@@ -377,7 +383,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">Distro</span><span class="p">(</span><span class="n">distro</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">distro</span> <span class="ow">in</span> <span class="n">distro_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.all_hosts"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_hosts">[docs]</a>    <span class="k">def</span> <span class="nf">all_hosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Host</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all hosts in evergreen.</span>
 
 <span class="sd">        :param status: Only return hosts with specified status.</span>
@@ -392,7 +398,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">Host</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">host_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.host_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.host_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">host_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Host</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get evergreen host by id.</span>
 
 <span class="sd">        :param host_id: host ids, &#39;i-000cba730e92eb85b&#39;</span>
@@ -404,7 +410,7 @@
 <div class="viewcode-block" id="EvergreenApi.configure_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.configure_task">[docs]</a>    <span class="k">def</span> <span class="nf">configure_task</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">activated</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update a task.</span>
 
 <span class="sd">        :param task_id: Id of the task to update</span>
@@ -420,7 +426,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.restart_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.restart_task">[docs]</a>    <span class="k">def</span> <span class="nf">restart_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Restart a task.</span>
 
 <span class="sd">        :param task_id: Id of the task to restart</span>
@@ -429,7 +435,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.abort_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.abort_task">[docs]</a>    <span class="k">def</span> <span class="nf">abort_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Abort a task.</span>
 
 <span class="sd">        :param task_id: Id of the task to abort</span>
@@ -438,7 +444,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.all_projects"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_projects">[docs]</a>    <span class="k">def</span> <span class="nf">all_projects</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Project</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all projects in evergreen.</span>
 
 <span class="sd">        :param project_filter_fn: function to filter projects, should accept a project_id argument.</span>
@@ -452,7 +458,7 @@
         <span class="k">return</span> <span class="n">projects</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.project_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.project_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">project_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Project</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a project by project_id.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -464,7 +470,7 @@
 <div class="viewcode-block" id="EvergreenApi.recent_versions_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.recent_versions_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">recent_versions_by_project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RecentVersions</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get recent versions created in specified project.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -478,7 +484,7 @@
 <div class="viewcode-block" id="EvergreenApi.send_slack_message"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.send_slack_message">[docs]</a>    <span class="k">def</span> <span class="nf">send_slack_message</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attachments</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SlackAttachment</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Send a Slack message to a user or channel in Slack.</span>
 
 <span class="sd">        :param target: The slack name of the user or channel to send the message to.</span>
@@ -507,7 +513,7 @@
         <span class="n">is_plain_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Send an email to a user.</span>
 
 <span class="sd">        :param recipients: Who to send the email to.</span>
@@ -538,7 +544,7 @@
 <div class="viewcode-block" id="EvergreenApi.alias_for_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.alias_for_version">[docs]</a>    <span class="k">def</span> <span class="nf">alias_for_version</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_deps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">VariantAlias</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the tasks and variants that an alias would select for an evergreen version.</span>
 
 <span class="sd">        :param version_id: Evergreen version to query against.</span>
@@ -563,7 +569,7 @@
         <span class="n">revision_start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">revision_end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the versions created in the specified project.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -595,7 +601,7 @@
         <span class="n">requester</span><span class="p">:</span> <span class="n">Requester</span> <span class="o">=</span> <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span><span class="p">,</span>
         <span class="n">time_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;create_time&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get an iterator over the patches for the given time window.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -609,8 +615,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">versions_by_project</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">requester</span><span class="p">),</span> <span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">,</span> <span class="n">time_attr</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.patches_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patches_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">patches_by_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EvergreenApi.patches_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patches_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">patches_by_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a list of patches for the specified project.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -624,7 +630,7 @@
 <div class="viewcode-block" id="EvergreenApi.update_patch_status"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.update_patch_status">[docs]</a>    <span class="k">def</span> <span class="nf">update_patch_status</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">activated</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update a patch and set its status.</span>
 
 <span class="sd">        :param patch_id: Id of the patch to update</span>
@@ -645,7 +651,7 @@
         <span class="n">variants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]],</span>
         <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update a patch.</span>
 
 <span class="sd">        :param patch_id: Id of the patch to update</span>
@@ -668,10 +674,10 @@
         <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">before</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
         <span class="n">after</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">time_attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;create_time&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get an iterator over the patches for the given time window.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -688,7 +694,7 @@
 <div class="viewcode-block" id="EvergreenApi.patches_by_user"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patches_by_user">[docs]</a>    <span class="k">def</span> <span class="nf">patches_by_user</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Patch</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get an iterable of recent patches by the given user.</span>
 
 <span class="sd">        :param user_id: Id of user to query.</span>
@@ -704,7 +710,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">Patch</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">patch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazy_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.commit_queue_for_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.commit_queue_for_project">[docs]</a>    <span class="k">def</span> <span class="nf">commit_queue_for_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommitQueue</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the current commit queue for the specified project.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -727,7 +733,7 @@
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TestStats</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a patch by patch id.</span>
 
 <span class="sd">        :param project_id: Id of patch to query for.</span>
@@ -768,7 +774,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">TestStats</span><span class="p">(</span><span class="n">test_stat</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test_stat</span> <span class="ow">in</span> <span class="n">test_stats_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.tasks_by_project"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tasks_by_project">[docs]</a>    <span class="k">def</span> <span class="nf">tasks_by_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all the tasks for a project.</span>
 
 <span class="sd">        :param project_id: The project&#39;s id.</span>
@@ -782,7 +788,7 @@
 <div class="viewcode-block" id="EvergreenApi.tasks_by_project_and_commit"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_commit">[docs]</a>    <span class="k">def</span> <span class="nf">tasks_by_project_and_commit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">commit_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all the tasks for a revision in specified project.</span>
 
 <span class="sd">        :param project_id: Project id associated with the revision</span>
@@ -801,7 +807,7 @@
         <span class="n">num_versions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">start_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all the tasks for a project by task name.</span>
 
 <span class="sd">        :param project_id: Id of project to query.</span>
@@ -835,7 +841,7 @@
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskStats</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get task stats by project id.</span>
 
 <span class="sd">        :param project_id: Id of patch to query for.</span>
@@ -885,7 +891,7 @@
         <span class="n">group_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskReliability</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get task reliability scores.</span>
 
 <span class="sd">        :param project_id: Id of patch to query for.</span>
@@ -927,7 +933,7 @@
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.build_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.build_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Build</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a build by id.</span>
 
 <span class="sd">        :param build_id: build id to query.</span>
@@ -939,7 +945,7 @@
 <div class="viewcode-block" id="EvergreenApi.tasks_by_build"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tasks_by_build">[docs]</a>    <span class="k">def</span> <span class="nf">tasks_by_build</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all tasks for a given build.</span>
 
 <span class="sd">        :param build_id: build_id to query.</span>
@@ -955,7 +961,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">Task</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">task_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.version_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.version_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">version_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get version by version id.</span>
 
 <span class="sd">        :param version_id: Id of version to query.</span>
@@ -965,7 +971,7 @@
         <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.builds_by_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.builds_by_version">[docs]</a>    <span class="k">def</span> <span class="nf">builds_by_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Build</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all builds for a given Evergreen version_id.</span>
 
 <span class="sd">        :param version_id: Version Id to query for.</span>
@@ -976,8 +982,8 @@
         <span class="n">build_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Build</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">build_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.patch_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patch_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">patch_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Patch</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EvergreenApi.patch_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.patch_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">patch_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Patch</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a patch by patch id.</span>
 
 <span class="sd">        :param patch_id: Id of patch to query for.</span>
@@ -988,7 +994,7 @@
         <span class="k">return</span> <span class="n">Patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.get_patch_diff"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_patch_diff">[docs]</a>    <span class="k">def</span> <span class="nf">get_patch_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the diff for a given patch.</span>
 
 <span class="sd">        :param patch_id: The id of the patch to request the diff for.</span>
@@ -1000,7 +1006,7 @@
     <span class="k">def</span> <span class="nf">_execute_patch_file_command</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchCreationDetails</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a patch file command.</span>
 
 <span class="sd">        :param command: The command</span>
@@ -1035,7 +1041,7 @@
         <span class="n">variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchCreationDetails</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start a patch build based on a patch.</span>
 
 <span class="sd">        :param diff_file_path: The path to the diff.</span>
@@ -1063,7 +1069,7 @@
         <span class="n">variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchCreationDetails</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start a patch build based on a diff.</span>
 
 <span class="sd">        :param patch_id: The patch_id to base this build on.</span>
@@ -1087,7 +1093,7 @@
         <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a task by task_id.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1106,7 +1112,7 @@
 <div class="viewcode-block" id="EvergreenApi.tests_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.tests_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">tests_by_task</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tst</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all tests for a given task.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1123,7 +1129,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">Tst</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.single_test_by_task_and_test_file"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.single_test_by_task_and_test_file">[docs]</a>    <span class="k">def</span> <span class="nf">single_test_by_task_and_test_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">test_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tst</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a test for a given task.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1135,7 +1141,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">Tst</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">param</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.num_of_tests_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.num_of_tests_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">num_of_tests_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the number of tests that ran as part of the given task.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1145,7 +1151,7 @@
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.manifest_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">manifest_for_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Manifest</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the manifest for the given task.</span>
 
 <span class="sd">        :param task_id: Task Id fo query.</span>
@@ -1168,7 +1174,7 @@
         <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskAnnotation</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the task annotations for the given task.</span>
 
 <span class="sd">        :param task_id: Id of task to query.</span>
@@ -1194,7 +1200,7 @@
 <div class="viewcode-block" id="EvergreenApi.file_ticket_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.file_ticket_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">file_ticket_for_task</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ticket_link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ticket_key</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Update an Evergreen task with information about a ticket created from it.</span>
 
 <span class="sd">        :param task_id: The id of the task to update.</span>
@@ -1219,7 +1225,7 @@
         <span class="n">metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">metadata_links</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">MetadataLinkRequest</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Annotate the specified task.</span>
 
 <span class="sd">        :param task_id: ID of task to annotate.</span>
@@ -1256,7 +1262,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">request</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.performance_results_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">performance_results_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PerformanceData</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the &#39;perf.json&#39; performance results for a given task_id.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1268,7 +1274,7 @@
 <div class="viewcode-block" id="EvergreenApi.performance_results_by_task_name"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task_name">[docs]</a>    <span class="k">def</span> <span class="nf">performance_results_by_task_name</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">PerformanceData</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the &#39;perf.json&#39; performance results for a given task_id and task_name.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1279,7 +1285,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">PerformanceData</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.json_by_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.json_by_task">[docs]</a>    <span class="k">def</span> <span class="nf">json_by_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">json_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the json reported for task {task_id} using the key {json_key}.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1292,7 +1298,7 @@
 <div class="viewcode-block" id="EvergreenApi.json_history_for_task"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.json_history_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">json_history_for_task</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">json_key</span><span class="p">:</span> <span class="nb">str</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the history of json reported for task {task_id} using the key {json_key}.</span>
 
 <span class="sd">        :param task_id: Id of task to query for.</span>
@@ -1304,7 +1310,7 @@
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">))</span></div>
 
     <span class="k">def</span> <span class="nf">_create_old_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build a url for an pre-v2 endpoint.</span>
 
 <span class="sd">        :param endpoint: endpoint to build url for.</span>
@@ -1313,7 +1319,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="EvergreenApi.manifest"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.manifest">[docs]</a>    <span class="k">def</span> <span class="nf">manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Manifest</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the manifest for the given revision.</span>
 
 <span class="sd">        :param project_id: Project the revision belongs to.</span>
@@ -1324,7 +1330,7 @@
         <span class="k">return</span> <span class="n">Manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.retrieve_task_log"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.retrieve_task_log">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_task_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the request log file from a task.</span>
 
 <span class="sd">        :param log_url: URL of log to retrieve.</span>
@@ -1337,7 +1343,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">log_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">text</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.stream_log"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.stream_log">[docs]</a>    <span class="k">def</span> <span class="nf">stream_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stream the given log url as a python generator.</span>
 
 <span class="sd">        :param log_url: URL of log file to stream.</span>
@@ -1347,7 +1353,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_api</span><span class="p">(</span><span class="n">log_url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.permissions_for_user"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.permissions_for_user">[docs]</a>    <span class="k">def</span> <span class="nf">permissions_for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ResourceTypePermissions</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the permissions a user has on evergreen resources.</span>
 
 <span class="sd">        :param user_id: Id of the user whose permissions to get.</span>
@@ -1364,7 +1370,7 @@
         <span class="n">resources</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">permissions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Grant a user permissions to evergreen resources.</span>
 
 <span class="sd">        :param user_id: Id of the user to give permissions to.</span>
@@ -1382,7 +1388,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.give_roles_to_user"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.give_roles_to_user">[docs]</a>    <span class="k">def</span> <span class="nf">give_roles_to_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">roles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">create_user</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add the specified role to the specified user.</span>
 
 <span class="sd">        :param user_id: Id of the user to give the roles to.</span>
@@ -1400,7 +1406,7 @@
 <div class="viewcode-block" id="EvergreenApi.delete_user_permissions"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.delete_user_permissions">[docs]</a>    <span class="k">def</span> <span class="nf">delete_user_permissions</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">:</span> <span class="n">RemovablePermission</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Delete all permissions of a given type for a user.</span>
 
 <span class="sd">        :param user_id: Id of the user whose permissions to remove.</span>
@@ -1415,7 +1421,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.get_users_for_role"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_users_for_role">[docs]</a>    <span class="k">def</span> <span class="nf">get_users_for_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UsersForRole</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a list of users having an evergreen role.</span>
 
 <span class="sd">        :param role: Role to fetch users for.</span>
@@ -1426,7 +1432,7 @@
 <div class="viewcode-block" id="EvergreenApi.all_user_permissions_for_resource"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.all_user_permissions_for_resource">[docs]</a>    <span class="k">def</span> <span class="nf">all_user_permissions_for_resource</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">:</span> <span class="n">PermissionableResourceType</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all users with their permissions to the resource.</span>
 
 <span class="sd">        The returned dict has the following structure -</span>
@@ -1462,7 +1468,7 @@
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get an evergreen api instance based on config file settings.</span>
 
 <span class="sd">        :param auth: EvgAuth with authentication to use.</span>
@@ -1511,7 +1517,7 @@
 
 
 <div class="viewcode-block" id="CachedEvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">CachedEvergreenApi</span><span class="p">(</span><span class="n">EvergreenApi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Access to the Evergreen API server that caches certain calls.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Access to the Evergreen API server that caches certain calls.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1520,14 +1526,14 @@
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CachedEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="CachedEvergreenApi.build_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi.build_by_id">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">CACHE_SIZE</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Build</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a build by id.</span>
 
 <span class="sd">        :param build_id: build id to query.</span>
@@ -1537,7 +1543,7 @@
 
 <div class="viewcode-block" id="CachedEvergreenApi.version_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi.version_by_id">[docs]</a>    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">CACHE_SIZE</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">version_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get version by version id.</span>
 
 <span class="sd">        :param version_id: Id of version to query.</span>
@@ -1546,7 +1552,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CachedEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">(</span><span class="n">version_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CachedEvergreenApi.clear_caches"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.CachedEvergreenApi.clear_caches">[docs]</a>    <span class="k">def</span> <span class="nf">clear_caches</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Clear the cache.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the cache.&quot;&quot;&quot;</span>
         <span class="n">cached_functions</span> <span class="o">=</span> <span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">,</span>
@@ -1556,7 +1562,7 @@
 
 
 <div class="viewcode-block" id="RetryingEvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.RetryingEvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">RetryingEvergreenApi</span><span class="p">(</span><span class="n">EvergreenApi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An Evergreen Api that retries failed calls.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An Evergreen Api that retries failed calls.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1565,7 +1571,7 @@
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span>
         <span class="p">)</span>
@@ -1579,9 +1585,13 @@
         <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">def</span> <span class="nf">_call_api</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Call into the evergreen api.</span>
 
 <span class="sd">        :param url: Url to call.</span>
@@ -1609,19 +1619,19 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.5.4.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
   </div>
   
   </body>
