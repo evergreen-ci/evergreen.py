@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "evergreen.py"
-version = "3.6.20"
+version = "3.6.21"
 description = "Python client for the Evergreen API"
 authors = [
-    "Dev Prod DAG <dev-prod-dag@mongodb.com>",
+    "DevProd Services & Integrations Team <devprod-si-team@mongodb.com>",
 ]
 license = "Apache-2.0"
 readme = "README.md"

@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.21 - 2024-01-30
+
+- Updated author information and README on Python version.
+
 ## 3.6.20 - 2024-01-29
 
 - Changed log level to `debug` in `Version` constructor.
