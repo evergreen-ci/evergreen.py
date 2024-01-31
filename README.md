@@ -34,12 +34,11 @@ or on the command line to get data about Evergreen objects quickly and easily.
 
 If you have a question about evergreen.py, please mention @dag-on-call in
 slack channel [#evergreen-users](https://mongodb.slack.com/messages/#evergreen-users/),
-or email us at
-dev-prod-dag@mongodb.com.
+or email us at devprod-si-team@mongodb.com.
 
 ### How can I request a change/report a bug in evergreen.py?
 
-Create a [DAG ticket](https://jira.mongodb.org/projects/DAG).
+Create a [DEVPROD ticket](https://jira.mongodb.org/projects/DEVPROD).
 
 ### What should I include in my ticket or #evergreen-users question?
 
@@ -74,7 +73,7 @@ In code:
 
 ```python
 >> from evergreen.api import EvgAuth, EvergreenApi
->> api = EvergreenApi.get_api(EvgAuth('david.bradford', '***'))
+>> api = EvergreenApi.get_api(EvgAuth('your.username', '***'))
 >> project = api.project_by_id('mongodb-mongo-master')
 >> project.display_name
 'MongoDB (master)'
@@ -109,7 +108,6 @@ $ evg-api --json list-hosts
 ```
 
 The `patch_from_diff` API requires the Evergreen CLI to be installed.
-
 Add the following to the host's DOCKERFILE:
 
 ```bash
@@ -158,10 +156,11 @@ can set up your credentials by following the link [here](https://github.com/ever
 
 ### Linting/formatting
 
-This project uses [black](https://github.com/psf/black) for formatting.
+This project uses [black](https://github.com/psf/black) and [isort](https://pycqa.github.io/isort/) for linting/formatting.
 
 ```bash
 poetry run black src tests
+poetry run isort src tests
 ```
 
 ### Running tests
@@ -197,7 +196,7 @@ $ poetry run pre-commit install
 Before deploying a new version, please update the `CHANGELOG.md` file with a description of what
 is being changed.
 
-Deploys to [PyPi](https://pypi.org/project/evergreen.py/) are done automatically on merges to master.
+Deployment to [PyPi](https://pypi.org/project/evergreen.py/) are done automatically on merges to master.
 In order to avoid overwriting a previous deploy, the version should be updated on all changes. The
 [semver](https://semver.org/) versioning scheme should be used for determining the version number.
 
@@ -210,4 +209,4 @@ Add a PR comment with `evergreen merge` to trigger a merge.
 
 ### Deployment
 
-Deployment to production is automatically triggered on merges to master.
+Deployment to [PyPi](https://pypi.org/project/evergreen.py/) is automatically triggered on merges to master.

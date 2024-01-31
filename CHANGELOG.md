@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.22 - 2024-01-31
+
+- Updated README.
+
 ## 3.6.21 - 2024-01-30
 
 - Updated author information and README on Python version.
