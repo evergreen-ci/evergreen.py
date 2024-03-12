@@ -1511,12 +1511,16 @@ class CachedEvergreenApi(EvergreenApi):
                        fetch_all_executions: Optional[bool] = None
                        ) -> List[Task]:
         """
-        Get version by version id.
+        Get tasks by build.
 
-        :param version_id: Id of version to query.
-        :return: Version queried for.
+        :param build_id: Id of build to query.
+        :param fetch_all_executions: should fetch all executions of the tasks
+        :return: List of the queried tasks.
         """
-        return super(CachedEvergreenApi, self).tasks_by_build(build_id=build_id, fetch_all_executions=fetch_all_executions)
+        return super(CachedEvergreenApi, self).tasks_by_build(
+            build_id=build_id,
+            fetch_all_executions=fetch_all_executions
+        )
 
     def clear_caches(self) -> None:
         """Clear the cache."""
