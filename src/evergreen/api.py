@@ -1506,10 +1506,9 @@ class CachedEvergreenApi(EvergreenApi):
         return super(CachedEvergreenApi, self).version_by_id(version_id)
 
     @lru_cache(maxsize=CACHE_SIZE)
-    def tasks_by_build(self,
-                       build_id: str,
-                       fetch_all_executions: Optional[bool] = None
-                       ) -> List[Task]:
+    def tasks_by_build(
+        self, build_id: str, fetch_all_executions: Optional[bool] = None
+    ) -> List[Task]:
         """
         Get tasks by build.
 
@@ -1518,8 +1517,7 @@ class CachedEvergreenApi(EvergreenApi):
         :return: List of the queried tasks.
         """
         return super(CachedEvergreenApi, self).tasks_by_build(
-            build_id=build_id,
-            fetch_all_executions=fetch_all_executions
+            build_id=build_id, fetch_all_executions=fetch_all_executions
         )
 
     def clear_caches(self) -> None:
