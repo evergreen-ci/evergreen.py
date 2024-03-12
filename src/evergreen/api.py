@@ -1505,11 +1505,25 @@ class CachedEvergreenApi(EvergreenApi):
         """
         return super(CachedEvergreenApi, self).version_by_id(version_id)
 
+    @lru_cache(maxsize=CACHE_SIZE)
+    def tasks_by_build(self,
+                       build_id: str,
+                       fetch_all_executions: Optional[bool] = None
+                       ) -> List[Task]:
+        """
+        Get version by version id.
+
+        :param version_id: Id of version to query.
+        :return: Version queried for.
+        """
+        return super(CachedEvergreenApi, self).tasks_by_build(build_id=build_id, fetch_all_executions=fetch_all_executions)
+
     def clear_caches(self) -> None:
         """Clear the cache."""
         cached_functions = [
             self.build_by_id,
             self.version_by_id,
+            self.tasks_by_build,
         ]
         for fn in cached_functions:
             fn.cache_clear()  # type: ignore[attr-defined]

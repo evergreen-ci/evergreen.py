@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.23 - 2024-03-12
+
+- Added cached support for the tasks_by_build method
+
 ## 3.6.22 - 2024-01-31
 
 - Updated README.
