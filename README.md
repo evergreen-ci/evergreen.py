@@ -204,8 +204,7 @@ The version is found in the `pyproject.toml` file.
 
 ### Code Review
 
-This project uses the [Evergreen Commit Queue](https://github.com/evergreen-ci/evergreen/wiki/Commit-Queue#pr).
-Add a PR comment with `evergreen merge` to trigger a merge.
+This project uses the GitHub merge queue. Click "Merge when ready" as soon as you'd like.
 
 ### Deployment
 
