@@ -98,7 +98,7 @@ class ModuleCodeChanges(_BaseEvergreenObject):
     @property
     def file_diffs(self) -> List[FileDiff]:
         """Retrieve a list of the file diffs for this patch."""
-        return [FileDiff(diff, self._api) for diff in self.json["module_code_changes"]]
+        return [FileDiff(diff, self._api) for diff in self.json["file_diffs"]]
 
 
 class PatchCreationDetails(NamedTuple):
