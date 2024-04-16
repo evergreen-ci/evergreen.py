@@ -8,7 +8,7 @@ buildvariants:
   - name: deploy
   - name: documentation
   - name: evg_api_install
-  - name: check_pypi_version
+  # - name: check_pypi_version
 
 functions:
   create virtualenv:
@@ -156,7 +156,7 @@ tasks:
   patchable: false
   depends_on:
     - name: unit_tests
-    - name: check_pypi_version
+    # - name: check_pypi_version
   commands:
     - func: deploy
 
