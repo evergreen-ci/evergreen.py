@@ -2,7 +2,7 @@
 
 ## 3.6.25 - 2024-04-15
 
-- Fix `file_diffs` endpoint.
+- Fix `file_diffs` getter.
 
 ## 3.6.24 - 2024-03-27
 
