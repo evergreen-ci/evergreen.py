@@ -2,7 +2,7 @@
 
 ## 3.6.25 - 2024-04-15
 
-- Added `end_time`, `long_term_date`, `long_term_num_swaps`, `short_term_date`, `short_term_num_swaps` field to `Task`.
+- Added `end_time` field to `Task`.
 
 ## 3.6.24 - 2024-03-27
 
