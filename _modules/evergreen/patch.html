@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.patch &#8212; evergreen.py 3.6.24 documentation</title>
+    <title>evergreen.patch &#8212; evergreen.py 3.6.25 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -144,7 +144,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">file_diffs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">FileDiff</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a list of the file diffs for this patch.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">FileDiff</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;module_code_changes&quot;</span><span class="p">]]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">FileDiff</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">diff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;file_diffs&quot;</span><span class="p">]]</span></div>
 
 
 <div class="viewcode-block" id="PatchCreationDetails"><a class="viewcode-back" href="../../evergreen.html#evergreen.patch.PatchCreationDetails">[docs]</a><span class="k">class</span> <span class="nc">PatchCreationDetails</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
