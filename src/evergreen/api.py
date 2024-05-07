@@ -1421,7 +1421,7 @@ class EvergreenApi(object):
         task_id: str,
         task_name: str,
         tests: list[str],
-    ) -> Dict[str, Dict[str, int]]:
+    ) -> Dict[str, Dict[str, List[str]]]:
         """
         Return a subset of tests to run for a given task.
 
