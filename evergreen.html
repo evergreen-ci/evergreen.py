@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>evergreen package &#8212; evergreen.py 3.6.25 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.6.26 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/readable.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -873,6 +873,27 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Contents of specified log file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.select_tests">
+<span class="sig-name descname"><span class="pre">select_tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requester</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tests</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.select_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.select_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a subset of tests to run for a given task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_id</strong> – project identifier of running task.</p></li>
+<li><p><strong>build_variant</strong> – build variant of running task.</p></li>
+<li><p><strong>requester</strong> – requester of running task.</p></li>
+<li><p><strong>task_id</strong> – task_id of running task.</p></li>
+<li><p><strong>task_name</strong> – task_name of running task.</p></li>
+<li><p><strong>tests</strong> – list of tests to filter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict containing all of the given information with a filtered list of tests.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -4984,6 +5005,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.recent_versions_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.recent_versions_by_project()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.restart_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.restart_task()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.retrieve_task_log"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.retrieve_task_log()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.select_tests"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.select_tests()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.send_email"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.send_email()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.send_slack_message"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.send_slack_message()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.session"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.session</span></code></a></li>
