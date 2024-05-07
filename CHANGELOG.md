@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.26 - 2024-05-07
+
+- Add support for select tests endpoint
+
 ## 3.6.25 - 2024-04-15
 
 - Fix `file_diffs` getter.

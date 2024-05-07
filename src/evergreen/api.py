@@ -1413,6 +1413,37 @@ class EvergreenApi(object):
             url, data=json.dumps({"resource_id": resource_id, "resource_type": resource_type})
         ).json()
 
+    def select_tests(
+        self,
+        project_id: str,
+        build_variant: str,
+        requester: str,
+        task_id: str,
+        task_name: str,
+        tests: list[str],
+    ) -> Dict[str, Dict[str, int]]:
+        """
+        Return a subset of tests to run for a given task.
+
+        :param project_id: project identifier of running task.
+        :param build_variant: build variant of running task.
+        :param requester: requester of running task.
+        :param task_id: task_id of running task.
+        :param task_name: task_name of running task.
+        :param tests: list of tests to filter.
+        :return: A dict containing all of the given information with a filtered list of tests.
+        """
+        url = self._create_url("/select/tests")
+        data = {
+            "project": project_id,
+            "build_variant": build_variant,
+            "requester": requester,
+            "task_id": task_id,
+            "task_name": task_name,
+            "tests": tests,
+        }
+        return self._call_api(url, method="POST", data=json.dumps(data)).json()
+
     @classmethod
     def get_api(
         cls,
