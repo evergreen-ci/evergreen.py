@@ -1,15 +1,18 @@
 import json
 import os
+import re
 import sys
 from copy import deepcopy
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from json.decoder import JSONDecodeError
-from unittest.mock import MagicMock, patch
+from unittest import mock
+from unittest.mock import DEFAULT, MagicMock, patch
 
 import pytest
-import requests
+import responses
 from requests.exceptions import HTTPError
+from urllib3.connectionpool import HTTPConnectionPool
 
 import evergreen.api as under_test
 from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
@@ -1064,57 +1067,62 @@ class TestCachedEvergreenApi(object):
 
 
 class TestRetryingEvergreenApi(object):
-    def test_no_retries_on_success(self, mocked_retrying_api):
-        version_id = "version id"
+    MATCH_ALL_URL = re.compile(r"^%s.*" % (DEFAULT_API_SERVER))
+    VRSID = "version id"
 
-        mocked_retrying_api.version_by_id(version_id)
-        assert mocked_retrying_api.session.request.call_count == 1
+    @responses.activate
+    def test_no_retries_on_success(self, mocked_retrying_api):
+        responses.get(url=self.MATCH_ALL_URL, json={}, status=200)
+
+        mocked_retrying_api.version_by_id(self.VRSID)
+        assert len(responses.calls) == 1
 
     @pytest.mark.skipif(
         not os.environ.get("RUN_SLOW_TESTS"), reason="Slow running test due to retries"
     )
-    def test_three_retries_on_failure(self, mocked_retrying_api):
-        version_id = "version id"
-        mocked_retrying_api.session.request.side_effect = HTTPError()
+    @responses.activate
+    def test_max_retries(self, mocked_retrying_api):
+        for _ in range(under_test.DEFAULT_HTTP_RETRY_ATTEMPTS + 1):
+            responses.get(url=self.MATCH_ALL_URL, json={}, status=500)
 
         with pytest.raises(HTTPError):
-            mocked_retrying_api.version_by_id(version_id)
+            mocked_retrying_api.version_by_id(self.VRSID)
 
-        assert mocked_retrying_api.session.request.call_count == under_test.MAX_RETRIES
+        assert len(responses.calls) == under_test.DEFAULT_HTTP_RETRY_ATTEMPTS + 1
 
     @pytest.mark.skipif(
         not os.environ.get("RUN_SLOW_TESTS"), reason="Slow running test due to retries"
     )
+    @responses.activate
     def test_pass_on_retries_after_failure(self, mocked_retrying_api):
-        version_id = "version id"
-        successful_response = mocked_retrying_api.session.request.return_value
-        mocked_retrying_api.session.request.side_effect = [HTTPError(), successful_response]
+        responses.get(url=self.MATCH_ALL_URL, json={}, status=500)
+        responses.get(url=self.MATCH_ALL_URL, json={}, status=200)
 
-        mocked_retrying_api.version_by_id(version_id)
+        mocked_retrying_api.version_by_id(self.VRSID)
 
-        assert mocked_retrying_api.session.request.call_count == 2
+        assert len(responses.calls) == 2
 
     @pytest.mark.skipif(
         not os.environ.get("RUN_SLOW_TESTS"), reason="Slow running test due to retries"
     )
-    def test_pass_on_retries_after_connection_error(self, mocked_retrying_api):
-        version_id = "version id"
-        successful_response = mocked_retrying_api.session.request.return_value
+    def test_retries_on_connection_errors(self, mocked_retrying_api):
+        with patch(
+            "urllib3.connectionpool.HTTPConnectionPool._make_request",
+            side_effect=[ConnectionResetError, ConnectionError, ConnectionRefusedError],
+        ) as mocked_conn_pool:
 
-        mocked_retrying_api.session.request.side_effect = [
-            requests.exceptions.ConnectionError(),
-            successful_response,
-        ]
+            try:
+                mocked_retrying_api.version_by_id(self.VRSID)
+            except StopIteration:
+                pass
 
-        mocked_retrying_api.version_by_id(version_id)
+            assert mocked_conn_pool.call_count == 4
 
-        assert mocked_retrying_api.session.request.call_count == 2
-
+    @responses.activate
     def test_no_retries_on_non_http_errors(self, mocked_retrying_api):
-        version_id = "version id"
-        mocked_retrying_api.session.request.side_effect = ValueError("Unexpected Failure")
+        responses.get(url=self.MATCH_ALL_URL, body=ValueError("Unexpected Failure"))
 
         with pytest.raises(ValueError):
-            mocked_retrying_api.version_by_id(version_id)
+            mocked_retrying_api.version_by_id(self.VRSID)
 
-        assert mocked_retrying_api.session.request.call_count == 1
+        assert len(responses.calls) == 1

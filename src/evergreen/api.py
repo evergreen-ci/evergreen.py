@@ -17,7 +17,7 @@ import requests
 import structlog
 from requests.exceptions import HTTPError
 from structlog.stdlib import LoggerFactory
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+from urllib3.util import Retry
 
 from evergreen.alias import VariantAlias
 from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
@@ -61,9 +61,22 @@ LOGGER = structlog.getLogger(__name__)
 
 CACHE_SIZE = 5000
 DEFAULT_LIMIT = 100
-MAX_RETRIES = 3
-START_WAIT_TIME_SEC = 2
-MAX_WAIT_TIME_SEC = 5
+
+DEFAULT_HTTP_RETRY_ATTEMPTS = 10
+DEFAULT_HTTP_RETRY_BACKOFF_FACTOR = 0.1
+DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC = 120
+DEFAULT_HTTP_RETRY_CODES = frozenset(
+    {
+        408,  # Request Timeout
+        409,  # Conflict
+        425,  # Too Early
+        429,  # Too Many Requests
+        500,  # Internal Server Error
+        502,  # Bad Gateway
+        503,  # Service Unavailable
+        504,  # Gatway Timeout
+    }
+)
 
 EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\\n)")
 EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
@@ -80,6 +93,7 @@ class EvergreenApi(object):
         session: Optional[requests.Session] = None,
         log_on_error: bool = False,
         use_default_logger_factory: bool = True,
+        http_retry: Optional[Retry] = None,
     ) -> None:
         """
         Create a _BaseEvergreenApi object.
@@ -96,6 +110,7 @@ class EvergreenApi(object):
         self._auth = auth
         self._session = session
         self._log_on_error = log_on_error
+        self._http_retry = http_retry
 
         if use_default_logger_factory:
             structlog.configure(logger_factory=LoggerFactory())
@@ -124,7 +139,7 @@ class EvergreenApi(object):
     def _create_session(self) -> requests.Session:
         """Create a new session to query the API with."""
         session = requests.Session()
-        adapter = requests.adapters.HTTPAdapter()
+        adapter = requests.adapters.HTTPAdapter(max_retries=self._http_retry)
         session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
         auth = self._auth
         if auth:
@@ -1565,40 +1580,40 @@ class CachedEvergreenApi(EvergreenApi):
 class RetryingEvergreenApi(EvergreenApi):
     """An Evergreen Api that retries failed calls."""
 
+    DEFAULT_HTTP_RETRY = Retry(
+        total=DEFAULT_HTTP_RETRY_ATTEMPTS,
+        backoff_factor=DEFAULT_HTTP_RETRY_BACKOFF_FACTOR,
+        backoff_max=DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC,
+        status_forcelist=DEFAULT_HTTP_RETRY_CODES,
+        raise_on_status=False,
+        raise_on_redirect=False,
+    )
+
     def __init__(
         self,
         api_server: str = DEFAULT_API_SERVER,
         auth: Optional[EvgAuth] = None,
         timeout: Optional[int] = None,
         log_on_error: bool = False,
+        use_default_logger_factory: bool = True,
+        http_retry: Retry = DEFAULT_HTTP_RETRY,
     ) -> None:
         """Create an Evergreen Api object."""
+        sticky_session_with_retry = EvergreenApi(
+            api_server,
+            auth,
+            timeout,
+            log_on_error=log_on_error,
+            use_default_logger_factory=use_default_logger_factory,
+            http_retry=http_retry,
+        )._create_session()
+
         super(RetryingEvergreenApi, self).__init__(
-            api_server, auth, timeout, log_on_error=log_on_error
+            api_server,
+            auth,
+            timeout,
+            sticky_session_with_retry,
+            log_on_error,
+            use_default_logger_factory,
+            http_retry,
         )
-
-    @retry(
-        retry=retry_if_exception_type(  # type: ignore[no-untyped-call]
-            (requests.exceptions.HTTPError, requests.exceptions.ConnectionError,)
-        ),
-        stop=stop_after_attempt(MAX_RETRIES),  # type: ignore[no-untyped-call]
-        wait=wait_exponential(multiplier=1, min=START_WAIT_TIME_SEC, max=MAX_WAIT_TIME_SEC),  # type: ignore[no-untyped-call]
-        reraise=True,
-    )
-    def _call_api(
-        self,
-        url: str,
-        params: Optional[Dict] = None,
-        method: str = "GET",
-        data: Optional[str] = None,
-    ) -> requests.Response:
-        """
-        Call into the evergreen api.
-
-        :param url: Url to call.
-        :param params: Parameters to pass to api.
-        :param method: HTTP method to make call with.
-        :param data: Extra data to send to the endpoint.
-        :return: Result from calling API.
-        """
-        return super(RetryingEvergreenApi, self)._call_api(url, params, method, data)

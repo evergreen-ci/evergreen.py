@@ -22,7 +22,6 @@ python-dateutil = ">=2"
 PyYAML = ">=5"
 requests = ">=2"
 structlog = ">=19"
-tenacity = ">=5"
 pydantic = ">=1"
 
 [tool.poetry.dev-dependencies]
