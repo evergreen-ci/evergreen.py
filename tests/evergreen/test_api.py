@@ -6,13 +6,11 @@ from copy import deepcopy
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from json.decoder import JSONDecodeError
-from unittest import mock
-from unittest.mock import DEFAULT, MagicMock, patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 import responses
 from requests.exceptions import HTTPError
-from urllib3.connectionpool import HTTPConnectionPool
 
 import evergreen.api as under_test
 from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
