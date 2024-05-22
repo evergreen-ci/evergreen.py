@@ -199,12 +199,7 @@ def mocked_cached_api():
 @pytest.fixture()
 def mocked_retrying_api():
     """Return an Evergreen API with a mocked session."""
-    api = RetryingEvergreenApi()
-    api._session = MagicMock()
-    response_mock = MagicMock()
-    response_mock.status_code = 200
-    api._session.request.return_value = response_mock
-    return api
+    return RetryingEvergreenApi()
 
 
 @pytest.fixture()

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.6.27 - 2024-05-22
+
+- `EvergreenApi` constructor now accepts an optional `urllib3.util.Retry` object that can be used to customize http request retry approach.
+- RetringEvergreenApi retry logic has been rewritten using `urllib3.util.Retry` instead of `Tenacity` library.
+- RetringEvergreenApi re-use same session across different requests.
+
 ## 3.6.26 - 2024-05-07
 
 - Add support for select tests endpoint

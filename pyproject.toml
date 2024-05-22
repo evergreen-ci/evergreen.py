@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evergreen.py"
-version = "3.6.26"
+version = "3.6.27"
 description = "Python client for the Evergreen API"
 authors = [
     "DevProd Services & Integrations Team <devprod-si-team@mongodb.com>",
@@ -22,7 +22,6 @@ python-dateutil = ">=2"
 PyYAML = ">=5"
 requests = ">=2"
 structlog = ">=19"
-tenacity = ">=5"
 pydantic = ">=1"
 
 [tool.poetry.dev-dependencies]
@@ -45,6 +44,7 @@ coveralls = "^3.0.0"
 types-PyYAML = "^6.0.1"
 types-python-dateutil = "^2.8.2"
 types-requests = "^2.26.0"
+responses = "^0.25.0"
 
 [tool.pytest.ini_options]
 flake8-ignore = "W605 W503 W291 E203 E501 F821"
