@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.6.26 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.6.27 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -63,7 +63,7 @@
 <span class="kn">import</span> <span class="nn">structlog</span>
 <span class="kn">from</span> <span class="nn">requests.exceptions</span> <span class="kn">import</span> <span class="n">HTTPError</span>
 <span class="kn">from</span> <span class="nn">structlog.stdlib</span> <span class="kn">import</span> <span class="n">LoggerFactory</span>
-<span class="kn">from</span> <span class="nn">tenacity</span> <span class="kn">import</span> <span class="n">retry</span><span class="p">,</span> <span class="n">retry_if_exception_type</span><span class="p">,</span> <span class="n">stop_after_attempt</span><span class="p">,</span> <span class="n">wait_exponential</span>
+<span class="kn">from</span> <span class="nn">urllib3.util</span> <span class="kn">import</span> <span class="n">Retry</span>
 
 <span class="kn">from</span> <span class="nn">evergreen.alias</span> <span class="kn">import</span> <span class="n">VariantAlias</span>
 <span class="kn">from</span> <span class="nn">evergreen.api_requests</span> <span class="kn">import</span> <span class="n">IssueLinkRequest</span><span class="p">,</span> <span class="n">MetadataLinkRequest</span><span class="p">,</span> <span class="n">SlackAttachment</span>
@@ -107,9 +107,22 @@
 
 <span class="n">CACHE_SIZE</span> <span class="o">=</span> <span class="mi">5000</span>
 <span class="n">DEFAULT_LIMIT</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">START_WAIT_TIME_SEC</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">MAX_WAIT_TIME_SEC</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">DEFAULT_HTTP_RETRY_ATTEMPTS</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">DEFAULT_HTTP_RETRY_BACKOFF_FACTOR</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">DEFAULT_HTTP_RETRY_CODES</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="mi">408</span><span class="p">,</span>  <span class="c1"># Request Timeout</span>
+        <span class="mi">409</span><span class="p">,</span>  <span class="c1"># Conflict</span>
+        <span class="mi">425</span><span class="p">,</span>  <span class="c1"># Too Early</span>
+        <span class="mi">429</span><span class="p">,</span>  <span class="c1"># Too Many Requests</span>
+        <span class="mi">500</span><span class="p">,</span>  <span class="c1"># Internal Server Error</span>
+        <span class="mi">502</span><span class="p">,</span>  <span class="c1"># Bad Gateway</span>
+        <span class="mi">503</span><span class="p">,</span>  <span class="c1"># Service Unavailable</span>
+        <span class="mi">504</span><span class="p">,</span>  <span class="c1"># Gatway Timeout</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
 <span class="n">EVERGREEN_URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(https?)://evergreen\..*?(?=</span><span class="se">\\</span><span class="s2">n)&quot;</span><span class="p">)</span>
 <span class="n">EVERGREEN_PATCH_ID_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=ID : )\w</span><span class="si">{24}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -126,6 +139,7 @@
         <span class="n">session</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">use_default_logger_factory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">http_retry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Retry</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a _BaseEvergreenApi object.</span>
@@ -136,12 +150,14 @@
 <span class="sd">        :param session: Session to use for requests.</span>
 <span class="sd">        :param log_on_error: Flag to use for error logs.</span>
 <span class="sd">        :param use_default_logger_factory: Indicate if the module should configure the default logger factory.</span>
+<span class="sd">        :param http_retry: Optional Retry object that can be used to customize http request retries.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span> <span class="o">=</span> <span class="n">api_server</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span> <span class="o">=</span> <span class="n">auth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">session</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span> <span class="o">=</span> <span class="n">log_on_error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_http_retry</span> <span class="o">=</span> <span class="n">http_retry</span>
 
         <span class="k">if</span> <span class="n">use_default_logger_factory</span><span class="p">:</span>
             <span class="n">structlog</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">logger_factory</span><span class="o">=</span><span class="n">LoggerFactory</span><span class="p">())</span>
@@ -170,7 +186,7 @@
     <span class="k">def</span> <span class="nf">_create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new session to query the API with.&quot;&quot;&quot;</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
-        <span class="n">adapter</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="p">()</span>
+        <span class="n">adapter</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_http_retry</span><span class="p">)</span>
         <span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://&quot;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
         <span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span>
         <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
@@ -1611,43 +1627,43 @@
 <div class="viewcode-block" id="RetryingEvergreenApi"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.RetryingEvergreenApi">[docs]</a><span class="k">class</span> <span class="nc">RetryingEvergreenApi</span><span class="p">(</span><span class="n">EvergreenApi</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An Evergreen Api that retries failed calls.&quot;&quot;&quot;</span>
 
+    <span class="n">DEFAULT_HTTP_RETRY</span> <span class="o">=</span> <span class="n">Retry</span><span class="p">(</span>
+        <span class="n">total</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_ATTEMPTS</span><span class="p">,</span>
+        <span class="n">backoff_factor</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_BACKOFF_FACTOR</span><span class="p">,</span>
+        <span class="n">backoff_max</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC</span><span class="p">,</span>
+        <span class="n">status_forcelist</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_CODES</span><span class="p">,</span>
+        <span class="n">raise_on_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">raise_on_redirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">api_server</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
         <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">use_default_logger_factory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">http_retry</span><span class="p">:</span> <span class="n">Retry</span> <span class="o">=</span> <span class="n">DEFAULT_HTTP_RETRY</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
+        <span class="n">sticky_session_with_retry</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="p">(</span>
+            <span class="n">api_server</span><span class="p">,</span>
+            <span class="n">auth</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="p">,</span>
+            <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span><span class="p">,</span>
+            <span class="n">use_default_logger_factory</span><span class="o">=</span><span class="n">use_default_logger_factory</span><span class="p">,</span>
+            <span class="n">http_retry</span><span class="o">=</span><span class="n">http_retry</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">_create_session</span><span class="p">()</span>
+
         <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span>
-        <span class="p">)</span>
-
-    <span class="nd">@retry</span><span class="p">(</span>
-        <span class="n">retry</span><span class="o">=</span><span class="n">retry_if_exception_type</span><span class="p">(</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
-            <span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,)</span>
-        <span class="p">),</span>
-        <span class="n">stop</span><span class="o">=</span><span class="n">stop_after_attempt</span><span class="p">(</span><span class="n">MAX_RETRIES</span><span class="p">),</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
-        <span class="n">wait</span><span class="o">=</span><span class="n">wait_exponential</span><span class="p">(</span><span class="n">multiplier</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">START_WAIT_TIME_SEC</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">MAX_WAIT_TIME_SEC</span><span class="p">),</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
-        <span class="n">reraise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">def</span> <span class="nf">_call_api</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
-        <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Call into the evergreen api.</span>
-
-<span class="sd">        :param url: Url to call.</span>
-<span class="sd">        :param params: Parameters to pass to api.</span>
-<span class="sd">        :param method: HTTP method to make call with.</span>
-<span class="sd">        :param data: Extra data to send to the endpoint.</span>
-<span class="sd">        :return: Result from calling API.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+            <span class="n">api_server</span><span class="p">,</span>
+            <span class="n">auth</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="p">,</span>
+            <span class="n">sticky_session_with_retry</span><span class="p">,</span>
+            <span class="n">log_on_error</span><span class="p">,</span>
+            <span class="n">use_default_logger_factory</span><span class="p">,</span>
+            <span class="n">http_retry</span><span class="p">,</span>
+        <span class="p">)</span></div>
 </pre></div>
 
             <div class="clearer"></div>
