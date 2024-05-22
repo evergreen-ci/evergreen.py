@@ -104,6 +104,7 @@ class EvergreenApi(object):
         :param session: Session to use for requests.
         :param log_on_error: Flag to use for error logs.
         :param use_default_logger_factory: Indicate if the module should configure the default logger factory.
+        :param http_retry: Optional Retry object that can be used to customize http request retries.
         """
         self._timeout = timeout
         self._api_server = api_server
