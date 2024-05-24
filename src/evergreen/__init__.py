@@ -1,4 +1,5 @@
 """Evergreen API Module."""
+
 # Shortcuts for importing.
 from evergreen.api import CachedEvergreenApi, EvergreenApi, Requester, RetryingEvergreenApi
 from evergreen.api_requests import IssueLinkRequest

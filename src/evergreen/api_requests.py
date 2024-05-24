@@ -1,4 +1,5 @@
 """Objects for making requests to the API."""
+
 from typing import Any, Dict, List, NamedTuple, Optional
 
 from pydantic import BaseModel

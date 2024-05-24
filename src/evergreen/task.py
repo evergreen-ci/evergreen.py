@@ -60,7 +60,10 @@ class Artifact(_BaseEvergreenObject):
             is_binary = self._is_binary()
 
         return self._api._stream_api(
-            self.url, decode_unicode=decode_unicode, chunk_size=chunk_size, is_binary=is_binary,
+            self.url,
+            decode_unicode=decode_unicode,
+            chunk_size=chunk_size,
+            is_binary=is_binary,
         )
 
     def _is_binary(self) -> bool:

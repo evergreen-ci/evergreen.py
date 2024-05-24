@@ -1,4 +1,5 @@
 """Models to working with task annotations."""
+
 from typing import TYPE_CHECKING, Any, Dict, List
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib, evg_datetime_attrib
