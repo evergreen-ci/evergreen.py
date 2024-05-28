@@ -704,7 +704,6 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>patch_id</strong> – The patch_id to base this build on.</p></li>
 <li><p><strong>params</strong> – The params to pass to the build.</p></li>
-<li><p><strong>base</strong> – The build’s base commit.</p></li>
 <li><p><strong>task</strong> – The task(s) to run.</p></li>
 <li><p><strong>project</strong> – The project to start the build for.</p></li>
 <li><p><strong>description</strong> – A description of the build.</p></li>
@@ -845,6 +844,29 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of recent versions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.repeat_patch">
+<span class="sig-name descname"><span class="pre">repeat_patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.patch.PatchCreationDetails" title="evergreen.patch.PatchCreationDetails"><span class="pre">PatchCreationDetails</span></a></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.repeat_patch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.repeat_patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start a patch build based on a diff.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>patch_id</strong> – The patch_id whose tasks should be repeated.</p></li>
+<li><p><strong>params</strong> – The params to pass to the build.</p></li>
+<li><p><strong>project</strong> – The project to start the build for.</p></li>
+<li><p><strong>description</strong> – A description of the build.</p></li>
+<li><p><strong>author</strong> – The author to attribute for the build.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If a build URL is not produced we raise an exception with the output included.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The patch creation details.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -5008,6 +5030,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.permissions_for_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.permissions_for_user()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.project_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.project_by_id()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.recent_versions_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.recent_versions_by_project()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.repeat_patch"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.repeat_patch()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.restart_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.restart_task()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.retrieve_task_log"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.retrieve_task_log()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.select_tests"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.select_tests()</span></code></a></li>

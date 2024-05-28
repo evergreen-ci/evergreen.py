@@ -124,7 +124,7 @@
     <span class="p">}</span>
 <span class="p">)</span>
 
-<span class="n">EVERGREEN_URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(https?)://evergreen\..*?(?=</span><span class="se">\\</span><span class="s2">n)&quot;</span><span class="p">)</span>
+<span class="n">EVERGREEN_URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(https?)://evergreen\..*?(?=\n)&quot;</span><span class="p">)</span>
 <span class="n">EVERGREEN_PATCH_ID_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=ID : )\w</span><span class="si">{24}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
@@ -945,7 +945,7 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/task_reliability&quot;</span><span class="p">)</span>
         <span class="n">task_reliability_scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span>
-            <span class="n">TaskReliability</span><span class="p">(</span><span class="n">task_reliability</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_reliability</span> <span class="ow">in</span> <span class="n">task_reliability_scores</span>  <span class="c1"># type: ignore[arg-type]</span>
+            <span class="n">TaskReliability</span><span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">task_reliability</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_reliability</span> <span class="ow">in</span> <span class="n">task_reliability_scores</span>  <span class="c1"># type: ignore[arg-type]</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.build_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.build_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Build</span><span class="p">:</span>
@@ -1034,7 +1034,12 @@
             <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2"> --author </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">:</span>
+            <span class="c1"># patch-file returns on stderr, but patch returns on stdout,</span>
+            <span class="c1"># so if stderr is empty, check stdout</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
         <span class="n">url_match</span> <span class="o">=</span> <span class="n">EVERGREEN_URL_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
         <span class="n">id_match</span> <span class="o">=</span> <span class="n">EVERGREEN_PATCH_ID_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
@@ -1090,7 +1095,6 @@
 
 <span class="sd">        :param patch_id: The patch_id to base this build on.</span>
 <span class="sd">        :param params: The params to pass to the build.</span>
-<span class="sd">        :param base: The build&#39;s base commit.</span>
 <span class="sd">        :param task: The task(s) to run.</span>
 <span class="sd">        :param project: The project to start the build for.</span>
 <span class="sd">        :param description: A description of the build.</span>
@@ -1101,6 +1105,29 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">unpacked_params</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;--param &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
         <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;evergreen patch-file --diff-patchId </span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2"> --description &#39;</span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&#39; --tasks </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2"> --variants </span><span class="si">{</span><span class="n">variant</span><span class="si">}</span><span class="s2"> --project </span><span class="si">{</span><span class="n">project</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unpacked_params</span><span class="si">}</span><span class="s2"> -y -f&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_patch_file_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">author</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.repeat_patch"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.repeat_patch">[docs]</a>    <span class="k">def</span> <span class="nf">repeat_patch</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
+        <span class="n">project</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PatchCreationDetails</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start a patch build based on a diff.</span>
+
+<span class="sd">        :param patch_id: The patch_id whose tasks should be repeated.</span>
+<span class="sd">        :param params: The params to pass to the build.</span>
+<span class="sd">        :param project: The project to start the build for.</span>
+<span class="sd">        :param description: A description of the build.</span>
+<span class="sd">        :param author: The author to attribute for the build.</span>
+<span class="sd">        :raises Exception: If a build URL is not produced we raise an exception with the output included.</span>
+<span class="sd">        :return: The patch creation details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unpacked_params</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;--param &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;evergreen patch-file --diff-patchId </span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2"> --repeat-patch </span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2"> --description &#39;</span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&#39; --project </span><span class="si">{</span><span class="n">project</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">unpacked_params</span><span class="si">}</span><span class="s2"> -y -f&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute_patch_file_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">author</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.task_by_id"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.task_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">task_by_id</span><span class="p">(</span>
