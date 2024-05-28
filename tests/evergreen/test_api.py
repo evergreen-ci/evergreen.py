@@ -657,6 +657,31 @@ class TestCreatePatchDiff:
         )
         assert result.id == "64387ca457e85ac95a3da12f"
 
+    @patch("evergreen.api.subprocess.run",)
+    def test_repeat_patch(self, mock_run, mocked_api):
+        mock_stdout = MagicMock()
+        mock_stdout.stdout = b"Patch successfully created.\n\n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
+        mock_stdout.stderr = b""
+        mock_run.return_value = mock_stdout
+
+        params = {
+            "runtime_params_json": '{"v": 0, "enable_profiling": true}',
+            "reuse_compile_from": "build_id",
+        }
+        result = mocked_api.repeat_patch("build_id", params, "project", "description")
+
+        command = mock_run.call_args[0][0]
+
+        assert (
+            command
+            == "evergreen patch-file --diff-patchId build_id --repeat-patch build_id --description 'description' --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f"
+        )
+        assert (
+            result.url
+            == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
+        )
+        assert result.id == "64387ca457e85ac95a3da12f"
+
 
 class TestTaskApi(object):
     def test_task_by_id(self, mocked_api):

@@ -78,7 +78,7 @@ DEFAULT_HTTP_RETRY_CODES = frozenset(
     }
 )
 
-EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\\n)")
+EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\n)")
 EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
 
 
@@ -899,7 +899,7 @@ class EvergreenApi(object):
         url = self._create_url(f"/projects/{project_id}/task_reliability")
         task_reliability_scores = self._paginate(url, params)
         return [
-            TaskReliability(task_reliability, self) for task_reliability in task_reliability_scores  # type: ignore[arg-type]
+            TaskReliability(cast(Dict[str, Any], task_reliability), self) for task_reliability in task_reliability_scores  # type: ignore[arg-type]
         ]
 
     def build_by_id(self, build_id: str) -> Build:
@@ -988,7 +988,12 @@ class EvergreenApi(object):
             command = f"{command} --author {author}"
 
         process = subprocess.run(command, shell=True, capture_output=True)
-        output = str(process.stderr)
+        output = process.stderr.decode("utf-8")
+
+        if not output:
+            # patch-file returns on stderr, but patch returns on stdout,
+            # so if stderr is empty, check stdout
+            output = process.stdout.decode("utf-8")
 
         url_match = EVERGREEN_URL_REGEX.search(output)
         id_match = EVERGREEN_PATCH_ID_REGEX.search(output)
@@ -1044,7 +1049,6 @@ class EvergreenApi(object):
 
         :param patch_id: The patch_id to base this build on.
         :param params: The params to pass to the build.
-        :param base: The build's base commit.
         :param task: The task(s) to run.
         :param project: The project to start the build for.
         :param description: A description of the build.
@@ -1055,6 +1059,29 @@ class EvergreenApi(object):
         """
         unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
         command = f"evergreen patch-file --diff-patchId {patch_id} --description '{description}' --tasks {task} --variants {variant} --project {project} {unpacked_params} -y -f"
+        return self._execute_patch_file_command(command, author)
+
+    def repeat_patch(
+        self,
+        patch_id: str,
+        params: dict[str, str],
+        project: str,
+        description: str,
+        author: Optional[str] = None,
+    ) -> PatchCreationDetails:
+        """
+        Start a patch build based on a diff.
+
+        :param patch_id: The patch_id whose tasks should be repeated.
+        :param params: The params to pass to the build.
+        :param project: The project to start the build for.
+        :param description: A description of the build.
+        :param author: The author to attribute for the build.
+        :raises Exception: If a build URL is not produced we raise an exception with the output included.
+        :return: The patch creation details.
+        """
+        unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
+        command = f"evergreen patch-file --diff-patchId {patch_id} --repeat-patch {patch_id} --description '{description}' --project {project} {unpacked_params} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def task_by_id(
