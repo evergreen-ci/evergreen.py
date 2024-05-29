@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.6.29 - 2024-05-29
+
+- Add ChangeLog data
+
+## 3.6.28 - 2024-05-29
+
+- Add `repeat_patch` function to `EvergreenApi`. This function repeats the tasks and variants of a previous patch.
+
 ## 3.6.27 - 2024-05-22
 
 - `EvergreenApi` constructor now accepts an optional `urllib3.util.Retry` object that can be used to customize http request retry approach.
