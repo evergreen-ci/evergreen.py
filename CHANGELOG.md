@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.6.30 - 2024-05-29
+
+- Add tags to tasks
+
 ## 3.6.29 - 2024-05-29
 
 - Add ChangeLog data
