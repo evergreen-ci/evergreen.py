@@ -168,6 +168,7 @@ class Task(_BaseEvergreenObject):
     scheduled_time = evg_datetime_attrib("scheduled_time")
     start_time = evg_datetime_attrib("start_time")
     status = evg_attrib("status")
+    tags = evg_attrib("tags")
     task_group = evg_attrib("task_group")
     task_group_max_hosts = evg_attrib("task_group_max_hosts")
     task_id = evg_attrib("task_id")
