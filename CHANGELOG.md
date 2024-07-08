@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.7.1 - 2024-07-08
+## 3.8.0 - 2024-07-08
 
 - Add test_id to tests
 
