@@ -38,6 +38,7 @@ class Tst(_BaseEvergreenObject):
 
     task_id = evg_attrib("task_id")
     status = evg_attrib("status")
+    test_id = evg_attrib("test_id")
     test_file = evg_attrib("test_file")
     exit_code = evg_attrib("exit_code")
     start_time = evg_datetime_attrib("start_time")
