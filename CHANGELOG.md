@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.8.0 - 2024-07-08
+
+- Add test_id to tests
+
 ## 3.7.0 - 2024-06-17
 
 - Add tags to tasks
