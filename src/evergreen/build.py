@@ -61,6 +61,7 @@ class Build(_BaseEvergreenObject):
     activated_by = evg_attrib("activated_by")
     activated_time = evg_datetime_attrib("activated_time")
     order = evg_attrib("order")
+    tags = evg_attrib("tags")
     tasks = evg_attrib("tasks")
     time_taken_ms = evg_attrib("time_taken_ms")
     display_name = evg_attrib("display_name")
