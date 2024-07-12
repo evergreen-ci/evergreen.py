@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.9.0 - 2024-07-12
+
+- Add tags to builds
+
 ## 3.8.0 - 2024-07-08
 
 - Add test_id to tests
