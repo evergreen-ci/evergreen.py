@@ -963,15 +963,17 @@ class EvergreenApi(object):
         url = self._create_url(f"/patches/{patch_id}")
         return Patch(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
 
-    def get_patch_diff(self, patch_id: str) -> str:
+    def get_patch_diff(self, patch_id: str, module: str = "") -> str:
         """
         Get the diff for a given patch.
 
         :param patch_id: The id of the patch to request the diff for.
+        :param module: The module to get the diff for. Defaults to an empty string.
         :return: The diff of the patch represented as plain text.
         """
+        query_params = {"module": module} if module else None
         url = self._create_url(f"/patches/{patch_id}/raw")
-        return self._call_api(url, method="GET").text
+        return self._call_api(url=url, params=query_params, method="GET").text
 
     def _execute_patch_file_command(
         self, command: str, author: Optional[str] = None
