@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.9.1 - 2024-09-04
+- Add module parameter to get_patch_diff
+
 ## 3.9.0 - 2024-07-12
 
 - Add tags to builds
