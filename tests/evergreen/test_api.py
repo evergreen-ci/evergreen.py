@@ -560,10 +560,14 @@ class TestPatchApi(object):
         )
 
     def test_patch_diff_api(self, mocked_api):
-        mocked_api.get_patch_diff("patch_id")
+        mocked_api.get_patch_diff("patch_id", "test_module")
         expected_url = mocked_api._create_url("/patches/patch_id/raw")
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=None, method="GET"
+            url=expected_url,
+            params={"module": "test_module"},
+            timeout=None,
+            data=None,
+            method="GET",
         )
 
 
