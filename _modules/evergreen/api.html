@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.9.0 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.9.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -1009,15 +1009,17 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/patches/</span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Patch</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
-<div class="viewcode-block" id="EvergreenApi.get_patch_diff"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_patch_diff">[docs]</a>    <span class="k">def</span> <span class="nf">get_patch_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="EvergreenApi.get_patch_diff"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_patch_diff">[docs]</a>    <span class="k">def</span> <span class="nf">get_patch_diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">module</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the diff for a given patch.</span>
 
 <span class="sd">        :param patch_id: The id of the patch to request the diff for.</span>
+<span class="sd">        :param module: The module to get the diff for. Defaults to an empty string.</span>
 <span class="sd">        :return: The diff of the patch represented as plain text.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">module</span><span class="p">}</span> <span class="k">if</span> <span class="n">module</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/patches/</span><span class="si">{</span><span class="n">patch_id</span><span class="si">}</span><span class="s2">/raw&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">query_params</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;GET&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span></div>
 
     <span class="k">def</span> <span class="nf">_execute_patch_file_command</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">author</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
