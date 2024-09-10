@@ -420,7 +420,7 @@ class EvergreenApi(object):
         :param project_filter_fn: function to filter projects, should accept a project_id argument.
         :return: List of all projects in evergreen.
         """
-        url = self._create_url("/projects")
+        url = self._create_url("/projects?includeRepo=true")
         project_list = self._paginate(url)
         projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
         if project_filter_fn is not None:
@@ -434,7 +434,7 @@ class EvergreenApi(object):
         :param project_id: Id of project to query.
         :return: Project specified.
         """
-        url = self._create_url(f"/projects/{project_id}")
+        url = self._create_url(f"/projects/{project_id}?includeRepo=true")
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
     def recent_versions_by_project(
