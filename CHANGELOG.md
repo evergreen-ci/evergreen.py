@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.9.2 - 2024-09-10
+## 3.10.0 - 2024-09-10
 - Add includeRepo parameter to project API calls
 
 ## 3.9.1 - 2024-09-04
