@@ -81,6 +81,8 @@ DEFAULT_HTTP_RETRY_CODES = frozenset(
 EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\n)")
 EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
 
+INCLUDE_REPO_QUERY = "?includeRepo=true"
+
 
 class EvergreenApi(object):
     """Base methods for building API objects."""
@@ -413,28 +415,42 @@ class EvergreenApi(object):
         url = self._create_url(f"/tasks/{task_id}/abort")
         self._call_api(url, method="POST")
 
-    def all_projects(self, project_filter_fn: Optional[Callable] = None) -> List[Project]:
+    def all_projects(
+        self,
+        project_filter_fn: Optional[Callable] = None,
+        include_repo_variables: Optional[bool] = False,
+    ) -> List[Project]:
         """
         Get all projects in evergreen.
 
         :param project_filter_fn: function to filter projects, should accept a project_id argument.
+        :param include_repo_variables: include repo variables query in the project API call
         :return: List of all projects in evergreen.
         """
-        url = self._create_url("/projects")
+        url_string = "/projects"
+        if include_repo_variables:
+            url_string.join(INCLUDE_REPO_QUERY)
+        url = self._create_url(url_string)
         project_list = self._paginate(url)
         projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
         if project_filter_fn is not None:
             return [project for project in projects if project_filter_fn(project)]
         return projects
 
-    def project_by_id(self, project_id: str) -> Project:
+    def project_by_id(
+        self, project_id: str, include_repo_variables: Optional[bool] = False,
+    ) -> Project:
         """
         Get a project by project_id.
 
         :param project_id: Id of project to query.
+        :param include_repo_variables: include repo variables query in the project API call
         :return: Project specified.
         """
-        url = self._create_url(f"/projects/{project_id}")
+        url_string = f"/projects/{project_id}"
+        if include_repo_variables:
+            url_string.join(INCLUDE_REPO_QUERY)
+        url = self._create_url(url_string)
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
     def recent_versions_by_project(

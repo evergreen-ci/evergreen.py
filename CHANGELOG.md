@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.9.2 - 2024-09-10
+- Add includeRepo parameter to project API calls
+
 ## 3.9.1 - 2024-09-04
 - Add module parameter to get_patch_diff
 
