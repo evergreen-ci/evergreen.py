@@ -427,9 +427,8 @@ class EvergreenApi(object):
         :param include_repo_variables: include repo variables query in the project API call
         :return: List of all projects in evergreen.
         """
-        url_string = "/projects"
-        if include_repo_variables:
-            url_string.join(INCLUDE_REPO_QUERY)
+        suffix = INCLUDE_REPO_QUERY if include_repo_variables else ""
+        url_string = f"/projects{suffix}"
         url = self._create_url(url_string)
         project_list = self._paginate(url)
         projects = [Project(project, self) for project in project_list]  # type: ignore[arg-type]
@@ -447,9 +446,8 @@ class EvergreenApi(object):
         :param include_repo_variables: include repo variables query in the project API call
         :return: Project specified.
         """
-        url_string = f"/projects/{project_id}"
-        if include_repo_variables:
-            url_string.join(INCLUDE_REPO_QUERY)
+        suffix = INCLUDE_REPO_QUERY if include_repo_variables else ""
+        url_string = f"/projects/{project_id}{suffix}"
         url = self._create_url(url_string)
         return Project(self._paginate(url), self)  # type: ignore[arg-type]
 
