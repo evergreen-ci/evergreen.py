@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.10.1 - 2024-09-12
+- Fix `includeRepo` concatenation
+
 ## 3.10.0 - 2024-09-10
 - Add includeRepo parameter to project API calls
 
