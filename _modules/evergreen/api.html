@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.10.0 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.10.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -473,9 +473,8 @@
 <span class="sd">        :param include_repo_variables: include repo variables query in the project API call</span>
 <span class="sd">        :return: List of all projects in evergreen.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">url_string</span> <span class="o">=</span> <span class="s2">&quot;/projects&quot;</span>
-        <span class="k">if</span> <span class="n">include_repo_variables</span><span class="p">:</span>
-            <span class="n">url_string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_REPO_QUERY</span><span class="p">)</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="n">INCLUDE_REPO_QUERY</span> <span class="k">if</span> <span class="n">include_repo_variables</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">url_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/projects</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="n">url_string</span><span class="p">)</span>
         <span class="n">project_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">projects</span> <span class="o">=</span> <span class="p">[</span><span class="n">Project</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">project_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span>
@@ -493,9 +492,8 @@
 <span class="sd">        :param include_repo_variables: include repo variables query in the project API call</span>
 <span class="sd">        :return: Project specified.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">url_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">include_repo_variables</span><span class="p">:</span>
-            <span class="n">url_string</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">INCLUDE_REPO_QUERY</span><span class="p">)</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="n">INCLUDE_REPO_QUERY</span> <span class="k">if</span> <span class="n">include_repo_variables</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">url_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="n">url_string</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
