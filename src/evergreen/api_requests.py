@@ -68,3 +68,15 @@ class SlackAttachment(BaseModel):
     author_name: Optional[str] = None
     author_icon: Optional[str] = None
     fields: Optional[List[SlackAttachmentField]] = None
+
+
+class ProjectAliasDefinition(BaseModel):
+    """
+    An alias that defines a group of tasks to run within a project.
+
+    task_regex: A regex that defines the tasks to run.
+    variant_regex: A regex that defines on what variants to run the tasks on.
+    """
+
+    task_regex: str
+    variant_regex: str
