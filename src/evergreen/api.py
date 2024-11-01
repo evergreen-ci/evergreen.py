@@ -1402,8 +1402,8 @@ class EvergreenApi(object):
         description: str = "",
     ) -> None:
         """
-        Add new aliases to a specified project. 
-        
+        Add new aliases to a specified project.
+
         This will create multiple aliases all named the same thing and with the same description.
 
         :param project_id: Id of the project to add aliases to.
