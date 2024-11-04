@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api_requests &#8212; evergreen.py 3.10.1 documentation</title>
+    <title>evergreen.api_requests &#8212; evergreen.py 3.10.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -114,6 +114,18 @@
     <span class="n">author_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">author_icon</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SlackAttachmentField</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ProjectAliasDefinition"><a class="viewcode-back" href="../../evergreen.html#evergreen.api_requests.ProjectAliasDefinition">[docs]</a><span class="k">class</span> <span class="nc">ProjectAliasDefinition</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An alias that defines a group of tasks to run within a project.</span>
+
+<span class="sd">    task_regex: A regex that defines the tasks to run.</span>
+<span class="sd">    variant_regex: A regex that defines on what variants to run the tasks on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">task_regex</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">variant_regex</span><span class="p">:</span> <span class="nb">str</span></div>
 </pre></div>
 
             <div class="clearer"></div>

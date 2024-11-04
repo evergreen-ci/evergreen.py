@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.10.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.10.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -66,7 +66,12 @@
 <span class="kn">from</span> <span class="nn">urllib3.util</span> <span class="kn">import</span> <span class="n">Retry</span>
 
 <span class="kn">from</span> <span class="nn">evergreen.alias</span> <span class="kn">import</span> <span class="n">VariantAlias</span>
-<span class="kn">from</span> <span class="nn">evergreen.api_requests</span> <span class="kn">import</span> <span class="n">IssueLinkRequest</span><span class="p">,</span> <span class="n">MetadataLinkRequest</span><span class="p">,</span> <span class="n">SlackAttachment</span>
+<span class="kn">from</span> <span class="nn">evergreen.api_requests</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">IssueLinkRequest</span><span class="p">,</span>
+    <span class="n">MetadataLinkRequest</span><span class="p">,</span>
+    <span class="n">ProjectAliasDefinition</span><span class="p">,</span>
+    <span class="n">SlackAttachment</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
 <span class="kn">from</span> <span class="nn">evergreen.commitqueue</span> <span class="kn">import</span> <span class="n">CommitQueue</span>
 <span class="kn">from</span> <span class="nn">evergreen.config</span> <span class="kn">import</span> <span class="p">(</span>
@@ -1410,6 +1415,61 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_api</span><span class="p">(</span><span class="n">log_url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.get_project_alias_ids_by_name"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.get_project_alias_ids_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_project_alias_ids_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all of the alias ids for a given alias name in a project.</span>
+
+<span class="sd">        :param project_id: Id of the project to query.</span>
+<span class="sd">        :param alias_name: Name of the alias to query.</span>
+<span class="sd">        :return: List of ids for the given alias name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/alias/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">alias</span><span class="p">[</span><span class="s2">&quot;_id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">response</span> <span class="k">if</span> <span class="n">alias</span><span class="p">[</span><span class="s2">&quot;alias&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">alias_name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.delete_project_aliases"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.delete_project_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">delete_project_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alias_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete the specified aliases by id from the project.</span>
+
+<span class="sd">        :param project_id: Id of the project to delete aliases from.</span>
+<span class="sd">        :param alias_ids: List of alias ids to delete.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">aliases_to_delete</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;_id&quot;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">alias_ids</span><span class="p">]</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;aliases&quot;</span><span class="p">:</span> <span class="n">aliases_to_delete</span><span class="p">}</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="EvergreenApi.add_project_aliases"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.add_project_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">add_project_aliases</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">alias_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">aliases</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProjectAliasDefinition</span><span class="p">],</span>
+        <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add new aliases to a specified project.</span>
+
+<span class="sd">        This will create multiple aliases all named the same thing and with the same description.</span>
+
+<span class="sd">        :param project_id: Id of the project to add aliases to.</span>
+<span class="sd">        :param alias_name: Name of the alias to add.</span>
+<span class="sd">        :param aliases: List of aliases(task/variant combinations) to add.</span>
+<span class="sd">        :param description: Description of the alias (empty string by default).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_aliases</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">:</span>
+            <span class="n">new_aliases</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;alias&quot;</span><span class="p">:</span> <span class="n">alias_name</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+                    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="o">.</span><span class="n">task_regex</span><span class="p">,</span>
+                    <span class="s2">&quot;variant&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="o">.</span><span class="n">variant_regex</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;aliases&quot;</span><span class="p">:</span> <span class="n">new_aliases</span><span class="p">}</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;PATCH&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="EvergreenApi.permissions_for_user"><a class="viewcode-back" href="../../evergreen.html#evergreen.api.EvergreenApi.permissions_for_user">[docs]</a>    <span class="k">def</span> <span class="nf">permissions_for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ResourceTypePermissions</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

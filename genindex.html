@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 3.10.1 documentation</title>
+    <title>Index &#8212; evergreen.py 3.10.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/readable.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -102,6 +102,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.version.Requester.AD_HOC">AD_HOC (evergreen.version.Requester attribute)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.add_project_aliases">add_project_aliases() (evergreen.api.EvergreenApi method)</a>
+</li>
       <li><a href="evergreen.html#evergreen.patch.FileDiff.additions">additions (evergreen.patch.FileDiff property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.project.Project.admins">admins (evergreen.project.Project property)</a>
@@ -120,10 +122,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.all_user_permissions_for_resource">all_user_permissions_for_resource() (evergreen.api.EvergreenApi method)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.ami">ami (evergreen.distro.AwsDistroSettings property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.distro.AwsDistroSettings.ami">ami (evergreen.distro.AwsDistroSettings property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.task.Task.annotate">annotate() (evergreen.task.Task method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.annotate_task">annotate_task() (evergreen.api.EvergreenApi method)</a>
@@ -338,6 +340,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.RetryingEvergreenApi.DEFAULT_HTTP_RETRY">DEFAULT_HTTP_RETRY (evergreen.api.RetryingEvergreenApi attribute)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.delete_project_aliases">delete_project_aliases() (evergreen.api.EvergreenApi method)</a>
+</li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.delete_user_permissions">delete_user_permissions() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.patch.FileDiff.deletions">deletions (evergreen.patch.FileDiff property)</a>
@@ -366,10 +370,10 @@
         <li><a href="evergreen.html#evergreen.task.Task.dispatch_time">(evergreen.task.Task property)</a>
 </li>
       </ul></li>
-      <li><a href="evergreen.html#evergreen.build.StatusCounts.dispatched">dispatched (evergreen.build.StatusCounts property)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.build.StatusCounts.dispatched">dispatched (evergreen.build.StatusCounts property)</a>
+</li>
       <li><a href="evergreen.html#evergreen.build.Build.display_name">display_name (evergreen.build.Build property)</a>
 
       <ul>
@@ -772,6 +776,8 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.get_patch_diff">get_patch_diff() (evergreen.api.EvergreenApi method)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api.EvergreenApi.get_project_alias_ids_by_name">get_project_alias_ids_by_name() (evergreen.api.EvergreenApi method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.build.Build.get_project_identifier">get_project_identifier() (evergreen.build.Build method)</a>
@@ -1034,21 +1040,27 @@
 </li>
       <li><a href="evergreen.html#evergreen.distro.PlannerSettings.minimum_hosts">minimum_hosts (evergreen.distro.PlannerSettings property)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.model_computed_fields">model_computed_fields (evergreen.api_requests.SlackAttachment attribute)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.model_computed_fields">model_computed_fields (evergreen.api_requests.ProjectAliasDefinition attribute)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.model_computed_fields">(evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
         <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField.model_computed_fields">(evergreen.api_requests.SlackAttachmentField attribute)</a>
 </li>
       </ul></li>
-      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.model_config">model_config (evergreen.api_requests.SlackAttachment attribute)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.model_config">model_config (evergreen.api_requests.ProjectAliasDefinition attribute)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.model_config">(evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
         <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField.model_config">(evergreen.api_requests.SlackAttachmentField attribute)</a>
 </li>
       </ul></li>
-      <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.model_fields">model_fields (evergreen.api_requests.SlackAttachment attribute)</a>
+      <li><a href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.model_fields">model_fields (evergreen.api_requests.ProjectAliasDefinition attribute)</a>
 
       <ul>
+        <li><a href="evergreen.html#evergreen.api_requests.SlackAttachment.model_fields">(evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
         <li><a href="evergreen.html#evergreen.api_requests.SlackAttachmentField.model_fields">(evergreen.api_requests.SlackAttachmentField attribute)</a>
 </li>
       </ul></li>
@@ -1293,10 +1305,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task">performance_results_by_task() (evergreen.api.EvergreenApi method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.performance_results_by_task_name">performance_results_by_task_name() (evergreen.api.EvergreenApi method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData">PerformanceData (class in evergreen.performance_results)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceTestBatch">PerformanceTestBatch (class in evergreen.performance_results)</a>
@@ -1361,6 +1373,8 @@
         <li><a href="evergreen.html#evergreen.version.Version.project_identifier">(evergreen.version.Version property)</a>
 </li>
       </ul></li>
+      <li><a href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition">ProjectAliasDefinition (class in evergreen.api_requests)</a>
+</li>
       <li><a href="evergreen.html#evergreen.distro.Distro.provider">provider (evergreen.distro.Distro property)</a>
 
       <ul>
@@ -1653,6 +1667,8 @@
       </ul></li>
       <li><a href="evergreen.html#evergreen.distro.PlannerSettings.task_ordering">task_ordering (evergreen.distro.PlannerSettings property)</a>
 </li>
+      <li><a href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.task_regex">task_regex (evergreen.api_requests.ProjectAliasDefinition attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.task_reliability_by_project">task_reliability_by_project() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.task_stats_by_project">task_stats_by_project() (evergreen.api.EvergreenApi method)</a>
@@ -1683,10 +1699,10 @@
 </li>
       <li><a href="evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_name">tasks_by_project_and_name() (evergreen.api.EvergreenApi method)</a>
 </li>
-      <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
+</li>
       <li><a href="evergreen.html#evergreen.distro.Distro.teardown">teardown (evergreen.distro.Distro property)</a>
 </li>
       <li><a href="evergreen.html#evergreen.performance_results.PerformanceData.test_batch">test_batch (evergreen.performance_results.PerformanceData property)</a>
@@ -1847,6 +1863,8 @@
         <li><a href="evergreen.html#evergreen.task_reliability.TaskReliability.variant">(evergreen.task_reliability.TaskReliability property)</a>
 </li>
       </ul></li>
+      <li><a href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.variant_regex">variant_regex (evergreen.api_requests.ProjectAliasDefinition attribute)</a>
+</li>
       <li><a href="evergreen.html#evergreen.alias.VariantAlias">VariantAlias (class in evergreen.alias)</a>
 </li>
       <li><a href="evergreen.html#evergreen.patch.Patch.variants_tasks">variants_tasks (evergreen.patch.Patch property)</a>

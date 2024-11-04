@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>evergreen package &#8212; evergreen.py 3.10.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.10.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/readable.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -249,6 +249,23 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.add_project_aliases">
+<span class="sig-name descname"><span class="pre">add_project_aliases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition" title="evergreen.api_requests.ProjectAliasDefinition"><span class="pre">evergreen.api_requests.ProjectAliasDefinition</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.add_project_aliases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.add_project_aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add new aliases to a specified project.</p>
+<p>This will create multiple aliases all named the same thing and with the same description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_id</strong> – Id of the project to add aliases to.</p></li>
+<li><p><strong>alias_name</strong> – Name of the alias to add.</p></li>
+<li><p><strong>aliases</strong> – List of aliases(task/variant combinations) to add.</p></li>
+<li><p><strong>description</strong> – Description of the alias (empty string by default).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="evergreen.api.EvergreenApi.alias_for_version">
 <span class="sig-name descname"><span class="pre">alias_for_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_deps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.alias.VariantAlias" title="evergreen.alias.VariantAlias"><span class="pre">VariantAlias</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.alias_for_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.alias_for_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the tasks and variants that an alias would select for an evergreen version.</p>
@@ -435,6 +452,20 @@ with value of a list of task names to configure for specified variant. See the d
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.delete_project_aliases">
+<span class="sig-name descname"><span class="pre">delete_project_aliases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.delete_project_aliases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.delete_project_aliases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete the specified aliases by id from the project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_id</strong> – Id of the project to delete aliases from.</p></li>
+<li><p><strong>alias_ids</strong> – List of alias ids to delete.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="evergreen.api.EvergreenApi.delete_user_permissions">
 <span class="sig-name descname"><span class="pre">delete_user_permissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.resource_type_permissions.RemovablePermission" title="evergreen.resource_type_permissions.RemovablePermission"><span class="pre">RemovablePermission</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.delete_user_permissions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.delete_user_permissions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete all permissions of a given type for a user.</p>
@@ -499,6 +530,23 @@ deleting all permissions.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The diff of the patch represented as plain text.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.get_project_alias_ids_by_name">
+<span class="sig-name descname"><span class="pre">get_project_alias_ids_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alias_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/evergreen/api.html#EvergreenApi.get_project_alias_ids_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.get_project_alias_ids_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all of the alias ids for a given alias name in a project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_id</strong> – Id of the project to query.</p></li>
+<li><p><strong>alias_name</strong> – Name of the alias to query.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of ids for the given alias name.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1326,6 +1374,45 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.MetadataLinkRequest.url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="evergreen.api_requests.ProjectAliasDefinition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></span><span class="sig-name descname"><span class="pre">ProjectAliasDefinition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_regex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variant_regex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/evergreen/api_requests.html#ProjectAliasDefinition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.ProjectAliasDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>An alias that defines a group of tasks to run within a project.</p>
+<p>task_regex: A regex that defines the tasks to run.
+variant_regex: A regex that defines on what variants to run the tasks on.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.ProjectAliasDefinition.model_computed_fields">
+<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#evergreen.api_requests.ProjectAliasDefinition.model_computed_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.ProjectAliasDefinition.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#evergreen.api_requests.ProjectAliasDefinition.model_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.ProjectAliasDefinition.model_fields">
+<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'task_regex':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True),</span> <span class="pre">'variant_regex':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#evergreen.api_requests.ProjectAliasDefinition.model_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metadata about the fields defined on the model,
+mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
+<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.ProjectAliasDefinition.task_regex">
+<span class="sig-name descname"><span class="pre">task_regex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.ProjectAliasDefinition.task_regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.ProjectAliasDefinition.variant_regex">
+<span class="sig-name descname"><span class="pre">variant_regex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.ProjectAliasDefinition.variant_regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -5021,6 +5108,7 @@ argument.</p>
 </li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi"><code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.abort_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.abort_task()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.add_project_aliases"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.add_project_aliases()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.alias_for_version"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.alias_for_version()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.all_distros"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_distros()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.all_hosts"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_hosts()</span></code></a></li>
@@ -5032,10 +5120,12 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.commit_queue_for_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.commit_queue_for_project()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.configure_patch"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.configure_patch()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.configure_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.configure_task()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.delete_project_aliases"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.delete_project_aliases()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.delete_user_permissions"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.delete_user_permissions()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.file_ticket_for_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.file_ticket_for_task()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.get_api"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_api()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.get_patch_diff"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_patch_diff()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.get_project_alias_ids_by_name"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_project_alias_ids_by_name()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.get_task_annotation"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_task_annotation()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.get_users_for_role"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_users_for_role()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.give_permissions_to_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.give_permissions_to_user()</span></code></a></li>
@@ -5099,6 +5189,14 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest.text"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.text</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest.url"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.url</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.model_computed_fields</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition.model_config"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.model_config</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition.model_fields"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.model_fields</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition.task_regex"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.task_regex</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api_requests.ProjectAliasDefinition.variant_regex"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.variant_regex</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#evergreen.api_requests.SlackAttachment"><code class="docutils literal notranslate"><span class="pre">SlackAttachment</span></code></a><ul>

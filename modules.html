@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>src &#8212; evergreen.py 3.10.1 documentation</title>
+    <title>src &#8212; evergreen.py 3.10.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/readable.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -97,6 +97,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi"><code class="docutils literal notranslate"><span class="pre">EvergreenApi</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.abort_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.abort_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.add_project_aliases"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.add_project_aliases()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.alias_for_version"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.alias_for_version()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.all_distros"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_distros()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.all_hosts"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.all_hosts()</span></code></a></li>
@@ -108,10 +109,12 @@
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.commit_queue_for_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.commit_queue_for_project()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.configure_patch"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.configure_patch()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.configure_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.configure_task()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.delete_project_aliases"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.delete_project_aliases()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.delete_user_permissions"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.delete_user_permissions()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.file_ticket_for_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.file_ticket_for_task()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_api"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_api()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_patch_diff"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_patch_diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_project_alias_ids_by_name"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_project_alias_ids_by_name()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_task_annotation"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_task_annotation()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.get_users_for_role"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_users_for_role()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api.EvergreenApi.give_permissions_to_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.give_permissions_to_user()</span></code></a></li>
@@ -175,6 +178,14 @@
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.MetadataLinkRequest"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.MetadataLinkRequest.text"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.text</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.MetadataLinkRequest.url"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.url</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.model_computed_fields"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.model_computed_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.model_config"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.model_fields"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.model_fields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.task_regex"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.task_regex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.api_requests.ProjectAliasDefinition.variant_regex"><code class="docutils literal notranslate"><span class="pre">ProjectAliasDefinition.variant_regex</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.api_requests.SlackAttachment"><code class="docutils literal notranslate"><span class="pre">SlackAttachment</span></code></a><ul>
