@@ -20,7 +20,12 @@ from structlog.stdlib import LoggerFactory
 from urllib3.util import Retry
 
 from evergreen.alias import VariantAlias
-from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
+from evergreen.api_requests import (
+    IssueLinkRequest,
+    MetadataLinkRequest,
+    ProjectAliasDefinition,
+    SlackAttachment,
+)
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import (
@@ -1364,6 +1369,61 @@ class EvergreenApi(object):
         """
         params = {"text": "true"}
         return self._stream_api(log_url, params)
+
+    def get_project_alias_ids_by_name(self, project_id: str, alias_name: str) -> list[str]:
+        """
+        Get all of the alias ids for a given alias name in a project.
+
+        :param project_id: Id of the project to query.
+        :param alias_name: Name of the alias to query.
+        :return: List of ids for the given alias name.
+        """
+        url = self._create_url(f"/alias/{project_id}")
+        response = self._call_api(url).json()
+        return [alias["_id"] for alias in response if alias["alias"] == alias_name]
+
+    def delete_project_aliases(self, project_id: str, alias_ids: list[str]) -> None:
+        """
+        Delete the specified aliases by id from the project.
+
+        :param project_id: Id of the project to delete aliases from.
+        :param alias_ids: List of alias ids to delete.
+        """
+        aliases_to_delete = [{"_id": id, "delete": True} for id in alias_ids]
+        payload = {"aliases": aliases_to_delete}
+        url = self._create_url(f"/projects/{project_id}")
+        self._call_api(url, method="PATCH", data=json.dumps(payload))
+
+    def add_project_aliases(
+        self,
+        project_id: str,
+        alias_name: str,
+        aliases: list[ProjectAliasDefinition],
+        description: str = "",
+    ) -> None:
+        """
+        Add new aliases to a specified project.
+
+        This will create multiple aliases all named the same thing and with the same description.
+
+        :param project_id: Id of the project to add aliases to.
+        :param alias_name: Name of the alias to add.
+        :param aliases: List of aliases(task/variant combinations) to add.
+        :param description: Description of the alias (empty string by default).
+        """
+        new_aliases = []
+        for alias in aliases:
+            new_aliases.append(
+                {
+                    "alias": alias_name,
+                    "description": description,
+                    "task": alias.task_regex,
+                    "variant": alias.variant_regex,
+                }
+            )
+        payload = {"aliases": new_aliases}
+        url = self._create_url(f"/projects/{project_id}")
+        self._call_api(url, method="PATCH", data=json.dumps(payload))
 
     def permissions_for_user(self, user_id: str) -> List[ResourceTypePermissions]:
         """

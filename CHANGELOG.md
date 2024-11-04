@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.10.2 - 2024-11-01
+- Add functions to deal with project aliases.
+  - Adding
+  - Deleting
+  - Getting
+
 ## 3.10.1 - 2024-09-12
 - Fix `includeRepo` concatenation
 
