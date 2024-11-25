@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.10.3 - 2024-11-25
+- Add `activated` field to version object.
+
 ## 3.10.2 - 2024-11-01
 - Add functions to deal with project aliases.
   - Adding
