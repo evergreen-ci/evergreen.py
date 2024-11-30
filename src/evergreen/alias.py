@@ -1,4 +1,5 @@
 """Representation of project aliases."""
+
 from typing import TYPE_CHECKING, Any, Dict, List
 
 from evergreen.base import _BaseEvergreenObject, evg_attrib

@@ -1,4 +1,5 @@
 """Command line driver for evergreen API."""
+
 from __future__ import absolute_import
 
 import json
@@ -34,10 +35,18 @@ def fmt_output(fmt, data):
 
 @click.group()
 @click.option(
-    "--json", "display_format", flag_value=DisplayFormat.json, help="Write output in json."
+    "--json",
+    "display_format",
+    flag_value=DisplayFormat.json,
+    help="Write output in json.",
+    type=click.UNPROCESSED,
 )
 @click.option(
-    "--yaml", "display_format", flag_value=DisplayFormat.yaml, help="Write output in yaml."
+    "--yaml",
+    "display_format",
+    flag_value=DisplayFormat.yaml,
+    help="Write output in yaml.",
+    type=click.UNPROCESSED,
 )
 @click.option(
     "--human-readable",
@@ -45,6 +54,7 @@ def fmt_output(fmt, data):
     flag_value=DisplayFormat.human,
     default=True,
     help="Write output in a human readable format.",
+    type=click.UNPROCESSED,
 )
 @click.pass_context
 def cli(ctx, display_format):
@@ -490,7 +500,10 @@ def delete_user_permissions(ctx, user_id, resource_type, resource_id):
 @click.pass_context
 @click.option("--user-id", required=True, help="User to grant roles to.")
 @click.option(
-    "--role", required=True, multiple=True, help="Role to grant the user.",
+    "--role",
+    required=True,
+    multiple=True,
+    help="Role to grant the user.",
 )
 def give_roles_to_user(ctx, user_id, role):
     """Grant roles to a user."""
@@ -502,7 +515,9 @@ def give_roles_to_user(ctx, user_id, role):
 @cli.command()
 @click.pass_context
 @click.option(
-    "--role", required=True, help="Role to fetch users for.",
+    "--role",
+    required=True,
+    help="Role to fetch users for.",
 )
 def get_users_for_role(ctx, role):
     """Get users having an evergreen role."""

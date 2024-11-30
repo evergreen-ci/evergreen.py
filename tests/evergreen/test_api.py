@@ -339,7 +339,9 @@ class TestProjectApi(object):
         }
 
         mocked_api.test_stats_by_project(
-            "project_id", from_iso_format(after_date), from_iso_format(before_date),
+            "project_id",
+            from_iso_format(after_date),
+            from_iso_format(before_date),
         )
 
         mocked_api.session.request.assert_called_with(
@@ -452,7 +454,11 @@ class TestProjectApi(object):
             {"build_variant": "build_variant", "num_versions": 50, "start_at": 10}
         )
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=expected_data, method="GET",
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="GET",
         )
 
 
@@ -572,7 +578,9 @@ class TestPatchApi(object):
 
 
 class TestCreatePatchDiff:
-    @patch("evergreen.api.subprocess.run",)
+    @patch(
+        "evergreen.api.subprocess.run",
+    )
     def test_patch_from_diff_valid_no_author(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
@@ -598,7 +606,9 @@ class TestCreatePatchDiff:
         )
         assert result.id == "64387ca457e85ac95a3da12f"
 
-    @patch("evergreen.api.subprocess.run",)
+    @patch(
+        "evergreen.api.subprocess.run",
+    )
     def test_patch_from_diff_valid_with_author(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
@@ -609,7 +619,14 @@ class TestCreatePatchDiff:
             "reuse_compile_from": "build_id",
         }
         result = mocked_api.patch_from_diff(
-            "path", params, "base", "task", "project", "description", "variant", "author",
+            "path",
+            params,
+            "base",
+            "task",
+            "project",
+            "description",
+            "variant",
+            "author",
         )
 
         command = mock_run.call_args[0][0]
@@ -624,7 +641,9 @@ class TestCreatePatchDiff:
         )
         assert result.id == "64387ca457e85ac95a3da12f"
 
-    @patch("evergreen.api.subprocess.run",)
+    @patch(
+        "evergreen.api.subprocess.run",
+    )
     def test_patch_from_diff_invalid(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
         mock_stdout.stderr = b"no url here"
@@ -635,7 +654,9 @@ class TestCreatePatchDiff:
                 "path", {}, "base", "task", "project", "description", "variant"
             )
 
-    @patch("evergreen.api.subprocess.run",)
+    @patch(
+        "evergreen.api.subprocess.run",
+    )
     def test_patch_from_patch_id(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
@@ -1004,7 +1025,11 @@ class TestUserPermissionsApi(object):
             "test.user", PermissionableResourceType.PROJECT, resources, permissions
         )
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=expected_data, method="POST",
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="POST",
         )
 
     def test_delete_user_permissions_all_resources(self, mocked_api):
@@ -1012,7 +1037,11 @@ class TestUserPermissionsApi(object):
         expected_data = json.dumps({"resource_type": RemovablePermission.PROJECT.value})
         mocked_api.delete_user_permissions("test.user", RemovablePermission.PROJECT)
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=expected_data, method="DELETE",
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="DELETE",
         )
 
     def test_delete_user_permissions_specific_resource(self, mocked_api):
@@ -1022,7 +1051,11 @@ class TestUserPermissionsApi(object):
         )
         mocked_api.delete_user_permissions("test.user", RemovablePermission.PROJECT, "testresource")
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=expected_data, method="DELETE",
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="DELETE",
         )
 
     def test_all_user_permissions_for_resource(self, mocked_api, mocked_api_response):
@@ -1037,7 +1070,11 @@ class TestUserPermissionsApi(object):
         )
         assert returned_permissions == permissions
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=None, timeout=None, data=expected_data, method="GET",
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="GET",
         )
 
 
