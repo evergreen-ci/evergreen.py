@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.10.4 - 2024-12-19
+- Add `group_id` field to test object.
+- Remove `url_lobster` and `log_id` fields from Logs object.
+- Remove `exit_code` field from test object.
+
 ## 3.10.3 - 2024-11-25
 - Add `activated` field to version object.
 

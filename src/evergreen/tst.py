@@ -13,12 +13,10 @@ if TYPE_CHECKING:
 class Logs(_BaseEvergreenObject):
     """Representation of test logs from evergreen."""
 
-    url = evg_attrib("url")
     line_num = evg_attrib("line_num")
-    url_raw = evg_attrib("url_raw")
-    url_lobster = evg_attrib("url_lobster")
+    url = evg_attrib("url")
     url_parsley = evg_attrib("url_parsley")
-    log_id = evg_attrib("log_id")
+    url_raw = evg_attrib("url_raw")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of a Test log."""
@@ -36,13 +34,13 @@ class Logs(_BaseEvergreenObject):
 class Tst(_BaseEvergreenObject):
     """Representation of a test object from evergreen."""
 
-    task_id = evg_attrib("task_id")
-    status = evg_attrib("status")
-    test_id = evg_attrib("test_id")
-    test_file = evg_attrib("test_file")
-    exit_code = evg_attrib("exit_code")
-    start_time = evg_datetime_attrib("start_time")
     end_time = evg_datetime_attrib("end_time")
+    group_id = evg_datetime_attrib("group_id")
+    start_time = evg_datetime_attrib("start_time")
+    status = evg_attrib("status")
+    task_id = evg_attrib("task_id")
+    test_file = evg_attrib("test_file")
+    test_id = evg_attrib("test_id")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of a Test object."""
