@@ -16,9 +16,7 @@ class Logs(_BaseEvergreenObject):
     url = evg_attrib("url")
     line_num = evg_attrib("line_num")
     url_raw = evg_attrib("url_raw")
-    url_lobster = evg_attrib("url_lobster")
     url_parsley = evg_attrib("url_parsley")
-    log_id = evg_attrib("log_id")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of a Test log."""
@@ -40,7 +38,6 @@ class Tst(_BaseEvergreenObject):
     status = evg_attrib("status")
     test_id = evg_attrib("test_id")
     test_file = evg_attrib("test_file")
-    exit_code = evg_attrib("exit_code")
     start_time = evg_datetime_attrib("start_time")
     end_time = evg_datetime_attrib("end_time")
 
