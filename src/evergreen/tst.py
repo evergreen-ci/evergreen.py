@@ -35,7 +35,7 @@ class Tst(_BaseEvergreenObject):
     """Representation of a test object from evergreen."""
 
     end_time = evg_datetime_attrib("end_time")
-    group_id = evg_datetime_attrib("group_id")
+    group_id = evg_attrib("group_id")
     start_time = evg_datetime_attrib("start_time")
     status = evg_attrib("status")
     task_id = evg_attrib("task_id")

@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.10.5 - 2025-01-02
+- Fixed the type of `group_id` field of test object.
+
 ## 3.10.4 - 2024-12-19
 - Add `group_id` field to test object.
 - Remove `url_lobster` and `log_id` fields from Logs object.
