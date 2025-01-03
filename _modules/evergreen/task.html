@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.task &#8212; evergreen.py 3.10.5 documentation</title>
+    <title>evergreen.task &#8212; evergreen.py 3.10.6 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -426,19 +426,24 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheduled_time</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_time</span></div>
 
 <div class="viewcode-block" id="Task.get_tests"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_tests">[docs]</a>    <span class="k">def</span> <span class="nf">get_tests</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">test_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Tst&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the test results for this task.</span>
 
 <span class="sd">        :param status: Only return tests with the given status.</span>
 <span class="sd">        :param execution: Return results for specified execution, if specified.</span>
+<span class="sd">        :param test_name: Only return tests with the given test name.</span>
 <span class="sd">        :return: List of test results for the task.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">tests_by_task</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span>
             <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
             <span class="n">execution</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">execution</span> <span class="k">if</span> <span class="n">execution</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">execution</span><span class="p">,</span>
+            <span class="n">test_name</span><span class="o">=</span><span class="n">test_name</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Task.get_num_of_tests"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_num_of_tests">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_of_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
