@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.10.6 - 2025-01-03
+- Added `test_name` parameter to get_tests method of task class.
+
 ## 3.10.5 - 2025-01-02
 - Fixed the type of `group_id` field of test object.
 

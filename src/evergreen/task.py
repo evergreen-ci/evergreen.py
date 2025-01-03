@@ -380,19 +380,24 @@ class Task(_BaseEvergreenObject):
         return self.scheduled_time and not self.finish_time
 
     def get_tests(
-        self, status: Optional[str] = None, execution: Optional[int] = None
+        self,
+        status: Optional[str] = None,
+        execution: Optional[int] = None,
+        test_name: Optional[str] = None,
     ) -> List["Tst"]:
         """
         Get the test results for this task.
 
         :param status: Only return tests with the given status.
         :param execution: Return results for specified execution, if specified.
+        :param test_name: Only return tests with the given test name.
         :return: List of test results for the task.
         """
         return self._api.tests_by_task(
             self.task_id,
             status=status,
             execution=self.execution if execution is None else execution,
+            test_name=test_name,
         )
 
     def get_num_of_tests(self) -> int:
