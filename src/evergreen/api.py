@@ -1128,7 +1128,11 @@ class EvergreenApi(object):
         return Task(self._call_api(url, params).json(), self)  # type: ignore[arg-type]
 
     def tests_by_task(
-        self, task_id: str, status: Optional[str] = None, execution: Optional[int] = None
+        self,
+        task_id: str,
+        status: Optional[str] = None,
+        execution: Optional[int] = None,
+        test_name: Optional[str] = None,
     ) -> List[Tst]:
         """
         Get all tests for a given task.
@@ -1136,6 +1140,7 @@ class EvergreenApi(object):
         :param task_id: Id of task to query for.
         :param status: Limit results to given status.
         :param execution: Retrieve the specified task execution (defaults to 0).
+        :param test_name: Limit results to given test name.
         :return: List of tests for the specified task.
         """
         params: Dict[str, Any] = {}
@@ -1143,6 +1148,8 @@ class EvergreenApi(object):
             params["status"] = status
         if execution is not None:
             params["execution"] = execution
+        if test_name is not None:
+            params["test_name"] = test_name
         url = self._create_url(f"/tasks/{task_id}/tests")
         return [Tst(test, self) for test in self._paginate(url, params)]  # type: ignore[arg-type]
 
