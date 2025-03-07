@@ -575,7 +575,7 @@ class TestCreatePatchDiff:
     @patch("evergreen.api.subprocess.run",)
     def test_patch_from_diff_valid_no_author(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
-        mock_stdout.stdout = b''
+        mock_stdout.stdout = b""
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
         mock_run.return_value = mock_stdout
 
@@ -602,7 +602,7 @@ class TestCreatePatchDiff:
     @patch("evergreen.api.subprocess.run",)
     def test_patch_from_diff_valid_with_author(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
-        mock_stdout.stdout = b''
+        mock_stdout.stdout = b""
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
         mock_run.return_value = mock_stdout
 
@@ -640,7 +640,7 @@ class TestCreatePatchDiff:
     @patch("evergreen.api.subprocess.run",)
     def test_patch_from_patch_id(self, mock_run, mocked_api):
         mock_stdout = MagicMock()
-        mock_stdout.stdout = b''
+        mock_stdout.stdout = b""
         mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
         mock_run.return_value = mock_stdout
 
