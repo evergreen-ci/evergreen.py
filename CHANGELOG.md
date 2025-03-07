@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.10.7 - 2025-03-07
+- No user facing changes, when creating a copy of a patch check both stderr and stdout for the patch creation details. This ensures forward compatibility with [DEVPROD-13915](https://jira.mongodb.org/browse/DEVPROD-13915).
+
 ## 3.10.6 - 2025-01-03
 - Added `test_name` parameter to get_tests method of task class.
 

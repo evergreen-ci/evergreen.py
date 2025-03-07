@@ -1009,15 +1009,20 @@ class EvergreenApi(object):
             command = f"{command} --author {author}"
 
         process = subprocess.run(command, shell=True, capture_output=True)
-        output = process.stderr.decode("utf-8")
-
-        if not output:
-            # patch-file returns on stderr, but patch returns on stdout,
-            # so if stderr is empty, check stdout
-            output = process.stdout.decode("utf-8")
+        output = process.stdout.decode("utf-8")
 
         url_match = EVERGREEN_URL_REGEX.search(output)
         id_match = EVERGREEN_PATCH_ID_REGEX.search(output)
+
+        # Until DEVPROD-13915 is implemented, the patch-file command
+        # returns on stderr, but patch returns on stdout.
+        # Thus, if no match is found in stdout, check stderr.
+        stderr = process.stderr.decode("utf-8")
+        if not url_match:
+            url_match = EVERGREEN_URL_REGEX.search(stderr)
+
+        if not id_match:
+            id_match = EVERGREEN_PATCH_ID_REGEX.search(stderr)
 
         if url_match is None or id_match is None:
             raise Exception(
