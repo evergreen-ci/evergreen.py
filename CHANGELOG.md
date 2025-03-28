@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.11.0 - 2025-03-28
+- Add `strategies` parameter to select tests endpoint.
+
 ## 3.10.7 - 2025-03-07
 - No user facing changes, when creating a copy of a patch check both stderr and stdout for the patch creation details. This ensures forward compatibility with [DEVPROD-13915](https://jira.mongodb.org/browse/DEVPROD-13915).
 
