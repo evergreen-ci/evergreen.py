@@ -1552,6 +1552,7 @@ class EvergreenApi(object):
         task_id: str,
         task_name: str,
         tests: List[str],
+        strategies: Optional[List[str]] = None,
     ) -> Dict[str, Dict[str, List[str]]]:
         """
         Return a subset of tests to run for a given task.
@@ -1562,6 +1563,7 @@ class EvergreenApi(object):
         :param task_id: task_id of running task.
         :param task_name: task_name of running task.
         :param tests: list of tests to filter.
+        :param strategies: list of strategies to use.
         :return: A dict containing all of the given information with a filtered list of tests.
         """
         url = self._create_url("/select/tests")
@@ -1572,6 +1574,7 @@ class EvergreenApi(object):
             "task_id": task_id,
             "task_name": task_name,
             "tests": tests,
+            "strategies": strategies,
         }
         return self._call_api(url, method="POST", data=json.dumps(data)).json()
 
