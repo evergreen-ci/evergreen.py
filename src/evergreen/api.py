@@ -1026,7 +1026,10 @@ class EvergreenApi(object):
 
         if url_match is None or id_match is None:
             raise Exception(
-                f"Unable to parse URL or ID from command output: {output}. \nExecuted command: {command}"
+                f"Unable to parse URL or ID from command stdout or stderr:\n \
+                    \tstdout: {output}\n \
+                    \tstderr: {stderr} \n \
+                    \tExecuted command: {command}"
             )
 
         return PatchCreationDetails(url=url_match.group(0), id=id_match.group(0))
