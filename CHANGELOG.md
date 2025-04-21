@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.11.1 - 2025-04-21
+- Add additional logging for cloning patch
+
 ## 3.11.0 - 2025-03-28
 - Add `strategies` parameter to select tests endpoint.
 
