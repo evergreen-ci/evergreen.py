@@ -99,9 +99,13 @@ functions:
           ./pypi-version-check
 
 pre:
+- command: github.generate_token
+  params:
+    expansion_name: GH_TOKEN
 - command: git.get_project
   params:
     directory: src
+    token: ${GH_TOKEN}
 - func: create virtualenv
 
 post:
