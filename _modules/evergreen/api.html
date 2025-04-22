@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.10.6 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.11.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -1055,19 +1055,27 @@
             <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2"> --author </span><span class="si">{</span><span class="n">author</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">output</span><span class="p">:</span>
-            <span class="c1"># patch-file returns on stderr, but patch returns on stdout,</span>
-            <span class="c1"># so if stderr is empty, check stdout</span>
-            <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
         <span class="n">url_match</span> <span class="o">=</span> <span class="n">EVERGREEN_URL_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
         <span class="n">id_match</span> <span class="o">=</span> <span class="n">EVERGREEN_PATCH_ID_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
 
+        <span class="c1"># Until DEVPROD-13915 is implemented, the patch-file command</span>
+        <span class="c1"># returns on stderr, but patch returns on stdout.</span>
+        <span class="c1"># Thus, if no match is found in stdout, check stderr.</span>
+        <span class="n">stderr</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">url_match</span><span class="p">:</span>
+            <span class="n">url_match</span> <span class="o">=</span> <span class="n">EVERGREEN_URL_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">id_match</span><span class="p">:</span>
+            <span class="n">id_match</span> <span class="o">=</span> <span class="n">EVERGREEN_PATCH_ID_REGEX</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">stderr</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">url_match</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">id_match</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unable to parse URL or ID from command output: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">. </span><span class="se">\n</span><span class="s2">Executed command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Unable to parse URL or ID from command stdout or stderr:</span><span class="se">\n</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                    </span><span class="se">\t</span><span class="s2">stdout: </span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="se">\n</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                    </span><span class="se">\t</span><span class="s2">stderr: </span><span class="si">{</span><span class="n">stderr</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="se">\</span>
+<span class="s2">                    </span><span class="se">\t</span><span class="s2">Executed command: </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">PatchCreationDetails</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="n">id_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
@@ -1593,6 +1601,7 @@
         <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">tests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">strategies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a subset of tests to run for a given task.</span>
@@ -1603,6 +1612,7 @@
 <span class="sd">        :param task_id: task_id of running task.</span>
 <span class="sd">        :param task_name: task_name of running task.</span>
 <span class="sd">        :param tests: list of tests to filter.</span>
+<span class="sd">        :param strategies: list of strategies to use.</span>
 <span class="sd">        :return: A dict containing all of the given information with a filtered list of tests.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="s2">&quot;/select/tests&quot;</span><span class="p">)</span>
@@ -1613,6 +1623,7 @@
             <span class="s2">&quot;task_id&quot;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
             <span class="s2">&quot;task_name&quot;</span><span class="p">:</span> <span class="n">task_name</span><span class="p">,</span>
             <span class="s2">&quot;tests&quot;</span><span class="p">:</span> <span class="n">tests</span><span class="p">,</span>
+            <span class="s2">&quot;strategies&quot;</span><span class="p">:</span> <span class="n">strategies</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span></div>
 
