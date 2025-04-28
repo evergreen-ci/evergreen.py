@@ -1,4 +1,5 @@
 """Representation of evergreen manifest."""
+
 from __future__ import absolute_import
 
 from typing import TYPE_CHECKING, Any, Dict, Optional
