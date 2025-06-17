@@ -23,6 +23,7 @@ PyYAML = ">=5"
 requests = ">=2"
 structlog = ">=19"
 pydantic = ">=1"
+urllib3 = ">2.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4"
