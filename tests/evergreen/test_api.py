@@ -1029,7 +1029,7 @@ class TestUserPermissionsApi(object):
         )
 
     def test_all_user_permissions_for_resource(self, mocked_api, mocked_api_response):
-        expected_url = mocked_api._create_url("permissions/users")
+        expected_url = mocked_api._create_url("/permissions/users")
         expected_data = json.dumps(
             {"resource_id": "resource-1", "resource_type": PermissionableResourceType.PROJECT.value}
         )
