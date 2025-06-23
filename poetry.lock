@@ -1327,6 +1327,7 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 name = "responses"
 version = "0.25.0"
 description = "A utility library for mocking out the `requests` Python library."
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -1346,6 +1347,7 @@ tests = ["coverage (>=6.0.0)", "flake8", "mypy", "pytest (>=7.0.0)", "pytest-asy
 name = "setuptools"
 version = "69.0.3"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -1730,4 +1732,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "ecd48ac0e64513a4839ac93903f56c8206401626018279ce996568be9bcca5cc"
+content-hash = "699a21bdcf1a19e241e6d7b41f43b13c5e92bfc5cc3bd691cec3c7c294b2a388"
