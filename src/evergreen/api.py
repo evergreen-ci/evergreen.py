@@ -12,11 +12,13 @@ from http import HTTPStatus
 from json.decoder import JSONDecodeError
 from time import time
 from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
+from distutils.version import StrictVersion
 
 import requests
 import structlog
 from requests.exceptions import HTTPError
 from structlog.stdlib import LoggerFactory
+import urllib3
 from urllib3.util import Retry
 
 from evergreen.alias import VariantAlias
@@ -1701,15 +1703,24 @@ class CachedEvergreenApi(EvergreenApi):
 
 class RetryingEvergreenApi(EvergreenApi):
     """An Evergreen Api that retries failed calls."""
-
-    DEFAULT_HTTP_RETRY = Retry(
+    if StrictVersion(urllib3.__version__) >= StrictVersion("2.0.0"):
+        DEFAULT_HTTP_RETRY = Retry(
+            total=DEFAULT_HTTP_RETRY_ATTEMPTS,
+            backoff_factor=DEFAULT_HTTP_RETRY_BACKOFF_FACTOR,
+            backoff_max=DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC,
+            status_forcelist=DEFAULT_HTTP_RETRY_CODES,
+            raise_on_status=False,
+            raise_on_redirect=False,
+        )
+    else:
+        DEFAULT_HTTP_RETRY = Retry(
         total=DEFAULT_HTTP_RETRY_ATTEMPTS,
         backoff_factor=DEFAULT_HTTP_RETRY_BACKOFF_FACTOR,
-        backoff_max=DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC,
         status_forcelist=DEFAULT_HTTP_RETRY_CODES,
         raise_on_status=False,
         raise_on_redirect=False,
     )
+    DEFAULT_HTTP_RETRY.DEFAULT_BACKOFF_MAX=DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC
 
     def __init__(
         self,
