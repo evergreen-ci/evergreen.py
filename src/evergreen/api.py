@@ -1721,7 +1721,7 @@ class RetryingEvergreenApi(EvergreenApi):
             raise_on_status=False,
             raise_on_redirect=False,
         )
-    DEFAULT_HTTP_RETRY.DEFAULT_BACKOFF_MAX = DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC
+    DEFAULT_HTTP_RETRY.BACKOFF_MAX = DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC
 
     def __init__(
         self,
