@@ -1,4 +1,6 @@
 # Changelog
+## 3.11.2 - 2025-06-23
+- Add compatibility for urllib3 < 2.0.0
 
 ## 3.11.1 - 2025-04-21
 - Add additional logging for cloning patch
