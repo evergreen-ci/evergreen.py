@@ -151,8 +151,11 @@ You can find the documentation [here](https://evergreen-ci.github.io/evergreen.p
 
 - Poetry 1.1 or later
 
-You will need Evergreen credentials on your local machine to use this library or the attached CLI. You
-can set up your credentials by following the link [here](https://github.com/evergreen-ci/evergreen/wiki/Using-the-Command-Line-Tool#downloading-the-command-line-tool).
+You will need Evergreen credentials on your local machine to use this library or the attached CLI. You can authenticate in one of two ways: 
+
+- *Deprecated soon* set up your credentials by following the link [here](https://github.com/evergreen-ci/evergreen/wiki/Using-the-Command-Line-Tool#downloading-the-command-line-tool). 
+
+- Authenticate through kanopy-oidc. Please follow the installation instructions [here](https://docs.devprod.prod.corp.mongodb.com/evergreen/CLI#install-kanopy-oidc). You will be prompted to click on a link to authenticate. 
 
 ### Linting/formatting
 
