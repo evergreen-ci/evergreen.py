@@ -224,7 +224,7 @@ def sample_test_run():
 def sample_evergreen_auth(sample_evergreen_configuration):
     """Return sample evergreen configuration"""
     return EvgAuth(
-        sample_evergreen_configuration["user"], sample_evergreen_configuration["api_key"]
+        sample_evergreen_configuration["user"], sample_evergreen_configuration["api_key"], ""
     )
 
 
