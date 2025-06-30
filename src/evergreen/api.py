@@ -1551,7 +1551,7 @@ class EvergreenApi(object):
         :param resource_type: Resource type of the resource.
         :return: A dict containing user to permissions mappings.
         """
-        url = self._create_url("/users/permissions")
+        url = self._create_url("/permissions/users")
         return self._call_api(
             url, data=json.dumps({"resource_id": resource_id, "resource_type": resource_type})
         ).json()

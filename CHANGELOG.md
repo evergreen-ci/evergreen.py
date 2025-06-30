@@ -1,4 +1,8 @@
 # Changelog
+
+## 3.11.3 - 2025-06-30
+- fix method `all_user_permissions_for_resource` call to endpoint `/permissions/users` instead of `/users/permissions`.
+
 ## 3.11.2 - 2025-06-23
 - Add compatibility for urllib3 < 2.0.0
 
