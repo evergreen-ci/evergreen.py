@@ -1915,12 +1915,18 @@ argument.</p>
 <p>Get configuration about connecting to evergreen.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.config.EvgAuth">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">EvgAuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evergreen.config.EvgAuth" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">EvgAuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jwt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evergreen.config.EvgAuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.config.EvgAuth.api_key">
 <span class="sig-name descname"><span class="pre">api_key</span></span><a class="headerlink" href="#evergreen.config.EvgAuth.api_key" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.config.EvgAuth.jwt">
+<span class="sig-name descname"><span class="pre">jwt</span></span><a class="headerlink" href="#evergreen.config.EvgAuth.jwt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1934,7 +1940,7 @@ argument.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="evergreen.config.get_auth">
 <span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_auth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/evergreen/config.html#get_auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_auth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the evergreen authentication object from the default locations. Convenience function.</p>
+<dd><p>Get the evergreen authentication object. Falls back to JWT if no api_key is found in config.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Authentication information for evergreen.</p>
@@ -1952,6 +1958,31 @@ argument.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Authentication information for evergreen.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="evergreen.config.get_jwt">
+<span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_jwt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/evergreen/config.html#get_jwt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_jwt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a JWT token using the ‘kanopy-oidc’ command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JWT token if successful, None otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="evergreen.config.get_jwt_from_process">
+<span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_jwt_from_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Popen</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/evergreen/config.html#get_jwt_from_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_jwt_from_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract JWT token from process output while displaying other output to user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>process</strong> – Subprocess with stdout and stderr pipes</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JWT token if found, None otherwise</p>
 </dd>
 </dl>
 </dd></dl>
@@ -5289,11 +5320,14 @@ argument.</p>
 <li><a class="reference internal" href="#module-evergreen.config">evergreen.config module</a><ul>
 <li><a class="reference internal" href="#evergreen.config.EvgAuth"><code class="docutils literal notranslate"><span class="pre">EvgAuth</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.config.EvgAuth.api_key"><code class="docutils literal notranslate"><span class="pre">EvgAuth.api_key</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.EvgAuth.jwt"><code class="docutils literal notranslate"><span class="pre">EvgAuth.jwt</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.EvgAuth.username"><code class="docutils literal notranslate"><span class="pre">EvgAuth.username</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#evergreen.config.get_auth"><code class="docutils literal notranslate"><span class="pre">get_auth()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.get_auth_from_config"><code class="docutils literal notranslate"><span class="pre">get_auth_from_config()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.get_jwt"><code class="docutils literal notranslate"><span class="pre">get_jwt()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.get_jwt_from_process"><code class="docutils literal notranslate"><span class="pre">get_jwt_from_process()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.read_evergreen_config"><code class="docutils literal notranslate"><span class="pre">read_evergreen_config()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.read_evergreen_from_file"><code class="docutils literal notranslate"><span class="pre">read_evergreen_from_file()</span></code></a></li>
 </ul>

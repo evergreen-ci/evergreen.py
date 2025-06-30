@@ -78,9 +78,11 @@
 <span class="kn">from</span> <span class="nn">evergreen.commitqueue</span> <span class="kn">import</span> <span class="n">CommitQueue</span>
 <span class="kn">from</span> <span class="nn">evergreen.config</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
+    <span class="n">DEFAULT_CORP_API_SERVER</span><span class="p">,</span>
     <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
     <span class="n">EvgAuth</span><span class="p">,</span>
     <span class="n">get_auth_from_config</span><span class="p">,</span>
+    <span class="n">get_jwt</span><span class="p">,</span>
     <span class="n">read_evergreen_config</span><span class="p">,</span>
     <span class="n">read_evergreen_from_file</span><span class="p">,</span>
 <span class="p">)</span>
@@ -163,6 +165,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span> <span class="o">=</span> <span class="n">api_server</span>
+        <span class="k">if</span> <span class="n">auth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">auth</span><span class="o">.</span><span class="n">jwt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span> <span class="o">=</span> <span class="n">DEFAULT_CORP_API_SERVER</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span> <span class="o">=</span> <span class="n">auth</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">session</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span> <span class="o">=</span> <span class="n">log_on_error</span>
@@ -195,11 +199,15 @@
     <span class="k">def</span> <span class="nf">_create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new session to query the API with.&quot;&quot;&quot;</span>
         <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
         <span class="n">adapter</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_http_retry</span><span class="p">)</span>
         <span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://&quot;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
         <span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span>
         <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
-            <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Api-User&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;Api-Key&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">auth</span><span class="o">.</span><span class="n">jwt</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">auth</span><span class="o">.</span><span class="n">jwt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span> <span class="ow">and</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
+                <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Api-User&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;Api-Key&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">session</span>
 
     <span class="k">def</span> <span class="nf">_create_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -388,7 +396,6 @@
             <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="n">DEFAULT_LIMIT</span><span class="p">,</span>
             <span class="p">}</span>
-
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
@@ -1676,13 +1683,16 @@
 
         <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">auth</span> <span class="o">=</span> <span class="n">get_auth_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">auth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Try to get JWT if no api_key found</span>
+                <span class="k">if</span> <span class="n">jwt</span> <span class="o">:=</span> <span class="n">get_jwt</span><span class="p">():</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EvgAuth</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">jwt</span><span class="p">)</span>
 
             <span class="c1"># If there is a value for api_server_host, then use it.</span>
             <span class="k">if</span> <span class="s2">&quot;evergreen&quot;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;evergreen&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_server_host&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;api_server&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;evergreen&quot;</span><span class="p">][</span><span class="s2">&quot;api_server_host&quot;</span><span class="p">]</span>
-
         <span class="k">return</span> <span class="n">kwargs</span></div>
 
 
