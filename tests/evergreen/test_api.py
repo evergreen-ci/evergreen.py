@@ -628,11 +628,12 @@ class TestCreatePatchDiff:
 
     @patch("evergreen.api.subprocess.run",)
     def test_patch_from_diff_invalid(self, mock_run, mocked_api):
-        mock_stdout = MagicMock()
-        mock_stdout.stderr = b"no url here"
-        mock_run.return_value = mock_stdout
+        mock_proc = MagicMock()
+        mock_proc.stdout = b""
+        mock_proc.stderr = b"no url here"
+        mock_run.return_value = mock_proc
 
-        with pytest.raises(Exception):
+        with pytest.raises(RuntimeError):
             mocked_api.patch_from_diff(
                 "path", {}, "base", "task", "project", "description", "variant"
             )

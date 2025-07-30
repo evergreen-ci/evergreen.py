@@ -1027,7 +1027,7 @@ class EvergreenApi(object):
             id_match = EVERGREEN_PATCH_ID_REGEX.search(stderr)
 
         if url_match is None or id_match is None:
-            raise Exception(
+            raise RuntimeError(
                 f"Unable to parse URL or ID from command stdout or stderr:\n \
                     \tstdout: {output}\n \
                     \tstderr: {stderr} \n \
@@ -1655,7 +1655,7 @@ class CachedEvergreenApi(EvergreenApi):
             api_server, auth, timeout, log_on_error=log_on_error
         )
 
-    @lru_cache(maxsize=CACHE_SIZE)
+    @lru_cache(maxsize=CACHE_SIZE)  # noqa: B019
     def build_by_id(self, build_id: str) -> Build:  # type: ignore[override]
         """
         Get a build by id.
@@ -1665,7 +1665,7 @@ class CachedEvergreenApi(EvergreenApi):
         """
         return super(CachedEvergreenApi, self).build_by_id(build_id)
 
-    @lru_cache(maxsize=CACHE_SIZE)
+    @lru_cache(maxsize=CACHE_SIZE)  # noqa: B019
     def version_by_id(self, version_id: str) -> Version:  # type: ignore[override]
         """
         Get version by version id.
@@ -1675,7 +1675,7 @@ class CachedEvergreenApi(EvergreenApi):
         """
         return super(CachedEvergreenApi, self).version_by_id(version_id)
 
-    @lru_cache(maxsize=CACHE_SIZE)
+    @lru_cache(maxsize=CACHE_SIZE)  # noqa: B019
     def tasks_by_build(
         self, build_id: str, fetch_all_executions: Optional[bool] = None
     ) -> List[Task]:
