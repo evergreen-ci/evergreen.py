@@ -49,18 +49,15 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">yaml</span>
 
-<span class="n">EvgAuth</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;EvgAuth&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">,</span> <span class="s2">&quot;jwt&quot;</span><span class="p">])</span>
+<span class="n">EvgAuth</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;EvgAuth&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;api_key&quot;</span><span class="p">])</span>
 
 <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span>
-<span class="n">DEFAULT_API_SERVER</span> <span class="o">=</span> <span class="s2">&quot;https://evergreen.mongodb.com&quot;</span>  <span class="c1"># for use with api key</span>
-<span class="n">DEFAULT_CORP_API_SERVER</span> <span class="o">=</span> <span class="s2">&quot;https://evergreen.corp.mongodb.com&quot;</span>  <span class="c1"># for use with JWT</span>
-
+<span class="n">DEFAULT_API_SERVER</span> <span class="o">=</span> <span class="s2">&quot;https://evergreen.mongodb.com&quot;</span>
 <span class="n">CONFIG_FILE_LOCATIONS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;cli_bin&quot;</span><span class="p">,</span> <span class="s2">&quot;.evergreen.yml&quot;</span><span class="p">)),</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="s2">&quot;.evergreen.yml&quot;</span><span class="p">)),</span>
@@ -96,87 +93,19 @@
 <span class="sd">    :param config: Evergreen configuration.</span>
 <span class="sd">    :return: Authentication information for evergreen.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">EvgAuth</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">api_key</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_key&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">jwt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EvgAuth</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;api_key&quot;</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="get_auth"><a class="viewcode-back" href="../../evergreen.html#evergreen.config.get_auth">[docs]</a><span class="k">def</span> <span class="nf">get_auth</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the evergreen authentication object. Falls back to JWT if no api_key is found in config.</span>
+<span class="sd">    Get the evergreen authentication object from the default locations. Convenience function.</span>
 
 <span class="sd">    :return: Authentication information for evergreen.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">conf</span> <span class="o">=</span> <span class="n">read_evergreen_config</span><span class="p">()</span>
-
     <span class="k">if</span> <span class="n">conf</span><span class="p">:</span>
-        <span class="n">auth</span> <span class="o">=</span> <span class="n">get_auth_from_config</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>  <span class="c1"># Only return auth if it has an api_key</span>
-            <span class="k">return</span> <span class="n">auth</span>
-
-    <span class="c1"># Try to get JWT if no api_key found</span>
-    <span class="k">if</span> <span class="n">jwt</span> <span class="o">:=</span> <span class="n">get_jwt</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">EvgAuth</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">jwt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">get_auth_from_config</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="get_jwt"><a class="viewcode-back" href="../../evergreen.html#evergreen.config.get_jwt">[docs]</a><span class="k">def</span> <span class="nf">get_jwt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get a JWT token using the &#39;kanopy-oidc&#39; command.</span>
-
-<span class="sd">    :return: JWT token if successful, None otherwise.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;kanopy-oidc&quot;</span><span class="p">,</span> <span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;device&quot;</span><span class="p">],</span>
-            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
-            <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
-            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">jwt</span> <span class="o">=</span> <span class="n">get_jwt_from_process</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
-        <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Warning: evergreen client jwt command failed with return code </span><span class="si">{</span><span class="n">process</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">jwt</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: No JWT token was obtained from evergreen client&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">jwt</span>
-
-    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: evergreen client not found in PATH&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Error getting JWT token: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="kc">None</span></div>
-
-
-<div class="viewcode-block" id="get_jwt_from_process"><a class="viewcode-back" href="../../evergreen.html#evergreen.config.get_jwt_from_process">[docs]</a><span class="k">def</span> <span class="nf">get_jwt_from_process</span><span class="p">(</span><span class="n">process</span><span class="p">:</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract JWT token from process output while displaying other output to user.</span>
-
-<span class="sd">    :param process: Subprocess with stdout and stderr pipes</span>
-<span class="sd">    :return: JWT token if found, None otherwise</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">jwt</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
-            <span class="c1"># Check if line looks like a JWT (starts with &#39;ey&#39; and is long)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ey&quot;</span><span class="p">):</span>
-                <span class="n">jwt</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>  <span class="c1"># Show non-JWT output to user</span>
-
-    <span class="c1"># Show any error output</span>
-    <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">process</span><span class="o">.</span><span class="n">stderr</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-
-    <span class="k">return</span> <span class="n">jwt</span></div>
 </pre></div>
 
             <div class="clearer"></div>
