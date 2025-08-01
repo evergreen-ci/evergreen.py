@@ -1,13 +1,13 @@
 # Changelog
 
+## 3.11.4 - 2025-07-30
+- revert kanopy-oidc support pending rethinking of auth
+
 ## 3.11.3 - 2025-06-30
 - fix method `all_user_permissions_for_resource` call to endpoint `/permissions/users` instead of `/users/permissions`.
 
 ## 3.11.2 - 2025-06-23
 - Add compatibility for urllib3 < 2.0.0
-
-3.11.2 - 2025-06-30
-- Add support for kanopy-oidc
 
 ## 3.11.1 - 2025-04-21
 - Add additional logging for cloning patch

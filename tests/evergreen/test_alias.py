@@ -16,5 +16,5 @@ class TestVariantAlias(object):
         display_tasks = alias.display_tasks
 
         assert len(display_tasks) == len(sample_version_alias["DisplayTasks"])
-        assert type(display_tasks[0]) == DisplayTaskAlias
+        assert isinstance(display_tasks[0], DisplayTaskAlias)
         assert display_tasks[0].name == sample_version_alias["DisplayTasks"][0]["Name"]

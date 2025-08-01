@@ -32,11 +32,9 @@ from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import (
     DEFAULT_API_SERVER,
-    DEFAULT_CORP_API_SERVER,
     DEFAULT_NETWORK_TIMEOUT_SEC,
     EvgAuth,
     get_auth_from_config,
-    get_jwt,
     read_evergreen_config,
     read_evergreen_from_file,
 )
@@ -119,8 +117,6 @@ class EvergreenApi(object):
         """
         self._timeout = timeout
         self._api_server = api_server
-        if auth is not None and auth.jwt:
-            self._api_server = DEFAULT_CORP_API_SERVER
         self._auth = auth
         self._session = session
         self._log_on_error = log_on_error
@@ -153,15 +149,11 @@ class EvergreenApi(object):
     def _create_session(self) -> requests.Session:
         """Create a new session to query the API with."""
         session = requests.Session()
-
         adapter = requests.adapters.HTTPAdapter(max_retries=self._http_retry)
         session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
         auth = self._auth
         if auth:
-            if auth.jwt:
-                session.headers.update({"Authorization": f"Bearer {auth.jwt}"})
-            if auth.username and auth.api_key:
-                session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
+            session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
         return session
 
     def _create_url(self, endpoint: str) -> str:
@@ -350,6 +342,7 @@ class EvergreenApi(object):
             params = {
                 "limit": DEFAULT_LIMIT,
             }
+
         while True:
             data = self._call_api(url, params).json()
             if not data:
@@ -1034,7 +1027,7 @@ class EvergreenApi(object):
             id_match = EVERGREEN_PATCH_ID_REGEX.search(stderr)
 
         if url_match is None or id_match is None:
-            raise Exception(
+            raise RuntimeError(
                 f"Unable to parse URL or ID from command stdout or stderr:\n \
                     \tstdout: {output}\n \
                     \tstderr: {stderr} \n \
@@ -1637,16 +1630,13 @@ class EvergreenApi(object):
 
         if config is not None:
             auth = get_auth_from_config(config)
-            if auth is not None and auth.api_key:
+            if auth:
                 kwargs["auth"] = auth
-            else:
-                # Try to get JWT if no api_key found
-                if jwt := get_jwt():
-                    kwargs["auth"] = EvgAuth(username="", api_key="", jwt=jwt)
 
             # If there is a value for api_server_host, then use it.
             if "evergreen" in config and config["evergreen"].get("api_server_host", None):
                 kwargs["api_server"] = config["evergreen"]["api_server_host"]
+
         return kwargs
 
 
@@ -1665,7 +1655,7 @@ class CachedEvergreenApi(EvergreenApi):
             api_server, auth, timeout, log_on_error=log_on_error
         )
 
-    @lru_cache(maxsize=CACHE_SIZE)
+    @lru_cache(maxsize=CACHE_SIZE)  # noqa: B019
     def build_by_id(self, build_id: str) -> Build:  # type: ignore[override]
         """
         Get a build by id.
@@ -1675,7 +1665,7 @@ class CachedEvergreenApi(EvergreenApi):
         """
         return super(CachedEvergreenApi, self).build_by_id(build_id)
 
-    @lru_cache(maxsize=CACHE_SIZE)
+    @lru_cache(maxsize=CACHE_SIZE)  # noqa: B019
     def version_by_id(self, version_id: str) -> Version:  # type: ignore[override]
         """
         Get version by version id.
@@ -1685,7 +1675,7 @@ class CachedEvergreenApi(EvergreenApi):
         """
         return super(CachedEvergreenApi, self).version_by_id(version_id)
 
-    @lru_cache(maxsize=CACHE_SIZE)
+    @lru_cache(maxsize=CACHE_SIZE)  # noqa: B019
     def tasks_by_build(
         self, build_id: str, fetch_all_executions: Optional[bool] = None
     ) -> List[Task]:
