@@ -1,102 +1,98 @@
 buildvariants:
-- display_name: Ubuntu 18.04
-  name: ubuntu1804
+- display_name: Python 3.9
+  name: cp39
   run_on:
-  - ubuntu1804-small
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.9
+  tasks:
+  - name: unit_tests
+  - name: evg_api_install
+
+- display_name: Python 3.10
+  name: cp310
+  run_on:
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.10
+  tasks:
+  - name: unit_tests
+  - name: evg_api_install
+
+- display_name: Python 3.11
+  name: cp311
+  run_on:
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.11
   tasks:
   - name: unit_tests
   - name: deploy
   - name: documentation
   - name: evg_api_install
 
+- display_name: Python 3.12
+  name: cp312
+  run_on:
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.12
+  tasks:
+  - name: unit_tests
+  - name: evg_api_install
+
+- display_name: Python 3.13
+  name: cp313
+  run_on:
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.13
+  tasks:
+  - name: unit_tests
+  - name: evg_api_install
+
 functions:
   create virtualenv:
-  - command: shell.exec
-    params:
-      working_dir: src
-      script: |
-        set -o errexit
-        set -o verbose
-
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
-
-        /opt/mongodbtoolchain/v3/bin/python3 -m venv venv
-        . venv/bin/activate
-        pip install --upgrade pip
-
-        export PIPX_HOME="$HOME/pipx"
-        export PIPX_BIN_DIR="$HOME/pipx/bin"
-        export PATH="$PATH:$PIPX_BIN_DIR"
-
-        rm -rf "$PIPX_HOME"
-
-        pip install --disable-pip-version-check --quiet pipx==1.1.0
-        pipx install poetry==1.3.2 --force
-        poetry install
+    - command: subprocess.exec
+      params:
+        command: "sh -c 'curl -sSL https://install.python-poetry.org | python3 -'"
+        env:
+          POETRY_HOME: ${workdir}/poetry
+          POETRY_VERSION: '2.1.3'
+    - command: subprocess.exec
+      params:
+        binary: ${workdir}/poetry/bin/poetry env use ${python_toolchain}/bin/python3
+        working_dir: src
+    - command: subprocess.exec
+      params:
+        command: ${workdir}/poetry/bin/poetry install
+        working_dir: src
 
   deploy:
-    - command: shell.exec
+    - command: subprocess.exec
       params:
+        command: ${workdir}/poetry/bin/poetry publish --build --username ${pypi_user} --password ${pypi_password}
         working_dir: src
-        script: |
-          set -o errexit
-          . venv/bin/activate
-
-          if [ "${is_patch}" = "true" ]; then
-            # Do not deploy on patches.
-            exit 0
-          fi
-
-          export PATH="$PATH:$HOME/pipx/bin"
-          poetry publish --build --username ${pypi_user} --password ${pypi_password}
 
   build_docs:
-    - command: shell.exec
+    - command: subprocess.exec
       params:
         working_dir: src
-        script: |
-          set -o errexit
-          set -o verbose
-          . venv/bin/activate
-
-          export PATH="$PATH:$HOME/pipx/bin"
-          poetry run sphinx-apidoc -o docs/source src "*cli*"
-          poetry run sphinx-build -W docs/source docs/build
-          git clean -d -f
+        command: ${workdir}/poetry/bin/poetry run sphinx-apidoc -o docs/source src "*cli*"
+    - command: subprocess.exec
+      params:
+        working_dir: src
+        command: ${workdir}/poetry/bin/poetry run sphinx-build -W docs/source docs/build
+    - command: subprocess.exec
+      params:
+        working_dir: src
+        command: git clean -d -f
 
   publish_docs:
-    - command: shell.exec
-      params:
-        working_dir: src
-        script: |
-          set -o errexit
-          set -o verbose
-          . venv/bin/activate
-
-          if [ "${is_patch}" = "true" ]; then
-            # Do not deploy on patches.
-            exit 0
-          fi
-
-          export LC_ALL=C.UTF-8
-          export LANG=C.UTF-8
-
-          export PATH="$PATH:$HOME/pipx/bin"
-          poetry run gh-pusher --build-dir docs/build
-
-  check_version_update:
-    - command: shell.exec
-      params:
-        working_dir: src
-        script: |
-          set -o errexit
-          set -o verbose
-
-          wget -q https://github.com/dbradf/pypi-version-check/releases/download/v0.3.0/pypi-version-check
-          chmod +x pypi-version-check
-
-          ./pypi-version-check
+  - command: subprocess.exec
+    params:
+      working_dir: src
+      command: ${workdir}/poetry/bin/poetry run gh-pusher --build-dir docs/build
 
 pre:
 - command: github.generate_token
@@ -107,6 +103,7 @@ pre:
     directory: src
     token: ${GH_TOKEN}
 - func: create virtualenv
+pre_error_fails_task: true
 
 post:
 - command: attach.xunit_results
@@ -116,20 +113,12 @@ post:
 tasks:
 - name: unit_tests
   commands:
-  - command: shell.exec
+  - command: subprocess.exec
     params:
       working_dir: src
-      script: |
-        set -o errexit
-        set -o verbose
-
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
-
-        . venv/bin/activate
-
-        export PATH="$PATH:$HOME/pipx/bin"
-        RUN_SLOW_TESTS=1 poetry run pytest --cov=src --junitxml=junit-test-output.xml
+      command: ${workdir}/poetry/bin/poetry run pytest --cov=src --junitxml=junit-test-output.xml
+      env:
+        RUN_SLOW_TESTS: '1'
 
 - name: evg_api_install
   commands:
@@ -137,23 +126,15 @@ tasks:
     params:
       working_dir: src
       script: |
-        set -o errexit
-        set -o verbose
+        set -eu
 
-        export LC_ALL=C.UTF-8
-        export LANG=C.UTF-8
-
-        /opt/mongodbtoolchain/v3/bin/python3 -m venv evg-api-cli-venv
+        ${python_toolchain}/bin/python3 -m venv evg-api-cli-venv
         . evg-api-cli-venv/bin/activate
 
         pip install --upgrade pip
         pip install .
 
         evg-api --help
-
-- name: check_pypi_version
-  commands:
-  - func: check_version_update
 
 - name: deploy
   patchable: false
@@ -165,6 +146,7 @@ tasks:
 - name: documentation
   depends_on:
     - name: unit_tests
+  allowed_requesters: ["commit"]
   commands:
     - func: build_docs
     - func: publish_docs
