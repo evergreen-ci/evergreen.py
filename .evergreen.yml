@@ -64,13 +64,13 @@ functions:
         command: ${workdir}/poetry/bin/poetry env use ${python_toolchain}/bin/python3
         working_dir: src
         env:
-          POETRY_HOME: ${workdir}/poetry
+          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
     - command: subprocess.exec
       params:
         command: ${workdir}/poetry/bin/poetry install
         working_dir: src
         env:
-          POETRY_HOME: ${workdir}/poetry
+          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
 
   deploy:
     - command: subprocess.exec
@@ -78,7 +78,7 @@ functions:
         command: ${workdir}/poetry/bin/poetry publish --build --username ${pypi_user} --password ${pypi_password}
         working_dir: src
         env:
-          POETRY_HOME: ${workdir}/poetry
+          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
 
   build_docs:
     - command: subprocess.exec
@@ -86,19 +86,17 @@ functions:
         working_dir: src
         command: ${workdir}/poetry/bin/poetry run sphinx-apidoc -o docs/source src "*cli*"
         env:
-          POETRY_HOME: ${workdir}/poetry
+          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
     - command: subprocess.exec
       params:
         working_dir: src
         command: ${workdir}/poetry/bin/poetry run sphinx-build -W docs/source docs/build
         env:
-          POETRY_HOME: ${workdir}/poetry
+          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
     - command: subprocess.exec
       params:
         working_dir: src
-        command: git clean -d -f
-        env:
-          POETRY_HOME: ${workdir}/poetry
+        command: git clean -d -f=
 
   publish_docs:
   - command: subprocess.exec
@@ -106,7 +104,7 @@ functions:
       working_dir: src
       command: ${workdir}/poetry/bin/poetry run gh-pusher --build-dir docs/build
       env:
-          POETRY_HOME: ${workdir}/poetry
+          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
 
 pre:
 - command: github.generate_token
@@ -133,7 +131,7 @@ tasks:
       command: ${workdir}/poetry/bin/poetry run pytest --cov=src --junitxml=junit-test-output.xml
       env:
         RUN_SLOW_TESTS: '1'
-        POETRY_HOME: ${workdir}/poetry
+        POETRY_VIRTUALENVS_PATH: ${workdir}/venv
 
 - name: evg_api_install
   commands:
