@@ -76,7 +76,7 @@ functions:
     - command: subprocess.exec
       params:
         working_dir: src
-        command: git clean -d -f=
+        command: git clean -d -f
 
   publish_docs:
   - command: subprocess.exec
