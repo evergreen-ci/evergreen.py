@@ -13,6 +13,7 @@ from http import HTTPStatus
 from json.decoder import JSONDecodeError
 from time import time
 from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
+from urllib.parse import urlparse
 
 import requests
 import structlog
@@ -57,12 +58,6 @@ from evergreen.tst import Tst
 from evergreen.users_for_role import UsersForRole
 from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
 from evergreen.version import RecentVersions, Requester, Version
-
-try:
-    from urlparse import urlparse
-except ImportError:
-    from urllib.parse import urlparse  # type: ignore
-
 
 LOGGER = structlog.getLogger(__name__)
 
