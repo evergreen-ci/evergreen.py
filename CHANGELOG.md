@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.12.0 - 2025-08-06
+- in a massive coincidence, python 3.12 support in version 3.12.0
+
 ## 3.11.5 - 2025-08-05
 - add multi version testing on Python 3.9-3.11
 

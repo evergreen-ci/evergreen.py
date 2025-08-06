@@ -31,6 +31,16 @@ buildvariants:
   - name: documentation
   - name: evg_api_install
 
+- display_name: Python 3.12
+  name: cp312
+  run_on:
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.12
+  tasks:
+  - name: unit_tests
+  - name: evg_api_install
+
 functions:
   create virtualenv:
     - command: subprocess.exec

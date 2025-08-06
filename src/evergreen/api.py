@@ -7,7 +7,6 @@ import re
 import subprocess
 from contextlib import contextmanager
 from datetime import datetime
-from distutils.version import StrictVersion
 from functools import lru_cache
 from http import HTTPStatus
 from json.decoder import JSONDecodeError
@@ -18,6 +17,7 @@ from urllib.parse import urlparse
 import requests
 import structlog
 import urllib3
+from packaging.version import Version as PackagingVersion
 from requests.exceptions import HTTPError
 from structlog.stdlib import LoggerFactory
 from urllib3.util import Retry
@@ -1699,7 +1699,7 @@ class CachedEvergreenApi(EvergreenApi):
 class RetryingEvergreenApi(EvergreenApi):
     """An Evergreen Api that retries failed calls."""
 
-    if StrictVersion(urllib3.__version__) >= StrictVersion("2.0.0"):
+    if PackagingVersion(urllib3.__version__) >= PackagingVersion("2.0.0"):
         DEFAULT_HTTP_RETRY = Retry(
             total=DEFAULT_HTTP_RETRY_ATTEMPTS,
             backoff_factor=DEFAULT_HTTP_RETRY_BACKOFF_FACTOR,
