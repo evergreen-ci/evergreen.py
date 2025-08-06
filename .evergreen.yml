@@ -80,32 +80,6 @@ functions:
         env:
           POETRY_VIRTUALENVS_PATH: ${workdir}/venv
 
-  build_docs:
-    - command: subprocess.exec
-      params:
-        working_dir: src
-        command: ${workdir}/poetry/bin/poetry run sphinx-apidoc -o docs/source src "*cli*"
-        env:
-          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
-    - command: subprocess.exec
-      params:
-        working_dir: src
-        command: ${workdir}/poetry/bin/poetry run sphinx-build -W docs/source docs/build
-        env:
-          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
-    - command: subprocess.exec
-      params:
-        working_dir: src
-        command: git clean -d -f
-
-  publish_docs:
-  - command: subprocess.exec
-    params:
-      working_dir: src
-      command: ${workdir}/poetry/bin/poetry run gh-pusher --build-dir docs/build
-      env:
-          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
-
 pre:
 - command: github.generate_token
   params:
@@ -155,11 +129,3 @@ tasks:
     - name: unit_tests
   commands:
     - func: deploy
-
-- name: documentation
-  depends_on:
-    - name: unit_tests
-  allowed_requesters: ["commit"]
-  commands:
-    - func: build_docs
-    - func: publish_docs
