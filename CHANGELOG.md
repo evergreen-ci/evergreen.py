@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.11.5 - 2025-08-05
+- add multi version testing on Python 3.9-3.11
+
 ## 3.11.4 - 2025-07-30
 - revert kanopy-oidc support pending rethinking of auth
 
