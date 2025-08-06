@@ -1,4 +1,5 @@
 """Sphinx Documentation configuration."""
+
 import os
 import sys
 from typing import List

@@ -439,7 +439,9 @@ class EvergreenApi(object):
         return projects
 
     def project_by_id(
-        self, project_id: str, include_repo_variables: Optional[bool] = False,
+        self,
+        project_id: str,
+        include_repo_variables: Optional[bool] = False,
     ) -> Project:
         """
         Get a project by project_id.
@@ -487,7 +489,9 @@ class EvergreenApi(object):
                 attachment.dict(exclude_none=True, exclude_unset=True) for attachment in attachments
             ]
         self._call_api(
-            url, data=json.dumps(data), method="POST",
+            url,
+            data=json.dumps(data),
+            method="POST",
         )
 
     def send_email(
@@ -524,7 +528,9 @@ class EvergreenApi(object):
         if headers is not None:
             data["headers"] = headers
         self._call_api(
-            url, data=json.dumps(data), method="POST",
+            url,
+            data=json.dumps(data),
+            method="POST",
         )
 
     def alias_for_version(

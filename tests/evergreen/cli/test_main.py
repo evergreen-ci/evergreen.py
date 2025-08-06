@@ -1,4 +1,5 @@
 """Unit tests for main.py."""
+
 import json
 from datetime import datetime
 
@@ -32,8 +33,8 @@ output_formats = [
 TEST_AUTH_USERNAME = "test.user"
 
 
-@pytest.fixture(params=output_formats)
-def output_fmt(request):
+@pytest.fixture(name="output_fmt", params=output_formats)
+def output_fmts(request):
     return request.param
 
 
