@@ -2,10 +2,10 @@
 
 import os
 import sys
+import tomllib
 from typing import List
 
 import sphinx_readable_theme
-import toml
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -20,11 +20,10 @@ PROJECT_ROOT = os.path.abspath("../..")
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-sys.path.insert(0, PROJECT_ROOT)
-
+sys.path.insert(0, os.path.join(PROJECT_ROOT, "src"))
 
 # -- Project information -----------------------------------------------------
-project_config = toml.load(f"{PROJECT_ROOT}/pyproject.toml")
+project_config = tomllib.load(open(f"{PROJECT_ROOT}/pyproject.toml", "rb"))
 project_info = project_config["tool"]["poetry"]
 
 project = project_info["name"]
@@ -40,10 +39,7 @@ release = project_info["version"]
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.viewcode",
-]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.apidoc"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -52,6 +48,8 @@ templates_path = ["_templates"]
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns: List[str] = []
+
+apidoc_modules = [{"path": "../../src", "destination": "ref"}]
 
 
 # -- Options for HTML output -------------------------------------------------

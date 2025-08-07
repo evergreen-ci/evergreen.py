@@ -11,12 +11,8 @@ jobs:
     - uses: actions/checkout@v4
       with:
         persist-credentials: false
-    - name: Build API docs
-      uses: ammaraskar/sphinx-action@5.3.0
-      with:
-        build-command: sphinx-apidoc -o docs/source src "*cli*"
     - name: Build HTML
-      uses: ammaraskar/sphinx-action@5.3.0
+      uses: ammaraskar/sphinx-action@8.2.3
       with:
         build-command: sphinx-build -W docs/source docs/build
     - name: Upload artifacts

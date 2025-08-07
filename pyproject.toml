@@ -12,6 +12,9 @@ packages = [
     { include = "evergreen", from = "src" },
 ]
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [tool.poetry.scripts]
 evg-api = "evergreen.cli.main:main"
 
@@ -32,8 +35,6 @@ pytest-cov = "^2.8"
 pytest-flake8 = "^1.0"
 pytest-mypy = "^1.0"
 pytest-pydocstyle = "^2.3"
-sphinx = "^5.0"
-sphinx-readable-theme = "^1.3.0"
 black = "^25.0"
 isort = "^5.5.4"
 pytest-isort = "^3.1"
