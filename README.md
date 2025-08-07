@@ -182,6 +182,45 @@ To get code coverage information:
 $ poetry run pytest --cov=src --cov-report=html
 ```
 
+### Changes to doc site building
+
+Docs are built with sphinx by their recommended GitHub Action. This action is configured to use a requirements.txt from the docs subdirectory so it doesn't know anything about Poetry and Poetry doesn't know anything about Sphinx deps. But this environment also needs to know about the runtime dependencies of the evergreen package in order to auto-document the Python modules from docstrings.
+
+This is an outline of the process you'd use to update the docs requirements.txt
+
+```bash
+poetry run python3 -m venv docs-env
+. docs-env/bin/activate
+pip install -r docs/requirements.txt
+# if you need to change any docs-only dependencies (like sphinx or extensions/themes), upgrade them now with pip install
+```
+
+If you have upgraded any material runtime dependencies of the evergreen package with poetry, follow this section as well
+
+```bash
+deactivate
+poetry export -f requirements.txt --output docs/runtime_requirements.txt
+. docs-env/bin/activate
+pip install -r docs/runtime_requirements.txt
+rm docs/runtime_requirements.txt
+```
+
+Check that the doc site still builds
+
+```bash
+pushd docs
+sphinx-build -W source build
+# poke around the build output directory
+popd
+```
+
+Finally to re-pin the docs dependencies
+
+```bash
+pip freeze > docs/requirements.txt
+git add docs/requirements.txt
+```
+
 ### Automatically running checks on commit
 
 This project has [pre-commit](https://pre-commit.com/) configured. Pre-commit will run

@@ -12,7 +12,7 @@ jobs:
       with:
         persist-credentials: false
     - name: Build HTML
-      uses: ammaraskar/sphinx-action@8.2.3
+      uses: ammaraskar/sphinx-action@8.2.3  # keep in sync with docs/requirements.txt
       with:
         build-command: sphinx-build -W source build
     - name: Upload artifacts
