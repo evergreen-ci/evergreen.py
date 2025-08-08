@@ -41,6 +41,16 @@ buildvariants:
   - name: unit_tests
   - name: evg_api_install
 
+- display_name: Python 3.13
+  name: cp313
+  run_on:
+  - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.13
+  tasks:
+  - name: unit_tests
+  - name: evg_api_install
+
 functions:
   create virtualenv:
     - command: subprocess.exec
@@ -68,32 +78,6 @@ functions:
         command: ${workdir}/poetry/bin/poetry publish --build --username ${pypi_user} --password ${pypi_password}
         working_dir: src
         env:
-          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
-
-  build_docs:
-    - command: subprocess.exec
-      params:
-        working_dir: src
-        command: ${workdir}/poetry/bin/poetry run sphinx-apidoc -o docs/source src "*cli*"
-        env:
-          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
-    - command: subprocess.exec
-      params:
-        working_dir: src
-        command: ${workdir}/poetry/bin/poetry run sphinx-build -W docs/source docs/build
-        env:
-          POETRY_VIRTUALENVS_PATH: ${workdir}/venv
-    - command: subprocess.exec
-      params:
-        working_dir: src
-        command: git clean -d -f
-
-  publish_docs:
-  - command: subprocess.exec
-    params:
-      working_dir: src
-      command: ${workdir}/poetry/bin/poetry run gh-pusher --build-dir docs/build
-      env:
           POETRY_VIRTUALENVS_PATH: ${workdir}/venv
 
 pre:
@@ -145,11 +129,3 @@ tasks:
     - name: unit_tests
   commands:
     - func: deploy
-
-- name: documentation
-  depends_on:
-    - name: unit_tests
-  allowed_requesters: ["commit"]
-  commands:
-    - func: build_docs
-    - func: publish_docs

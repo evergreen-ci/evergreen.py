@@ -214,7 +214,8 @@ class TestTask(object):
         assert not task.is_active()
 
     @pytest.mark.parametrize(
-        "execution,expected", [(None, 1), (0, 0)],
+        "execution,expected",
+        [(None, 1), (0, 0)],
     )
     def test_get_tests(self, sample_task, execution, expected):
         mock_api = MagicMock()

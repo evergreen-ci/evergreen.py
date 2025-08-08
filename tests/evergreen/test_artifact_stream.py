@@ -1,4 +1,5 @@
 """Unit tests for Artifact class streams in src/evergreen/task.py"""
+
 from unittest.mock import MagicMock
 
 import pytest

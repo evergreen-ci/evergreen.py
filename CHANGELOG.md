@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.13.0 - 2025-08-07
+- in a massive coincidence, python 3.13 support in version 3.13.0
+
 ## 3.12.0 - 2025-08-06
 - in a massive coincidence, python 3.12 support in version 3.12.0
 
