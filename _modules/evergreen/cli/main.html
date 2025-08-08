@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>evergreen.cli.main &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/readable.css?v=e058d051" />
+    <script src="../../../_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head><body>
+  
+  
+
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Home</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">evergreen.cli.main</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for evergreen.cli.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Command line driver for evergreen API.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.resource_type_permissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">PermissionableResourceType</span><span class="p">,</span> <span class="n">RemovablePermission</span>
+
+<span class="n">DATE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
+
+<span class="n">DisplayFormat</span> <span class="o">=</span> <span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;DisplayFormat&quot;</span><span class="p">,</span> <span class="s2">&quot;human json yaml&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fmt_output">
+<a class="viewcode-back" href="../../../ref/evergreen.cli.html#evergreen.cli.main.fmt_output">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the given data into the specified format.</span>
+
+<span class="sd">    :param fmt: DisplayFormat to use.</span>
+<span class="sd">    :param data: Data to convertn.</span>
+<span class="sd">    :return: Data is specified format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">yaml</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--json&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;display_format&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">DisplayFormat</span><span class="p">,</span>
+    <span class="n">flag_value</span><span class="o">=</span><span class="n">DisplayFormat</span><span class="o">.</span><span class="n">json</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Write output in json.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--yaml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;display_format&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">DisplayFormat</span><span class="p">,</span>
+    <span class="n">flag_value</span><span class="o">=</span><span class="n">DisplayFormat</span><span class="o">.</span><span class="n">yaml</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Write output in yaml.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--human-readable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;display_format&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">DisplayFormat</span><span class="p">,</span>
+    <span class="n">flag_value</span><span class="o">=</span><span class="n">DisplayFormat</span><span class="o">.</span><span class="n">human</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Write output in a human readable format.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">cli</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">display_format</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create common CLI options.&quot;&quot;&quot;</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">ensure_object</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">(</span><span class="n">use_config_file</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">display_format</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_hosts</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List the hosts running in evergreen.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+    <span class="n">host_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">all_hosts</span><span class="p">()</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="p">[</span><span class="n">host</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">host</span> <span class="ow">in</span> <span class="n">host_list</span><span class="p">]))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="s2">&quot;--limit&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_patches</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the patches for the given project.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+    <span class="n">patches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">patches_by_project</span><span class="p">(</span><span class="n">project</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">json</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">patches</span><span class="p">))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_projects</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List the evergreen projects.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+    <span class="n">project_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">all_projects</span><span class="p">()</span>
+    <span class="n">projects</span> <span class="o">=</span> <span class="p">[</span><span class="n">project</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">project_list</span><span class="p">]</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">projects</span><span class="p">))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--start&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--limit&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--revision_start&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--revision_end&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_versions</span><span class="p">(</span>
+    <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">project</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">revision_start</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">revision_end</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the versions for the given project.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+    <span class="n">version_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">versions_by_project</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span> <span class="n">revision_start</span><span class="o">=</span><span class="n">revision_start</span><span class="p">,</span> <span class="n">revision_end</span><span class="o">=</span><span class="n">revision_end</span>
+    <span class="p">)</span>
+    <span class="n">versions_to_display</span> <span class="o">=</span> <span class="p">[</span><span class="n">version</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">islice</span><span class="p">(</span><span class="n">version_list</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">)]</span>
+
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">versions_to_display</span><span class="p">))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--target&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--msg&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">send_slack_message</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a Slack message to the specified target.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">api</span><span class="o">.</span><span class="n">send_slack_message</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--after-date&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="n">DATE_FORMAT</span><span class="p">]),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The earliest date to use &#39;YYYY-MM-DD&#39;.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--before-date&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="n">DATE_FORMAT</span><span class="p">]),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The latest date to use &#39;YYYY-MM-DD&#39;.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--distros&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--group-by&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-g&quot;</span><span class="p">,</span> <span class="s2">&quot;--group-num-days&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;--requesters&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--sort&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--tests&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="s2">&quot;--tasks&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--variants&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_stats</span><span class="p">(</span>
+    <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">after_date</span><span class="p">,</span>
+    <span class="n">before_date</span><span class="p">,</span>
+    <span class="n">project</span><span class="p">,</span>
+    <span class="n">distros</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="p">,</span>
+    <span class="n">group_num_days</span><span class="p">,</span>
+    <span class="n">requesters</span><span class="p">,</span>
+    <span class="n">sort</span><span class="p">,</span>
+    <span class="n">tests</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="p">,</span>
+    <span class="n">variants</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the test stats specified.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="n">test_stat_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">test_stats_by_project</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">,</span>
+        <span class="n">after_date</span><span class="p">,</span>
+        <span class="n">before_date</span><span class="p">,</span>
+        <span class="n">group_num_days</span><span class="p">,</span>
+        <span class="n">requesters</span><span class="p">,</span>
+        <span class="n">tests</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">,</span>
+        <span class="n">distros</span><span class="p">,</span>
+        <span class="n">group_by</span><span class="p">,</span>
+        <span class="n">sort</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">test_statistics</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">test_stat_list</span><span class="p">]</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">test_statistics</span><span class="p">))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--after-date&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="n">DATE_FORMAT</span><span class="p">]),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The earliest date to use &#39;YYYY-MM-DD&#39;.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--before-date&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="n">DATE_FORMAT</span><span class="p">]),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The latest date to use &#39;YYYY-MM-DD&#39;.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--distros&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--group-by&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-g&quot;</span><span class="p">,</span> <span class="s2">&quot;--group-num-days&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;--requesters&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--sort&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="s2">&quot;--tasks&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--variants&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">task_stats</span><span class="p">(</span>
+    <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">after_date</span><span class="p">,</span>
+    <span class="n">before_date</span><span class="p">,</span>
+    <span class="n">project</span><span class="p">,</span>
+    <span class="n">distros</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="p">,</span>
+    <span class="n">group_num_days</span><span class="p">,</span>
+    <span class="n">requesters</span><span class="p">,</span>
+    <span class="n">sort</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="p">,</span>
+    <span class="n">variants</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the specified task stats.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="n">task_stat_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">task_stats_by_project</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">,</span>
+        <span class="n">after_date</span><span class="p">,</span>
+        <span class="n">before_date</span><span class="p">,</span>
+        <span class="n">group_num_days</span><span class="p">,</span>
+        <span class="n">requesters</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">,</span>
+        <span class="n">distros</span><span class="p">,</span>
+        <span class="n">group_by</span><span class="p">,</span>
+        <span class="n">sort</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">task_statistics</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">task_stat_list</span><span class="p">]</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">task_statistics</span><span class="p">))</span>
+
+
+<span class="n">RELIABILITY_GROUP_MAPPING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;task&quot;</span><span class="p">:</span> <span class="s2">&quot;task&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;variant&quot;</span><span class="p">:</span> <span class="s2">&quot;task_variant&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;distro&quot;</span><span class="p">:</span> <span class="s2">&quot;task_variant_distro&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-a&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--after-date&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="n">DATE_FORMAT</span><span class="p">]),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The earliest date to use &#39;YYYY-MM-DD&#39;.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--before-date&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">formats</span><span class="o">=</span><span class="p">[</span><span class="n">DATE_FORMAT</span><span class="p">]),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The latest date to use &#39;YYYY-MM-DD&#39;.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The evergreen project, eg &#39;mongodb-mongo-master&#39;&quot;</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--distros&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The list of distributions.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--group-by&quot;</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">RELIABILITY_GROUP_MAPPING</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span>
+    <span class="n">default</span><span class="o">=</span><span class="s2">&quot;task&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Group the results by &#39;task&#39;, &#39;variant&#39; or &#39;distro&#39;. Defaults to &#39;task&#39;&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-g&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--group-num-days&quot;</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The number of days to group results by. Defaults to 28.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;--requesters&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The requesters.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="s2">&quot;--sort&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The sort order, can be earliest or latest.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;-t&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--tasks&quot;</span><span class="p">,</span>
+    <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The list of tasks, e.g. &#39;lint&#39; , &#39;compile&#39;. Required, no default.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--variants&quot;</span><span class="p">,</span> <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The list of build variants.&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">task_reliability</span><span class="p">(</span>
+    <span class="n">ctx</span><span class="p">,</span>
+    <span class="n">after_date</span><span class="p">,</span>
+    <span class="n">before_date</span><span class="p">,</span>
+    <span class="n">project</span><span class="p">,</span>
+    <span class="n">distros</span><span class="p">,</span>
+    <span class="n">group_by</span><span class="p">,</span>
+    <span class="n">group_num_days</span><span class="p">,</span>
+    <span class="n">requesters</span><span class="p">,</span>
+    <span class="n">sort</span><span class="p">,</span>
+    <span class="n">tasks</span><span class="p">,</span>
+    <span class="n">variants</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the Task Reliability scores for the matching tasks.</span>
+
+<span class="sd">    \b</span>
+<span class="sd">    Examples:</span>
+<span class="sd">    \b</span>
+<span class="sd">        # Get the scores for mongodb-mongo-master project, compile task (grouped by task)</span>
+<span class="sd">        # for today (1 day, grouped by days 1).</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t compile</span>
+<span class="sd">    OR</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t compile \\</span>
+<span class="sd">            --group-by task</span>
+
+<span class="sd">    \b</span>
+<span class="sd">        # Get the scores for mongodb-mongo-master project, compile task (grouped by variant)</span>
+<span class="sd">        # for today (1 day, grouped by days 1).</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t compile \\</span>
+<span class="sd">            --group-by variant</span>
+
+<span class="sd">    \b</span>
+<span class="sd">        # Get the scores for mongodb-mongo-master project, compile and lint tasks (grouped by distro)</span>
+<span class="sd">        # for today (1 day, grouped by days 1).</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t compile -t lint \\</span>
+<span class="sd">            --group-by distro</span>
+<span class="sd">    \b</span>
+<span class="sd">        # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro)</span>
+<span class="sd">        # for the last 28 days.</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1 \\</span>
+<span class="sd">            -a $(date -I --date=&quot;27 days ago&quot;)</span>
+<span class="sd">    OR</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1 \\</span>
+<span class="sd">            -a $(date -I --date=&quot;27 days ago&quot;) -b $(date -I)</span>
+<span class="sd">    OR</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile -g 1 \\</span>
+<span class="sd">            --group_num_days 28</span>
+
+<span class="sd">    \b</span>
+<span class="sd">        # Get the scores for mongodb-mongo-master project, lint and compile tasks (grouped by distro)</span>
+<span class="sd">        # for each day for the last 28 days.</span>
+<span class="sd">        $&gt; evg-api --json task-reliability -p mongodb-mongo-master -t lint -t compile \\</span>
+<span class="sd">            --group_by distro -a $(date -I --date=&quot;27 days ago&quot;)</span>
+
+<span class="sd">    \b</span>
+<span class="sd">        # Get the scores for mongodb-mongo-master project, lint task (grouped by task) , grouped in</span>
+<span class="sd">        # batches of 28 days for all dates after 168 days ago.</span>
+<span class="sd">        $&gt; evg-api   --json task-reliability   -p mongodb-mongo-master -t lint  --group-by task \\</span>
+<span class="sd">            -g 28 -a $(date -I --date=&quot;$((28 * 6 - 1)) days ago&quot;)</span>
+
+<span class="sd">    \f</span>
+<span class="sd">    :see: &#39;task reliability</span>
+<span class="sd">        &lt;https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage#taskreliability&gt;&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="n">task_reliability_list</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">task_reliability_by_project</span><span class="p">(</span>
+        <span class="n">project</span><span class="p">,</span>
+        <span class="n">after_date</span><span class="p">,</span>
+        <span class="n">before_date</span><span class="p">,</span>
+        <span class="n">group_num_days</span><span class="p">,</span>
+        <span class="n">requesters</span><span class="p">,</span>
+        <span class="n">tasks</span><span class="p">,</span>
+        <span class="n">variants</span><span class="p">,</span>
+        <span class="n">distros</span><span class="p">,</span>
+        <span class="n">RELIABILITY_GROUP_MAPPING</span><span class="p">[</span><span class="n">group_by</span><span class="p">],</span>
+        <span class="n">sort</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">task_reliability_scores</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">task_reliability_list</span><span class="p">]</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">task_reliability_scores</span><span class="p">))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--version&quot;</span><span class="p">,</span> <span class="s2">&quot;version_id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--builds&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Include builds of version in output&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">version_stats</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">version_id</span><span class="p">,</span> <span class="n">builds</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Collect stats for the given evergreen version.</span>
+
+<span class="sd">    :param ctx: Command context.</span>
+<span class="sd">    :param version_id: Id of version to analyze.</span>
+<span class="sd">    :param builds: Include builds of version in output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">(</span><span class="n">version_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">human</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">version</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">()</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">include_children</span><span class="o">=</span><span class="n">builds</span><span class="p">)))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-b&quot;</span><span class="p">,</span> <span class="s2">&quot;--build&quot;</span><span class="p">,</span> <span class="s2">&quot;build_id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--tasks&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Include tasks of build in output&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_stats</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">build_id</span><span class="p">,</span> <span class="n">tasks</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Collect stats for the given evergreen build.</span>
+
+<span class="sd">    :param ctx: Command context.</span>
+<span class="sd">    :param build_id: Id of build to analyze.</span>
+<span class="sd">    :param tasks: If true include tasks in output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="n">build</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">(</span><span class="n">build_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="n">DisplayFormat</span><span class="o">.</span><span class="n">human</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">build</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">())</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">build</span><span class="o">.</span><span class="n">get_metrics</span><span class="p">()</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">include_children</span><span class="o">=</span><span class="n">tasks</span><span class="p">)))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The project name&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--commit&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The full 40-char commit hash&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">manifest</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">commit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a manifest for the given project and commit.</span>
+
+<span class="sd">    Example: use jq to get a module version associated with a main-repo version:</span>
+
+<span class="sd">    evg-api --json manifest --project &lt;PROJECT&gt; --commit &lt;MAIN-REPO-HASH&gt; \\</span>
+<span class="sd">        | jq --raw-output .modules.&lt;MODULE-NAME&gt;.revision</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="n">manifest</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">commit</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">manifest</span><span class="o">.</span><span class="n">json</span><span class="p">))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--user-id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;User whose permissions to fetch&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">user_permissions</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">user_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the evergreen permissions for a given user.</span>
+
+<span class="sd">    Gets permissions for the current user if --user-id is not explicitly</span>
+<span class="sd">    specified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user_id</span><span class="p">:</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">_auth</span><span class="o">.</span><span class="n">username</span>
+    <span class="n">permissions</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">permissions_for_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">permissions</span><span class="p">]))</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--user-id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;User whose permissions to remove&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--resource-type&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s2">&quot;project&quot;</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;superuser&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">],</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Type of resource for which to delete permissions.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--resource-id&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Id of the resource for which to delete permissions. Required unless deleting all permissions.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_user_permissions</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete all permissions of a given type for a user.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">api</span><span class="o">.</span><span class="n">delete_user_permissions</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">RemovablePermission</span><span class="p">(</span><span class="n">resource_type</span><span class="p">),</span> <span class="n">resource_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">resource_id</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Sucessfully deleted </span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> permissions for user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2"> on resource id </span><span class="si">{</span><span class="n">resource_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sucessfully deleted </span><span class="si">{</span><span class="n">resource_type</span><span class="si">}</span><span class="s2"> permissions for user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--user-id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;User to grant roles to.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--role&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">multiple</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Role to grant the user.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">give_roles_to_user</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">role</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Grant roles to a user.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">api</span><span class="o">.</span><span class="n">give_roles_to_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">role</span><span class="p">))</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully granted roles </span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2"> to user </span><span class="si">{</span><span class="n">user_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--role&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Role to fetch users for.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_users_for_role</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">role</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get users having an evergreen role.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_users_for_role</span><span class="p">(</span><span class="n">role</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">users</span><span class="o">.</span><span class="n">users</span><span class="p">)</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--resource-id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Resource id to fetch user permissions for.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--resource-type&quot;</span><span class="p">,</span>
+    <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Choice</span><span class="p">([</span><span class="s2">&quot;project&quot;</span><span class="p">,</span> <span class="s2">&quot;distro&quot;</span><span class="p">,</span> <span class="s2">&quot;superuser&quot;</span><span class="p">],</span> <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Type of resource.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">all_user_permissions_for_resource</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all user permissions to a resource.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">user_permissions</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">all_user_permissions_for_resource</span><span class="p">(</span>
+        <span class="n">resource_id</span><span class="p">,</span> <span class="n">PermissionableResourceType</span><span class="p">(</span><span class="n">resource_type</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">user_permissions</span><span class="p">)</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--patch-id&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Patch id to request diff for.&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">patch_diff</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">patch_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get patch diff for a given patch.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_patch_diff</span><span class="p">(</span><span class="n">patch_id</span><span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+
+
+<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">pass_context</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--diff-file&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The path to the diff file.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--description&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The description of the build.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--param&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The params to pass to the build.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--base&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The base commit of the build.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--project&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The project of the build.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--tasks&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The tasks to execute.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--variants&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The variants to build against.&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--author&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Indicate the author of the patch.&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">patch_from_diff</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">diff_file</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">variants</span><span class="p">,</span> <span class="n">author</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start a patch build based on the diff.&quot;&quot;&quot;</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">patch_from_diff</span><span class="p">(</span>
+        <span class="n">diff_file</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">variants</span><span class="p">,</span> <span class="n">author</span>
+    <span class="p">)</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../ref/evergreen.cli.html#evergreen.cli.main.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create command line application.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cli</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="p">{})</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation index</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2020 MongoDB.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
+  </div>
+  
+  </body>
+</html>

@@ -6,7 +6,7 @@
 evergreen.py documentation
 ==========================
 
-``evergreen.py`` is a thin wrapper around the Evergreen API to help build 
+``evergreen.py`` is a thin wrapper around the Evergreen API to help build
 Python tools using the API.
 
 It can easily be install with pip:
@@ -23,7 +23,7 @@ It can easily be install with pip:
    getting_started.rst
    sample_usage.rst
 
-   modules
+   ref/modules
 
 
 

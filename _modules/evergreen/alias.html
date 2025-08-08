@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.alias &#8212; evergreen.py 3.12.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>evergreen.alias &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
+    <script src="../../_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -23,7 +19,7 @@
   
   
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -45,21 +41,24 @@
             
   <h1>Source code for evergreen.alias</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Representation of project aliases.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
 
 
-<div class="viewcode-block" id="DisplayTaskAlias"><a class="viewcode-back" href="../../evergreen.html#evergreen.alias.DisplayTaskAlias">[docs]</a><span class="k">class</span> <span class="nc">DisplayTaskAlias</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+<div class="viewcode-block" id="DisplayTaskAlias">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.alias.DisplayTaskAlias">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DisplayTaskAlias</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of a DisplayTask in an alias.&quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
     <span class="n">execution_tasks</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;ExecutionTasks&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of a display task alias.</span>
 
@@ -69,13 +68,16 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="VariantAlias"><a class="viewcode-back" href="../../evergreen.html#evergreen.alias.VariantAlias">[docs]</a><span class="k">class</span> <span class="nc">VariantAlias</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="VariantAlias">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.alias.VariantAlias">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VariantAlias</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of an alias for a particular build variant.&quot;&quot;&quot;</span>
 
     <span class="n">variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;Variant&quot;</span><span class="p">)</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;Tasks&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of a variant alias.</span>
 
@@ -85,18 +87,19 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DisplayTaskAlias</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DisplayTaskAlias</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a list of display tasks for the alias.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;DisplayTasks&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">DisplayTaskAlias</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;DisplayTasks&quot;</span><span class="p">]]</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
@@ -104,7 +107,7 @@
   </ul></li>
   </ul></li>
 </ul>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -112,7 +115,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -120,7 +123,7 @@
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
   </div>
   
   </body>

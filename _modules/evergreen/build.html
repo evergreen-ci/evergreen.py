@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.build &#8212; evergreen.py 3.12.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>evergreen.build &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
+    <script src="../../_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -23,7 +19,7 @@
   
   
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,17 +42,17 @@
   <h1>Source code for evergreen.build</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Representation of an evergreen build.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
-<span class="kn">from</span> <span class="nn">evergreen.metrics.buildmetrics</span> <span class="kn">import</span> <span class="n">BuildMetrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.metrics.buildmetrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">BuildMetrics</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
-    <span class="kn">from</span> <span class="nn">evergreen.task</span> <span class="kn">import</span> <span class="n">Task</span>  <span class="c1"># noqa: F401</span>
-    <span class="kn">from</span> <span class="nn">evergreen.version</span> <span class="kn">import</span> <span class="n">Version</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.task</span><span class="w"> </span><span class="kn">import</span> <span class="n">Task</span>  <span class="c1"># noqa: F401</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">Version</span>
 
 <span class="n">EVG_BUILD_STATUS_FAILED</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
 <span class="n">EVG_BUILD_STATUS_SUCCESS</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
@@ -68,7 +64,9 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="StatusCounts"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.StatusCounts">[docs]</a><span class="k">class</span> <span class="nc">StatusCounts</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+<div class="viewcode-block" id="StatusCounts">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.StatusCounts">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatusCounts</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of Evergreen StatusCounts.&quot;&quot;&quot;</span>
 
     <span class="n">succeeded</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;succeeded&quot;</span><span class="p">)</span>
@@ -79,7 +77,7 @@
     <span class="n">dispatched</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;dispatched&quot;</span><span class="p">)</span>
     <span class="n">timed_out</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;timed_out&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a Status Counts object.</span>
 
@@ -89,7 +87,10 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">StatusCounts</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Build"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build">[docs]</a><span class="k">class</span> <span class="nc">Build</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Build">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.Build">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Build</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of an Evergreen build.&quot;&quot;&quot;</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;_id&quot;</span><span class="p">)</span>
@@ -115,7 +116,7 @@
     <span class="n">actual_makespan_ms</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;actual_makespan_ms&quot;</span><span class="p">)</span>
     <span class="n">origin</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of an evergreen task.</span>
 
@@ -125,11 +126,13 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Build</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">status_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCounts</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCounts</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the status counts of the build.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">StatusCounts</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;status_counts&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Build.get_project_identifier"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.get_project_identifier">[docs]</a>    <span class="k">def</span> <span class="nf">get_project_identifier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Build.get_project_identifier">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.Build.get_project_identifier">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_project_identifier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the human-readable project id. Can also be accessed as an attribute.</span>
 
@@ -137,7 +140,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_identifier</span></div>
 
-<div class="viewcode-block" id="Build.get_tasks"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.get_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Task&quot;</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Build.get_tasks">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.Build.get_tasks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Task&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all tasks for this build.</span>
 
@@ -146,7 +152,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">tasks_by_build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">fetch_all_executions</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Build.is_completed"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.is_completed">[docs]</a>    <span class="k">def</span> <span class="nf">is_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Build.is_completed">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.Build.is_completed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if this build has completed running tasks.</span>
 
@@ -154,7 +163,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="n">COMPLETED_STATES</span></div>
 
-<div class="viewcode-block" id="Build.get_metrics"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.get_metrics">[docs]</a>    <span class="k">def</span> <span class="nf">get_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BuildMetrics</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Build.get_metrics">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.Build.get_metrics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BuildMetrics</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get metrics for the build.</span>
 
@@ -168,7 +180,10 @@
             <span class="k">return</span> <span class="n">BuildMetrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">task_filter_fn</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Build.get_version"><a class="viewcode-back" href="../../evergreen.html#evergreen.build.Build.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Version&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Build.get_version">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.build.Build.get_version">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Version&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the version this build is a part of.</span>
 
@@ -176,20 +191,22 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a string representation of Task for debugging purposes.</span>
 
 <span class="sd">        :return: String representation of Task.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Build(</span><span class="si">{id}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
@@ -197,7 +214,7 @@
   </ul></li>
   </ul></li>
 </ul>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -205,7 +222,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -213,7 +230,7 @@
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
   </div>
   
   </body>

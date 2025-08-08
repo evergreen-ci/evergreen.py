@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.metrics.buildmetrics &#8212; evergreen.py 3.12.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/readable.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <title>evergreen.metrics.buildmetrics &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/readable.css?v=e058d051" />
+    <script src="../../../_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -23,7 +19,7 @@
   
   
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,29 +42,31 @@
   <h1>Source code for evergreen.metrics.buildmetrics</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Metrics for Evergreen builds.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">structlog</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">structlog</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
 
-<span class="kn">from</span> <span class="nn">evergreen.errors.exceptions</span> <span class="kn">import</span> <span class="n">ActiveTaskMetricsException</span>
-<span class="kn">from</span> <span class="nn">evergreen.task</span> <span class="kn">import</span> <span class="n">StatusScore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.errors.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ActiveTaskMetricsException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.task</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatusScore</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
-    <span class="kn">from</span> <span class="nn">evergreen.task</span> <span class="kn">import</span> <span class="n">Task</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Build</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.task</span><span class="w"> </span><span class="kn">import</span> <span class="n">Task</span>
 
 
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="BuildMetrics"><a class="viewcode-back" href="../../../evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics">[docs]</a><span class="k">class</span> <span class="nc">BuildMetrics</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="BuildMetrics">
+<a class="viewcode-back" href="../../../ref/evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BuildMetrics</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Metrics about an evergreen build.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build</span><span class="p">:</span> <span class="s2">&quot;Build&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build</span><span class="p">:</span> <span class="s2">&quot;Build&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of build metrics.</span>
 
@@ -98,7 +96,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_display_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BuildMetrics.calculate"><a class="viewcode-back" href="../../../evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.calculate">[docs]</a>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMetrics&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="BuildMetrics.calculate">
+<a class="viewcode-back" href="../../../ref/evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.calculate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BuildMetrics&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate metrics for the given build.</span>
 
@@ -121,8 +121,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_count_display_tasks</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
+
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the total tasks in the build.</span>
 
@@ -131,7 +132,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">success_count</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">failure_count</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">undispatched_count</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_tasks_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_tasks_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of successful tasks.</span>
 
@@ -140,7 +141,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">success_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_tasks_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_tasks_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of undispatched tasks.</span>
 
@@ -149,7 +150,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">undispatched_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_tasks_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_tasks_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of failed tasks.</span>
 
@@ -158,7 +159,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">failure_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_tasks_timed_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_tasks_timed_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of timeout tasks.</span>
 
@@ -167,7 +168,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timed_out_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_tasks_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_tasks_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of system failure tasks.</span>
 
@@ -176,7 +177,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">system_failure_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">total_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">total_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the total display tasks in the build.</span>
 
@@ -189,7 +190,7 @@
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_display_tasks_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_display_tasks_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of successful display tasks.</span>
 
@@ -198,7 +199,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_success_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_display_tasks_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_display_tasks_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of undispatched display_tasks.</span>
 
@@ -207,7 +208,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_undispatched_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_display_tasks_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_display_tasks_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of failed display tasks.</span>
 
@@ -216,7 +217,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_failure_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_display_tasks_timed_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_display_tasks_timed_out</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of timeout display tasks.</span>
 
@@ -225,7 +226,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_timed_out_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pct_display_tasks_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pct_display_tasks_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the percentage of system failure display tasks.</span>
 
@@ -234,7 +235,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_system_failure_count</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">create_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time the first task of the build was created.</span>
 
@@ -245,7 +246,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time first task of build was started.</span>
 
@@ -256,7 +257,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Time last task of build was completed.</span>
 
@@ -267,7 +268,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">makespan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">makespan</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wall clock duration of build.</span>
 
@@ -278,7 +279,7 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wall clock duration until build was started.</span>
 
@@ -288,7 +289,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_time</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_percent_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the percent of n_tasks out of total.</span>
 
@@ -299,7 +300,7 @@
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">n_tasks</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_tasks</span>
 
-    <span class="k">def</span> <span class="nf">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_percent_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_tasks</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the percent of display n_tasks out of display total.</span>
 
@@ -310,7 +311,7 @@
             <span class="k">return</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">n_tasks</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_display_tasks</span>
 
-    <span class="k">def</span> <span class="nf">_count_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="s2">&quot;Task&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_count_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="s2">&quot;Task&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add stats for the given task to the metrics.</span>
 
@@ -362,7 +363,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">total_processing_time</span> <span class="o">+=</span> <span class="n">task</span><span class="o">.</span><span class="n">time_taken_ms</span> <span class="o">/</span> <span class="mi">1000</span>
 
-    <span class="k">def</span> <span class="nf">_count_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_count_display_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">tasks</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_display_map</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">status</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">task</span><span class="o">.</span><span class="n">get_status_score</span><span class="p">()</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
@@ -383,7 +384,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">display_failure_count</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">continue</span>
 
-<div class="viewcode-block" id="BuildMetrics.as_dict"><a class="viewcode-back" href="../../../evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.as_dict">[docs]</a>    <span class="k">def</span> <span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_children</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<div class="viewcode-block" id="BuildMetrics.as_dict">
+<a class="viewcode-back" href="../../../ref/evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.as_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_children</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Provide a dictionary representation.</span>
 
@@ -422,7 +425,8 @@
 
         <span class="k">return</span> <span class="n">metric</span></div>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create string version of metrics.</span>
 
@@ -475,13 +479,14 @@
             <span class="n">system_failure_display_count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_system_failure_count</span><span class="p">,</span>
             <span class="n">system_failure_display_pct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pct_display_tasks_system_failure</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../../index.html">Documentation index</a><ul>
@@ -489,7 +494,7 @@
   </ul></li>
   </ul></li>
 </ul>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
@@ -497,7 +502,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -505,7 +510,7 @@
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
   </div>
   
   </body>

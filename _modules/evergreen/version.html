@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.version &#8212; evergreen.py 3.12.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>evergreen.version &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
+    <script src="../../_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -23,7 +19,7 @@
   
   
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,28 +42,30 @@
   <h1>Source code for evergreen.version</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Version representation of evergreen.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">structlog</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">structlog</span>
 
-<span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
-<span class="kn">from</span> <span class="nn">evergreen.build</span> <span class="kn">import</span> <span class="n">Build</span>
-<span class="kn">from</span> <span class="nn">evergreen.manifest</span> <span class="kn">import</span> <span class="n">ManifestModule</span>
-<span class="kn">from</span> <span class="nn">evergreen.metrics.versionmetrics</span> <span class="kn">import</span> <span class="n">VersionMetrics</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.build</span><span class="w"> </span><span class="kn">import</span> <span class="n">Build</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.manifest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManifestModule</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.metrics.versionmetrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">VersionMetrics</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
-    <span class="kn">from</span> <span class="nn">evergreen.manifest</span> <span class="kn">import</span> <span class="n">Manifest</span>
-    <span class="kn">from</span> <span class="nn">evergreen.patch</span> <span class="kn">import</span> <span class="n">Patch</span>  <span class="c1"># noqa: F401</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.manifest</span><span class="w"> </span><span class="kn">import</span> <span class="n">Manifest</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.patch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Patch</span>  <span class="c1"># noqa: F401</span>
 
 
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Requester"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester">[docs]</a><span class="k">class</span> <span class="nc">Requester</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Requester">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Requester">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Requester</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Requester that created version.&quot;&quot;&quot;</span>
 
     <span class="n">PATCH_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;patch_request&quot;</span>
@@ -78,11 +76,16 @@
     <span class="n">TRIGGER_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;trigger_request&quot;</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">&quot;UNKNOWN&quot;</span>
 
-<div class="viewcode-block" id="Requester.evg_value"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester.evg_value">[docs]</a>    <span class="k">def</span> <span class="nf">evg_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Requester.evg_value">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Requester.evg_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evg_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the evergreen value for a requester.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Requester.stats_value"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Requester.stats_value">[docs]</a>    <span class="k">def</span> <span class="nf">stats_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Requester.stats_value">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Requester.stats_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stats_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value for the stats endpoints.&quot;&quot;&quot;</span>
         <span class="n">value_mappings</span> <span class="o">=</span> <span class="p">{</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">PATCH_REQUEST</span><span class="p">:</span> <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
@@ -94,7 +97,9 @@
             <span class="n">Requester</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">value_mappings</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="n">value_mappings</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span></div>
+</div>
+
 
 
 <span class="n">PATCH_REQUESTERS</span> <span class="o">=</span> <span class="p">{</span>
@@ -113,22 +118,30 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="BuildVariantStatus"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.BuildVariantStatus">[docs]</a><span class="k">class</span> <span class="nc">BuildVariantStatus</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+<div class="viewcode-block" id="BuildVariantStatus">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.BuildVariantStatus">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BuildVariantStatus</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of a Build Variants status.&quot;&quot;&quot;</span>
 
     <span class="n">build_variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_variant&quot;</span><span class="p">)</span>
     <span class="n">build_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_id&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of a Build Variants status.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BuildVariantStatus</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
 
-<div class="viewcode-block" id="BuildVariantStatus.get_build"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.BuildVariantStatus.get_build">[docs]</a>    <span class="k">def</span> <span class="nf">get_build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Build&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="BuildVariantStatus.get_build">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.BuildVariantStatus.get_build">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Build&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the build object for this build variants status.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_id</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_id</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Version"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version">[docs]</a><span class="k">class</span> <span class="nc">Version</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Version">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Version</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of an Evergreen Version.&quot;&quot;&quot;</span>
 
     <span class="n">version_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;version_id&quot;</span><span class="p">)</span>
@@ -152,7 +165,7 @@
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;parameters&quot;</span><span class="p">)</span>
     <span class="n">activated</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;activated&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an instance of an evergreen version.</span>
 
@@ -178,7 +191,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">build_variants_map</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">build_variants_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildVariantStatus</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_variants_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildVariantStatus</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a list of build variant statuses.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;build_variants_status&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;build_variants_status&quot;</span><span class="p">]:</span>
             <span class="k">return</span> <span class="p">[]</span>
@@ -186,11 +199,13 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">BuildVariantStatus</span><span class="p">(</span><span class="n">bvs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">bvs</span> <span class="ow">in</span> <span class="n">build_variants_status</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">requester</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Requester</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">requester</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Requester</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the requester of this version.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Requester</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;requester&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKNOWN&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
 
-<div class="viewcode-block" id="Version.build_by_variant"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.build_by_variant">[docs]</a>    <span class="k">def</span> <span class="nf">build_by_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Build&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="Version.build_by_variant">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.build_by_variant">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_by_variant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">build_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Build&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a build object for the specified variant.</span>
 
@@ -199,7 +214,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">build_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">build_variants_map</span><span class="p">[</span><span class="n">build_variant</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Version.get_manifest"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.get_manifest">[docs]</a>    <span class="k">def</span> <span class="nf">get_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Manifest&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Version.get_manifest">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.get_manifest">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Manifest&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the manifest for this version.</span>
 
@@ -207,7 +225,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">revision</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Version.get_modules"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.get_modules">[docs]</a>    <span class="k">def</span> <span class="nf">get_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ManifestModule</span><span class="p">]]:</span>
+
+<div class="viewcode-block" id="Version.get_modules">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.get_modules">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_modules</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ManifestModule</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the modules for this version.</span>
 
@@ -215,7 +236,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_manifest</span><span class="p">()</span><span class="o">.</span><span class="n">modules</span></div>
 
-<div class="viewcode-block" id="Version.get_builds"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.get_builds">[docs]</a>    <span class="k">def</span> <span class="nf">get_builds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Build&quot;</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Version.get_builds">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.get_builds">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_builds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s2">&quot;Build&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all the builds that are a part of this version.</span>
 
@@ -223,7 +247,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">builds_by_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Version.is_patch"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.is_patch">[docs]</a>    <span class="k">def</span> <span class="nf">is_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Version.is_patch">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.is_patch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if this version from a patch build.</span>
 
@@ -233,7 +260,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">requester</span> <span class="ow">in</span> <span class="n">PATCH_REQUESTERS</span>
         <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Version.is_completed"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.is_completed">[docs]</a>    <span class="k">def</span> <span class="nf">is_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Version.is_completed">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.is_completed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if this version has completed running tasks.</span>
 
@@ -241,7 +271,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="n">COMPLETED_STATES</span></div>
 
-<div class="viewcode-block" id="Version.get_patch"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.get_patch">[docs]</a>    <span class="k">def</span> <span class="nf">get_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Patch&quot;</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Version.get_patch">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.get_patch">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Patch&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the patch information for this version.</span>
 
@@ -251,7 +284,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">patch_by_id</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Version.get_metrics"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.Version.get_metrics">[docs]</a>    <span class="k">def</span> <span class="nf">get_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">VersionMetrics</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Version.get_metrics">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.Version.get_metrics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">VersionMetrics</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the metrics for this version.</span>
 
@@ -265,7 +301,8 @@
             <span class="k">return</span> <span class="n">VersionMetrics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">task_filter_fn</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the string representation of Version for debugging purposes.</span>
 
@@ -274,43 +311,50 @@
         <span class="k">return</span> <span class="s2">&quot;Version(</span><span class="si">{id}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">version_id</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="RecentVersionRow"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.RecentVersionRow">[docs]</a><span class="k">class</span> <span class="nc">RecentVersionRow</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RecentVersionRow">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.RecentVersionRow">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RecentVersionRow</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for a row of the RecentVersions endpoint.&quot;&quot;&quot;</span>
 
     <span class="n">build_variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_variant&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">builds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Build</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">builds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Build</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a map of build IDs to build objects.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">Build</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;builds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span></div>
 
 
-<div class="viewcode-block" id="RecentVersions"><a class="viewcode-back" href="../../evergreen.html#evergreen.version.RecentVersions">[docs]</a><span class="k">class</span> <span class="nc">RecentVersions</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RecentVersions">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.version.RecentVersions">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RecentVersions</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper for the data object returned by /projects/{project_id}/recent_versions.&quot;&quot;&quot;</span>
 
     <span class="n">rows</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;rows&quot;</span><span class="p">)</span>
     <span class="n">build_variants</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_variants&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">row_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RecentVersionRow</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">row_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">RecentVersionRow</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a map of build names to RecentVersionRows.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">RecentVersionRow</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">versions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">versions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Version</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the list of versions from the recent versions response object.</span>
 
 <span class="sd">        :return: List of versions from the response object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Version</span><span class="p">(</span><span class="n">wrapper</span><span class="p">[</span><span class="s2">&quot;versions&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">wrapper</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;versions&quot;</span><span class="p">]]</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
@@ -318,7 +362,7 @@
   </ul></li>
   </ul></li>
 </ul>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -326,7 +370,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -334,7 +378,7 @@
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
   </div>
   
   </body>

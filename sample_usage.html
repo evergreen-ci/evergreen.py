@@ -1,23 +1,19 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Sample Usages &#8212; evergreen.py 3.12.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/readable.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <title>Sample Usages &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="_static/readable.css?v=e058d051" />
+    <script src="_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="src" href="modules.html" />
+    <link rel="next" title="src" href="ref/modules.html" />
     <link rel="prev" title="Getting started with evergreen.py" href="getting_started.html" />
    
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -26,7 +22,7 @@
   
   
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,7 +32,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="modules.html" title="src"
+          <a href="ref/modules.html" title="src"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="getting_started.html" title="Getting started with evergreen.py"
@@ -52,14 +48,14 @@
           <div class="body" role="main">
             
   <section id="sample-usages">
-<h1>Sample Usages<a class="headerlink" href="#sample-usages" title="Permalink to this heading">¶</a></h1>
+<h1>Sample Usages<a class="headerlink" href="#sample-usages" title="Link to this heading">¶</a></h1>
 <p>Some samples for using <code class="docutils literal notranslate"><span class="pre">evergreen.py</span></code>.</p>
 <section id="diplaying-all-the-failed-tests-from-a-given-task">
-<h2>Diplaying all the failed tests from a given task<a class="headerlink" href="#diplaying-all-the-failed-tests-from-a-given-task" title="Permalink to this heading">¶</a></h2>
+<h2>Diplaying all the failed tests from a given task<a class="headerlink" href="#diplaying-all-the-failed-tests-from-a-given-task" title="Link to this heading">¶</a></h2>
 <p>If you have an ID of a failed task, a common operation would be to
 get a list of all the tests that failed. In this example, we will
 print out that list.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">evergreen</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">evergreen</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
 
 <span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="o">.</span><span class="n">get_api</span><span class="p">()</span>
 <span class="n">task_id</span> <span class="o">=</span> <span class="s2">&quot;task_id_1&quot;</span>
@@ -78,7 +74,7 @@ print out that list.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
@@ -93,7 +89,7 @@ print out that list.</p>
 <ul>
   <li><a href="index.html">Documentation index</a><ul>
       <li>Previous: <a href="getting_started.html" title="previous chapter">Getting started with evergreen.py</a></li>
-      <li>Next: <a href="modules.html" title="next chapter">src</a></li>
+      <li>Next: <a href="ref/modules.html" title="next chapter">src</a></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">
@@ -103,7 +99,7 @@ print out that list.</p>
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -111,7 +107,7 @@ print out that list.</p>
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -119,7 +115,7 @@ print out that list.</p>
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
   </div>
   
   </body>

@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.task &#8212; evergreen.py 3.12.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/readable.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>evergreen.task &#8212; evergreen.py 3.13.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
+    <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
+    <script src="../../_static/documentation_options.js?v=6aaf4047"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -23,7 +19,7 @@
   
   
 
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,20 +42,20 @@
   <h1>Source code for evergreen.task</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Task representation of evergreen.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
 
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntEnum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">evergreen.api_requests</span> <span class="kn">import</span> <span class="n">IssueLinkRequest</span><span class="p">,</span> <span class="n">MetadataLinkRequest</span>
-<span class="kn">from</span> <span class="nn">evergreen.base</span> <span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
-<span class="kn">from</span> <span class="nn">evergreen.manifest</span> <span class="kn">import</span> <span class="n">Manifest</span>
-<span class="kn">from</span> <span class="nn">evergreen.task_annotations</span> <span class="kn">import</span> <span class="n">TaskAnnotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.api_requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">IssueLinkRequest</span><span class="p">,</span> <span class="n">MetadataLinkRequest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_BaseEvergreenObject</span><span class="p">,</span> <span class="n">evg_attrib</span><span class="p">,</span> <span class="n">evg_datetime_attrib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.manifest</span><span class="w"> </span><span class="kn">import</span> <span class="n">Manifest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.task_annotations</span><span class="w"> </span><span class="kn">import</span> <span class="n">TaskAnnotation</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">evergreen.api</span> <span class="kn">import</span> <span class="n">EvergreenApi</span>
-    <span class="kn">from</span> <span class="nn">evergreen.tst</span> <span class="kn">import</span> <span class="n">Tst</span>  <span class="c1"># noqa: F401</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.tst</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tst</span>  <span class="c1"># noqa: F401</span>
 
 <span class="n">EVG_FAILED_STATUS</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
 <span class="n">EVG_SUCCESS_STATUS</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
@@ -75,7 +71,9 @@
 <span class="n">_BINARY_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;application&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="Artifact"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Artifact">[docs]</a><span class="k">class</span> <span class="nc">Artifact</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+<div class="viewcode-block" id="Artifact">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Artifact">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Artifact</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of a task artifact from evergreen.&quot;&quot;&quot;</span>
 
     <span class="n">name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
@@ -84,11 +82,13 @@
     <span class="n">ignore_for_fetch</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;ignore_for_fetch&quot;</span><span class="p">)</span>
     <span class="n">content_type</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;content_type&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task artifact.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Artifact</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Artifact.stream"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Artifact.stream">[docs]</a>    <span class="k">def</span> <span class="nf">stream</span><span class="p">(</span>
+<div class="viewcode-block" id="Artifact.stream">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Artifact.stream">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">decode_unicode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">chunk_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -106,10 +106,14 @@
             <span class="n">is_binary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_binary</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">_stream_api</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">decode_unicode</span><span class="o">=</span><span class="n">decode_unicode</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">,</span> <span class="n">is_binary</span><span class="o">=</span><span class="n">is_binary</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+            <span class="n">decode_unicode</span><span class="o">=</span><span class="n">decode_unicode</span><span class="p">,</span>
+            <span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">,</span>
+            <span class="n">is_binary</span><span class="o">=</span><span class="n">is_binary</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_is_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_binary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if an artifact is binary based on content_type.&quot;&quot;&quot;</span>
         <span class="n">_type</span><span class="p">,</span> <span class="n">subtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
 
@@ -119,7 +123,10 @@
             <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="StatusScore"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.StatusScore">[docs]</a><span class="k">class</span> <span class="nc">StatusScore</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+
+<div class="viewcode-block" id="StatusScore">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.StatusScore">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatusScore</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Integer score of the task status.&quot;&quot;&quot;</span>
 
     <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mi">1</span>
@@ -128,8 +135,10 @@
     <span class="n">FAILURE_TIMEOUT</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">UNDISPATCHED</span> <span class="o">=</span> <span class="mi">5</span>
 
-<div class="viewcode-block" id="StatusScore.get_task_status_score"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.StatusScore.get_task_status_score">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_task_status_score</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="s2">&quot;Task&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatusScore&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="StatusScore.get_task_status_score">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.StatusScore.get_task_status_score">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_task_status_score</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="s2">&quot;Task&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;StatusScore&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the status score based on the task status.</span>
 
@@ -143,21 +152,28 @@
             <span class="k">return</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">FAILURE_TIMEOUT</span>
         <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">is_system_failure</span><span class="p">():</span>
             <span class="k">return</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">FAILURE_SYSTEM</span>
-        <span class="k">return</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">FAILURE</span></div></div>
+        <span class="k">return</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">FAILURE</span></div>
+</div>
 
 
-<div class="viewcode-block" id="OomTrackerInfo"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.OomTrackerInfo">[docs]</a><span class="k">class</span> <span class="nc">OomTrackerInfo</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OomTrackerInfo">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.OomTrackerInfo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OomTrackerInfo</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of a task&#39;s OOM Tracker Info from evergreen.&quot;&quot;&quot;</span>
 
     <span class="n">detected</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;detected&quot;</span><span class="p">)</span>
     <span class="n">pids</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;pids&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task OOM Tracker Info.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OomTrackerInfo</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="StatusDetails"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.StatusDetails">[docs]</a><span class="k">class</span> <span class="nc">StatusDetails</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="StatusDetails">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.StatusDetails">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StatusDetails</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of a task status details from evergreen.&quot;&quot;&quot;</span>
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span>
@@ -165,12 +181,12 @@
     <span class="n">desc</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;desc&quot;</span><span class="p">)</span>
     <span class="n">timed_out</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;timed_out&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task status details.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">StatusDetails</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">oom_tracker_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OomTrackerInfo</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">oom_tracker_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OomTrackerInfo</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the OOM tracker info from the status details for the given task.</span>
 
@@ -179,7 +195,10 @@
         <span class="k">return</span> <span class="n">OomTrackerInfo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;oom_tracker_info&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Task">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of an Evergreen task.&quot;&quot;&quot;</span>
 
     <span class="n">activated</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;activated&quot;</span><span class="p">)</span>
@@ -221,13 +240,13 @@
     <span class="n">time_taken_ms</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;time_taken_ms&quot;</span><span class="p">)</span>
     <span class="n">version_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;version_id&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Task</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_logs_map</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">artifacts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">artifacts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Artifact</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the artifacts for the given task.</span>
 
@@ -238,7 +257,7 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">Artifact</span><span class="p">(</span><span class="n">artifact</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span> <span class="k">for</span> <span class="n">artifact</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;artifacts&quot;</span><span class="p">]]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">log_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve a dict of all the logs.</span>
 
@@ -248,7 +267,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_logs_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;logs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logs_map</span>
 
-<div class="viewcode-block" id="Task.get_project_identifier"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_project_identifier">[docs]</a>    <span class="k">def</span> <span class="nf">get_project_identifier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Task.get_project_identifier">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_project_identifier">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_project_identifier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the human-readable project id. Can also be accessed as an attribute.</span>
 
@@ -256,7 +277,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">project_identifier</span></div>
 
-<div class="viewcode-block" id="Task.retrieve_log"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.retrieve_log">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.retrieve_log">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.retrieve_log">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">raw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the contents of the specified log.</span>
 
@@ -266,7 +290,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">retrieve_task_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_map</span><span class="p">[</span><span class="n">log_name</span><span class="p">],</span> <span class="n">raw</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.stream_log"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.stream_log">[docs]</a>    <span class="k">def</span> <span class="nf">stream_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.stream_log">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.stream_log">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stream_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve an iterator of a streamed log contents for the given log.</span>
 
@@ -275,8 +302,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">stream_log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_map</span><span class="p">[</span><span class="n">log_name</span><span class="p">])</span></div>
 
+
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">status_details</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusDetails</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status_details</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusDetails</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the status details for the given task.</span>
 
@@ -284,7 +312,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">StatusDetails</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">json</span><span class="p">[</span><span class="s2">&quot;status_details&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Task.get_status_score"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_status_score">[docs]</a>    <span class="k">def</span> <span class="nf">get_status_score</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusScore</span><span class="p">:</span>
+<div class="viewcode-block" id="Task.get_status_score">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_status_score">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_status_score</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusScore</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve the status score enum for the given task.</span>
 
@@ -292,7 +322,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">StatusScore</span><span class="o">.</span><span class="n">get_task_status_score</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.get_execution"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_execution">[docs]</a>    <span class="k">def</span> <span class="nf">get_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Task&quot;</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.get_execution">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_execution">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_execution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Task&quot;</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the task info for the specified execution.</span>
 
@@ -309,7 +342,10 @@
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Task.get_execution_or_self"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_execution_or_self">[docs]</a>    <span class="k">def</span> <span class="nf">get_execution_or_self</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Task&quot;</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.get_execution_or_self">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_execution_or_self">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_execution_or_self</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">execution</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Task&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the specified execution if it exists.</span>
 
@@ -323,7 +359,10 @@
             <span class="k">return</span> <span class="n">task_execution</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="Task.wait_time"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.wait_time">[docs]</a>    <span class="k">def</span> <span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.wait_time">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.wait_time">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wait_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the time taken until the task started running.</span>
 
@@ -333,7 +372,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ingest_time</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Task.wait_time_once_unblocked"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.wait_time_once_unblocked">[docs]</a>    <span class="k">def</span> <span class="nf">wait_time_once_unblocked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.wait_time_once_unblocked">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.wait_time_once_unblocked">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wait_time_once_unblocked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">timedelta</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the time taken until the task started running.</span>
 
@@ -345,7 +387,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheduled_time</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Task.is_success"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_success">[docs]</a>    <span class="k">def</span> <span class="nf">is_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_success">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_success">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_success</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether task was successful.</span>
 
@@ -353,7 +398,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">EVG_SUCCESS_STATUS</span></div>
 
-<div class="viewcode-block" id="Task.is_test_failure"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_test_failure">[docs]</a>    <span class="k">def</span> <span class="nf">is_test_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_test_failure">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_test_failure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_test_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether task was a test failure.</span>
 
@@ -363,7 +411,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">EVG_TEST_STATUS_TYPE</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Task.is_undispatched"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_undispatched">[docs]</a>    <span class="k">def</span> <span class="nf">is_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_undispatched">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_undispatched">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_undispatched</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether the task was undispatched.</span>
 
@@ -371,7 +422,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">EVG_UNDISPATCHED_STATUS</span></div>
 
-<div class="viewcode-block" id="Task.is_system_failure"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_system_failure">[docs]</a>    <span class="k">def</span> <span class="nf">is_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_system_failure">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_system_failure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_system_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether task resulted in a system failure.</span>
 
@@ -381,7 +435,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">EVG_SYSTEM_FAILURE_STATUS</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Task.is_timeout"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_timeout">[docs]</a>    <span class="k">def</span> <span class="nf">is_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_timeout">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_timeout">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether task results in a timeout.</span>
 
@@ -391,7 +448,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">timed_out</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Task.is_setup_failure"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_setup_failure">[docs]</a>    <span class="k">def</span> <span class="nf">is_setup_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_setup_failure">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_setup_failure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_setup_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether task is a setup failure.</span>
 
@@ -401,7 +461,10 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">EVG_SETUP_FAILURE_STATUS_TYPE</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="Task.is_completed"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_completed">[docs]</a>    <span class="k">def</span> <span class="nf">is_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_completed">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_completed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whether task is completed.</span>
 
@@ -409,7 +472,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">EVG_SUCCESS_STATUS</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">EVG_FAILED_STATUS</span></div>
 
-<div class="viewcode-block" id="Task.has_oom"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.has_oom">[docs]</a>    <span class="k">def</span> <span class="nf">has_oom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.has_oom">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.has_oom">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_oom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if the given task has an OOM failure.</span>
 
@@ -417,7 +483,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">oom_tracker_info</span><span class="o">.</span><span class="n">detected</span></div>
 
-<div class="viewcode-block" id="Task.is_active"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.is_active">[docs]</a>    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.is_active">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.is_active">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine if the given task is active.</span>
 
@@ -425,7 +494,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scheduled_time</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_time</span></div>
 
-<div class="viewcode-block" id="Task.get_tests"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_tests">[docs]</a>    <span class="k">def</span> <span class="nf">get_tests</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Task.get_tests">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_tests">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_tests</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">execution</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -446,7 +518,10 @@
             <span class="n">test_name</span><span class="o">=</span><span class="n">test_name</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.get_num_of_tests"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_num_of_tests">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_of_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Task.get_num_of_tests">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_num_of_tests">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_num_of_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the number of tests that ran as part of this task.</span>
 
@@ -454,7 +529,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">num_of_tests_by_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.get_execution_tasks"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_execution_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_execution_tasks</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Task.get_execution_tasks">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_execution_tasks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_execution_tasks</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">filter_fn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Task&quot;</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">&quot;Task&quot;</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -482,15 +560,24 @@
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Task.get_manifest"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_manifest">[docs]</a>    <span class="k">def</span> <span class="nf">get_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Manifest</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.get_manifest">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_manifest">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Manifest</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the Manifest for this task.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">manifest_for_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.get_task_annotation"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_task_annotation">[docs]</a>    <span class="k">def</span> <span class="nf">get_task_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskAnnotation</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.get_task_annotation">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_task_annotation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_task_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">TaskAnnotation</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the task annotation for this task.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api</span><span class="o">.</span><span class="n">get_task_annotation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">execution</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.get_oom_pids"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.get_oom_pids">[docs]</a>    <span class="k">def</span> <span class="nf">get_oom_pids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Task.get_oom_pids">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.get_oom_pids">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_oom_pids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the OOM PIDs for this task.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status_details</span><span class="o">.</span><span class="n">oom_tracker_info</span><span class="o">.</span><span class="n">pids</span>
@@ -498,7 +585,10 @@
             <span class="k">else</span> <span class="p">[]</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Task.annotate"><a class="viewcode-back" href="../../evergreen.html#evergreen.task.Task.annotate">[docs]</a>    <span class="k">def</span> <span class="nf">annotate</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Task.annotate">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.task.Task.annotate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">annotate</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">message</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">issues</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">IssueLinkRequest</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -525,20 +615,22 @@
             <span class="n">metadata_links</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get a string representation of Task for debugging purposes.</span>
 
 <span class="sd">        :return: String representation of Task.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Task(</span><span class="si">{id}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_id</span><span class="p">)</span></div>
+
 </pre></div>
 
             <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation index</a><ul>
@@ -546,7 +638,7 @@
   </ul></li>
   </ul></li>
 </ul>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
@@ -554,7 +646,7 @@
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -562,7 +654,7 @@
     </div>
   <div class="footer">
     &copy; Copyright 2020 MongoDB.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 8.2.3.
   </div>
   
   </body>

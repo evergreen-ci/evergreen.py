@@ -9,22 +9,21 @@ evergreen.metrics.buildmetrics module
 
 .. automodule:: evergreen.metrics.buildmetrics
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 evergreen.metrics.versionmetrics module
 ---------------------------------------
 
 .. automodule:: evergreen.metrics.versionmetrics
    :members:
-   :undoc-members:
    :show-inheritance:
-
+   :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: evergreen.metrics
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
