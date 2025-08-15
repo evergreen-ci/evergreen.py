@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.13.1 - 2025-08-15
+- Fix supported Python versions (only Python 3.9-3.13 supported)
+
 ## 3.13.0 - 2025-08-07
 - in a massive coincidence, python 3.13 support in version 3.13.0
 

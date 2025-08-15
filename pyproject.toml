@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evergreen.py"
-version = "3.13.0"
+version = "3.13.1"
 description = "Python client for the Evergreen API"
 authors = [
     "DevProd Services & Integrations Team <devprod-si-team@mongodb.com>",
@@ -19,7 +19,7 @@ poetry-plugin-export = ">=1.8"
 evg-api = "evergreen.cli.main:main"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.14"
 Click = "^8"
 python-dateutil = ">=2"
 PyYAML = ">=5"
