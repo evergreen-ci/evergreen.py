@@ -27,8 +27,6 @@ buildvariants:
     python_toolchain: /opt/python/3.11
   tasks:
   - name: unit_tests
-  - name: deploy
-  - name: documentation
   - name: evg_api_install
 
 - display_name: Python 3.12
@@ -50,6 +48,15 @@ buildvariants:
   tasks:
   - name: unit_tests
   - name: evg_api_install
+
+- display_name: Publish to PyPI
+  name: publish_pypi
+  run_on:
+    - ubuntu2404-small
+  expansions:
+    python_toolchain: /opt/python/3.11
+  tasks:
+    - name: deploy
 
 functions:
   create virtualenv:
@@ -126,6 +133,7 @@ tasks:
 - name: deploy
   patchable: false
   depends_on:
-    - name: unit_tests
+    - name: evg_api_install
+      variant: "*"
   commands:
     - func: deploy
