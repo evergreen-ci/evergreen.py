@@ -1621,7 +1621,6 @@ class EvergreenApi(object):
         log_on_error: bool = False,
     ) -> Dict:
         kwargs = {"auth": auth, "timeout": timeout, "log_on_error": log_on_error}
-        config = None
         config_path = None
         if use_config_file:
             config_path = get_evergreen_config()
