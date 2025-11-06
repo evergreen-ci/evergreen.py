@@ -30,6 +30,7 @@ class EvgAuth:
             raise RuntimeError("Failed to get OAuth token from Evergreen client.")
         return process.stdout.decode("utf-8").strip()
 
+
 DEFAULT_NETWORK_TIMEOUT_SEC = 5 * 60
 DEFAULT_API_SERVER = "https://evergreen.corp.mongodb.com"
 CONFIG_FILE_LOCATIONS = [
