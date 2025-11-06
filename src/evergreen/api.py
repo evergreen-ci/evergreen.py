@@ -148,7 +148,10 @@ class EvergreenApi(object):
         session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
         auth = self._auth
         if auth:
-            session.headers.update({"Api-User": auth.username, "Api-Key": auth.api_key})
+            process = subprocess.run("evergreen login", shell=True)
+            process = subprocess.run("evergreen client get-oauth-token", shell=True, capture_output=True)
+            token = process.stdout.decode("utf-8").strip()
+            session.headers.update({"Authorization": f"Bearer {token}"})
         return session
 
     def _create_url(self, endpoint: str) -> str:
