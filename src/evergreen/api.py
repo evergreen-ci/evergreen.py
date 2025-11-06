@@ -35,9 +35,8 @@ from evergreen.config import (
     DEFAULT_API_SERVER,
     DEFAULT_NETWORK_TIMEOUT_SEC,
     EvgAuth,
-    get_auth_from_config,
-    read_evergreen_config,
-    read_evergreen_from_file,
+    get_auth_from_config_path,
+    get_evergreen_config,
 )
 from evergreen.distro import Distro
 from evergreen.host import Host
@@ -148,9 +147,7 @@ class EvergreenApi(object):
         session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
         auth = self._auth
         if auth:
-            process = subprocess.run("evergreen login", shell=True)
-            process = subprocess.run("evergreen client get-oauth-token", shell=True, capture_output=True)
-            token = process.stdout.decode("utf-8").strip()
+            token = auth.get_oauth_token()
             session.headers.update({"Authorization": f"Bearer {token}"})
         return session
 
@@ -1625,21 +1622,18 @@ class EvergreenApi(object):
     ) -> Dict:
         kwargs = {"auth": auth, "timeout": timeout, "log_on_error": log_on_error}
         config = None
+        config_path = None
         if use_config_file:
-            config = read_evergreen_config()
-            if config is None:
+            config_path = get_evergreen_config()
+            if config_path is None:
                 raise FileNotFoundError("The Evergreen config file cannot be found.")
         elif config_file is not None:
-            config = read_evergreen_from_file(config_file)
+            config_path = config_file
 
-        if config is not None:
-            auth = get_auth_from_config(config)
+        if config_path is not None:
+            auth = get_auth_from_config_path(config_path)
             if auth:
                 kwargs["auth"] = auth
-
-            # If there is a value for api_server_host, then use it.
-            if "evergreen" in config and config["evergreen"].get("api_server_host", None):
-                kwargs["api_server"] = config["evergreen"]["api_server_host"]
 
         return kwargs
 

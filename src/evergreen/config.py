@@ -3,19 +3,60 @@
 from __future__ import absolute_import
 
 import os
+import subprocess
 from collections import namedtuple
 from typing import Dict, Optional
 
 import yaml
 
-EvgAuth = namedtuple("EvgAuth", ["username", "api_key"])
+class EvgAuth:  
+    def __init__(self, config_path: str):  
+        self.config_path: str = config_path
+
+    def get_oauth_token(self) -> str:
+        """Get the OAuth token for authentication with Evergreen.
+
+        :return: OAuth token string.
+        """
+        process = subprocess.run(f"evergreen login --config ${self.config_path}", shell=True)
+        if process.returncode != 0:
+            raise RuntimeError("Failed to login to Evergreen using the provided config.")
+        process = subprocess.run(
+            f"evergreen client get-oauth-token --config {self.config_path}",
+            shell=True,
+            capture_output=True,
+        )
+        if process.returncode != 0:
+            raise RuntimeError("Failed to get OAuth token from Evergreen client.")
+        return process.stdout.decode("utf-8").strip()
 
 DEFAULT_NETWORK_TIMEOUT_SEC = 5 * 60
-DEFAULT_API_SERVER = "https://evergreen.mongodb.com"
+DEFAULT_API_SERVER = "https://evergreen.corp.mongodb.com"
 CONFIG_FILE_LOCATIONS = [
     os.path.expanduser(os.path.join("~", "cli_bin", ".evergreen.yml")),
     os.path.expanduser(os.path.join("~", ".evergreen.yml")),
 ]
+
+
+def get_evergreen_config() -> Optional[str]:
+    """
+    Search known location for the evergreen config file.
+
+    :return: First found evergreen configuration path.
+    """
+    for filename in [filename for filename in CONFIG_FILE_LOCATIONS if os.path.isfile(filename)]:
+        return filename
+    return None
+
+
+def get_auth_from_config_path(config_path: str) -> EvgAuth:
+    """
+    Get the evergreen authentication from the specified config path.
+
+    :param config_path: Evergreen configuration location.
+    :return: Authentication information for evergreen.
+    """
+    return EvgAuth(config_path)
 
 
 def read_evergreen_from_file(filename: str) -> Dict:
@@ -40,23 +81,13 @@ def read_evergreen_config() -> Optional[Dict]:
     return None
 
 
-def get_auth_from_config(config: Dict) -> EvgAuth:
-    """
-    Get the evergreen authentication from the specified config dict.
-
-    :param config: Evergreen configuration.
-    :return: Authentication information for evergreen.
-    """
-    return EvgAuth(config["user"], config["api_key"])
-
-
 def get_auth() -> Optional[EvgAuth]:
     """
     Get the evergreen authentication object from the default locations. Convenience function.
 
     :return: Authentication information for evergreen.
     """
-    conf = read_evergreen_config()
-    if conf:
-        return get_auth_from_config(conf)
+    conf_path = get_evergreen_config()
+    if conf_path:
+        return get_auth_from_config_path(conf_path)
     return None
