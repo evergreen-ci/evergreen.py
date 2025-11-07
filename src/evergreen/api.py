@@ -37,6 +37,7 @@ from evergreen.config import (
     EvgAuth,
     get_auth_from_config_path,
     get_evergreen_config,
+    OAUTH_API_SERVER,
 )
 from evergreen.distro import Distro
 from evergreen.host import Host
@@ -147,8 +148,7 @@ class EvergreenApi(object):
         session.mount(f"{urlparse(self._api_server).scheme}://", adapter)
         auth = self._auth
         if auth:
-            token = auth.get_oauth_token()
-            session.headers.update({"Authorization": f"Bearer {token}"})
+            session.headers.update(auth.get_auth_headers())
         return session
 
     def _create_url(self, endpoint: str) -> str:
@@ -1592,6 +1592,7 @@ class EvergreenApi(object):
         config_file: Optional[str] = None,
         timeout: Optional[int] = DEFAULT_NETWORK_TIMEOUT_SEC,
         log_on_error: bool = False,
+        use_oauth: bool = True,
     ) -> "EvergreenApi":
         """
         Get an evergreen api instance based on config file settings.
@@ -1609,6 +1610,7 @@ class EvergreenApi(object):
             use_config_file=use_config_file,
             config_file=config_file,
             log_on_error=log_on_error,
+            use_oauth=use_oauth
         )
         return cls(**kwargs)
 
@@ -1619,6 +1621,7 @@ class EvergreenApi(object):
         config_file: Optional[str] = None,
         timeout: Optional[int] = DEFAULT_NETWORK_TIMEOUT_SEC,
         log_on_error: bool = False,
+        use_oauth: bool = True,
     ) -> Dict:
         kwargs = {"auth": auth, "timeout": timeout, "log_on_error": log_on_error}
         config_path = None
@@ -1630,9 +1633,12 @@ class EvergreenApi(object):
             config_path = config_file
 
         if config_path is not None:
-            auth = get_auth_from_config_path(config_path)
+            auth = get_auth_from_config_path(config_path, use_oauth)
             if auth:
                 kwargs["auth"] = auth
+                if auth.use_oauth:
+                    kwargs["api_server"] = OAUTH_API_SERVER
+            
 
         return kwargs
 

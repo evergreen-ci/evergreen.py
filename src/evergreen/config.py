@@ -4,14 +4,49 @@ from __future__ import absolute_import
 
 import os
 import subprocess
-from collections import namedtuple
 from typing import Dict, Optional
 
 import yaml
 
+
 class EvgAuth:  
-    def __init__(self, config_path: str):  
+    def __init__(self, config_path: str, use_oauth: bool = True) -> None:
         self.config_path: str = config_path
+        self.use_oauth: bool = use_oauth
+
+    def set_auth_headers(self, headers: Dict[str, str | bytes]) -> None:
+        """Set the authentication headers for Evergreen API requests.
+
+        :param headers: Dictionary of headers to update with authentication information.
+        :param use_oauth: Whether to use OAuth token for authentication. Defaults to True.
+        """
+        if self.use_oauth:
+            headers["Authorization"] = f"Bearer {self.get_oauth_token()}"
+            return
+        if not self.api_username:
+            conf = read_evergreen_from_file(self.config_path)
+            self.api_username: str = conf["user"]
+            self.api_key: str = conf["api_key"]
+        headers["Api-User"] = self.api_username
+        headers["Api-Key"] = self.api_key
+
+    def get_auth_headers(self) -> Dict[str, str | bytes]:
+        """Get the authentication headers for Evergreen API requests.
+
+        :return: Dictionary of headers with authentication information.
+        """
+        headers: Dict[str, str | bytes] = {}
+        if self.use_oauth:
+            headers["Authorization"] = f"Bearer {self.get_oauth_token()}"
+        else:
+            if not self.user:
+                conf = read_evergreen_from_file(self.config_path)
+                self.user: str = conf["user"]
+                self.api_key: str = conf["api_key"]
+            headers["Api-User"] = self.user
+            headers["Api-Key"] = self.api_key
+        return headers
+
 
     def get_oauth_token(self) -> str:
         """Get the OAuth token for authentication with Evergreen.
@@ -32,7 +67,8 @@ class EvgAuth:
 
 
 DEFAULT_NETWORK_TIMEOUT_SEC = 5 * 60
-DEFAULT_API_SERVER = "https://evergreen.corp.mongodb.com"
+DEFAULT_API_SERVER = "https://evergreen.mongodb.com"
+OAUTH_API_SERVER = "https://evergreen.corp.mongodb.com"
 CONFIG_FILE_LOCATIONS = [
     os.path.expanduser(os.path.join("~", "cli_bin", ".evergreen.yml")),
     os.path.expanduser(os.path.join("~", ".evergreen.yml")),
@@ -50,14 +86,14 @@ def get_evergreen_config() -> Optional[str]:
     return None
 
 
-def get_auth_from_config_path(config_path: str) -> EvgAuth:
+def get_auth_from_config_path(config_path: str, use_oauth: bool = True) -> EvgAuth:
     """
     Get the evergreen authentication from the specified config path.
 
     :param config_path: Evergreen configuration location.
     :return: Authentication information for evergreen.
     """
-    return EvgAuth(config_path)
+    return EvgAuth(config_path, use_oauth)
 
 
 def read_evergreen_from_file(filename: str) -> Dict:
@@ -82,7 +118,7 @@ def read_evergreen_config() -> Optional[Dict]:
     return None
 
 
-def get_auth() -> Optional[EvgAuth]:
+def get_auth(use_oauth: bool = True) -> Optional[EvgAuth]:
     """
     Get the evergreen authentication object from the default locations. Convenience function.
 
@@ -90,5 +126,6 @@ def get_auth() -> Optional[EvgAuth]:
     """
     conf_path = get_evergreen_config()
     if conf_path:
-        return get_auth_from_config_path(conf_path)
+        return get_auth_from_config_path(conf_path, use_oauth)
     return None
+
