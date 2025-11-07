@@ -154,6 +154,8 @@ You can find the documentation [here](https://evergreen-ci.github.io/evergreen.p
 You will need Evergreen credentials on your local machine to use this library or the attached CLI. You
 can set up your credentials by following the link [here](https://github.com/evergreen-ci/evergreen/wiki/Using-the-Command-Line-Tool#downloading-the-command-line-tool).
 
+By default, the library uses OAuth authentication. This means during usage, you will be prompted to open a browser window to authenticate.
+
 ### Linting/formatting
 
 This project uses [black](https://github.com/psf/black) and [isort](https://pycqa.github.io/isort/) for linting/formatting.
