@@ -14,22 +14,6 @@ class EvgAuth:
         self.config_path: str = config_path
         self.use_oauth: bool = use_oauth
 
-    def set_auth_headers(self, headers: Dict[str, str | bytes]) -> None:
-        """Set the authentication headers for Evergreen API requests.
-
-        :param headers: Dictionary of headers to update with authentication information.
-        :param use_oauth: Whether to use OAuth token for authentication. Defaults to True.
-        """
-        if self.use_oauth:
-            headers["Authorization"] = f"Bearer {self.get_oauth_token()}"
-            return
-        if not self.api_username:
-            conf = read_evergreen_from_file(self.config_path)
-            self.api_username: str = conf["user"]
-            self.api_key: str = conf["api_key"]
-        headers["Api-User"] = self.api_username
-        headers["Api-Key"] = self.api_key
-
     def get_auth_headers(self) -> Dict[str, str | bytes]:
         """Get the authentication headers for Evergreen API requests.
 
@@ -46,7 +30,6 @@ class EvgAuth:
             headers["Api-User"] = self.user
             headers["Api-Key"] = self.api_key
         return headers
-
 
     def get_oauth_token(self) -> str:
         """Get the OAuth token for authentication with Evergreen.
