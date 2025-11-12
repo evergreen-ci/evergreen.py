@@ -230,6 +230,14 @@ class EvergreenApi(object):
             data=data,
             method=method,
         )
+
+        # Refresh OIDC bearer token in session headers if expired
+        if self._oidc_token_manager:
+            token_obj = self._oidc_token_manager._token
+            if token_obj is None or token_obj.is_expired():
+                token = self._oidc_token_manager.get_token()
+                self.session.headers.update({"Authorization": f"Bearer {token}"})
+
         response = self.session.request(
             url=url, params=params, timeout=self._timeout, data=data, method=method
         )
