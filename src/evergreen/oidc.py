@@ -20,49 +20,45 @@ LOGGER = structlog.getLogger(__name__)
 
 
 class OidcToken:
-    """Represents an OIDC access token with optional expiration info."""
+    """Represents an OIDC access token."""
 
-    def __init__(
-        self,
-        access_token: str,
-        expires_in: Optional[int] = None,
-        refresh_token: Optional[str] = None,
-    ):
+    def __init__(self, access_token: str, refresh_token: Optional[str] = None):
         """
         Initialize an OIDC token.
 
-        :param access_token: The access token string.
-        :param expires_in: Optional. Seconds until token expires.
+        :param access_token: The access token JWT string.
         :param refresh_token: Optional. Refresh token for obtaining new access tokens.
         """
         self.access_token = access_token
-        self.expires_in = expires_in
         self.refresh_token = refresh_token
-        self.created_at = time.time()
 
     def is_expired(self, buffer_seconds: int = 60) -> bool:
         """
-        Check if token is expired.
+        Check if token is expired by decoding the JWT and checking the exp claim.
 
         :param buffer_seconds: Number of seconds to consider as buffer before actual expiration.
         :return: True if token is expired or about to expire, False otherwise.
         """
-        if self.expires_in is None:
-            return False
-        elapsed = time.time() - self.created_at
-        return elapsed >= (self.expires_in - buffer_seconds)
+        try:
+            claims = jwt.decode(self.access_token, options={"verify_signature": False})
+            exp_timestamp = claims.get("exp")
+            if exp_timestamp is None:
+                raise ValueError("No exp claim in token")
+            current_time = time.time()
+            return current_time >= (exp_timestamp - buffer_seconds)
+        except Exception as e:
+            raise RuntimeError(f"Failed to check token expiration: {e}")
 
     @classmethod
     def from_dict(cls, data: dict) -> "OidcToken":
         """
         Create OidcToken from dictionary (e.g., from JSON file).
 
-        :param data: Dictionary containing 'access_token' and optionally 'expires_in' and 'refresh_token'.
+        :param data: Dictionary containing 'access_token' and optionally 'refresh_token'.
         :return: OidcToken instance.
         """
         return cls(
             access_token=data["access_token"],
-            expires_in=data.get("expires_in"),
             refresh_token=data.get("refresh_token"),
         )
 
@@ -74,7 +70,6 @@ class OidcToken:
         """
         return {
             "access_token": self.access_token,
-            "expires_in": self.expires_in,
             "refresh_token": self.refresh_token,
         }
 
@@ -209,7 +204,6 @@ class OidcTokenManager:
 
             return OidcToken(
                 access_token=data["access_token"],
-                expires_in=data.get("expires_in"),
                 refresh_token=data.get(
                     "refresh_token", refresh_token
                 ),  # Use new refresh token if provided, else keep old one
@@ -314,7 +308,6 @@ class OidcTokenManager:
                     data = response.json()
                     return OidcToken(
                         access_token=data["access_token"],
-                        expires_in=data.get("expires_in"),
                         refresh_token=data.get("refresh_token"),
                     )
                 elif response.status_code == 400:
