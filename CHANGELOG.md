@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.13.2 - 2025-11-12
+- Escape user provided args to CLI
+
 ## 3.13.1 - 2025-08-15
 - Fix supported Python versions (only Python 3.9-3.13 supported)
 
