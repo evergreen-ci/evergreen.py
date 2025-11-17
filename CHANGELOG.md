@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.14.0 - 2025-11-17
+- OIDC credential support
+
 ## 3.13.1 - 2025-08-15
 - Fix supported Python versions (only Python 3.9-3.13 supported)
 
