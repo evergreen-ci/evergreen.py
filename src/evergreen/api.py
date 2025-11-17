@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 import json
 import re
+import shlex
 import subprocess
 from contextlib import contextmanager
 from datetime import datetime
@@ -1039,7 +1040,7 @@ class EvergreenApi(object):
         :return: The patch creation details.
         """
         if author is not None:
-            command = f"{command} --author {author}"
+            command = f"{command} --author {shlex.quote(author)}"
 
         process = subprocess.run(command, shell=True, capture_output=True)
         output = process.stdout.decode("utf-8")
@@ -1092,8 +1093,10 @@ class EvergreenApi(object):
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
-        unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
-        command = f"evergreen patch-file --diff-file {diff_file_path} --description '{description}' --base {base} --tasks {task} --variants {variant} --project {project} {unpacked_params} -y -f"
+        unpacked_params = " ".join(
+            ["--param " + shlex.quote(f"{key}={value}") for key, value in params.items()]
+        )
+        command = f"evergreen patch-file --diff-file {shlex.quote(diff_file_path)} --description {shlex.quote(description)} --base {shlex.quote(base)} --tasks {shlex.quote(task)} --variants {shlex.quote(variant)} --project {shlex.quote(project)} {unpacked_params} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def patch_from_patch_id(
@@ -1119,8 +1122,10 @@ class EvergreenApi(object):
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
-        unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
-        command = f"evergreen patch-file --diff-patchId {patch_id} --description '{description}' --tasks {task} --variants {variant} --project {project} {unpacked_params} -y -f"
+        unpacked_params = " ".join(
+            ["--param " + shlex.quote(f"{key}={value}") for key, value in params.items()]
+        )
+        command = f"evergreen patch-file --diff-patchId {shlex.quote(patch_id)} --description {shlex.quote(description)} --tasks {shlex.quote(task)} --variants {shlex.quote(variant)} --project {shlex.quote(project)} {unpacked_params} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def repeat_patch(
@@ -1142,8 +1147,10 @@ class EvergreenApi(object):
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
-        unpacked_params = " ".join([f"--param '{key}={value}'" for key, value in params.items()])
-        command = f"evergreen patch-file --diff-patchId {patch_id} --repeat-patch {patch_id} --description '{description}' --project {project} {unpacked_params} -y -f"
+        unpacked_params = " ".join(
+            ["--param " + shlex.quote(f"{key}={value}") for key, value in params.items()]
+        )
+        command = f"evergreen patch-file --diff-patchId {shlex.quote(patch_id)} --repeat-patch {shlex.quote(patch_id)} --description {shlex.quote(description)} --project {shlex.quote(project)} {unpacked_params} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def task_by_id(

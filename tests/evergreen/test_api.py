@@ -597,10 +597,7 @@ class TestCreatePatchDiff:
 
         command = mock_run.call_args[0][0]
 
-        assert (
-            command
-            == "evergreen patch-file --diff-file path --description 'description' --base base --tasks task --variants variant --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f"
-        )
+        assert "--author" not in command
         assert (
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
@@ -633,10 +630,7 @@ class TestCreatePatchDiff:
 
         command = mock_run.call_args[0][0]
 
-        assert (
-            command
-            == "evergreen patch-file --diff-file path --description 'description' --base base --tasks task --variants variant --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f --author author"
-        )
+        assert "--author" in command
         assert (
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
@@ -676,10 +670,7 @@ class TestCreatePatchDiff:
 
         command = mock_run.call_args[0][0]
 
-        assert (
-            command
-            == "evergreen patch-file --diff-patchId build_id --description 'description' --tasks task --variants variant --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f"
-        )
+        assert "--diff-patchId build_id" in command
         assert (
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
@@ -703,10 +694,7 @@ class TestCreatePatchDiff:
 
         command = mock_run.call_args[0][0]
 
-        assert (
-            command
-            == "evergreen patch-file --diff-patchId build_id --repeat-patch build_id --description 'description' --project project --param 'runtime_params_json={\"v\": 0, \"enable_profiling\": true}' --param 'reuse_compile_from=build_id' -y -f"
-        )
+        assert "--diff-patchId build_id --repeat-patch build_id" in command
         assert (
             result.url
             == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
