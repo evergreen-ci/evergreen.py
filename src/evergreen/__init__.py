@@ -5,9 +5,11 @@ from evergreen.api import CachedEvergreenApi, EvergreenApi, Requester, RetryingE
 from evergreen.api_requests import IssueLinkRequest
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
+from evergreen.config import EvgAuth, OidcConfig
 from evergreen.distro import Distro
 from evergreen.host import Host
 from evergreen.manifest import Manifest
+from evergreen.oidc import OidcToken, OidcTokenManager
 from evergreen.patch import Patch
 from evergreen.project import Project
 from evergreen.stats import TaskStats, TestStats

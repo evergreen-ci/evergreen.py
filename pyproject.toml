@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "evergreen.py"
-version = "3.13.2"
+version = "3.14.0"
 description = "Python client for the Evergreen API"
 authors = [
     "DevProd Services & Integrations Team <devprod-si-team@mongodb.com>",
@@ -27,6 +27,7 @@ requests = ">=2"
 structlog = ">=19"
 pydantic = ">=1"
 packaging = "^25.0"
+PyJWT = "^2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.4"
