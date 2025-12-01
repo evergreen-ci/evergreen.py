@@ -115,7 +115,12 @@ class OidcTokenManager:
         """
         # Try to load from cache file first
         if self._token is None and self.oidc_config.token_file_path:
-            self._token = self._load_token_from_file()
+            try:
+                self._token = self._load_token_from_file()
+            except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
+                raise RuntimeError(
+                    "Evergreen token file is invalid or missing. Do you need to run `evergreen-login`?"
+                ) from e
 
         # If we have a valid token, return it
         if self._token and not self._token.is_expired():
@@ -124,14 +129,21 @@ class OidcTokenManager:
         # Token is expired or missing. Try to refresh if we have a refresh token
         if self._token and self._token.refresh_token:
             LOGGER.debug("Attempting to refresh expired token using refresh token")
-            self._token = self._refresh_token(self._token.refresh_token)
+            try:
+                self._token = self._refresh_token(self._token.refresh_token)
+            except requests.HTTPError as e:
+                if e.response.status_code >= 400 and e.response.status_code < 500:
+                    raise RuntimeError(
+                        f"Refresh token is invalid or expired. Do you need to re-run `evergreen login` or remove {self.oidc_config.token_file_path}?"
+                    ) from e
+                raise
             # Cache the refreshed token if configured
             if self.oidc_config.token_file_path:
                 self._save_token_to_file(self._token)
             return self._token.access_token
 
         raise RuntimeError(
-            "No valid OIDC token available and no refresh token present. Do you need to re-run `evergreen login`?"
+            "No valid OIDC token available and no refresh token present. Do you need to run `evergreen login`?"
         )
 
     def _load_token_from_file(self) -> OidcToken:
@@ -143,7 +155,7 @@ class OidcTokenManager:
         :raises json.JSONDecodeError: If token file is corrupted.
         :raises KeyError: If token file is missing required fields.
         """
-        with open(self.oidc_config.token_file_path, "r") as f:
+        with open(self.oidc_config.token_file_path, "rb") as f:
             data = json.load(f)
             return OidcToken.from_dict(data)
 
