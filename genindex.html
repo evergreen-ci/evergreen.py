@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; evergreen.py 3.13.2 documentation</title>
+    <title>Index &#8212; evergreen.py 3.14.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="_static/readable.css?v=e058d051" />
-    <script src="_static/documentation_options.js?v=f92f4e34"></script>
+    <script src="_static/documentation_options.js?v=e4f4b189"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="#" />
@@ -275,6 +275,8 @@
 </li>
       <li><a href="ref/evergreen.html#evergreen.distro.Distro.client_dir">client_dir (evergreen.distro.Distro property)</a>
 </li>
+      <li><a href="ref/evergreen.html#evergreen.config.OidcConfig.client_id">client_id (evergreen.config.OidcConfig attribute)</a>
+</li>
       <li><a href="ref/evergreen.html#evergreen.distro.Distro.clone_method">clone_method (evergreen.distro.Distro property)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.api_requests.SlackAttachment.color">color (evergreen.api_requests.SlackAttachment attribute)</a>
@@ -300,6 +302,8 @@
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.configure_patch">configure_patch() (evergreen.api.EvergreenApi method)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.configure_task">configure_task() (evergreen.api.EvergreenApi method)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.config.OidcConfig.connector_id">connector_id (evergreen.config.OidcConfig attribute)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.distro.Distro.container_pool">container_pool (evergreen.distro.Distro property)</a>
 </li>
@@ -559,8 +563,6 @@
         <li><a href="ref/evergreen.metrics.html#module-evergreen.metrics">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     evergreen.metrics.buildmetrics
 
@@ -568,11 +570,20 @@
         <li><a href="ref/evergreen.metrics.html#module-evergreen.metrics.buildmetrics">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     evergreen.metrics.versionmetrics
 
       <ul>
         <li><a href="ref/evergreen.metrics.html#module-evergreen.metrics.versionmetrics">module</a>
+</li>
+      </ul></li>
+      <li>
+    evergreen.oidc
+
+      <ul>
+        <li><a href="ref/evergreen.html#module-evergreen.oidc">module</a>
 </li>
       </ul></li>
       <li>
@@ -713,10 +724,10 @@
 </li>
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.file_ticket_for_task">file_ticket_for_task() (evergreen.api.EvergreenApi method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/evergreen.html#evergreen.patch.FileDiff">FileDiff (class in evergreen.patch)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/evergreen.html#evergreen.distro.Distro.finder_settings">finder_settings (evergreen.distro.Distro property)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.distro.FinderSettings">FinderSettings (class in evergreen.distro)</a>
@@ -736,6 +747,8 @@
       <li><a href="ref/evergreen.html#evergreen.util.format_evergreen_date">format_evergreen_date() (in module evergreen.util)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.util.format_evergreen_datetime">format_evergreen_datetime() (in module evergreen.util)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcToken.from_dict">from_dict() (evergreen.oidc.OidcToken class method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -785,6 +798,10 @@
 </li>
       <li><a href="ref/evergreen.html#evergreen.task.Task.get_num_of_tests">get_num_of_tests() (evergreen.task.Task method)</a>
 </li>
+      <li><a href="ref/evergreen.html#evergreen.config.get_oauth_config_from_config">get_oauth_config_from_config() (in module evergreen.config)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.config.get_oauth_config_from_dict">get_oauth_config_from_dict() (in module evergreen.config)</a>
+</li>
       <li><a href="ref/evergreen.html#evergreen.task.Task.get_oom_pids">get_oom_pids() (evergreen.task.Task method)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.version.Version.get_patch">get_patch() (evergreen.version.Version method)</a>
@@ -793,14 +810,14 @@
 </li>
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.get_project_alias_ids_by_name">get_project_alias_ids_by_name() (evergreen.api.EvergreenApi method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/evergreen.html#evergreen.build.Build.get_project_identifier">get_project_identifier() (evergreen.build.Build method)</a>
 
       <ul>
         <li><a href="ref/evergreen.html#evergreen.task.Task.get_project_identifier">(evergreen.task.Task method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/evergreen.html#evergreen.task.Task.get_status_score">get_status_score() (evergreen.task.Task method)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.get_task_annotation">get_task_annotation() (evergreen.api.EvergreenApi method)</a>
@@ -814,6 +831,12 @@
       <li><a href="ref/evergreen.html#evergreen.build.Build.get_tasks">get_tasks() (evergreen.build.Build method)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.task.Task.get_tests">get_tests() (evergreen.task.Task method)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcTokenManager.get_token">get_token() (evergreen.oidc.OidcTokenManager method)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.get_username_from_api">get_username_from_api() (in module evergreen.oidc)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcToken.get_username_from_claims">get_username_from_claims() (evergreen.oidc.OidcToken method)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.get_users_for_role">get_users_for_role() (evergreen.api.EvergreenApi method)</a>
 </li>
@@ -937,6 +960,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcToken.is_expired">is_expired() (evergreen.oidc.OidcToken method)</a>
+</li>
       <li><a href="ref/evergreen.html#evergreen.patch.Patch.is_in_commit_queue">is_in_commit_queue() (evergreen.patch.Patch method)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.version.Version.is_patch">is_patch() (evergreen.version.Version method)</a>
@@ -966,6 +991,8 @@
       <li><a href="ref/evergreen.html#evergreen.task_annotations.IssueLink">IssueLink (class in evergreen.task_annotations)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.api_requests.IssueLinkRequest">IssueLinkRequest (class in evergreen.api_requests)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.config.OidcConfig.issuer">issuer (evergreen.config.OidcConfig attribute)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.task_annotations.TaskAnnotation.issues">issues (evergreen.task_annotations.TaskAnnotation property)</a>
 </li>
@@ -1109,6 +1136,8 @@
 </li>
         <li><a href="ref/evergreen.metrics.html#module-evergreen.metrics.versionmetrics">evergreen.metrics.versionmetrics</a>
 </li>
+        <li><a href="ref/evergreen.html#module-evergreen.oidc">evergreen.oidc</a>
+</li>
         <li><a href="ref/evergreen.html#module-evergreen.patch">evergreen.patch</a>
 </li>
         <li><a href="ref/evergreen.html#module-evergreen.performance_results">evergreen.performance_results</a>
@@ -1218,6 +1247,12 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ref/evergreen.html#evergreen.config.OidcConfig">OidcConfig (class in evergreen.config)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcToken">OidcToken (class in evergreen.oidc)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcTokenManager">OidcTokenManager (class in evergreen.oidc)</a>
+</li>
       <li><a href="ref/evergreen.html#evergreen.task.StatusDetails.oom_tracker_info">oom_tracker_info (evergreen.task.StatusDetails property)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.task.OomTrackerInfo">OomTrackerInfo (class in evergreen.task)</a>
@@ -1708,10 +1743,10 @@
 </li>
       <li><a href="ref/evergreen.html#evergreen.api.EvergreenApi.tasks_by_project_and_name">tasks_by_project_and_name() (evergreen.api.EvergreenApi method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/evergreen.html#evergreen.stats.TaskStats">TaskStats (class in evergreen.stats)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ref/evergreen.html#evergreen.distro.Distro.teardown">teardown (evergreen.distro.Distro property)</a>
 </li>
       <li><a href="ref/evergreen.html#evergreen.performance_results.PerformanceData.test_batch">test_batch (evergreen.performance_results.PerformanceData property)</a>
@@ -1775,6 +1810,10 @@
 </li>
       </ul></li>
       <li><a href="ref/evergreen.html#evergreen.api_requests.SlackAttachment.title_link">title_link (evergreen.api_requests.SlackAttachment attribute)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.oidc.OidcToken.to_dict">to_dict() (evergreen.oidc.OidcToken method)</a>
+</li>
+      <li><a href="ref/evergreen.html#evergreen.config.OidcConfig.token_file_path">token_file_path (evergreen.config.OidcConfig attribute)</a>
 </li>
       <li><a href="ref/evergreen.metrics.html#evergreen.metrics.buildmetrics.BuildMetrics.total_display_tasks">total_display_tasks (evergreen.metrics.buildmetrics.BuildMetrics property)</a>
 </li>

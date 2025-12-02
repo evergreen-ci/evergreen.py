@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.13.2 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.14.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=f92f4e34"></script>
+    <script src="../../_static/documentation_options.js?v=e4f4b189"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -76,15 +76,19 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.commitqueue</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommitQueue</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_API_SERVER</span><span class="p">,</span>
+    <span class="n">DEFAULT_API_SERVER_OIDC</span><span class="p">,</span>
     <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
     <span class="n">EvgAuth</span><span class="p">,</span>
+    <span class="n">OidcConfig</span><span class="p">,</span>
     <span class="n">get_auth_from_config</span><span class="p">,</span>
+    <span class="n">get_oauth_config_from_config</span><span class="p">,</span>
     <span class="n">read_evergreen_config</span><span class="p">,</span>
     <span class="n">read_evergreen_from_file</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.distro</span><span class="w"> </span><span class="kn">import</span> <span class="n">Distro</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.host</span><span class="w"> </span><span class="kn">import</span> <span class="n">Host</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.manifest</span><span class="w"> </span><span class="kn">import</span> <span class="n">Manifest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OidcTokenManager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.patch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Patch</span><span class="p">,</span> <span class="n">PatchCreationDetails</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.performance_results</span><span class="w"> </span><span class="kn">import</span> <span class="n">PerformanceData</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.project</span><span class="w"> </span><span class="kn">import</span> <span class="n">Project</span>
@@ -143,6 +147,7 @@
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">use_default_logger_factory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">http_retry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Retry</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">oidc_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">OidcConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a _BaseEvergreenApi object.</span>
@@ -154,6 +159,7 @@
 <span class="sd">        :param log_on_error: Flag to use for error logs.</span>
 <span class="sd">        :param use_default_logger_factory: Indicate if the module should configure the default logger factory.</span>
 <span class="sd">        :param http_retry: Optional Retry object that can be used to customize http request retries.</span>
+<span class="sd">        :param oidc_config: Optional OidcConfig for OIDC authentication.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span> <span class="o">=</span> <span class="n">api_server</span>
@@ -161,6 +167,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">session</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span> <span class="o">=</span> <span class="n">log_on_error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_http_retry</span> <span class="o">=</span> <span class="n">http_retry</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_config</span> <span class="o">=</span> <span class="n">oidc_config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">OidcTokenManager</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">oidc_config</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span> <span class="o">=</span> <span class="n">OidcTokenManager</span><span class="p">(</span><span class="n">oidc_config</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">use_default_logger_factory</span><span class="p">:</span>
             <span class="n">structlog</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">logger_factory</span><span class="o">=</span><span class="n">LoggerFactory</span><span class="p">())</span>
@@ -172,7 +182,12 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield an instance of the API client with a shared session.&quot;&quot;&quot;</span>
         <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_session</span><span class="p">()</span>
         <span class="n">evg_api</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
+            <span class="n">session</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log_on_error</span><span class="p">,</span>
+            <span class="n">oidc_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_oidc_config</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">yield</span> <span class="n">evg_api</span></div>
 
@@ -194,9 +209,16 @@
         <span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
         <span class="n">adapter</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span><span class="p">(</span><span class="n">max_retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_http_retry</span><span class="p">)</span>
         <span class="n">session</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://&quot;</span><span class="p">,</span> <span class="n">adapter</span><span class="p">)</span>
-        <span class="n">auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span>
-        <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
-            <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Api-User&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;Api-Key&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
+
+        <span class="c1"># Add authentication headers</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span><span class="p">:</span>
+            <span class="c1"># Use OIDC Bearer token</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">:</span>
+            <span class="c1"># Use API key authentication</span>
+            <span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Api-User&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="s2">&quot;Api-Key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
+
         <span class="k">return</span> <span class="n">session</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_create_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -256,6 +278,12 @@
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="p">)</span>
+
+        <span class="c1"># Refresh OIDC bearer token in session headers if expired</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
         <span class="p">)</span>
@@ -1856,8 +1884,8 @@
         <span class="n">config_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_NETWORK_TIMEOUT_SEC</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;auth&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="p">,</span> <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">,</span> <span class="s2">&quot;log_on_error&quot;</span><span class="p">:</span> <span class="n">log_on_error</span><span class="p">}</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;auth&quot;</span><span class="p">:</span> <span class="n">auth</span><span class="p">,</span> <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">,</span> <span class="s2">&quot;log_on_error&quot;</span><span class="p">:</span> <span class="n">log_on_error</span><span class="p">}</span>
         <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">use_config_file</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">read_evergreen_config</span><span class="p">()</span>
@@ -1867,9 +1895,19 @@
             <span class="n">config</span> <span class="o">=</span> <span class="n">read_evergreen_from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">auth</span> <span class="o">=</span> <span class="n">get_auth_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span>
+            <span class="c1"># Try to get OIDC config first</span>
+            <span class="n">oidc_config</span> <span class="o">=</span> <span class="n">get_oauth_config_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">oidc_config</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;oidc_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">oidc_config</span>
+                <span class="c1"># Use OIDC API server for OIDC auth</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;api_server&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_API_SERVER_OIDC</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Fall back to API key auth</span>
+                <span class="n">auth</span> <span class="o">=</span> <span class="n">get_auth_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">auth</span><span class="p">:</span>
+                    <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;auth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">auth</span>
+                <span class="c1"># Use default API server for API key auth</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;api_server&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DEFAULT_API_SERVER</span>
 
             <span class="c1"># If there is a value for api_server_host, then use it.</span>
             <span class="k">if</span> <span class="s2">&quot;evergreen&quot;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">and</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;evergreen&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_server_host&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
@@ -1890,10 +1928,11 @@
         <span class="n">auth</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EvgAuth</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">oidc_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">OidcConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CachedEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span>
+            <span class="n">api_server</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span><span class="p">,</span> <span class="n">oidc_config</span><span class="o">=</span><span class="n">oidc_config</span>
         <span class="p">)</span>
 
 <div class="viewcode-block" id="CachedEvergreenApi.build_by_id">
@@ -1986,6 +2025,7 @@
         <span class="n">log_on_error</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">use_default_logger_factory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">http_retry</span><span class="p">:</span> <span class="n">Retry</span> <span class="o">=</span> <span class="n">DEFAULT_HTTP_RETRY</span><span class="p">,</span>
+        <span class="n">oidc_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">OidcConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an Evergreen Api object.&quot;&quot;&quot;</span>
         <span class="n">sticky_session_with_retry</span> <span class="o">=</span> <span class="n">EvergreenApi</span><span class="p">(</span>
@@ -1995,6 +2035,7 @@
             <span class="n">log_on_error</span><span class="o">=</span><span class="n">log_on_error</span><span class="p">,</span>
             <span class="n">use_default_logger_factory</span><span class="o">=</span><span class="n">use_default_logger_factory</span><span class="p">,</span>
             <span class="n">http_retry</span><span class="o">=</span><span class="n">http_retry</span><span class="p">,</span>
+            <span class="n">oidc_config</span><span class="o">=</span><span class="n">oidc_config</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">_create_session</span><span class="p">()</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">RetryingEvergreenApi</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -2005,6 +2046,7 @@
             <span class="n">log_on_error</span><span class="p">,</span>
             <span class="n">use_default_logger_factory</span><span class="p">,</span>
             <span class="n">http_retry</span><span class="p">,</span>
+            <span class="n">oidc_config</span><span class="p">,</span>
         <span class="p">)</span></div>
 
 </pre></div>

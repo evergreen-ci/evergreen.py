@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>src &#8212; evergreen.py 3.13.2 documentation</title>
+    <title>src &#8212; evergreen.py 3.14.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=f92f4e34"></script>
+    <script src="../_static/documentation_options.js?v=e4f4b189"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -280,8 +280,17 @@
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.EvgAuth.username"><code class="docutils literal notranslate"><span class="pre">EvgAuth.username</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.OidcConfig"><code class="docutils literal notranslate"><span class="pre">OidcConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.OidcConfig.client_id"><code class="docutils literal notranslate"><span class="pre">OidcConfig.client_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.OidcConfig.connector_id"><code class="docutils literal notranslate"><span class="pre">OidcConfig.connector_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.OidcConfig.issuer"><code class="docutils literal notranslate"><span class="pre">OidcConfig.issuer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.config.OidcConfig.token_file_path"><code class="docutils literal notranslate"><span class="pre">OidcConfig.token_file_path</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.get_auth"><code class="docutils literal notranslate"><span class="pre">get_auth()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.get_auth_from_config"><code class="docutils literal notranslate"><span class="pre">get_auth_from_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.get_oauth_config_from_config"><code class="docutils literal notranslate"><span class="pre">get_oauth_config_from_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.get_oauth_config_from_dict"><code class="docutils literal notranslate"><span class="pre">get_oauth_config_from_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.read_evergreen_config"><code class="docutils literal notranslate"><span class="pre">read_evergreen_config()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.config.read_evergreen_from_file"><code class="docutils literal notranslate"><span class="pre">read_evergreen_from_file()</span></code></a></li>
 </ul>
@@ -416,6 +425,21 @@
 <li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.manifest.ManifestModule.url"><code class="docutils literal notranslate"><span class="pre">ManifestModule.url</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.oidc">evergreen.oidc module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcToken"><code class="docutils literal notranslate"><span class="pre">OidcToken</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcToken.from_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcToken.get_username_from_claims"><code class="docutils literal notranslate"><span class="pre">OidcToken.get_username_from_claims()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcToken.is_expired"><code class="docutils literal notranslate"><span class="pre">OidcToken.is_expired()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcToken.to_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcTokenManager"><code class="docutils literal notranslate"><span class="pre">OidcTokenManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="evergreen.html#evergreen.oidc.OidcTokenManager.get_token"><code class="docutils literal notranslate"><span class="pre">OidcTokenManager.get_token()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.html#evergreen.oidc.get_username_from_api"><code class="docutils literal notranslate"><span class="pre">get_username_from_api()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="evergreen.html#module-evergreen.patch">evergreen.patch module</a><ul>

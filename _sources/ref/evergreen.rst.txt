@@ -94,6 +94,14 @@ evergreen.manifest module
    :show-inheritance:
    :undoc-members:
 
+evergreen.oidc module
+---------------------
+
+.. automodule:: evergreen.oidc
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 evergreen.patch module
 ----------------------
 

@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen package &#8212; evergreen.py 3.13.2 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.14.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=f92f4e34"></script>
+    <script src="../_static/documentation_options.js?v=e4f4b189"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -188,7 +188,7 @@
 <p>API for interacting with evergreen.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.api.CachedEvergreenApi">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">CachedEvergreenApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://evergreen.mongodb.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#CachedEvergreenApi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.CachedEvergreenApi" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">CachedEvergreenApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://evergreen.mongodb.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oidc_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.OidcConfig" title="evergreen.config.OidcConfig"><span class="pre">OidcConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#CachedEvergreenApi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.CachedEvergreenApi" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#evergreen.api.EvergreenApi" title="evergreen.api.EvergreenApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvergreenApi</span></code></a></p>
 <p>Access to the Evergreen API server that caches certain calls.</p>
 <dl class="py method">
@@ -246,7 +246,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.api.EvergreenApi">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">EvergreenApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://evergreen.mongodb.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_default_logger_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_retry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Retry</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">EvergreenApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://evergreen.mongodb.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_default_logger_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_retry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Retry</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oidc_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.OidcConfig" title="evergreen.config.OidcConfig"><span class="pre">OidcConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base methods for building API objects.</p>
 <dl class="py method">
@@ -1327,7 +1327,7 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.api.RetryingEvergreenApi">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">RetryingEvergreenApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://evergreen.mongodb.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_default_logger_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_retry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Retry</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Retry(total=10,</span> <span class="pre">connect=None,</span> <span class="pre">read=None,</span> <span class="pre">redirect=None,</span> <span class="pre">status=None)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#RetryingEvergreenApi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.RetryingEvergreenApi" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">RetryingEvergreenApi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_server</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://evergreen.mongodb.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_on_error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_default_logger_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">http_retry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Retry</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Retry(total=10,</span> <span class="pre">connect=None,</span> <span class="pre">read=None,</span> <span class="pre">redirect=None,</span> <span class="pre">status=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oidc_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.OidcConfig" title="evergreen.config.OidcConfig"><span class="pre">OidcConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#RetryingEvergreenApi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.RetryingEvergreenApi" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#evergreen.api.EvergreenApi" title="evergreen.api.EvergreenApi"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvergreenApi</span></code></a></p>
 <p>An Evergreen Api that retries failed calls.</p>
 <dl class="py attribute">
@@ -1901,6 +1901,36 @@ argument.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="evergreen.config.OidcConfig">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">OidcConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evergreen.config.OidcConfig" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.config.OidcConfig.client_id">
+<span class="sig-name descname"><span class="pre">client_id</span></span><a class="headerlink" href="#evergreen.config.OidcConfig.client_id" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.config.OidcConfig.connector_id">
+<span class="sig-name descname"><span class="pre">connector_id</span></span><a class="headerlink" href="#evergreen.config.OidcConfig.connector_id" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.config.OidcConfig.issuer">
+<span class="sig-name descname"><span class="pre">issuer</span></span><a class="headerlink" href="#evergreen.config.OidcConfig.issuer" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.config.OidcConfig.token_file_path">
+<span class="sig-name descname"><span class="pre">token_file_path</span></span><a class="headerlink" href="#evergreen.config.OidcConfig.token_file_path" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="evergreen.config.get_auth">
 <span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_auth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/evergreen/config.html#get_auth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_auth" title="Link to this definition">¶</a></dt>
@@ -1914,14 +1944,42 @@ argument.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="evergreen.config.get_auth_from_config">
-<span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_auth_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a></span></span><a class="reference internal" href="../_modules/evergreen/config.html#get_auth_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_auth_from_config" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_auth_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.config.EvgAuth" title="evergreen.config.EvgAuth"><span class="pre">EvgAuth</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/evergreen/config.html#get_auth_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_auth_from_config" title="Link to this definition">¶</a></dt>
 <dd><p>Get the evergreen authentication from the specified config dict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> – Evergreen configuration.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Authentication information for evergreen.</p>
+<dd class="field-even"><p>Authentication information for evergreen, or None if no API key auth is configured.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="evergreen.config.get_oauth_config_from_config">
+<span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_oauth_config_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.config.OidcConfig" title="evergreen.config.OidcConfig"><span class="pre">OidcConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/evergreen/config.html#get_oauth_config_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_oauth_config_from_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get OIDC configuration from the config dictionary, if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – Evergreen configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>OidcConfig if present, None otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="evergreen.config.get_oauth_config_from_dict">
+<span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">get_oauth_config_from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oauth_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.config.OidcConfig" title="evergreen.config.OidcConfig"><span class="pre">OidcConfig</span></a></span></span><a class="reference internal" href="../_modules/evergreen/config.html#get_oauth_config_from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.config.get_oauth_config_from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Get OIDC configuration from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>oauth_dict</strong> – Dictionary containing oauth configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>OidcConfig object.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2617,6 +2675,109 @@ argument.</p>
 <dd><p>value of url</p>
 </dd></dl>
 
+</dd></dl>
+
+</section>
+<section id="module-evergreen.oidc">
+<span id="evergreen-oidc-module"></span><h2>evergreen.oidc module<a class="headerlink" href="#module-evergreen.oidc" title="Link to this heading">¶</a></h2>
+<p>OIDC token management for Evergreen API authentication.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcToken">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.oidc.</span></span><span class="sig-name descname"><span class="pre">OidcToken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcToken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcToken" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an OIDC access token.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcToken.from_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.oidc.OidcToken" title="evergreen.oidc.OidcToken"><span class="pre">OidcToken</span></a></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcToken.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcToken.from_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Create OidcToken from dictionary (e.g., from JSON file).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – Dictionary containing ‘access_token’ and ‘refresh_token’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>OidcToken instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcToken.get_username_from_claims">
+<span class="sig-name descname"><span class="pre">get_username_from_claims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcToken.get_username_from_claims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcToken.get_username_from_claims" title="Link to this definition">¶</a></dt>
+<dd><p>Extract username from JWT token claims.</p>
+<p>Decodes the JWT (without verification) and extracts the username
+from common claim names (preferred_username, email, sub, name).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Username extracted from token claims.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If no recognized username claim is found in token.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcToken.is_expired">
+<span class="sig-name descname"><span class="pre">is_expired</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcToken.is_expired"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcToken.is_expired" title="Link to this definition">¶</a></dt>
+<dd><p>Check if token is expired by decoding the JWT and checking the exp claim.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buffer_seconds</strong> – Number of seconds to consider as buffer before actual expiration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if token is expired or about to expire, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcToken.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcToken.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcToken.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert token to dictionary (for JSON serialization).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary representation of the token.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcTokenManager">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.oidc.</span></span><span class="sig-name descname"><span class="pre">OidcTokenManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oidc_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.config.OidcConfig" title="evergreen.config.OidcConfig"><span class="pre">OidcConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcTokenManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcTokenManager" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages OIDC token acquisition and caching.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcTokenManager.get_token">
+<span class="sig-name descname"><span class="pre">get_token</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcTokenManager.get_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcTokenManager.get_token" title="Link to this definition">¶</a></dt>
+<dd><p>Get a valid access token, acquiring or refreshing if necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Access token string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="evergreen.oidc.get_username_from_api">
+<span class="sig-prename descclassname"><span class="pre">evergreen.oidc.</span></span><span class="sig-name descname"><span class="pre">get_username_from_api</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.api.EvergreenApi" title="evergreen.api.EvergreenApi"><span class="pre">EvergreenApi</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#get_username_from_api"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.get_username_from_api" title="Link to this definition">¶</a></dt>
+<dd><p>Extract username from an EvergreenApi instance.</p>
+<p>Works with both API key auth and OIDC auth by extracting the username
+from the appropriate source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>api</strong> – The EvergreenApi instance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Username extracted from either API key auth or OIDC token.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If no username can be determined from auth configuration.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -5256,8 +5417,17 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.config.EvgAuth.username"><code class="docutils literal notranslate"><span class="pre">EvgAuth.username</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#evergreen.config.OidcConfig"><code class="docutils literal notranslate"><span class="pre">OidcConfig</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.config.OidcConfig.client_id"><code class="docutils literal notranslate"><span class="pre">OidcConfig.client_id</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.OidcConfig.connector_id"><code class="docutils literal notranslate"><span class="pre">OidcConfig.connector_id</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.OidcConfig.issuer"><code class="docutils literal notranslate"><span class="pre">OidcConfig.issuer</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.OidcConfig.token_file_path"><code class="docutils literal notranslate"><span class="pre">OidcConfig.token_file_path</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#evergreen.config.get_auth"><code class="docutils literal notranslate"><span class="pre">get_auth()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.get_auth_from_config"><code class="docutils literal notranslate"><span class="pre">get_auth_from_config()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.get_oauth_config_from_config"><code class="docutils literal notranslate"><span class="pre">get_oauth_config_from_config()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.get_oauth_config_from_dict"><code class="docutils literal notranslate"><span class="pre">get_oauth_config_from_dict()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.read_evergreen_config"><code class="docutils literal notranslate"><span class="pre">read_evergreen_config()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.read_evergreen_from_file"><code class="docutils literal notranslate"><span class="pre">read_evergreen_from_file()</span></code></a></li>
 </ul>
@@ -5392,6 +5562,21 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.manifest.ManifestModule.url"><code class="docutils literal notranslate"><span class="pre">ManifestModule.url</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-evergreen.oidc">evergreen.oidc module</a><ul>
+<li><a class="reference internal" href="#evergreen.oidc.OidcToken"><code class="docutils literal notranslate"><span class="pre">OidcToken</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.oidc.OidcToken.from_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.oidc.OidcToken.get_username_from_claims"><code class="docutils literal notranslate"><span class="pre">OidcToken.get_username_from_claims()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.oidc.OidcToken.is_expired"><code class="docutils literal notranslate"><span class="pre">OidcToken.is_expired()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.oidc.OidcToken.to_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evergreen.oidc.OidcTokenManager"><code class="docutils literal notranslate"><span class="pre">OidcTokenManager</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.oidc.OidcTokenManager.get_token"><code class="docutils literal notranslate"><span class="pre">OidcTokenManager.get_token()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evergreen.oidc.get_username_from_api"><code class="docutils literal notranslate"><span class="pre">get_username_from_api()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-evergreen.patch">evergreen.patch module</a><ul>

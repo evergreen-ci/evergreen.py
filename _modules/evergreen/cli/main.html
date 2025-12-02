@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.cli.main &#8212; evergreen.py 3.13.2 documentation</title>
+    <title>evergreen.cli.main &#8212; evergreen.py 3.14.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../../_static/readable.css?v=e058d051" />
-    <script src="../../../_static/documentation_options.js?v=f92f4e34"></script>
+    <script src="../../../_static/documentation_options.js?v=e4f4b189"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -53,6 +53,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenApi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_username_from_api</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.resource_type_permissions</span><span class="w"> </span><span class="kn">import</span> <span class="n">PermissionableResourceType</span><span class="p">,</span> <span class="n">RemovablePermission</span>
 
 <span class="n">DATE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span>
@@ -510,7 +511,12 @@
     <span class="n">fmt</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">user_id</span><span class="p">:</span>
-        <span class="n">user_id</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">_auth</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">get_username_from_api</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="c1"># Strip email domain if present (for OIDC tokens that contain full email)</span>
+    <span class="k">if</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">user_id</span><span class="p">:</span>
+        <span class="n">user_id</span> <span class="o">=</span> <span class="n">user_id</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
     <span class="n">permissions</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">permissions_for_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">fmt_output</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">json</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">permissions</span><span class="p">]))</span>
 
