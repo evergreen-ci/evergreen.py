@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.14.0 - 2025-11-17
+- OIDC credential support
+
 ## 3.13.2 - 2025-11-12
 - Escape user provided args to CLI
 

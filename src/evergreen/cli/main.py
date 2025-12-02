@@ -11,6 +11,7 @@ import click
 import yaml
 
 from evergreen import EvergreenApi
+from evergreen.oidc import get_username_from_api
 from evergreen.resource_type_permissions import PermissionableResourceType, RemovablePermission
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -465,7 +466,12 @@ def user_permissions(ctx, user_id):
     fmt = ctx.obj["format"]
 
     if not user_id:
-        user_id = api._auth.username
+        user_id = get_username_from_api(api)
+
+    # Strip email domain if present (for OIDC tokens that contain full email)
+    if "@" in user_id:
+        user_id = user_id.split("@")[0]
+
     permissions = api.permissions_for_user(user_id)
     click.echo(fmt_output(fmt, [p.json for p in permissions]))
 
