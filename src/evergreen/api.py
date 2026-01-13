@@ -1076,6 +1076,7 @@ class EvergreenApi(object):
         description: str,
         variant: str,
         author: Optional[str] = None,
+        large: Optional[bool] = None,
     ) -> PatchCreationDetails:
         """
         Start a patch build based on a patch.
@@ -1088,13 +1089,15 @@ class EvergreenApi(object):
         :param description: A description of the build.
         :param variant: The variant(s) to build against.
         :param author: The author to attribute for the build.
+        :param large: Whether the patch is large. (>16MB)
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
         unpacked_params = " ".join(
             ["--param " + shlex.quote(f"{key}={value}") for key, value in params.items()]
         )
-        command = f"evergreen patch-file --diff-file {shlex.quote(diff_file_path)} --description {shlex.quote(description)} --base {shlex.quote(base)} --tasks {shlex.quote(task)} --variants {shlex.quote(variant)} --project {shlex.quote(project)} {unpacked_params} -y -f"
+        large_flag = "--large" if large else ""
+        command = f"evergreen patch-file --diff-file {shlex.quote(diff_file_path)} --description {shlex.quote(description)} --base {shlex.quote(base)} --tasks {shlex.quote(task)} --variants {shlex.quote(variant)} --project {shlex.quote(project)} {unpacked_params} {large_flag} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def patch_from_patch_id(
@@ -1106,6 +1109,7 @@ class EvergreenApi(object):
         description: str,
         variant: str,
         author: Optional[str] = None,
+        large: Optional[bool] = None,
     ) -> PatchCreationDetails:
         """
         Start a patch build based on a diff.
@@ -1117,13 +1121,15 @@ class EvergreenApi(object):
         :param description: A description of the build.
         :param variant: The variant(s) to build against.
         :param author: The author to attribute for the build.
+        :param large: Whether the patch is large. (>16MB)
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
         unpacked_params = " ".join(
             ["--param " + shlex.quote(f"{key}={value}") for key, value in params.items()]
         )
-        command = f"evergreen patch-file --diff-patchId {shlex.quote(patch_id)} --description {shlex.quote(description)} --tasks {shlex.quote(task)} --variants {shlex.quote(variant)} --project {shlex.quote(project)} {unpacked_params} -y -f"
+        large_flag = "--large" if large else ""
+        command = f"evergreen patch-file --diff-patchId {shlex.quote(patch_id)} --description {shlex.quote(description)} --tasks {shlex.quote(task)} --variants {shlex.quote(variant)} --project {shlex.quote(project)} {unpacked_params} {large_flag} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def repeat_patch(
@@ -1133,6 +1139,7 @@ class EvergreenApi(object):
         project: str,
         description: str,
         author: Optional[str] = None,
+        large: Optional[bool] = None,
     ) -> PatchCreationDetails:
         """
         Start a patch build based on a diff.
@@ -1142,13 +1149,15 @@ class EvergreenApi(object):
         :param project: The project to start the build for.
         :param description: A description of the build.
         :param author: The author to attribute for the build.
+        :param large: Whether the patch is large. (>16MB)
         :raises Exception: If a build URL is not produced we raise an exception with the output included.
         :return: The patch creation details.
         """
         unpacked_params = " ".join(
             ["--param " + shlex.quote(f"{key}={value}") for key, value in params.items()]
         )
-        command = f"evergreen patch-file --diff-patchId {shlex.quote(patch_id)} --repeat-patch {shlex.quote(patch_id)} --description {shlex.quote(description)} --project {shlex.quote(project)} {unpacked_params} -y -f"
+        large_flag = "--large" if large else ""
+        command = f"evergreen patch-file --diff-patchId {shlex.quote(patch_id)} --repeat-patch {shlex.quote(patch_id)} --description {shlex.quote(description)} --project {shlex.quote(project)} {unpacked_params} {large_flag} -y -f"
         return self._execute_patch_file_command(command, author)
 
     def task_by_id(
