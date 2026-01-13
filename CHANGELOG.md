@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.14.1 - 2025-11-18
+## 3.14.1 - 2026-01-13
 - Add support for large flag when creating patches
 
 ## 3.14.0 - 2025-11-17
