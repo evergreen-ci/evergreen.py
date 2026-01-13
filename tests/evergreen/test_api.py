@@ -640,6 +640,33 @@ class TestCreatePatchDiff:
     @patch(
         "evergreen.api.subprocess.run",
     )
+    def test_patch_from_diff_valid_with_large(self, mock_run, mocked_api):
+        mock_stdout = MagicMock()
+        mock_stdout.stdout = b""
+        mock_stdout.stderr = b"[evergreen] 2023/04/13 15:05:24 [p=info]: Patch successfully created.\n[evergreen] 2023/04/13 15:05:24 [p=info]: \n         ID : 64387ca457e85ac95a3da12f\n    Created : 2023-04-13 22:05:24.463 +0000 UTC\n    Description : Test enable profiling.\n      Build : https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true\n     Status : created\n\n\n"
+        mock_run.return_value = mock_stdout
+
+        params = {
+            "runtime_params_json": '{"v": 0, "enable_profiling": true}',
+            "reuse_compile_from": "build_id",
+        }
+        result = mocked_api.patch_from_diff(
+            "path", params, "base", "task", "project", "description", "variant", "author", True
+        )
+
+        command = mock_run.call_args[0][0]
+
+        assert "--author" in command
+        assert "--large" in command
+        assert (
+            result.url
+            == "https://evergreen.mongodb.com/patch/64387ca457e85ac95a3da12f?redirect_spruce_users=true"
+        )
+        assert result.id == "64387ca457e85ac95a3da12f"
+
+    @patch(
+        "evergreen.api.subprocess.run",
+    )
     def test_patch_from_diff_invalid(self, mock_run, mocked_api):
         mock_proc = MagicMock()
         mock_proc.stdout = b""
