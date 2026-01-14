@@ -119,7 +119,7 @@ class OidcTokenManager:
                 self._token = self._load_token_from_file()
             except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
                 raise RuntimeError(
-                    "Evergreen token file is invalid or missing. Do you need to run `evergreen-login`?"
+                    "Evergreen token file is invalid or missing. Do you need to run `evergreen login`?"
                 ) from e
 
         # If we have a valid token, return it
