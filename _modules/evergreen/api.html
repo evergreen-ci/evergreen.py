@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.14.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.15.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=408c3590"></script>
+    <script src="../../_static/documentation_options.js?v=9521fbd0"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -1138,6 +1138,52 @@
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/versions/</span><span class="si">{</span><span class="n">version_id</span><span class="si">}</span><span class="s2">/builds&quot;</span><span class="p">)</span>
         <span class="n">build_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">Build</span><span class="p">(</span><span class="n">build</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">build</span> <span class="ow">in</span> <span class="n">build_list</span><span class="p">]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+
+<div class="viewcode-block" id="EvergreenApi.activate_version_tasks">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.activate_version_tasks">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">activate_version_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">variants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Activate specified tasks for given build variants in a version.</span>
+
+<span class="sd">        :param version_id: The ID of the version to activate tasks for.</span>
+<span class="sd">        :param variants: List of variant specifications. Each should be a dict with:</span>
+<span class="sd">                         - &#39;name&#39; (str): The build variant name</span>
+<span class="sd">                         - &#39;tasks&#39; (List[str]): List of task names to activate</span>
+<span class="sd">        :return: Updated Version object after activation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/versions/</span><span class="si">{</span><span class="n">version_id</span><span class="si">}</span><span class="s2">/activate_tasks&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;variants&quot;</span><span class="p">:</span> <span class="n">variants</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EvergreenApi.abort_version">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.abort_version">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abort_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abort a version.</span>
+
+<span class="sd">        :param version_id: Id of the version to abort.</span>
+<span class="sd">        :return: Updated Version object after abort.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/versions/</span><span class="si">{</span><span class="n">version_id</span><span class="si">}</span><span class="s2">/abort&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EvergreenApi.restart_version">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.restart_version">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">restart_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Restart a version.</span>
+
+<span class="sd">        :param version_id: Id of the version to restart.</span>
+<span class="sd">        :return: Updated Version object after restart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/versions/</span><span class="si">{</span><span class="n">version_id</span><span class="si">}</span><span class="s2">/restart&quot;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">(),</span> <span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EvergreenApi.patch_by_id">
