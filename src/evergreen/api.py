@@ -1003,6 +1003,43 @@ class EvergreenApi(object):
         build_list = self._paginate(url, params)
         return [Build(build, self) for build in build_list]  # type: ignore[arg-type]
 
+    def activate_version_tasks(self, version_id: str, variants: List[Dict[str, Any]]) -> Version:
+        """
+        Activate specified tasks for given build variants in a version.
+
+        :param version_id: The ID of the version to activate tasks for.
+        :param variants: List of variant specifications. Each should be a dict with:
+                         - 'name' (str): The build variant name
+                         - 'tasks' (List[str]): List of task names to activate
+        :return: Updated Version object after activation.
+        """
+        url = self._create_url(f"/versions/{version_id}/activate_tasks")
+        data = {"variants": variants}
+        response = self._call_api(url, data=json.dumps(data), method="POST")
+        return Version(response.json(), self)
+
+    def abort_version(self, version_id: str) -> Version:
+        """
+        Abort a version.
+
+        :param version_id: Id of the version to abort.
+        :return: Updated Version object after abort.
+        """
+        url = self._create_url(f"/versions/{version_id}/abort")
+        response = self._call_api(url, method="POST")
+        return Version(response.json(), self)
+
+    def restart_version(self, version_id: str) -> Version:
+        """
+        Restart a version.
+
+        :param version_id: Id of the version to restart.
+        :return: Updated Version object after restart.
+        """
+        url = self._create_url(f"/versions/{version_id}/restart")
+        response = self._call_api(url, method="POST")
+        return Version(response.json(), self)
+
     def patch_by_id(self, patch_id: str, params: Optional[Dict] = None) -> Patch:
         """
         Get a patch by patch id.

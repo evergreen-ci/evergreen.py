@@ -517,6 +517,98 @@ class TestVersionApi(object):
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
 
+    def test_activate_version_tasks(self, mocked_api, sample_version, mocked_api_response):
+        mocked_api_response.json.return_value = sample_version
+
+        variants = [
+            {"name": "variant1", "tasks": ["task1", "task2"]},
+            {"name": "variant2", "tasks": ["task3"]},
+        ]
+
+        result = mocked_api.activate_version_tasks("version_id", variants)
+
+        expected_url = mocked_api._create_url("/versions/version_id/activate_tasks")
+        expected_data = json.dumps({"variants": variants})
+
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="POST",
+        )
+
+        assert isinstance(result, under_test.Version)
+        assert result.version_id == sample_version["version_id"]
+
+    def test_activate_version_tasks_single_variant(
+        self, mocked_api, sample_version, mocked_api_response
+    ):
+        mocked_api_response.json.return_value = sample_version
+        variants = [{"name": "my_variant", "tasks": ["task1", "task2"]}]
+
+        mocked_api.activate_version_tasks("version_id", variants)
+
+        expected_data = json.dumps({"variants": variants})
+        mocked_api.session.request.assert_called_with(
+            url=mocked_api._create_url("/versions/version_id/activate_tasks"),
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="POST",
+        )
+
+    def test_activate_version_tasks_empty_variants(
+        self, mocked_api, sample_version, mocked_api_response
+    ):
+        mocked_api_response.json.return_value = sample_version
+        variants = []
+
+        mocked_api.activate_version_tasks("version_id", variants)
+
+        expected_data = json.dumps({"variants": variants})
+        mocked_api.session.request.assert_called_with(
+            url=mocked_api._create_url("/versions/version_id/activate_tasks"),
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="POST",
+        )
+
+    def test_abort_version(self, mocked_api, sample_version, mocked_api_response):
+        mocked_api_response.json.return_value = sample_version
+
+        result = mocked_api.abort_version("version_id")
+
+        expected_url = mocked_api._create_url("/versions/version_id/abort")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=None,
+            method="POST",
+        )
+
+        assert isinstance(result, under_test.Version)
+        assert result.version_id == sample_version["version_id"]
+
+    def test_restart_version(self, mocked_api, sample_version, mocked_api_response):
+        mocked_api_response.json.return_value = sample_version
+
+        result = mocked_api.restart_version("version_id")
+
+        expected_url = mocked_api._create_url("/versions/version_id/restart")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=None,
+            method="POST",
+        )
+
+        assert isinstance(result, under_test.Version)
+        assert result.version_id == sample_version["version_id"]
+
 
 class TestPatchApi(object):
     def test_patch_by_id(self, mocked_api):
