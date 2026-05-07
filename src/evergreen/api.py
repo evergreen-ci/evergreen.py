@@ -1374,7 +1374,7 @@ class EvergreenApi(object):
             request["metadata"] = metadata
 
         if metadata_links is not None:
-            request["metadata_links"] = [link._asdict() for link in metadata_links]
+            request["metadata_links"] = [link.model_dump() for link in metadata_links]
 
         self._call_api(url, method="PUT", data=json.dumps(request))
 
