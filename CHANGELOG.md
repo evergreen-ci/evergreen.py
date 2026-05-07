@@ -1,9 +1,7 @@
 # Changelog
-## 3.15.2 - 2026-05-07
-- Add optional `model` field to IssueLinkRequest.
-
-## 3.15.1 - 2026-05-07
+## 3.16.0 - 2026-05-07
 - Convert IssueLinkRequest and MetadataLinkRequest from NamedTuple to Pydantic BaseModel.
+- Add an optional field model to class IssueLinkRequest
 
 ## 3.15.0 - 2026-03-05
 - Add support for abort/restart/activate version endpoints.
