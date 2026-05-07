@@ -11,6 +11,7 @@ class IssueLinkRequest(BaseModel):
     issue_key: str
     url: str
     confidence_score: Optional[float] = None
+    model: Optional[str] = None
 
     def as_dict(self) -> Dict[str, Any]:
         """Get a dictionary representation of the issue link."""

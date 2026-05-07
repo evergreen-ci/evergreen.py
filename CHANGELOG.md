@@ -1,4 +1,7 @@
 # Changelog
+## 3.15.2 - 2026-05-07
+- Add optional `model` field to IssueLinkRequest.
+
 ## 3.15.1 - 2026-05-07
 - Convert IssueLinkRequest and MetadataLinkRequest from NamedTuple to Pydantic BaseModel.
 
