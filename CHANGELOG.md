@@ -1,4 +1,7 @@
 # Changelog
+## 3.16.0 - 2026-05-08
+- Add `GITHUB_MERGE_REQUEST` and `GIT_TAG_REQUEST` to `Requester` enum
+
 ## 3.15.0 - 2026-03-05
 - Add support for abort/restart/activate version endpoints.
 
