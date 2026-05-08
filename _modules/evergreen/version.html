@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.version &#8212; evergreen.py 3.15.0 documentation</title>
+    <title>evergreen.version &#8212; evergreen.py 3.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=9521fbd0"></script>
+    <script src="../../_static/documentation_options.js?v=075e253b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -71,9 +71,11 @@
     <span class="n">PATCH_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;patch_request&quot;</span>
     <span class="n">GITTER_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;gitter_request&quot;</span>
     <span class="n">GITHUB_PULL_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;github_pull_request&quot;</span>
+    <span class="n">GITHUB_MERGE_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;github_merge_request&quot;</span>
     <span class="n">MERGE_TEST</span> <span class="o">=</span> <span class="s2">&quot;merge_test&quot;</span>
     <span class="n">AD_HOC</span> <span class="o">=</span> <span class="s2">&quot;ad_hoc&quot;</span>
     <span class="n">TRIGGER_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;trigger_request&quot;</span>
+    <span class="n">GIT_TAG_REQUEST</span> <span class="o">=</span> <span class="s2">&quot;git_tag_request&quot;</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">&quot;UNKNOWN&quot;</span>
 
 <div class="viewcode-block" id="Requester.evg_value">
@@ -91,9 +93,11 @@
             <span class="n">Requester</span><span class="o">.</span><span class="n">PATCH_REQUEST</span><span class="p">:</span> <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">GITTER_REQUEST</span><span class="p">:</span> <span class="s2">&quot;mainline&quot;</span><span class="p">,</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">GITHUB_PULL_REQUEST</span><span class="p">:</span> <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">GITHUB_MERGE_REQUEST</span><span class="p">:</span> <span class="s2">&quot;patch&quot;</span><span class="p">,</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">MERGE_TEST</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">AD_HOC</span><span class="p">:</span> <span class="s2">&quot;adhoc&quot;</span><span class="p">,</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">TRIGGER_REQUEST</span><span class="p">:</span> <span class="s2">&quot;trigger&quot;</span><span class="p">,</span>
+            <span class="n">Requester</span><span class="o">.</span><span class="n">GIT_TAG_REQUEST</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="n">Requester</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
@@ -105,6 +109,7 @@
 <span class="n">PATCH_REQUESTERS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">Requester</span><span class="o">.</span><span class="n">PATCH_REQUEST</span><span class="p">,</span>
     <span class="n">Requester</span><span class="o">.</span><span class="n">GITHUB_PULL_REQUEST</span><span class="p">,</span>
+    <span class="n">Requester</span><span class="o">.</span><span class="n">GITHUB_MERGE_REQUEST</span><span class="p">,</span>
     <span class="n">Requester</span><span class="o">.</span><span class="n">MERGE_TEST</span><span class="p">,</span>
 <span class="p">}</span>
 
