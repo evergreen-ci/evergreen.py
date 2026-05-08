@@ -27,9 +27,11 @@ class Requester(str, Enum):
     PATCH_REQUEST = "patch_request"
     GITTER_REQUEST = "gitter_request"
     GITHUB_PULL_REQUEST = "github_pull_request"
+    GITHUB_MERGE_REQUEST = "github_merge_request"
     MERGE_TEST = "merge_test"
     AD_HOC = "ad_hoc"
     TRIGGER_REQUEST = "trigger_request"
+    GIT_TAG_REQUEST = "git_tag_request"
     UNKNOWN = "UNKNOWN"
 
     def evg_value(self) -> str:
@@ -42,9 +44,11 @@ class Requester(str, Enum):
             Requester.PATCH_REQUEST: "patch",
             Requester.GITTER_REQUEST: "mainline",
             Requester.GITHUB_PULL_REQUEST: "patch",
+            Requester.GITHUB_MERGE_REQUEST: "patch",
             Requester.MERGE_TEST: "",
             Requester.AD_HOC: "adhoc",
             Requester.TRIGGER_REQUEST: "trigger",
+            Requester.GIT_TAG_REQUEST: "",
             Requester.UNKNOWN: "",
         }
 
@@ -54,6 +58,7 @@ class Requester(str, Enum):
 PATCH_REQUESTERS = {
     Requester.PATCH_REQUEST,
     Requester.GITHUB_PULL_REQUEST,
+    Requester.GITHUB_MERGE_REQUEST,
     Requester.MERGE_TEST,
 }
 

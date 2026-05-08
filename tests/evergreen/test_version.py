@@ -15,8 +15,10 @@ EXPECTED_REQUESTER_PAIRS = [
     (Requester.PATCH_REQUEST, "patch"),
     (Requester.GITTER_REQUEST, "mainline"),
     (Requester.GITHUB_PULL_REQUEST, "patch"),
+    (Requester.GITHUB_MERGE_REQUEST, "patch"),
     (Requester.AD_HOC, "adhoc"),
     (Requester.TRIGGER_REQUEST, "trigger"),
+    (Requester.GIT_TAG_REQUEST, ""),
 ]
 
 
