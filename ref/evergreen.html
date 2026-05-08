@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen package &#8212; evergreen.py 3.16.0 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.17.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=075e253b"></script>
+    <script src="../_static/documentation_options.js?v=768b6f62"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -1393,8 +1393,8 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <p>Objects for making requests to the API.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></span><span class="sig-name descname"><span class="pre">IssueLinkRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issue_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api_requests.html#IssueLinkRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></span><span class="sig-name descname"><span class="pre">IssueLinkRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">issue_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api_requests.html#IssueLinkRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Issue to add to a task annotation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest.as_dict">
@@ -1405,39 +1405,51 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest.confidence_score">
 <span class="sig-name descname"><span class="pre">confidence_score</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.confidence_score" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest.issue_key">
 <span class="sig-name descname"><span class="pre">issue_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.issue_key" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.model" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.api_requests.IssueLinkRequest.url">
 <span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.IssueLinkRequest.url" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.api_requests.MetadataLinkRequest">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></span><span class="sig-name descname"><span class="pre">MetadataLinkRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api_requests.html#MetadataLinkRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.MetadataLinkRequest" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api_requests.</span></span><span class="sig-name descname"><span class="pre">MetadataLinkRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api_requests.html#MetadataLinkRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api_requests.MetadataLinkRequest" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Metadata Link to add to a task annotation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api_requests.MetadataLinkRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#evergreen.api_requests.MetadataLinkRequest.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.api_requests.MetadataLinkRequest.text">
 <span class="sig-name descname"><span class="pre">text</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.MetadataLinkRequest.text" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.api_requests.MetadataLinkRequest.url">
 <span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#evergreen.api_requests.MetadataLinkRequest.url" title="Link to this definition">¶</a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -5374,10 +5386,13 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest.as_dict"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.as_dict()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest.confidence_score"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.confidence_score</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest.issue_key"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.issue_key</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest.model"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.model</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest.model_config"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.model_config</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api_requests.IssueLinkRequest.url"><code class="docutils literal notranslate"><span class="pre">IssueLinkRequest.url</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest.model_config"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.model_config</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest.text"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.text</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api_requests.MetadataLinkRequest.url"><code class="docutils literal notranslate"><span class="pre">MetadataLinkRequest.url</span></code></a></li>
 </ul>
