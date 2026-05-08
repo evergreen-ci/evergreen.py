@@ -1,4 +1,8 @@
 # Changelog
+## 3.17.0 - 2026-05-08
+- Convert IssueLinkRequest and MetadataLinkRequest from NamedTuple to Pydantic BaseModel.
+- Add an optional field model to class IssueLinkRequest
+
 ## 3.16.0 - 2026-05-08
 - Add `GITHUB_MERGE_REQUEST` and `GIT_TAG_REQUEST` to `Requester` enum
 

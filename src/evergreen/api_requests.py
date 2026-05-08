@@ -1,26 +1,24 @@
 """Objects for making requests to the API."""
 
-from typing import Any, Dict, List, NamedTuple, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
 
-class IssueLinkRequest(NamedTuple):
+class IssueLinkRequest(BaseModel):
     """Issue to add to a task annotation."""
 
     issue_key: str
     url: str
     confidence_score: Optional[float] = None
+    model: Optional[str] = None
 
     def as_dict(self) -> Dict[str, Any]:
         """Get a dictionary representation of the issue link."""
-        data: Dict[str, Any] = {"issue_key": self.issue_key, "url": self.url}
-        if self.confidence_score is not None:
-            data["confidence_score"] = self.confidence_score
-        return data
+        return self.model_dump(exclude_none=True)
 
 
-class MetadataLinkRequest(NamedTuple):
+class MetadataLinkRequest(BaseModel):
     """Metadata Link to add to a task annotation."""
 
     url: str
