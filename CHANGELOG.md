@@ -1,4 +1,7 @@
 # Changelog
+## 3.18.0 - 2026-06-02
+- Raise an error in `_stream_api` when the server returns a non-2xx status, instead of silently yielding no content.
+
 ## 3.17.0 - 2026-05-08
 - Convert IssueLinkRequest and MetadataLinkRequest from NamedTuple to Pydantic BaseModel.
 - Add an optional field model to class IssueLinkRequest
