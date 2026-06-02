@@ -16,6 +16,7 @@ def mocked_res():
     mock_res.request = MagicMock()
     mock_res.__enter__.return_value = mock_res
     mock_res.request.url = "url"
+    mock_res.status_code = 200
     mock_res.iter_content.return_value = iter(RESPONSE_DATA)
     mock_res.iter_lines.return_value = iter(RESPONSE_DATA)
     return mock_res
