@@ -1,4 +1,7 @@
 # Changelog
+## 3.19.0 - 2026-06-02
+- Revert changes made in version 3.17.0
+
 ## 3.18.0 - 2026-06-02
 - Raise an error in `_stream_api` when the server returns a non-2xx status, instead of silently yielding no content.
 
