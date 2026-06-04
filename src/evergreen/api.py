@@ -274,6 +274,15 @@ class EvergreenApi(object):
         """
         start_time = time()
 
+        # TODO: when DEVPROD-34453 is done remove this 
+        if self._oidc_token_manager and "evergreen.mongodb.com" in url:
+            url = url.replace("evergreen.mongodb.com", "evergreen.corp.mongodb.com")
+            LOGGER.debug(
+                "Rewrote URL for OIDC authentication",
+                original_domain="evergreen.mongodb.com",
+                rewritten_domain="evergreen.corp.mongodb.com",
+            )
+
         with self.session.get(url=url, params=params, stream=True, timeout=self._timeout) as res:
             self._log_api_call_time(res, start_time)
             self._raise_for_status(res)

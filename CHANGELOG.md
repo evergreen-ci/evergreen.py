@@ -1,4 +1,7 @@
 # Changelog
+## 3.19.1 - Unreleased
+- Fix OIDC authentication for test log streaming when using corp Evergreen API. The corp API returns test log URLs pointing to the public server which doesn't accept OIDC tokens. This patch automatically rewrites URLs to use the corp domain when OIDC is enabled.
+
 ## 3.19.0 - 2026-06-02
 - Revert changes made in version 3.17.0
 
