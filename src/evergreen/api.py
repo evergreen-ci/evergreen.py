@@ -290,21 +290,22 @@ class EvergreenApi(object):
 
         :param response: response from evergreen api.
         """
-        try:
-            json_data = response.json()
-            if response.status_code >= 400 and "error" in json_data:
-                if self._log_on_error:
-                    LOGGER.error(
-                        "Error found in json",
-                        request_url=response.request.url,
-                        request_method=response.request.method,
-                        request_body=response.request.body,
-                        response_status_code=response.status_code,
-                        response_text=response.text,
-                    )
-                raise requests.exceptions.HTTPError(json_data["error"], response=response)
-        except JSONDecodeError:
-            pass
+        if response.status_code >= 400:
+            try:
+                json_data = response.json()
+                if "error" in json_data:
+                    if self._log_on_error:
+                        LOGGER.error(
+                            "Error found in json",
+                            request_url=response.request.url,
+                            request_method=response.request.method,
+                            request_body=response.request.body,
+                            response_status_code=response.status_code,
+                            response_text=response.text,
+                        )
+                    raise requests.exceptions.HTTPError(json_data["error"], response=response)
+            except JSONDecodeError:
+                pass
 
         response.raise_for_status()
 
