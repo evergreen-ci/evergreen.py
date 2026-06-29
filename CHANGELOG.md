@@ -1,6 +1,6 @@
 # Changelog
 ## 3.19.1 - 2026-06-29
-- Download response content only for errors
+- Download response content only for errors in _raise_for_status
 
 ## 3.19.0 - 2026-06-02
 - Revert changes made in version 3.17.0
