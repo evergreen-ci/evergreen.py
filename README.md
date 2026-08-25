@@ -1,7 +1,6 @@
 # Evergreen.py
 
-A client library for the Evergreen API written in python. Currently supports the V2 version of
-the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/REST-V2-Usage.
+A client library for the Evergreen [Rest v2 API written in python](https://docs.devprod.prod.corp.mongodb.com/evergreen/API/REST-V2-Usage). **This library is deprecated; no new features will be implemented.** 
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/evergreen.py) [![PyPI](https://img.shields.io/pypi/v/evergreen.py.svg)](https://pypi.org/project/evergreen.py/) [![Coverage Status](https://coveralls.io/repos/github/evergreen-ci/evergreen.py/badge.svg?branch=master)](https://coveralls.io/github/evergreen-ci/evergreen.py?branch=master)
 
@@ -26,30 +25,24 @@ the API. For more details, see https://github.com/evergreen-ci/evergreen/wiki/RE
 
 This is a Python client library for interacting with Evergreen and Evergreen objects. It currently only
 supports the V2 version of Evergreen's api. It can be used either by Python code in a separate application
-or on the command line to get data about Evergreen objects quickly and easily.
+or on the command line to get data about Evergreen objects quickly and easily. 
 
 ## Getting Help
 
 ### What's the right channel to ask my question?
 
-If you have a question about evergreen.py, please mention @dag-on-call in
-slack channel [#evergreen-users](https://mongodb.slack.com/messages/#evergreen-users/),
-or email us at devprod-si-team@mongodb.com.
+Questions should be sent to #ask-devprod. Please note we will likely only invest time in helping to move users off of this library.
 
 ### How can I request a change/report a bug in evergreen.py?
 
-Create a [DEVPROD ticket](https://jira.mongodb.org/projects/DEVPROD).
+Create a [DEVPROD ticket](https://jira.mongodb.org/projects/DEVPROD) for **high-impact blocking bugs**; otherwise, we recommend migrating off of this library.
 
-### What should I include in my ticket or #evergreen-users question?
-
-Since #evergreen-users questions are interrupts,
-please include as much information as possible.
-This can help avoid long information-gathering threads.
+### What should I include in my ticket or #ask-devprod question?
 
 Please include the following:
 
 - **Motivation for Request**
-  - provide us the motivation for this change.
+  - provide us the motivation for this change. (Only high impact motivations will be considered at this time.)
 - **Context**
   - provide some background contexts for this issue.
 - **Description**
