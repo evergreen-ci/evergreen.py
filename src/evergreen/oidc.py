@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import json
 import os
 import time
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import jwt
 import requests
@@ -43,6 +43,23 @@ class OidcToken:
         exp_timestamp = claims["exp"]
         current_time = time.time()
         return current_time >= (exp_timestamp - buffer_seconds)
+
+    @classmethod
+    def from_spawnhost_dict(cls, data: Dict[str, Any]) -> "OidcToken":
+        """
+        Create OidcToken from the spawn_host_access_token block in ~/.evergreen.yml.
+
+        On a spawn host, Evergreen writes the OIDC token it minted for the host directly
+        into the yaml config (under oauth.spawn_host_access_token) instead of a separate
+        token cache file. Its keys are lowercase and unseparated (accesstoken/refreshtoken).
+
+        :param data: The spawn_host_access_token dictionary.
+        :return: OidcToken instance.
+        """
+        return cls(
+            access_token=data["accesstoken"],
+            refresh_token=data.get("refreshtoken") or "",
+        )
 
     @classmethod
     def from_dict(cls, data: dict) -> "OidcToken":
@@ -121,6 +138,10 @@ class OidcTokenManager:
                 raise RuntimeError(
                     "Evergreen token file is invalid or missing. Do you need to run `evergreen login`?"
                 ) from e
+
+        # On a spawn host, the config yaml embeds the token directly instead of a cache file.
+        if self._token is None and self.oidc_config.spawn_host_access_token:
+            self._token = OidcToken.from_spawnhost_dict(self.oidc_config.spawn_host_access_token)
 
         # If we have a valid token, return it
         if self._token and not self._token.is_expired():

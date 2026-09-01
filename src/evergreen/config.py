@@ -9,7 +9,10 @@ from typing import Dict, Optional
 import yaml
 
 EvgAuth = namedtuple("EvgAuth", ["username", "api_key"])
-OidcConfig = namedtuple("OidcConfig", ["issuer", "client_id", "connector_id", "token_file_path"])
+OidcConfig = namedtuple(
+    "OidcConfig",
+    ["issuer", "client_id", "connector_id", "token_file_path", "spawn_host_access_token"],
+)
 
 DEFAULT_NETWORK_TIMEOUT_SEC = 5 * 60
 DEFAULT_API_SERVER = "https://evergreen.mongodb.com"
@@ -54,6 +57,7 @@ def get_oauth_config_from_dict(oauth_dict: Dict) -> OidcConfig:
         client_id=oauth_dict["client_id"],
         connector_id=oauth_dict["connector_id"],
         token_file_path=oauth_dict.get("token_file_path"),
+        spawn_host_access_token=oauth_dict.get("spawn_host_access_token"),
     )
 
 

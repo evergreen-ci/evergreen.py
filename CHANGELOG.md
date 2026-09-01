@@ -1,4 +1,7 @@
 # Changelog
+## 3.19.2 - 2026-09-01
+- Support OIDC auth on spawn hosts by reading the embedded `oauth.spawn_host_access_token` from `~/.evergreen.yml`.
+
 ## 3.19.1 - 2026-06-29
 - Download response content only for errors in _raise_for_status
 
