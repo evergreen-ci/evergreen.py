@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen package &#8212; evergreen.py 3.19.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.19.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=15350ea6"></script>
+    <script src="../_static/documentation_options.js?v=22cd84cc"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -1953,7 +1953,7 @@ argument.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="evergreen.config.OidcConfig">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">OidcConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evergreen.config.OidcConfig" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.config.</span></span><span class="sig-name descname"><span class="pre">OidcConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spawn_host_access_token</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#evergreen.config.OidcConfig" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.config.OidcConfig.client_id">
@@ -1971,6 +1971,12 @@ argument.</p>
 <dt class="sig sig-object py" id="evergreen.config.OidcConfig.issuer">
 <span class="sig-name descname"><span class="pre">issuer</span></span><a class="headerlink" href="#evergreen.config.OidcConfig.issuer" title="Link to this definition">¶</a></dt>
 <dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.config.OidcConfig.spawn_host_access_token">
+<span class="sig-name descname"><span class="pre">spawn_host_access_token</span></span><a class="headerlink" href="#evergreen.config.OidcConfig.spawn_host_access_token" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2743,6 +2749,23 @@ argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – Dictionary containing ‘access_token’ and ‘refresh_token’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>OidcToken instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.oidc.OidcToken.from_spawnhost_dict">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_spawnhost_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.oidc.OidcToken" title="evergreen.oidc.OidcToken"><span class="pre">OidcToken</span></a></span></span><a class="reference internal" href="../_modules/evergreen/oidc.html#OidcToken.from_spawnhost_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.oidc.OidcToken.from_spawnhost_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Create OidcToken from the spawn_host_access_token block in ~/.evergreen.yml.</p>
+<p>On a spawn host, Evergreen writes the OIDC token it minted for the host directly
+into the yaml config (under oauth.spawn_host_access_token) instead of a separate
+token cache file. Its keys are lowercase and unseparated (accesstoken/refreshtoken).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – The spawn_host_access_token dictionary.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>OidcToken instance.</p>
@@ -5484,6 +5507,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.config.OidcConfig.client_id"><code class="docutils literal notranslate"><span class="pre">OidcConfig.client_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.OidcConfig.connector_id"><code class="docutils literal notranslate"><span class="pre">OidcConfig.connector_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.OidcConfig.issuer"><code class="docutils literal notranslate"><span class="pre">OidcConfig.issuer</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.config.OidcConfig.spawn_host_access_token"><code class="docutils literal notranslate"><span class="pre">OidcConfig.spawn_host_access_token</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.config.OidcConfig.token_file_path"><code class="docutils literal notranslate"><span class="pre">OidcConfig.token_file_path</span></code></a></li>
 </ul>
 </li>
@@ -5630,6 +5654,7 @@ argument.</p>
 <li><a class="reference internal" href="#module-evergreen.oidc">evergreen.oidc module</a><ul>
 <li><a class="reference internal" href="#evergreen.oidc.OidcToken"><code class="docutils literal notranslate"><span class="pre">OidcToken</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.oidc.OidcToken.from_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.oidc.OidcToken.from_spawnhost_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.from_spawnhost_dict()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.oidc.OidcToken.get_username_from_claims"><code class="docutils literal notranslate"><span class="pre">OidcToken.get_username_from_claims()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.oidc.OidcToken.is_expired"><code class="docutils literal notranslate"><span class="pre">OidcToken.is_expired()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.oidc.OidcToken.to_dict"><code class="docutils literal notranslate"><span class="pre">OidcToken.to_dict()</span></code></a></li>

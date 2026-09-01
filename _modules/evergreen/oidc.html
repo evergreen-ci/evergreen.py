@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.oidc &#8212; evergreen.py 3.19.1 documentation</title>
+    <title>evergreen.oidc &#8212; evergreen.py 3.19.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=15350ea6"></script>
+    <script src="../../_static/documentation_options.js?v=22cd84cc"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -47,7 +47,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">jwt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
@@ -89,6 +89,26 @@
         <span class="n">exp_timestamp</span> <span class="o">=</span> <span class="n">claims</span><span class="p">[</span><span class="s2">&quot;exp&quot;</span><span class="p">]</span>
         <span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">current_time</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">exp_timestamp</span> <span class="o">-</span> <span class="n">buffer_seconds</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OidcToken.from_spawnhost_dict">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.oidc.OidcToken.from_spawnhost_dict">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_spawnhost_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;OidcToken&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create OidcToken from the spawn_host_access_token block in ~/.evergreen.yml.</span>
+
+<span class="sd">        On a spawn host, Evergreen writes the OIDC token it minted for the host directly</span>
+<span class="sd">        into the yaml config (under oauth.spawn_host_access_token) instead of a separate</span>
+<span class="sd">        token cache file. Its keys are lowercase and unseparated (accesstoken/refreshtoken).</span>
+
+<span class="sd">        :param data: The spawn_host_access_token dictionary.</span>
+<span class="sd">        :return: OidcToken instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">access_token</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;accesstoken&quot;</span><span class="p">],</span>
+            <span class="n">refresh_token</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;refreshtoken&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="OidcToken.from_dict">
@@ -182,6 +202,10 @@
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                     <span class="s2">&quot;Evergreen token file is invalid or missing. Do you need to run `evergreen login`?&quot;</span>
                 <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+        <span class="c1"># On a spawn host, the config yaml embeds the token directly instead of a cache file.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">oidc_config</span><span class="o">.</span><span class="n">spawn_host_access_token</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">OidcToken</span><span class="o">.</span><span class="n">from_spawnhost_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">oidc_config</span><span class="o">.</span><span class="n">spawn_host_access_token</span><span class="p">)</span>
 
         <span class="c1"># If we have a valid token, return it</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="o">.</span><span class="n">is_expired</span><span class="p">():</span>
