@@ -1347,10 +1347,12 @@ class EvergreenApi(object):
             id_match = EVERGREEN_PATCH_ID_REGEX.search(stderr)
 
         if url_match is None or id_match is None:
-            raise RuntimeError(f"Unable to parse URL or ID from command stdout or stderr:\n \
+            raise RuntimeError(
+                f"Unable to parse URL or ID from command stdout or stderr:\n \
                     \tstdout: {output}\n \
                     \tstderr: {stderr} \n \
-                    \tExecuted command: {command}")
+                    \tExecuted command: {command}"
+            )
 
         return PatchCreationDetails(url=url_match.group(0), id=id_match.group(0))
 
