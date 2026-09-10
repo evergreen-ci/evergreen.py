@@ -33,6 +33,22 @@ class TestVersion(object):
         version = Version(sample_version, None)
         assert version.version_id == sample_version["version_id"]
 
+    def test_new_fields_are_declared(self, sample_version):
+        version = Version(sample_version, None)
+        for attr in [
+            "ingest_time",
+            "author_id",
+            "triggered_by_git_tag",
+            "git_tags",
+            "tag",
+            "pusher",
+            "artifacts",
+            "cost",
+            "predicted_cost",
+            "logs",
+        ]:
+            getattr(version, attr)
+
     def test_dates_are_correct(self, sample_version):
         version = Version(sample_version, None)
         assert isinstance(version.create_time, datetime)

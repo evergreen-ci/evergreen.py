@@ -13,6 +13,12 @@ class TestBuild(object):
         build = Build(sample_build, None)
         assert sample_build["project_id"] == build.project_id
 
+    def test_new_fields_are_declared(self, sample_build):
+        build = Build(sample_build, None)
+        assert build.task_cache == sample_build["task_cache"]
+        for attr in ["batchtime", "cron", "definition_info", "failed_test_names"]:
+            getattr(build, attr)
+
     def test_get_project_identifier(self, sample_build):
         mock_api = MagicMock()
         build = Build(sample_build, mock_api)
