@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Unit tests for src/evergreen/build.py."""
+
 from __future__ import absolute_import
 
 from unittest.mock import MagicMock

@@ -1220,10 +1220,10 @@ class TestGraphQLApi(object):
     def test_graphql_basic_query(self, mocked_api, mocked_api_response):
         mocked_api_response.json.return_value = {"data": {"task": {"id": "task_id"}}}
 
-        result = mocked_api.graphql("{ task(taskId: \"task_id\") { id } }")
+        result = mocked_api.graphql('{ task(taskId: "task_id") { id } }')
 
         expected_url = f"{DEFAULT_API_SERVER}/graphql/query"
-        expected_data = json.dumps({"query": "{ task(taskId: \"task_id\") { id } }"})
+        expected_data = json.dumps({"query": '{ task(taskId: "task_id") { id } }'})
         mocked_api.session.request.assert_called_with(
             url=expected_url,
             params=None,
@@ -1265,7 +1265,7 @@ class TestGraphQLApi(object):
         }
 
         with pytest.raises(EvergreenGraphQLError) as excinfo:
-            mocked_api.graphql("{ task(taskId: \"x\") { id } }")
+            mocked_api.graphql('{ task(taskId: "x") { id } }')
 
         assert "task.id: boom" in str(excinfo.value)
 
@@ -1276,7 +1276,7 @@ class TestGraphQLApi(object):
         mocked_api._session.request.return_value = response
 
         with pytest.raises(EvergreenGraphQLError) as excinfo:
-            mocked_api.graphql("{ task(taskId: \"x\") { id } }")
+            mocked_api.graphql('{ task(taskId: "x") { id } }')
 
         assert "invalid query" in str(excinfo.value)
 
@@ -1400,9 +1400,7 @@ class TestTaskHistoryApi(object):
             MagicMock(status_code=200, json=lambda: page3),
         ]
 
-        result = list(
-            mocked_api.task_history_iter("evergreen", "test-graphql", "ubuntu2204", "t0")
-        )
+        result = list(mocked_api.task_history_iter("evergreen", "test-graphql", "ubuntu2204", "t0"))
 
         assert [task["id"] for task in result] == ["t3", "t2", "t1"]
         assert mocked_api._session.request.call_count == 3

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Representation of an evergreen build."""
+
 from __future__ import absolute_import
 
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional

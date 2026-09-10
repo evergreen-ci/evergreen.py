@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """API for interacting with evergreen."""
+
 from __future__ import absolute_import
 
 import json
@@ -91,6 +92,7 @@ EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\n)")
 EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
 
 INCLUDE_REPO_QUERY = "?includeRepo=true"
+
 
 class TaskHistoryDirection(str, Enum):
     """Direction in which to page through task history."""
@@ -1345,12 +1347,10 @@ class EvergreenApi(object):
             id_match = EVERGREEN_PATCH_ID_REGEX.search(stderr)
 
         if url_match is None or id_match is None:
-            raise RuntimeError(
-                f"Unable to parse URL or ID from command stdout or stderr:\n \
+            raise RuntimeError(f"Unable to parse URL or ID from command stdout or stderr:\n \
                     \tstdout: {output}\n \
                     \tstderr: {stderr} \n \
-                    \tExecuted command: {command}"
-            )
+                    \tExecuted command: {command}")
 
         return PatchCreationDetails(url=url_match.group(0), id=id_match.group(0))
 

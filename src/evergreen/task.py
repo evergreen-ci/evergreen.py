@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Task representation of evergreen."""
+
 from __future__ import absolute_import
 
 from datetime import timedelta

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Version representation of evergreen."""
+
 from __future__ import absolute_import
 
 from enum import Enum
