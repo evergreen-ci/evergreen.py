@@ -3,8 +3,8 @@
 - Add a `graphql` method to `EvergreenApi` for querying the Evergreen GraphQL API. It reuses the client's
   auth/retry/timeout handling and raises `EvergreenGraphQLError` when the GraphQL API returns errors.
 - Add `task_history` and `task_history_iter` methods that wrap the GraphQL `taskHistory` query, with
-  cursor pagination and selectable task fields. `task_history_iter` has a configurable safety cap
-  (default 1000 results) to prevent unbounded iteration.
+  cursor pagination and selectable task fields. `task_history_iter` accepts an optional `max_results`
+  cap to prevent unbounded iteration.
 - Add missing fields to the Task, StatusDetails, Version, and Build objects to match the current
   Evergreen REST API responses.
 

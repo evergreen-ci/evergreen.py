@@ -64,7 +64,12 @@ from evergreen.task_annotations import TaskAnnotation
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.users_for_role import UsersForRole
-from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
+from evergreen.util import (
+    EVG_SHORT_DATETIME_FORMAT,
+    evergreen_input_to_output,
+    format_evergreen_date,
+    iterate_by_time_window,
+)
 from evergreen.version import RecentVersions, Requester, Version
 
 LOGGER = structlog.getLogger(__name__)
@@ -521,7 +526,7 @@ class EvergreenApi(object):
         if limit is not None:
             options["limit"] = limit
         if date is not None:
-            options["date"] = date.strftime("%Y-%m-%dT%H:%M:%SZ")
+            options["date"] = date.strftime(EVG_SHORT_DATETIME_FORMAT)
 
         query = (
             "query TaskHistory($options: TaskHistoryOpts!) { "
@@ -543,7 +548,7 @@ class EvergreenApi(object):
         page_limit: Optional[int] = None,
         date: Optional[datetime] = None,
         fields: Optional[List[str]] = None,
-        max_results: Optional[int] = 1000,
+        max_results: Optional[int] = None,
     ) -> Iterator[Dict[str, Any]]:
         """
         Iterate over the execution history of a task.
@@ -564,9 +569,8 @@ class EvergreenApi(object):
         :param date: Only return history relative to this date. Takes precedence over the cursor.
         :param fields: Fields to select for each returned task. Must include ``id`` unless the
                        default selection is used.
-        :param max_results: Maximum number of tasks to yield before raising. Defaults to 1000 as
-                             a safety cap against unbounded iteration. Pass a larger value or None
-                             to disable the cap.
+        :param max_results: Maximum number of tasks to yield before raising. Defaults to None
+                             (unbounded). Pass an int to cap iteration and raise on exceed.
         :raises ValueError: If ``fields`` is given without ``id`` (needed for pagination) or
                             contains an invalid GraphQL field name.
         :raises EvergreenException: If ``max_results`` is exceeded.
