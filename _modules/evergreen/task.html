@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.task &#8212; evergreen.py 3.19.2 documentation</title>
+    <title>evergreen.task &#8212; evergreen.py 3.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=22cd84cc"></script>
+    <script src="../../_static/documentation_options.js?v=cf9ada82"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -42,6 +42,7 @@
   <h1>Source code for evergreen.task</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Task representation of evergreen.&quot;&quot;&quot;</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
@@ -179,7 +180,15 @@
     <span class="n">status</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span>
     <span class="nb">type</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>
     <span class="n">desc</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;desc&quot;</span><span class="p">)</span>
+    <span class="n">failing_command</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;failing_command&quot;</span><span class="p">)</span>
+    <span class="n">post_errored</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;post_errored&quot;</span><span class="p">)</span>
+    <span class="n">failure_metadata_tags</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;failure_metadata_tags&quot;</span><span class="p">)</span>
+    <span class="n">other_failing_commands</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;other_failing_commands&quot;</span><span class="p">)</span>
     <span class="n">timed_out</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;timed_out&quot;</span><span class="p">)</span>
+    <span class="n">timeout_type</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;timeout_type&quot;</span><span class="p">)</span>
+    <span class="n">trace_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;trace_id&quot;</span><span class="p">)</span>
+    <span class="n">disk_devices</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;disk_devices&quot;</span><span class="p">)</span>
+    <span class="n">resource_constraints</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;resource_constraints&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">api</span><span class="p">:</span> <span class="s2">&quot;EvergreenApi&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an instance of an evergreen task status details.&quot;&quot;&quot;</span>
@@ -201,8 +210,15 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">(</span><span class="n">_BaseEvergreenObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Representation of an Evergreen task.&quot;&quot;&quot;</span>
 
+    <span class="n">aborted</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;aborted&quot;</span><span class="p">)</span>
+    <span class="n">abort_info</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;abort_info&quot;</span><span class="p">)</span>
     <span class="n">activated</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;activated&quot;</span><span class="p">)</span>
     <span class="n">activated_by</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;activated_by&quot;</span><span class="p">)</span>
+    <span class="n">activated_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;activated_time&quot;</span><span class="p">)</span>
+    <span class="n">ami</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;ami&quot;</span><span class="p">)</span>
+    <span class="n">archived</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;archived&quot;</span><span class="p">)</span>
+    <span class="n">base_task</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;base_task&quot;</span><span class="p">)</span>
+    <span class="n">blocked</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;blocked&quot;</span><span class="p">)</span>
     <span class="n">build_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_id&quot;</span><span class="p">)</span>
     <span class="n">build_variant</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_variant&quot;</span><span class="p">)</span>
     <span class="n">build_variant_display_name</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;build_variant_display_name&quot;</span><span class="p">)</span>
@@ -215,28 +231,42 @@
     <span class="n">distro_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;distro_id&quot;</span><span class="p">)</span>
     <span class="n">est_wait_to_start_ms</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;est_wait_to_start_ms&quot;</span><span class="p">)</span>
     <span class="n">execution</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;execution&quot;</span><span class="p">)</span>
+    <span class="n">execution_platform</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;execution_platform&quot;</span><span class="p">)</span>
     <span class="n">execution_tasks</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;execution_tasks&quot;</span><span class="p">)</span>
     <span class="n">expected_duration_ms</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;expected_duration_ms&quot;</span><span class="p">)</span>
     <span class="n">finish_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;finish_time&quot;</span><span class="p">)</span>
     <span class="n">generate_task</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;generate_task&quot;</span><span class="p">)</span>
     <span class="n">generated_by</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;generated_by&quot;</span><span class="p">)</span>
+    <span class="n">has_annotations</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;has_annotations&quot;</span><span class="p">)</span>
     <span class="n">host_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;host_id&quot;</span><span class="p">)</span>
     <span class="n">ingest_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;ingest_time&quot;</span><span class="p">)</span>
+    <span class="n">is_automatic_restart</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;is_automatic_restart&quot;</span><span class="p">)</span>
     <span class="n">mainline</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;mainline&quot;</span><span class="p">)</span>
+    <span class="n">must_have_test_results</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;must_have_test_results&quot;</span><span class="p">)</span>
     <span class="n">order</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">)</span>
     <span class="n">parent_task_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;parent_task_id&quot;</span><span class="p">)</span>
+    <span class="n">parsley_logs</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;parsley_logs&quot;</span><span class="p">)</span>
+    <span class="n">predicted_task_cost</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;predicted_task_cost&quot;</span><span class="p">)</span>
+    <span class="n">previous_executions</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;previous_executions&quot;</span><span class="p">)</span>
+    <span class="n">priority</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">)</span>
     <span class="n">project_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;project_id&quot;</span><span class="p">)</span>
     <span class="n">project_identifier</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;project_identifier&quot;</span><span class="p">)</span>
-    <span class="n">priority</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">)</span>
+    <span class="n">requester</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;requester&quot;</span><span class="p">)</span>
+    <span class="n">reset_when_finished</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;reset_when_finished&quot;</span><span class="p">)</span>
     <span class="n">restarts</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;restarts&quot;</span><span class="p">)</span>
     <span class="n">revision</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;revision&quot;</span><span class="p">)</span>
+    <span class="n">s3_usage</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;s3_usage&quot;</span><span class="p">)</span>
     <span class="n">scheduled_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;scheduled_time&quot;</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">evg_datetime_attrib</span><span class="p">(</span><span class="s2">&quot;start_time&quot;</span><span class="p">)</span>
     <span class="n">status</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span>
+    <span class="n">stepback_info</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;stepback_info&quot;</span><span class="p">)</span>
     <span class="n">tags</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">)</span>
+    <span class="n">task_cost</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_cost&quot;</span><span class="p">)</span>
     <span class="n">task_group</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_group&quot;</span><span class="p">)</span>
     <span class="n">task_group_max_hosts</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_group_max_hosts&quot;</span><span class="p">)</span>
     <span class="n">task_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;task_id&quot;</span><span class="p">)</span>
+    <span class="n">test_results</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;test_results&quot;</span><span class="p">)</span>
+    <span class="n">test_selection_enabled</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;test_selection_enabled&quot;</span><span class="p">)</span>
     <span class="n">time_taken_ms</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;time_taken_ms&quot;</span><span class="p">)</span>
     <span class="n">version_id</span> <span class="o">=</span> <span class="n">evg_attrib</span><span class="p">(</span><span class="s2">&quot;version_id&quot;</span><span class="p">)</span>
 

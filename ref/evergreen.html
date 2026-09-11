@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen package &#8212; evergreen.py 3.19.2 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=22cd84cc"></script>
+    <script src="../_static/documentation_options.js?v=cf9ada82"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -75,6 +75,7 @@
 <li class="toctree-l2"><a class="reference internal" href="evergreen.errors.html#module-evergreen.errors.exceptions">evergreen.errors.exceptions module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.ActiveTaskMetricsException"><code class="docutils literal notranslate"><span class="pre">ActiveTaskMetricsException</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.EvergreenException"><code class="docutils literal notranslate"><span class="pre">EvergreenException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.EvergreenGraphQLError"><code class="docutils literal notranslate"><span class="pre">EvergreenGraphQLError</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.MetricsException"><code class="docutils literal notranslate"><span class="pre">MetricsException</span></code></a></li>
 </ul>
 </li>
@@ -658,6 +659,30 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.graphql">
+<span class="sig-name descname"><span class="pre">graphql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi.graphql"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.graphql" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a query or mutation against the Evergreen GraphQL API.</p>
+<p>This uses the same authentication (API key headers or OIDC bearer tokens),
+retry and timeout handling as the rest of this client. The GraphQL endpoint
+is served at <code class="docutils literal notranslate"><span class="pre">/graphql/query</span></code> on the configured Evergreen API server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> – The GraphQL query or mutation to execute.</p></li>
+<li><p><strong>variables</strong> – Optional mapping of variable names to values for the query.</p></li>
+<li><p><strong>operation_name</strong> – Optional name of the operation to execute.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The “data” payload of the GraphQL response.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.EvergreenGraphQLError" title="evergreen.errors.exceptions.EvergreenGraphQLError"><strong>EvergreenGraphQLError</strong></a> – If the GraphQL API returns errors in the response.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="evergreen.api.EvergreenApi.host_by_id">
 <span class="sig-name descname"><span class="pre">host_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.host.Host" title="evergreen.host.Host"><span class="pre">Host</span></a></span></span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi.host_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.host_by_id" title="Link to this definition">¶</a></dt>
 <dd><p>Get evergreen host by id.</p>
@@ -1134,6 +1159,78 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.task_history">
+<span class="sig-name descname"><span class="pre">task_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.api.TaskHistoryDirection" title="evergreen.api.TaskHistoryDirection"><span class="pre">TaskHistoryDirection</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TaskHistoryDirection.BEFORE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cursor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi.task_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.task_history" title="Link to this definition">¶</a></dt>
+<dd><p>Get the history of executions for a task in an Evergreen project.</p>
+<p>This wraps Evergreen’s <code class="docutils literal notranslate"><span class="pre">taskHistory</span></code> GraphQL query. The history is paginated with
+a cursor: pass the id of a previously returned task as <code class="docutils literal notranslate"><span class="pre">task_id</span></code> and page before
+or after it. The <code class="docutils literal notranslate"><span class="pre">date</span></code> option, if given, takes precedence over the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_identifier</strong> – Identifier of the project the task belongs to.</p></li>
+<li><p><strong>task_name</strong> – Name of the task to get history for.</p></li>
+<li><p><strong>build_variant</strong> – Build variant the task ran on.</p></li>
+<li><p><strong>task_id</strong> – Id of the task to page from.</p></li>
+<li><p><strong>direction</strong> – Whether to page before or after the cursor task.</p></li>
+<li><p><strong>include_cursor</strong> – Whether to include the cursor task in the results.</p></li>
+<li><p><strong>limit</strong> – Maximum number of tasks to return (defaults to 50 server-side).</p></li>
+<li><p><strong>date</strong> – Only return history relative to this date. Takes precedence over the cursor.</p></li>
+<li><p><strong>fields</strong> – Fields to select for each returned task. Defaults to a small set of
+core fields. Only simple (non-nested) field names are supported.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If a field name in <code class="docutils literal notranslate"><span class="pre">fields</span></code> is not a valid GraphQL field name.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Mapping with the returned <code class="docutils literal notranslate"><span class="pre">tasks</span></code> and <code class="docutils literal notranslate"><span class="pre">pagination</span></code> info.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.task_history_iter">
+<span class="sig-name descname"><span class="pre">task_history_iter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">build_variant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.api.TaskHistoryDirection" title="evergreen.api.TaskHistoryDirection"><span class="pre">TaskHistoryDirection</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TaskHistoryDirection.BEFORE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_cursor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi.task_history_iter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.task_history_iter" title="Link to this definition">¶</a></dt>
+<dd><p>Iterate over the execution history of a task.</p>
+<p>Follows the pagination cursor returned by each page of <a class="reference internal" href="#evergreen.api.EvergreenApi.task_history" title="evergreen.api.EvergreenApi.task_history"><code class="xref py py-meth docutils literal notranslate"><span class="pre">task_history()</span></code></a> until no
+more tasks are returned, yielding each individual task as it goes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_identifier</strong> – Identifier of the project the task belongs to.</p></li>
+<li><p><strong>task_name</strong> – Name of the task to get history for.</p></li>
+<li><p><strong>build_variant</strong> – Build variant the task ran on.</p></li>
+<li><p><strong>task_id</strong> – Id of the task to page from.</p></li>
+<li><p><strong>direction</strong> – Whether to page before or after the cursor task.</p></li>
+<li><p><strong>include_cursor</strong> – Whether to include the original <code class="docutils literal notranslate"><span class="pre">task_id</span></code> in the first page of
+results. Later pages always exclude their cursor task to avoid
+duplicates.</p></li>
+<li><p><strong>page_limit</strong> – Number of tasks to fetch per page (defaults to 50 server-side). This is
+a pagination knob and rarely needs changing.</p></li>
+<li><p><strong>date</strong> – Only return history relative to this date. Takes precedence over the cursor.</p></li>
+<li><p><strong>fields</strong> – Fields to select for each returned task. Must include <code class="docutils literal notranslate"><span class="pre">id</span></code> unless the
+default selection is used.</p></li>
+<li><p><strong>max_results</strong> – Maximum number of tasks to yield before raising. Defaults to None
+(unbounded). Pass an int to cap iteration and raise on exceed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <code class="docutils literal notranslate"><span class="pre">fields</span></code> is given without <code class="docutils literal notranslate"><span class="pre">id</span></code> (needed for pagination) or
+contains an invalid GraphQL field name.</p></li>
+<li><p><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.EvergreenException" title="evergreen.errors.exceptions.EvergreenException"><strong>EvergreenException</strong></a> – If <code class="docutils literal notranslate"><span class="pre">max_results</span></code> is exceeded.</p></li>
+<li><p><a class="reference internal" href="evergreen.errors.html#evergreen.errors.exceptions.EvergreenGraphQLError" title="evergreen.errors.exceptions.EvergreenGraphQLError"><strong>EvergreenGraphQLError</strong></a> – If the GraphQL API returns errors.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Iterator over task history entries. Tasks are yielded nearest-to-cursor first
+(most recent first for BEFORE, chronological order for AFTER).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="evergreen.api.EvergreenApi.task_reliability_by_project">
 <span class="sig-name descname"><span class="pre">task_reliability_by_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_num_days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requesters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#evergreen.version.Requester" title="evergreen.version.Requester"><span class="pre">Requester</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distros</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.task_reliability.TaskReliability" title="evergreen.task_reliability.TaskReliability"><span class="pre">TaskReliability</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi.task_reliability_by_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.task_reliability_by_project" title="Link to this definition">¶</a></dt>
 <dd><p>Get task reliability scores.</p>
@@ -1383,6 +1480,23 @@ E.g. - [{“project_tasks”: 30, “project_patches”: 10}]</p></li>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="evergreen.api.RetryingEvergreenApi.DEFAULT_HTTP_RETRY">
 <span class="sig-name descname"><span class="pre">DEFAULT_HTTP_RETRY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Retry(total=10,</span> <span class="pre">connect=None,</span> <span class="pre">read=None,</span> <span class="pre">redirect=None,</span> <span class="pre">status=None)</span></em><a class="headerlink" href="#evergreen.api.RetryingEvergreenApi.DEFAULT_HTTP_RETRY" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="evergreen.api.TaskHistoryDirection">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.api.</span></span><span class="sig-name descname"><span class="pre">TaskHistoryDirection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/api.html#TaskHistoryDirection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.TaskHistoryDirection" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Direction in which to page through task history.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api.TaskHistoryDirection.AFTER">
+<span class="sig-name descname"><span class="pre">AFTER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'AFTER'</span></em><a class="headerlink" href="#evergreen.api.TaskHistoryDirection.AFTER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="evergreen.api.TaskHistoryDirection.BEFORE">
+<span class="sig-name descname"><span class="pre">BEFORE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'BEFORE'</span></em><a class="headerlink" href="#evergreen.api.TaskHistoryDirection.BEFORE" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1655,6 +1769,12 @@ allow editors to show what attributes are available for a given evergreen object
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.build.Build.batchtime">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">batchtime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.batchtime" title="Link to this definition">¶</a></dt>
+<dd><p>value of batchtime</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.build.Build.branch">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">branch</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.branch" title="Link to this definition">¶</a></dt>
 <dd><p>value of branch</p>
@@ -1673,9 +1793,27 @@ allow editors to show what attributes are available for a given evergreen object
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.build.Build.cron">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cron</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.cron" title="Link to this definition">¶</a></dt>
+<dd><p>value of cron</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.build.Build.definition_info">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">definition_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.definition_info" title="Link to this definition">¶</a></dt>
+<dd><p>value of definition_info</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.build.Build.display_name">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">display_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.display_name" title="Link to this definition">¶</a></dt>
 <dd><p>value of display_name</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.build.Build.failed_test_names">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">failed_test_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.failed_test_names" title="Link to this definition">¶</a></dt>
+<dd><p>value of failed_test_names</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1811,6 +1949,12 @@ argument.</p>
 <dt class="sig sig-object py" id="evergreen.build.Build.tags">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.tags" title="Link to this definition">¶</a></dt>
 <dd><p>value of tags</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.build.Build.task_cache">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task_cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.build.Build.task_cache" title="Link to this definition">¶</a></dt>
+<dd><p>value of task_cache</p>
 </dd></dl>
 
 <dl class="py property">
@@ -3797,6 +3941,24 @@ from the appropriate source.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.disk_devices">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">disk_devices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.disk_devices" title="Link to this definition">¶</a></dt>
+<dd><p>value of disk_devices</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.failing_command">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">failing_command</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.failing_command" title="Link to this definition">¶</a></dt>
+<dd><p>value of failing_command</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.failure_metadata_tags">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">failure_metadata_tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.failure_metadata_tags" title="Link to this definition">¶</a></dt>
+<dd><p>value of failure_metadata_tags</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.task.StatusDetails.oom_tracker_info">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">oom_tracker_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#evergreen.task.OomTrackerInfo" title="evergreen.task.OomTrackerInfo"><span class="pre">OomTrackerInfo</span></a></em><a class="headerlink" href="#evergreen.task.StatusDetails.oom_tracker_info" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve the OOM tracker info from the status details for the given task.</p>
@@ -3805,6 +3967,24 @@ from the appropriate source.</p>
 <dd class="field-odd"><p>OOM Tracker Info.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.other_failing_commands">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">other_failing_commands</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.other_failing_commands" title="Link to this definition">¶</a></dt>
+<dd><p>value of other_failing_commands</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.post_errored">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_errored</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.post_errored" title="Link to this definition">¶</a></dt>
+<dd><p>value of post_errored</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.resource_constraints">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">resource_constraints</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.resource_constraints" title="Link to this definition">¶</a></dt>
+<dd><p>value of resource_constraints</p>
 </dd></dl>
 
 <dl class="py property">
@@ -3817,6 +3997,18 @@ from the appropriate source.</p>
 <dt class="sig sig-object py" id="evergreen.task.StatusDetails.timed_out">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timed_out</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.timed_out" title="Link to this definition">¶</a></dt>
 <dd><p>value of timed_out</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.timeout_type">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timeout_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.timeout_type" title="Link to this definition">¶</a></dt>
+<dd><p>value of timeout_type</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.StatusDetails.trace_id">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">trace_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.StatusDetails.trace_id" title="Link to this definition">¶</a></dt>
+<dd><p>value of trace_id</p>
 </dd></dl>
 
 <dl class="py property">
@@ -3876,6 +4068,18 @@ from the appropriate source.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseEvergreenObject</span></code></p>
 <p>Representation of an Evergreen task.</p>
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.abort_info">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">abort_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.abort_info" title="Link to this definition">¶</a></dt>
+<dd><p>value of abort_info</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.aborted">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">aborted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.aborted" title="Link to this definition">¶</a></dt>
+<dd><p>value of aborted</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.task.Task.activated">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.activated" title="Link to this definition">¶</a></dt>
 <dd><p>value of activated</p>
@@ -3885,6 +4089,18 @@ from the appropriate source.</p>
 <dt class="sig sig-object py" id="evergreen.task.Task.activated_by">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activated_by</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.activated_by" title="Link to this definition">¶</a></dt>
 <dd><p>value of activated_by</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.activated_time">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activated_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.activated_time" title="Link to this definition">¶</a></dt>
+<dd><p>value of activated_time</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.ami">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ami</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.ami" title="Link to this definition">¶</a></dt>
+<dd><p>value of ami</p>
 </dd></dl>
 
 <dl class="py method">
@@ -3905,6 +4121,12 @@ from the appropriate source.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.archived">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">archived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.archived" title="Link to this definition">¶</a></dt>
+<dd><p>value of archived</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.task.Task.artifacts">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">artifacts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.task.Artifact" title="evergreen.task.Artifact"><span class="pre">Artifact</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.task.Task.artifacts" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve the artifacts for the given task.</p>
@@ -3913,6 +4135,18 @@ from the appropriate source.</p>
 <dd class="field-odd"><p>List of artifacts.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.base_task">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">base_task</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.base_task" title="Link to this definition">¶</a></dt>
+<dd><p>value of base_task</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.blocked">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">blocked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.blocked" title="Link to this definition">¶</a></dt>
+<dd><p>value of blocked</p>
 </dd></dl>
 
 <dl class="py property">
@@ -3985,6 +4219,12 @@ from the appropriate source.</p>
 <dt class="sig sig-object py" id="evergreen.task.Task.execution">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execution</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.execution" title="Link to this definition">¶</a></dt>
 <dd><p>value of execution</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.execution_platform">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">execution_platform</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.execution_platform" title="Link to this definition">¶</a></dt>
+<dd><p>value of execution_platform</p>
 </dd></dl>
 
 <dl class="py property">
@@ -4131,6 +4371,12 @@ If this is not a display task, returns None.</p>
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.has_annotations">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_annotations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.has_annotations" title="Link to this definition">¶</a></dt>
+<dd><p>value of has_annotations</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="evergreen.task.Task.has_oom">
 <span class="sig-name descname"><span class="pre">has_oom</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/evergreen/task.html#Task.has_oom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.task.Task.has_oom" title="Link to this definition">¶</a></dt>
@@ -4163,6 +4409,12 @@ If this is not a display task, returns None.</p>
 <dd class="field-odd"><p>True if task is active.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.is_automatic_restart">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_automatic_restart</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.is_automatic_restart" title="Link to this definition">¶</a></dt>
+<dd><p>value of is_automatic_restart</p>
 </dd></dl>
 
 <dl class="py method">
@@ -4260,6 +4512,12 @@ If this is not a display task, returns None.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.must_have_test_results">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">must_have_test_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.must_have_test_results" title="Link to this definition">¶</a></dt>
+<dd><p>value of must_have_test_results</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.task.Task.order">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.order" title="Link to this definition">¶</a></dt>
 <dd><p>value of order</p>
@@ -4269,6 +4527,24 @@ If this is not a display task, returns None.</p>
 <dt class="sig sig-object py" id="evergreen.task.Task.parent_task_id">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent_task_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.parent_task_id" title="Link to this definition">¶</a></dt>
 <dd><p>value of parent_task_id</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.parsley_logs">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parsley_logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.parsley_logs" title="Link to this definition">¶</a></dt>
+<dd><p>value of parsley_logs</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.predicted_task_cost">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">predicted_task_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.predicted_task_cost" title="Link to this definition">¶</a></dt>
+<dd><p>value of predicted_task_cost</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.previous_executions">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">previous_executions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.previous_executions" title="Link to this definition">¶</a></dt>
+<dd><p>value of previous_executions</p>
 </dd></dl>
 
 <dl class="py property">
@@ -4287,6 +4563,18 @@ If this is not a display task, returns None.</p>
 <dt class="sig sig-object py" id="evergreen.task.Task.project_identifier">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">project_identifier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.project_identifier" title="Link to this definition">¶</a></dt>
 <dd><p>value of project_identifier</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.requester">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">requester</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.requester" title="Link to this definition">¶</a></dt>
+<dd><p>value of requester</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.reset_when_finished">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset_when_finished</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.reset_when_finished" title="Link to this definition">¶</a></dt>
+<dd><p>value of reset_when_finished</p>
 </dd></dl>
 
 <dl class="py property">
@@ -4319,6 +4607,12 @@ If this is not a display task, returns None.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.s3_usage">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">s3_usage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.s3_usage" title="Link to this definition">¶</a></dt>
+<dd><p>value of s3_usage</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.task.Task.scheduled_time">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scheduled_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.scheduled_time" title="Link to this definition">¶</a></dt>
 <dd><p>value of scheduled_time</p>
@@ -4347,6 +4641,12 @@ If this is not a display task, returns None.</p>
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.stepback_info">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stepback_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.stepback_info" title="Link to this definition">¶</a></dt>
+<dd><p>value of stepback_info</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="evergreen.task.Task.stream_log">
 <span class="sig-name descname"><span class="pre">stream_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/evergreen/task.html#Task.stream_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.task.Task.stream_log" title="Link to this definition">¶</a></dt>
@@ -4368,6 +4668,12 @@ If this is not a display task, returns None.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.task_cost">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.task_cost" title="Link to this definition">¶</a></dt>
+<dd><p>value of task_cost</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.task.Task.task_group">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task_group</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.task_group" title="Link to this definition">¶</a></dt>
 <dd><p>value of task_group</p>
@@ -4383,6 +4689,18 @@ If this is not a display task, returns None.</p>
 <dt class="sig sig-object py" id="evergreen.task.Task.task_id">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.task_id" title="Link to this definition">¶</a></dt>
 <dd><p>value of task_id</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.test_results">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.test_results" title="Link to this definition">¶</a></dt>
+<dd><p>value of test_results</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.task.Task.test_selection_enabled">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_selection_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.task.Task.test_selection_enabled" title="Link to this definition">¶</a></dt>
+<dd><p>value of test_selection_enabled</p>
 </dd></dl>
 
 <dl class="py property">
@@ -5058,6 +5376,12 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.artifacts">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">artifacts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.artifacts" title="Link to this definition">¶</a></dt>
+<dd><p>value of artifacts</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.version.Version.author">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">author</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.author" title="Link to this definition">¶</a></dt>
 <dd><p>value of author</p>
@@ -5067,6 +5391,12 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 <dt class="sig sig-object py" id="evergreen.version.Version.author_email">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">author_email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.author_email" title="Link to this definition">¶</a></dt>
 <dd><p>value of author_email</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.author_id">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">author_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.author_id" title="Link to this definition">¶</a></dt>
+<dd><p>value of author_id</p>
 </dd></dl>
 
 <dl class="py property">
@@ -5093,6 +5423,12 @@ should be later in time than <cite>end</cite> since we will start seeing new ite
 <dt class="sig sig-object py" id="evergreen.version.Version.build_variants_status">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_variants_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#evergreen.version.BuildVariantStatus" title="evergreen.version.BuildVariantStatus"><span class="pre">BuildVariantStatus</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#evergreen.version.Version.build_variants_status" title="Link to this definition">¶</a></dt>
 <dd><p>Get a list of build variant statuses.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.cost">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.cost" title="Link to this definition">¶</a></dt>
+<dd><p>value of cost</p>
 </dd></dl>
 
 <dl class="py property">
@@ -5174,9 +5510,21 @@ argument.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.git_tags">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">git_tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.git_tags" title="Link to this definition">¶</a></dt>
+<dd><p>value of git_tags</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.version.Version.ignored">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ignored</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.ignored" title="Link to this definition">¶</a></dt>
 <dd><p>value of ignored</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.ingest_time">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ingest_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.ingest_time" title="Link to this definition">¶</a></dt>
+<dd><p>value of ingest_time</p>
 </dd></dl>
 
 <dl class="py method">
@@ -5202,6 +5550,12 @@ argument.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.logs">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">logs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.logs" title="Link to this definition">¶</a></dt>
+<dd><p>value of logs</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.version.Version.message">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.message" title="Link to this definition">¶</a></dt>
 <dd><p>value of message</p>
@@ -5220,6 +5574,12 @@ argument.</p>
 </dd></dl>
 
 <dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.predicted_cost">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">predicted_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.predicted_cost" title="Link to this definition">¶</a></dt>
+<dd><p>value of predicted_cost</p>
+</dd></dl>
+
+<dl class="py property">
 <dt class="sig sig-object py" id="evergreen.version.Version.project">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">project</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.project" title="Link to this definition">¶</a></dt>
 <dd><p>value of project</p>
@@ -5229,6 +5589,12 @@ argument.</p>
 <dt class="sig sig-object py" id="evergreen.version.Version.project_identifier">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">project_identifier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.project_identifier" title="Link to this definition">¶</a></dt>
 <dd><p>value of project_identifier</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.pusher">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pusher</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.pusher" title="Link to this definition">¶</a></dt>
+<dd><p>value of pusher</p>
 </dd></dl>
 
 <dl class="py property">
@@ -5259,6 +5625,18 @@ argument.</p>
 <dt class="sig sig-object py" id="evergreen.version.Version.status">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.status" title="Link to this definition">¶</a></dt>
 <dd><p>value of status</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.tag">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.tag" title="Link to this definition">¶</a></dt>
+<dd><p>value of tag</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="evergreen.version.Version.triggered_by_git_tag">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">triggered_by_git_tag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#evergreen.version.Version.triggered_by_git_tag" title="Link to this definition">¶</a></dt>
+<dd><p>value of triggered_by_git_tag</p>
 </dd></dl>
 
 <dl class="py property">
@@ -5343,6 +5721,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.get_users_for_role"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.get_users_for_role()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.give_permissions_to_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.give_permissions_to_user()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.give_roles_to_user"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.give_roles_to_user()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.graphql"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.graphql()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.host_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.host_by_id()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.json_by_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.json_by_task()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.json_history_for_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.json_history_for_task()</span></code></a></li>
@@ -5371,6 +5750,8 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.single_test_by_task_and_test_file"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.single_test_by_task_and_test_file()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.stream_log"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.stream_log()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.task_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.task_history"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_history()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.task_history_iter"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_history_iter()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.task_reliability_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_reliability_by_project()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.task_stats_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.task_stats_by_project()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.tasks_by_build"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tasks_by_build()</span></code></a></li>
@@ -5388,6 +5769,11 @@ argument.</p>
 </li>
 <li><a class="reference internal" href="#evergreen.api.RetryingEvergreenApi"><code class="docutils literal notranslate"><span class="pre">RetryingEvergreenApi</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.api.RetryingEvergreenApi.DEFAULT_HTTP_RETRY"><code class="docutils literal notranslate"><span class="pre">RetryingEvergreenApi.DEFAULT_HTTP_RETRY</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#evergreen.api.TaskHistoryDirection"><code class="docutils literal notranslate"><span class="pre">TaskHistoryDirection</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.api.TaskHistoryDirection.AFTER"><code class="docutils literal notranslate"><span class="pre">TaskHistoryDirection.AFTER</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.TaskHistoryDirection.BEFORE"><code class="docutils literal notranslate"><span class="pre">TaskHistoryDirection.BEFORE</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -5446,10 +5832,14 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.build.Build.activated_by"><code class="docutils literal notranslate"><span class="pre">Build.activated_by</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.activated_time"><code class="docutils literal notranslate"><span class="pre">Build.activated_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.actual_makespan_ms"><code class="docutils literal notranslate"><span class="pre">Build.actual_makespan_ms</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.build.Build.batchtime"><code class="docutils literal notranslate"><span class="pre">Build.batchtime</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.branch"><code class="docutils literal notranslate"><span class="pre">Build.branch</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.build_variant"><code class="docutils literal notranslate"><span class="pre">Build.build_variant</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.create_time"><code class="docutils literal notranslate"><span class="pre">Build.create_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.build.Build.cron"><code class="docutils literal notranslate"><span class="pre">Build.cron</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.build.Build.definition_info"><code class="docutils literal notranslate"><span class="pre">Build.definition_info</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.display_name"><code class="docutils literal notranslate"><span class="pre">Build.display_name</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.build.Build.failed_test_names"><code class="docutils literal notranslate"><span class="pre">Build.failed_test_names</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.finish_time"><code class="docutils literal notranslate"><span class="pre">Build.finish_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.get_metrics"><code class="docutils literal notranslate"><span class="pre">Build.get_metrics()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.get_project_identifier"><code class="docutils literal notranslate"><span class="pre">Build.get_project_identifier()</span></code></a></li>
@@ -5467,6 +5857,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.build.Build.status"><code class="docutils literal notranslate"><span class="pre">Build.status</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.status_counts"><code class="docutils literal notranslate"><span class="pre">Build.status_counts</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.tags"><code class="docutils literal notranslate"><span class="pre">Build.tags</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.build.Build.task_cache"><code class="docutils literal notranslate"><span class="pre">Build.task_cache</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.tasks"><code class="docutils literal notranslate"><span class="pre">Build.tasks</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.time_taken_ms"><code class="docutils literal notranslate"><span class="pre">Build.time_taken_ms</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.build.Build.version"><code class="docutils literal notranslate"><span class="pre">Build.version</span></code></a></li>
@@ -5860,9 +6251,17 @@ argument.</p>
 </li>
 <li><a class="reference internal" href="#evergreen.task.StatusDetails"><code class="docutils literal notranslate"><span class="pre">StatusDetails</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.task.StatusDetails.desc"><code class="docutils literal notranslate"><span class="pre">StatusDetails.desc</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.disk_devices"><code class="docutils literal notranslate"><span class="pre">StatusDetails.disk_devices</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.failing_command"><code class="docutils literal notranslate"><span class="pre">StatusDetails.failing_command</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.failure_metadata_tags"><code class="docutils literal notranslate"><span class="pre">StatusDetails.failure_metadata_tags</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.StatusDetails.oom_tracker_info"><code class="docutils literal notranslate"><span class="pre">StatusDetails.oom_tracker_info</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.other_failing_commands"><code class="docutils literal notranslate"><span class="pre">StatusDetails.other_failing_commands</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.post_errored"><code class="docutils literal notranslate"><span class="pre">StatusDetails.post_errored</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.resource_constraints"><code class="docutils literal notranslate"><span class="pre">StatusDetails.resource_constraints</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.StatusDetails.status"><code class="docutils literal notranslate"><span class="pre">StatusDetails.status</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.StatusDetails.timed_out"><code class="docutils literal notranslate"><span class="pre">StatusDetails.timed_out</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.timeout_type"><code class="docutils literal notranslate"><span class="pre">StatusDetails.timeout_type</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.StatusDetails.trace_id"><code class="docutils literal notranslate"><span class="pre">StatusDetails.trace_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.StatusDetails.type"><code class="docutils literal notranslate"><span class="pre">StatusDetails.type</span></code></a></li>
 </ul>
 </li>
@@ -5876,10 +6275,17 @@ argument.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#evergreen.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul>
+<li><a class="reference internal" href="#evergreen.task.Task.abort_info"><code class="docutils literal notranslate"><span class="pre">Task.abort_info</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.aborted"><code class="docutils literal notranslate"><span class="pre">Task.aborted</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.activated"><code class="docutils literal notranslate"><span class="pre">Task.activated</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.activated_by"><code class="docutils literal notranslate"><span class="pre">Task.activated_by</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.activated_time"><code class="docutils literal notranslate"><span class="pre">Task.activated_time</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.ami"><code class="docutils literal notranslate"><span class="pre">Task.ami</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.annotate"><code class="docutils literal notranslate"><span class="pre">Task.annotate()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.archived"><code class="docutils literal notranslate"><span class="pre">Task.archived</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.artifacts"><code class="docutils literal notranslate"><span class="pre">Task.artifacts</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.base_task"><code class="docutils literal notranslate"><span class="pre">Task.base_task</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.blocked"><code class="docutils literal notranslate"><span class="pre">Task.blocked</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.build_id"><code class="docutils literal notranslate"><span class="pre">Task.build_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.build_variant"><code class="docutils literal notranslate"><span class="pre">Task.build_variant</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.build_variant_display_name"><code class="docutils literal notranslate"><span class="pre">Task.build_variant_display_name</span></code></a></li>
@@ -5892,6 +6298,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.task.Task.distro_id"><code class="docutils literal notranslate"><span class="pre">Task.distro_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.est_wait_to_start_ms"><code class="docutils literal notranslate"><span class="pre">Task.est_wait_to_start_ms</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.execution"><code class="docutils literal notranslate"><span class="pre">Task.execution</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.execution_platform"><code class="docutils literal notranslate"><span class="pre">Task.execution_platform</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.execution_tasks"><code class="docutils literal notranslate"><span class="pre">Task.execution_tasks</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.expected_duration_ms"><code class="docutils literal notranslate"><span class="pre">Task.expected_duration_ms</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.finish_time"><code class="docutils literal notranslate"><span class="pre">Task.finish_time</span></code></a></li>
@@ -5907,10 +6314,12 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.task.Task.get_status_score"><code class="docutils literal notranslate"><span class="pre">Task.get_status_score()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.get_task_annotation"><code class="docutils literal notranslate"><span class="pre">Task.get_task_annotation()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.get_tests"><code class="docutils literal notranslate"><span class="pre">Task.get_tests()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.has_annotations"><code class="docutils literal notranslate"><span class="pre">Task.has_annotations</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.has_oom"><code class="docutils literal notranslate"><span class="pre">Task.has_oom()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.host_id"><code class="docutils literal notranslate"><span class="pre">Task.host_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.ingest_time"><code class="docutils literal notranslate"><span class="pre">Task.ingest_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.is_active"><code class="docutils literal notranslate"><span class="pre">Task.is_active()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.is_automatic_restart"><code class="docutils literal notranslate"><span class="pre">Task.is_automatic_restart</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.is_completed"><code class="docutils literal notranslate"><span class="pre">Task.is_completed()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.is_setup_failure"><code class="docutils literal notranslate"><span class="pre">Task.is_setup_failure()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.is_success"><code class="docutils literal notranslate"><span class="pre">Task.is_success()</span></code></a></li>
@@ -5920,23 +6329,34 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.task.Task.is_undispatched"><code class="docutils literal notranslate"><span class="pre">Task.is_undispatched()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.log_map"><code class="docutils literal notranslate"><span class="pre">Task.log_map</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.mainline"><code class="docutils literal notranslate"><span class="pre">Task.mainline</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.must_have_test_results"><code class="docutils literal notranslate"><span class="pre">Task.must_have_test_results</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.order"><code class="docutils literal notranslate"><span class="pre">Task.order</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.parent_task_id"><code class="docutils literal notranslate"><span class="pre">Task.parent_task_id</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.parsley_logs"><code class="docutils literal notranslate"><span class="pre">Task.parsley_logs</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.predicted_task_cost"><code class="docutils literal notranslate"><span class="pre">Task.predicted_task_cost</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.previous_executions"><code class="docutils literal notranslate"><span class="pre">Task.previous_executions</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.priority"><code class="docutils literal notranslate"><span class="pre">Task.priority</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.project_id"><code class="docutils literal notranslate"><span class="pre">Task.project_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.project_identifier"><code class="docutils literal notranslate"><span class="pre">Task.project_identifier</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.requester"><code class="docutils literal notranslate"><span class="pre">Task.requester</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.reset_when_finished"><code class="docutils literal notranslate"><span class="pre">Task.reset_when_finished</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.restarts"><code class="docutils literal notranslate"><span class="pre">Task.restarts</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.retrieve_log"><code class="docutils literal notranslate"><span class="pre">Task.retrieve_log()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.revision"><code class="docutils literal notranslate"><span class="pre">Task.revision</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.s3_usage"><code class="docutils literal notranslate"><span class="pre">Task.s3_usage</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.scheduled_time"><code class="docutils literal notranslate"><span class="pre">Task.scheduled_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.start_time"><code class="docutils literal notranslate"><span class="pre">Task.start_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.status"><code class="docutils literal notranslate"><span class="pre">Task.status</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.status_details"><code class="docutils literal notranslate"><span class="pre">Task.status_details</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.stepback_info"><code class="docutils literal notranslate"><span class="pre">Task.stepback_info</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.stream_log"><code class="docutils literal notranslate"><span class="pre">Task.stream_log()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.tags"><code class="docutils literal notranslate"><span class="pre">Task.tags</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.task_cost"><code class="docutils literal notranslate"><span class="pre">Task.task_cost</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.task_group"><code class="docutils literal notranslate"><span class="pre">Task.task_group</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.task_group_max_hosts"><code class="docutils literal notranslate"><span class="pre">Task.task_group_max_hosts</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.task_id"><code class="docutils literal notranslate"><span class="pre">Task.task_id</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.test_results"><code class="docutils literal notranslate"><span class="pre">Task.test_results</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.task.Task.test_selection_enabled"><code class="docutils literal notranslate"><span class="pre">Task.test_selection_enabled</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.time_taken_ms"><code class="docutils literal notranslate"><span class="pre">Task.time_taken_ms</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.version_id"><code class="docutils literal notranslate"><span class="pre">Task.version_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.task.Task.wait_time"><code class="docutils literal notranslate"><span class="pre">Task.wait_time()</span></code></a></li>
@@ -6075,11 +6495,14 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.version.Version"><code class="docutils literal notranslate"><span class="pre">Version</span></code></a><ul>
 <li><a class="reference internal" href="#evergreen.version.Version.aborted"><code class="docutils literal notranslate"><span class="pre">Version.aborted</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.activated"><code class="docutils literal notranslate"><span class="pre">Version.activated</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.artifacts"><code class="docutils literal notranslate"><span class="pre">Version.artifacts</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.author"><code class="docutils literal notranslate"><span class="pre">Version.author</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.author_email"><code class="docutils literal notranslate"><span class="pre">Version.author_email</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.author_id"><code class="docutils literal notranslate"><span class="pre">Version.author_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.branch"><code class="docutils literal notranslate"><span class="pre">Version.branch</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.build_by_variant"><code class="docutils literal notranslate"><span class="pre">Version.build_by_variant()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.build_variants_status"><code class="docutils literal notranslate"><span class="pre">Version.build_variants_status</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.cost"><code class="docutils literal notranslate"><span class="pre">Version.cost</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.create_time"><code class="docutils literal notranslate"><span class="pre">Version.create_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.errors"><code class="docutils literal notranslate"><span class="pre">Version.errors</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.finish_time"><code class="docutils literal notranslate"><span class="pre">Version.finish_time</span></code></a></li>
@@ -6088,19 +6511,26 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.version.Version.get_metrics"><code class="docutils literal notranslate"><span class="pre">Version.get_metrics()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.get_modules"><code class="docutils literal notranslate"><span class="pre">Version.get_modules()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.get_patch"><code class="docutils literal notranslate"><span class="pre">Version.get_patch()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.git_tags"><code class="docutils literal notranslate"><span class="pre">Version.git_tags</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.ignored"><code class="docutils literal notranslate"><span class="pre">Version.ignored</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.ingest_time"><code class="docutils literal notranslate"><span class="pre">Version.ingest_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.is_completed"><code class="docutils literal notranslate"><span class="pre">Version.is_completed()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.is_patch"><code class="docutils literal notranslate"><span class="pre">Version.is_patch()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.logs"><code class="docutils literal notranslate"><span class="pre">Version.logs</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.message"><code class="docutils literal notranslate"><span class="pre">Version.message</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.order"><code class="docutils literal notranslate"><span class="pre">Version.order</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.parameters"><code class="docutils literal notranslate"><span class="pre">Version.parameters</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.predicted_cost"><code class="docutils literal notranslate"><span class="pre">Version.predicted_cost</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.project"><code class="docutils literal notranslate"><span class="pre">Version.project</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.project_identifier"><code class="docutils literal notranslate"><span class="pre">Version.project_identifier</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.pusher"><code class="docutils literal notranslate"><span class="pre">Version.pusher</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.repo"><code class="docutils literal notranslate"><span class="pre">Version.repo</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.requester"><code class="docutils literal notranslate"><span class="pre">Version.requester</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.revision"><code class="docutils literal notranslate"><span class="pre">Version.revision</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.start_time"><code class="docutils literal notranslate"><span class="pre">Version.start_time</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.status"><code class="docutils literal notranslate"><span class="pre">Version.status</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.tag"><code class="docutils literal notranslate"><span class="pre">Version.tag</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.version.Version.triggered_by_git_tag"><code class="docutils literal notranslate"><span class="pre">Version.triggered_by_git_tag</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.version_id"><code class="docutils literal notranslate"><span class="pre">Version.version_id</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.version.Version.warnings"><code class="docutils literal notranslate"><span class="pre">Version.warnings</span></code></a></li>
 </ul>

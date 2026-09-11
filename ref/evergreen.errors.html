@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen.errors package &#8212; evergreen.py 3.19.2 documentation</title>
+    <title>evergreen.errors package &#8212; evergreen.py 3.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=22cd84cc"></script>
+    <script src="../_static/documentation_options.js?v=cf9ada82"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -72,6 +72,13 @@
 </dd></dl>
 
 <dl class="py exception">
+<dt class="sig sig-object py" id="evergreen.errors.exceptions.EvergreenGraphQLError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></span><span class="sig-name descname"><span class="pre">EvergreenGraphQLError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/errors/exceptions.html#EvergreenGraphQLError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.EvergreenGraphQLError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#evergreen.errors.exceptions.EvergreenException" title="evergreen.errors.exceptions.EvergreenException"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvergreenException</span></code></a></p>
+<p>An error returned by the Evergreen GraphQL API.</p>
+</dd></dl>
+
+<dl class="py exception">
 <dt class="sig sig-object py" id="evergreen.errors.exceptions.MetricsException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">evergreen.errors.exceptions.</span></span><span class="sig-name descname"><span class="pre">MetricsException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/evergreen/errors/exceptions.html#MetricsException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.errors.exceptions.MetricsException" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#evergreen.errors.exceptions.EvergreenException" title="evergreen.errors.exceptions.EvergreenException"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvergreenException</span></code></a></p>
@@ -99,6 +106,7 @@
 <li><a class="reference internal" href="#module-evergreen.errors.exceptions">evergreen.errors.exceptions module</a><ul>
 <li><a class="reference internal" href="#evergreen.errors.exceptions.ActiveTaskMetricsException"><code class="docutils literal notranslate"><span class="pre">ActiveTaskMetricsException</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.errors.exceptions.EvergreenException"><code class="docutils literal notranslate"><span class="pre">EvergreenException</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.errors.exceptions.EvergreenGraphQLError"><code class="docutils literal notranslate"><span class="pre">EvergreenGraphQLError</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.errors.exceptions.MetricsException"><code class="docutils literal notranslate"><span class="pre">MetricsException</span></code></a></li>
 </ul>
 </li>

@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.19.2 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=22cd84cc"></script>
+    <script src="../../_static/documentation_options.js?v=cf9ada82"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -42,6 +42,7 @@
   <h1>Source code for evergreen.api</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- encoding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;API for interacting with evergreen.&quot;&quot;&quot;</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">absolute_import</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -50,6 +51,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPStatus</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">json.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONDecodeError</span>
@@ -86,6 +88,7 @@
     <span class="n">read_evergreen_from_file</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.distro</span><span class="w"> </span><span class="kn">import</span> <span class="n">Distro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.errors.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">EvergreenException</span><span class="p">,</span> <span class="n">EvergreenGraphQLError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.host</span><span class="w"> </span><span class="kn">import</span> <span class="n">Host</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.manifest</span><span class="w"> </span><span class="kn">import</span> <span class="n">Manifest</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.oidc</span><span class="w"> </span><span class="kn">import</span> <span class="n">OidcTokenManager</span>
@@ -103,7 +106,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.task_reliability</span><span class="w"> </span><span class="kn">import</span> <span class="n">TaskReliability</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.tst</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tst</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.users_for_role</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsersForRole</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">evergreen_input_to_output</span><span class="p">,</span> <span class="n">format_evergreen_date</span><span class="p">,</span> <span class="n">iterate_by_time_window</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EVG_SHORT_DATETIME_FORMAT</span><span class="p">,</span>
+    <span class="n">evergreen_input_to_output</span><span class="p">,</span>
+    <span class="n">format_evergreen_date</span><span class="p">,</span>
+    <span class="n">iterate_by_time_window</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">RecentVersions</span><span class="p">,</span> <span class="n">Requester</span><span class="p">,</span> <span class="n">Version</span>
 
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -131,6 +139,33 @@
 <span class="n">EVERGREEN_PATCH_ID_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=ID : )\w</span><span class="si">{24}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">INCLUDE_REPO_QUERY</span> <span class="o">=</span> <span class="s2">&quot;?includeRepo=true&quot;</span>
+
+
+<div class="viewcode-block" id="TaskHistoryDirection">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.TaskHistoryDirection">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TaskHistoryDirection</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Direction in which to page through task history.&quot;&quot;&quot;</span>
+
+    <span class="n">AFTER</span> <span class="o">=</span> <span class="s2">&quot;AFTER&quot;</span>
+    <span class="n">BEFORE</span> <span class="o">=</span> <span class="s2">&quot;BEFORE&quot;</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_graphql_errors</span><span class="p">(</span><span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Format a list of GraphQL errors into a human readable string.</span>
+
+<span class="sd">    :param errors: The list of errors returned by the GraphQL API.</span>
+<span class="sd">    :return: A semicolon-separated string describing the errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">error</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">item</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="EvergreenApi">
@@ -259,6 +294,7 @@
         <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make a call to the evergreen api.</span>
@@ -267,6 +303,7 @@
 <span class="sd">        :param params: parameters to pass to api.</span>
 <span class="sd">        :param method: HTTP method to make call with.</span>
 <span class="sd">        :param data: Extra data to send to the endpoint.</span>
+<span class="sd">        :param headers: Extra headers to send with the request.</span>
 <span class="sd">        :return: response from api server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
@@ -277,6 +314,7 @@
             <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Refresh OIDC bearer token in session headers if expired</span>
@@ -284,9 +322,16 @@
             <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oidc_token_manager</span><span class="o">.</span><span class="n">get_token</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
-            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span>
-        <span class="p">)</span>
+        <span class="n">request_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+            <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+            <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">headers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">request_kwargs</span><span class="p">[</span><span class="s2">&quot;headers&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">headers</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="o">**</span><span class="n">request_kwargs</span><span class="p">)</span>
 
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Response received&quot;</span><span class="p">,</span>
@@ -423,6 +468,228 @@
             <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                 <span class="k">yield</span> <span class="n">result</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;start_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evergreen_input_to_output</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;create_time&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="EvergreenApi.graphql">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.graphql">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">graphql</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">variables</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">operation_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a query or mutation against the Evergreen GraphQL API.</span>
+
+<span class="sd">        This uses the same authentication (API key headers or OIDC bearer tokens),</span>
+<span class="sd">        retry and timeout handling as the rest of this client. The GraphQL endpoint</span>
+<span class="sd">        is served at ``/graphql/query`` on the configured Evergreen API server.</span>
+
+<span class="sd">        :param query: The GraphQL query or mutation to execute.</span>
+<span class="sd">        :param variables: Optional mapping of variable names to values for the query.</span>
+<span class="sd">        :param operation_name: Optional name of the operation to execute.</span>
+<span class="sd">        :return: The &quot;data&quot; payload of the GraphQL response.</span>
+<span class="sd">        :raises EvergreenGraphQLError: If the GraphQL API returns errors in the response.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;variables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variables</span>
+        <span class="k">if</span> <span class="n">operation_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;operationName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">operation_name</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/graphql/query&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span>
+                <span class="n">url</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span>
+                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">error_json</span> <span class="o">=</span> <span class="n">err</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">JSONDecodeError</span><span class="p">:</span>
+                    <span class="n">error_json</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error_json</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">error_json</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;errors&quot;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">EvergreenGraphQLError</span><span class="p">(</span>
+                        <span class="n">_format_graphql_errors</span><span class="p">(</span><span class="n">error_json</span><span class="p">[</span><span class="s2">&quot;errors&quot;</span><span class="p">])</span>
+                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">err</span>
+            <span class="k">raise</span>
+
+        <span class="n">json_response</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">json_response</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">json_response</span>
+
+        <span class="n">errors</span> <span class="o">=</span> <span class="n">json_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;errors&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EvergreenGraphQLError</span><span class="p">(</span><span class="n">_format_graphql_errors</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">json_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EvergreenApi.task_history">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.task_history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">task_history</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">build_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">direction</span><span class="p">:</span> <span class="n">TaskHistoryDirection</span> <span class="o">=</span> <span class="n">TaskHistoryDirection</span><span class="o">.</span><span class="n">BEFORE</span><span class="p">,</span>
+        <span class="n">include_cursor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the history of executions for a task in an Evergreen project.</span>
+
+<span class="sd">        This wraps Evergreen&#39;s ``taskHistory`` GraphQL query. The history is paginated with</span>
+<span class="sd">        a cursor: pass the id of a previously returned task as ``task_id`` and page before</span>
+<span class="sd">        or after it. The ``date`` option, if given, takes precedence over the cursor.</span>
+
+<span class="sd">        :param project_identifier: Identifier of the project the task belongs to.</span>
+<span class="sd">        :param task_name: Name of the task to get history for.</span>
+<span class="sd">        :param build_variant: Build variant the task ran on.</span>
+<span class="sd">        :param task_id: Id of the task to page from.</span>
+<span class="sd">        :param direction: Whether to page before or after the cursor task.</span>
+<span class="sd">        :param include_cursor: Whether to include the cursor task in the results.</span>
+<span class="sd">        :param limit: Maximum number of tasks to return (defaults to 50 server-side).</span>
+<span class="sd">        :param date: Only return history relative to this date. Takes precedence over the cursor.</span>
+<span class="sd">        :param fields: Fields to select for each returned task. Defaults to a small set of</span>
+<span class="sd">                       core fields. Only simple (non-nested) field names are supported.</span>
+<span class="sd">        :raises ValueError: If a field name in ``fields`` is not a valid GraphQL field name.</span>
+<span class="sd">        :return: Mapping with the returned ``tasks`` and ``pagination`` info.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">default_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;displayName&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="s2">&quot;buildVariant&quot;</span><span class="p">]</span>
+        <span class="n">field_name_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[A-Za-z_][A-Za-z0-9_]*$&quot;</span><span class="p">)</span>
+        <span class="n">task_selection</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">default_fields</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">task_selection</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field_name_regex</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid GraphQL field name: </span><span class="si">{</span><span class="n">field</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;projectIdentifier&quot;</span><span class="p">:</span> <span class="n">project_identifier</span><span class="p">,</span>
+            <span class="s2">&quot;taskName&quot;</span><span class="p">:</span> <span class="n">task_name</span><span class="p">,</span>
+            <span class="s2">&quot;buildVariant&quot;</span><span class="p">:</span> <span class="n">build_variant</span><span class="p">,</span>
+            <span class="s2">&quot;cursorParams&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;cursorId&quot;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
+                <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="n">direction</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s2">&quot;includeCursor&quot;</span><span class="p">:</span> <span class="n">include_cursor</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;limit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limit</span>
+        <span class="k">if</span> <span class="n">date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">options</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">EVG_SHORT_DATETIME_FORMAT</span><span class="p">)</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;query TaskHistory($options: TaskHistoryOpts!) { &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;taskHistory(options: $options) </span><span class="se">{{</span><span class="s2"> tasks </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">task_selection</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"> &quot;</span>
+            <span class="s2">&quot;pagination { mostRecentTaskOrder oldestTaskOrder } }&quot;</span>
+            <span class="s2">&quot;}&quot;</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">options</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">data</span><span class="p">)[</span><span class="s2">&quot;taskHistory&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EvergreenApi.task_history_iter">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.task_history_iter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">task_history_iter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">project_identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">task_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">build_variant</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">direction</span><span class="p">:</span> <span class="n">TaskHistoryDirection</span> <span class="o">=</span> <span class="n">TaskHistoryDirection</span><span class="o">.</span><span class="n">BEFORE</span><span class="p">,</span>
+        <span class="n">include_cursor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">page_limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_results</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Iterate over the execution history of a task.</span>
+
+<span class="sd">        Follows the pagination cursor returned by each page of :meth:`task_history` until no</span>
+<span class="sd">        more tasks are returned, yielding each individual task as it goes.</span>
+
+<span class="sd">        :param project_identifier: Identifier of the project the task belongs to.</span>
+<span class="sd">        :param task_name: Name of the task to get history for.</span>
+<span class="sd">        :param build_variant: Build variant the task ran on.</span>
+<span class="sd">        :param task_id: Id of the task to page from.</span>
+<span class="sd">        :param direction: Whether to page before or after the cursor task.</span>
+<span class="sd">        :param include_cursor: Whether to include the original ``task_id`` in the first page of</span>
+<span class="sd">                               results. Later pages always exclude their cursor task to avoid</span>
+<span class="sd">                               duplicates.</span>
+<span class="sd">        :param page_limit: Number of tasks to fetch per page (defaults to 50 server-side). This is</span>
+<span class="sd">                           a pagination knob and rarely needs changing.</span>
+<span class="sd">        :param date: Only return history relative to this date. Takes precedence over the cursor.</span>
+<span class="sd">        :param fields: Fields to select for each returned task. Must include ``id`` unless the</span>
+<span class="sd">                       default selection is used.</span>
+<span class="sd">        :param max_results: Maximum number of tasks to yield before raising. Defaults to None</span>
+<span class="sd">                             (unbounded). Pass an int to cap iteration and raise on exceed.</span>
+<span class="sd">        :raises ValueError: If ``fields`` is given without ``id`` (needed for pagination) or</span>
+<span class="sd">                            contains an invalid GraphQL field name.</span>
+<span class="sd">        :raises EvergreenException: If ``max_results`` is exceeded.</span>
+<span class="sd">        :raises EvergreenGraphQLError: If the GraphQL API returns errors.</span>
+<span class="sd">        :return: Iterator over task history entries. Tasks are yielded nearest-to-cursor first</span>
+<span class="sd">                 (most recent first for BEFORE, chronological order for AFTER).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;id&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;task_history_iter requires &#39;id&#39; in fields for pagination&quot;</span><span class="p">)</span>
+
+        <span class="n">cursor_id</span> <span class="o">=</span> <span class="n">task_id</span>
+        <span class="n">first_page</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">yielded</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Only the first page honors the caller&#39;s include_cursor (to include the starting</span>
+            <span class="c1"># task). Subsequent pages force include_cursor=False so the boundary task, which was</span>
+            <span class="c1"># already yielded as the last task of the previous page, is not yielded again.</span>
+            <span class="n">page_include_cursor</span> <span class="o">=</span> <span class="n">include_cursor</span> <span class="k">if</span> <span class="n">first_page</span> <span class="k">else</span> <span class="kc">False</span>
+            <span class="n">first_page</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_history</span><span class="p">(</span>
+                <span class="n">project_identifier</span><span class="p">,</span>
+                <span class="n">task_name</span><span class="p">,</span>
+                <span class="n">build_variant</span><span class="p">,</span>
+                <span class="n">task_id</span><span class="o">=</span><span class="n">cursor_id</span><span class="p">,</span>
+                <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+                <span class="n">include_cursor</span><span class="o">=</span><span class="n">page_include_cursor</span><span class="p">,</span>
+                <span class="n">limit</span><span class="o">=</span><span class="n">page_limit</span><span class="p">,</span>
+                <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">,</span>
+                <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">tasks</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tasks&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># The server returns tasks sorted by order descending in both directions. For BEFORE</span>
+            <span class="c1"># (paging toward older tasks) that is already nearest-to-cursor first, so yield as-is.</span>
+            <span class="c1"># For AFTER (paging toward newer tasks) descending is farthest-from-cursor first, so</span>
+            <span class="c1"># yield the page reversed to get nearest-to-cursor (chronological) order.</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">TaskHistoryDirection</span><span class="o">.</span><span class="n">AFTER</span> <span class="k">else</span> <span class="n">tasks</span>
+            <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">page</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">max_results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">yielded</span> <span class="o">&gt;=</span> <span class="n">max_results</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">EvergreenException</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;task_history_iter exceeded the max_results cap of </span><span class="si">{</span><span class="n">max_results</span><span class="si">}</span><span class="s2">. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Pass a larger max_results (or None) to override.&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">yield</span> <span class="n">task</span>
+                <span class="n">yielded</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Cursor advancement uses the original server ordering (descending).</span>
+            <span class="c1"># When paging AFTER (toward newer tasks) the cursor advances to the newest task in</span>
+            <span class="c1"># the page (tasks[0]); when paging BEFORE (toward older tasks) it advances to the</span>
+            <span class="c1"># oldest task in the page (tasks[-1]).</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">TaskHistoryDirection</span><span class="o">.</span><span class="n">AFTER</span><span class="p">:</span>
+                <span class="n">next_cursor</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">next_cursor</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">next_cursor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;task_history_iter requires &#39;id&#39; in fields for pagination&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">next_cursor</span> <span class="o">==</span> <span class="n">cursor_id</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">cursor_id</span> <span class="o">=</span> <span class="n">next_cursor</span></div>
+
 
 <div class="viewcode-block" id="EvergreenApi.all_distros">
 <a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.all_distros">[docs]</a>
