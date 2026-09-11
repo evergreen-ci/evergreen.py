@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Task representation of evergreen."""
+
 from __future__ import absolute_import
 
 from datetime import timedelta
@@ -120,7 +121,15 @@ class StatusDetails(_BaseEvergreenObject):
     status = evg_attrib("status")
     type = evg_attrib("type")
     desc = evg_attrib("desc")
+    failing_command = evg_attrib("failing_command")
+    post_errored = evg_attrib("post_errored")
+    failure_metadata_tags = evg_attrib("failure_metadata_tags")
+    other_failing_commands = evg_attrib("other_failing_commands")
     timed_out = evg_attrib("timed_out")
+    timeout_type = evg_attrib("timeout_type")
+    trace_id = evg_attrib("trace_id")
+    disk_devices = evg_attrib("disk_devices")
+    resource_constraints = evg_attrib("resource_constraints")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """Create an instance of an evergreen task status details."""
@@ -139,8 +148,15 @@ class StatusDetails(_BaseEvergreenObject):
 class Task(_BaseEvergreenObject):
     """Representation of an Evergreen task."""
 
+    aborted = evg_attrib("aborted")
+    abort_info = evg_attrib("abort_info")
     activated = evg_attrib("activated")
     activated_by = evg_attrib("activated_by")
+    activated_time = evg_datetime_attrib("activated_time")
+    ami = evg_attrib("ami")
+    archived = evg_attrib("archived")
+    base_task = evg_attrib("base_task")
+    blocked = evg_attrib("blocked")
     build_id = evg_attrib("build_id")
     build_variant = evg_attrib("build_variant")
     build_variant_display_name = evg_attrib("build_variant_display_name")
@@ -153,28 +169,42 @@ class Task(_BaseEvergreenObject):
     distro_id = evg_attrib("distro_id")
     est_wait_to_start_ms = evg_attrib("est_wait_to_start_ms")
     execution = evg_attrib("execution")
+    execution_platform = evg_attrib("execution_platform")
     execution_tasks = evg_attrib("execution_tasks")
     expected_duration_ms = evg_attrib("expected_duration_ms")
     finish_time = evg_datetime_attrib("finish_time")
     generate_task = evg_attrib("generate_task")
     generated_by = evg_attrib("generated_by")
+    has_annotations = evg_attrib("has_annotations")
     host_id = evg_attrib("host_id")
     ingest_time = evg_datetime_attrib("ingest_time")
+    is_automatic_restart = evg_attrib("is_automatic_restart")
     mainline = evg_attrib("mainline")
+    must_have_test_results = evg_attrib("must_have_test_results")
     order = evg_attrib("order")
     parent_task_id = evg_attrib("parent_task_id")
+    parsley_logs = evg_attrib("parsley_logs")
+    predicted_task_cost = evg_attrib("predicted_task_cost")
+    previous_executions = evg_attrib("previous_executions")
+    priority = evg_attrib("priority")
     project_id = evg_attrib("project_id")
     project_identifier = evg_attrib("project_identifier")
-    priority = evg_attrib("priority")
+    requester = evg_attrib("requester")
+    reset_when_finished = evg_attrib("reset_when_finished")
     restarts = evg_attrib("restarts")
     revision = evg_attrib("revision")
+    s3_usage = evg_attrib("s3_usage")
     scheduled_time = evg_datetime_attrib("scheduled_time")
     start_time = evg_datetime_attrib("start_time")
     status = evg_attrib("status")
+    stepback_info = evg_attrib("stepback_info")
     tags = evg_attrib("tags")
+    task_cost = evg_attrib("task_cost")
     task_group = evg_attrib("task_group")
     task_group_max_hosts = evg_attrib("task_group_max_hosts")
     task_id = evg_attrib("task_id")
+    test_results = evg_attrib("test_results")
+    test_selection_enabled = evg_attrib("test_selection_enabled")
     time_taken_ms = evg_attrib("time_taken_ms")
     version_id = evg_attrib("version_id")
 

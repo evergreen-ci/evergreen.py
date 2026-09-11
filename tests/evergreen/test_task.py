@@ -23,6 +23,51 @@ class TestTask(object):
         with pytest.raises(AttributeError):
             assert task.estimated_cost
 
+    def test_new_fields_are_declared(self, sample_task):
+        task = Task(sample_task, None)
+        assert task.previous_executions == sample_task["previous_executions"]
+        for attr in [
+            "aborted",
+            "abort_info",
+            "activated_time",
+            "ami",
+            "archived",
+            "base_task",
+            "blocked",
+            "execution_platform",
+            "has_annotations",
+            "is_automatic_restart",
+            "must_have_test_results",
+            "parsley_logs",
+            "predicted_task_cost",
+            "requester",
+            "reset_when_finished",
+            "s3_usage",
+            "stepback_info",
+            "task_cost",
+            "test_results",
+            "test_selection_enabled",
+        ]:
+            getattr(task, attr)
+
+    def test_status_details_fields_are_declared(self, sample_task):
+        details = Task(sample_task, None).status_details
+        for attr in [
+            "status",
+            "type",
+            "desc",
+            "failing_command",
+            "post_errored",
+            "failure_metadata_tags",
+            "other_failing_commands",
+            "timed_out",
+            "timeout_type",
+            "trace_id",
+            "disk_devices",
+            "resource_constraints",
+        ]:
+            getattr(details, attr)
+
     def test_task_has_oom(self, sample_task):
         task = Task(sample_task, None)
         assert task.has_oom()

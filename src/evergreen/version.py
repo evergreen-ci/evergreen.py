@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Version representation of evergreen."""
+
 from __future__ import absolute_import
 
 from enum import Enum
@@ -92,12 +93,15 @@ class Version(_BaseEvergreenObject):
 
     version_id = evg_attrib("version_id")
     create_time = evg_datetime_attrib("create_time")
+    ingest_time = evg_datetime_attrib("ingest_time")
     start_time = evg_datetime_attrib("start_time")
     finish_time = evg_datetime_attrib("finish_time")
     revision = evg_attrib("revision")
     order = evg_attrib("order")
     project = evg_attrib("project")
+    project_identifier = evg_attrib("project_identifier")
     author = evg_attrib("author")
+    author_id = evg_attrib("author_id")
     author_email = evg_attrib("author_email")
     message = evg_attrib("message")
     status = evg_attrib("status")
@@ -106,10 +110,17 @@ class Version(_BaseEvergreenObject):
     errors = evg_attrib("errors")
     warnings = evg_attrib("warnings")
     ignored = evg_attrib("ignored")
-    project_identifier = evg_attrib("project_identifier")
     aborted = evg_attrib("aborted")
-    parameters = evg_attrib("parameters")
     activated = evg_attrib("activated")
+    parameters = evg_attrib("parameters")
+    triggered_by_git_tag = evg_attrib("triggered_by_git_tag")
+    git_tags = evg_attrib("git_tags")
+    tag = evg_attrib("tag")
+    pusher = evg_attrib("pusher")
+    artifacts = evg_attrib("artifacts")
+    cost = evg_attrib("cost")
+    predicted_cost = evg_attrib("predicted_cost")
+    logs = evg_attrib("logs")
 
     def __init__(self, json: Dict[str, Any], api: "EvergreenApi") -> None:
         """

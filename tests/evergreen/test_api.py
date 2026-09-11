@@ -15,6 +15,7 @@ from requests.exceptions import HTTPError
 import evergreen.api as under_test
 from evergreen.api_requests import IssueLinkRequest, MetadataLinkRequest, SlackAttachment
 from evergreen.config import DEFAULT_API_SERVER, DEFAULT_NETWORK_TIMEOUT_SEC
+from evergreen.errors.exceptions import EvergreenException, EvergreenGraphQLError
 from evergreen.resource_type_permissions import PermissionableResourceType, RemovablePermission
 from evergreen.util import EVG_DATETIME_FORMAT, parse_evergreen_datetime
 from evergreen.version import Requester
@@ -1213,6 +1214,329 @@ class TestRolesApi(object):
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
         assert returned_response.users == users
+
+
+class TestGraphQLApi(object):
+    def test_graphql_basic_query(self, mocked_api, mocked_api_response):
+        mocked_api_response.json.return_value = {"data": {"task": {"id": "task_id"}}}
+
+        result = mocked_api.graphql('{ task(taskId: "task_id") { id } }')
+
+        expected_url = f"{DEFAULT_API_SERVER}/graphql/query"
+        expected_data = json.dumps({"query": '{ task(taskId: "task_id") { id } }'})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+
+        assert result == {"task": {"id": "task_id"}}
+
+    def test_graphql_with_variables_and_operation_name(self, mocked_api, mocked_api_response):
+        mocked_api_response.json.return_value = {"data": {"patch": {"id": "patch_id"}}}
+
+        query = "query GetPatch($patchId: String!) { patch(patchId: $patchId) { id } }"
+        variables = {"patchId": "patch_id"}
+        mocked_api.graphql(query, variables=variables, operation_name="GetPatch")
+
+        expected_data = json.dumps(
+            {
+                "query": query,
+                "variables": variables,
+                "operationName": "GetPatch",
+            }
+        )
+        expected_url = f"{DEFAULT_API_SERVER}/graphql/query"
+        mocked_api.session.request.assert_called_with(
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=expected_data,
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+
+    def test_graphql_raises_on_errors(self, mocked_api, mocked_api_response):
+        mocked_api_response.json.return_value = {
+            "errors": [{"message": "boom", "path": ["task", "id"]}]
+        }
+
+        with pytest.raises(EvergreenGraphQLError) as excinfo:
+            mocked_api.graphql('{ task(taskId: "x") { id } }')
+
+        assert "task.id: boom" in str(excinfo.value)
+
+    def test_graphql_surfaces_errors_from_http_error(self, mocked_api):
+        response = MagicMock(status_code=422)
+        response.raise_for_status.side_effect = HTTPError(response=response, request=MagicMock())
+        response.json.return_value = {"errors": [{"message": "invalid query"}]}
+        mocked_api._session.request.return_value = response
+
+        with pytest.raises(EvergreenGraphQLError) as excinfo:
+            mocked_api.graphql('{ task(taskId: "x") { id } }')
+
+        assert "invalid query" in str(excinfo.value)
+
+
+class TestTaskHistoryApi(object):
+    def test_task_history(self, mocked_api, mocked_api_response):
+        mocked_api_response.json.return_value = {
+            "data": {
+                "taskHistory": {
+                    "tasks": [{"id": "task_101", "status": "success"}],
+                    "pagination": {"mostRecentTaskOrder": 150, "oldestTaskOrder": 90},
+                }
+            }
+        }
+
+        result = mocked_api.task_history("evergreen", "test-graphql", "ubuntu2204", "task_101")
+
+        expected_query = (
+            "query TaskHistory($options: TaskHistoryOpts!) { "
+            "taskHistory(options: $options) { tasks { id displayName status order buildVariant } "
+            "pagination { mostRecentTaskOrder oldestTaskOrder } }"
+            "}"
+        )
+        expected_options = {
+            "projectIdentifier": "evergreen",
+            "taskName": "test-graphql",
+            "buildVariant": "ubuntu2204",
+            "cursorParams": {
+                "cursorId": "task_101",
+                "direction": "BEFORE",
+                "includeCursor": False,
+            },
+        }
+        mocked_api.session.request.assert_called_with(
+            url=f"{DEFAULT_API_SERVER}/graphql/query",
+            params=None,
+            timeout=None,
+            data=json.dumps({"query": expected_query, "variables": {"options": expected_options}}),
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+        assert result["tasks"][0]["id"] == "task_101"
+
+    def test_task_history_custom_options(self, mocked_api, mocked_api_response):
+        mocked_api_response.json.return_value = {
+            "data": {"taskHistory": {"tasks": [], "pagination": {}}}
+        }
+
+        history_date = datetime(2025, 1, 2, 4, 0, 3)
+        mocked_api.task_history(
+            "evergreen",
+            "test-graphql",
+            "ubuntu2204",
+            "task_100",
+            direction=under_test.TaskHistoryDirection.AFTER,
+            include_cursor=True,
+            limit=5,
+            date=history_date,
+            fields=["id", "execution", "displayStatus"],
+        )
+
+        expected_query = (
+            "query TaskHistory($options: TaskHistoryOpts!) { "
+            "taskHistory(options: $options) { tasks { id execution displayStatus } "
+            "pagination { mostRecentTaskOrder oldestTaskOrder } }"
+            "}"
+        )
+        expected_options = {
+            "projectIdentifier": "evergreen",
+            "taskName": "test-graphql",
+            "buildVariant": "ubuntu2204",
+            "cursorParams": {
+                "cursorId": "task_100",
+                "direction": "AFTER",
+                "includeCursor": True,
+            },
+            "limit": 5,
+            "date": "2025-01-02T04:00:03Z",
+        }
+        mocked_api.session.request.assert_called_with(
+            url=f"{DEFAULT_API_SERVER}/graphql/query",
+            params=None,
+            timeout=None,
+            data=json.dumps({"query": expected_query, "variables": {"options": expected_options}}),
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+
+    def test_task_history_invalid_field(self, mocked_api):
+        with pytest.raises(ValueError):
+            mocked_api.task_history(
+                "evergreen",
+                "test-graphql",
+                "ubuntu2204",
+                "task_101",
+                fields=["id", "displayName } password"],
+            )
+        mocked_api.session.request.assert_not_called()
+
+    def test_task_history_iter(self, mocked_api):
+        page1 = {
+            "data": {
+                "taskHistory": {
+                    "tasks": [{"id": "t3"}, {"id": "t2"}],
+                    "pagination": {"mostRecentTaskOrder": 3, "oldestTaskOrder": 1},
+                }
+            }
+        }
+        page2 = {
+            "data": {
+                "taskHistory": {
+                    "tasks": [{"id": "t1"}],
+                    "pagination": {"mostRecentTaskOrder": 1, "oldestTaskOrder": 0},
+                }
+            }
+        }
+        page3 = {"data": {"taskHistory": {"tasks": [], "pagination": {}}}}
+        mocked_api._session.request.side_effect = [
+            MagicMock(status_code=200, json=lambda: page1),
+            MagicMock(status_code=200, json=lambda: page2),
+            MagicMock(status_code=200, json=lambda: page3),
+        ]
+
+        result = list(mocked_api.task_history_iter("evergreen", "test-graphql", "ubuntu2204", "t0"))
+
+        assert [task["id"] for task in result] == ["t3", "t2", "t1"]
+        assert mocked_api._session.request.call_count == 3
+
+        second_call = mocked_api._session.request.call_args_list[1]
+        body = json.loads(second_call.kwargs["data"])
+        assert body["variables"]["options"]["cursorParams"]["cursorId"] == "t2"
+
+    def test_task_history_iter_after_direction(self, mocked_api):
+        page1 = {
+            "data": {
+                "taskHistory": {
+                    "tasks": [{"id": "t4"}, {"id": "t3"}],
+                    "pagination": {},
+                }
+            }
+        }
+        page2 = {"data": {"taskHistory": {"tasks": [], "pagination": {}}}}
+        mocked_api._session.request.side_effect = [
+            MagicMock(status_code=200, json=lambda: page1),
+            MagicMock(status_code=200, json=lambda: page2),
+        ]
+
+        result = list(
+            mocked_api.task_history_iter(
+                "evergreen",
+                "test-graphql",
+                "ubuntu2204",
+                "t5",
+                direction=under_test.TaskHistoryDirection.AFTER,
+            )
+        )
+
+        # Server returns [t4, t3] (descending); AFTER yields reversed for chronological order.
+        assert [task["id"] for task in result] == ["t3", "t4"]
+
+        second_call = mocked_api._session.request.call_args_list[1]
+        body = json.loads(second_call.kwargs["data"])
+        assert body["variables"]["options"]["cursorParams"]["cursorId"] == "t4"
+
+    def test_task_history_iter_forces_include_cursor_false_after_first_page(self, mocked_api):
+        page1 = {
+            "data": {
+                "taskHistory": {
+                    "tasks": [{"id": "t0"}, {"id": "t3"}, {"id": "t2"}],
+                    "pagination": {},
+                }
+            }
+        }
+        page2 = {"data": {"taskHistory": {"tasks": [{"id": "t1"}], "pagination": {}}}}
+        page3 = {"data": {"taskHistory": {"tasks": [], "pagination": {}}}}
+        mocked_api._session.request.side_effect = [
+            MagicMock(status_code=200, json=lambda: page1),
+            MagicMock(status_code=200, json=lambda: page2),
+            MagicMock(status_code=200, json=lambda: page3),
+        ]
+
+        result = list(
+            mocked_api.task_history_iter(
+                "evergreen",
+                "test-graphql",
+                "ubuntu2204",
+                "t0",
+                include_cursor=True,
+                page_limit=5,
+            )
+        )
+
+        assert [task["id"] for task in result] == ["t0", "t3", "t2", "t1"]
+
+        first_call = mocked_api._session.request.call_args_list[0]
+        first_body = json.loads(first_call.kwargs["data"])
+        assert first_body["variables"]["options"]["cursorParams"]["includeCursor"] is True
+
+        second_call = mocked_api._session.request.call_args_list[1]
+        second_body = json.loads(second_call.kwargs["data"])
+        assert second_body["variables"]["options"]["cursorParams"]["includeCursor"] is False
+
+    def test_task_history_iter_respects_max_results(self, mocked_api):
+        page1 = {
+            "data": {
+                "taskHistory": {
+                    "tasks": [{"id": "t3"}, {"id": "t2"}, {"id": "t1"}],
+                    "pagination": {},
+                }
+            }
+        }
+        mocked_api._session.request.side_effect = [
+            MagicMock(status_code=200, json=lambda: page1),
+        ]
+
+        iterator = mocked_api.task_history_iter(
+            "evergreen",
+            "test-graphql",
+            "ubuntu2204",
+            "t0",
+            max_results=2,
+        )
+        assert next(iterator)["id"] == "t3"
+        assert next(iterator)["id"] == "t2"
+        with pytest.raises(EvergreenException):
+            next(iterator)
+
+    def test_task_history_iter_max_results_none_is_unlimited(self, mocked_api):
+        page1 = {"data": {"taskHistory": {"tasks": [{"id": "t3"}, {"id": "t2"}], "pagination": {}}}}
+        page2 = {"data": {"taskHistory": {"tasks": [{"id": "t1"}], "pagination": {}}}}
+        page3 = {"data": {"taskHistory": {"tasks": [], "pagination": {}}}}
+        mocked_api._session.request.side_effect = [
+            MagicMock(status_code=200, json=lambda: page1),
+            MagicMock(status_code=200, json=lambda: page2),
+            MagicMock(status_code=200, json=lambda: page3),
+        ]
+
+        result = list(
+            mocked_api.task_history_iter(
+                "evergreen",
+                "test-graphql",
+                "ubuntu2204",
+                "t0",
+                max_results=None,
+            )
+        )
+        assert [task["id"] for task in result] == ["t3", "t2", "t1"]
+
+    def test_task_history_iter_requires_id_field(self, mocked_api):
+        with pytest.raises(ValueError):
+            list(
+                mocked_api.task_history_iter(
+                    "evergreen",
+                    "test-graphql",
+                    "ubuntu2204",
+                    "t0",
+                    fields=["displayName"],
+                )
+            )
+        mocked_api.session.request.assert_not_called()
 
 
 class TestCachedEvergreenApi(object):

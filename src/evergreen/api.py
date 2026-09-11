@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """API for interacting with evergreen."""
+
 from __future__ import absolute_import
 
 import json
@@ -8,6 +9,7 @@ import shlex
 import subprocess
 from contextlib import contextmanager
 from datetime import datetime
+from enum import Enum
 from functools import lru_cache
 from http import HTTPStatus
 from json.decoder import JSONDecodeError
@@ -44,6 +46,7 @@ from evergreen.config import (
     read_evergreen_from_file,
 )
 from evergreen.distro import Distro
+from evergreen.errors.exceptions import EvergreenException, EvergreenGraphQLError
 from evergreen.host import Host
 from evergreen.manifest import Manifest
 from evergreen.oidc import OidcTokenManager
@@ -61,7 +64,12 @@ from evergreen.task_annotations import TaskAnnotation
 from evergreen.task_reliability import TaskReliability
 from evergreen.tst import Tst
 from evergreen.users_for_role import UsersForRole
-from evergreen.util import evergreen_input_to_output, format_evergreen_date, iterate_by_time_window
+from evergreen.util import (
+    EVG_SHORT_DATETIME_FORMAT,
+    evergreen_input_to_output,
+    format_evergreen_date,
+    iterate_by_time_window,
+)
 from evergreen.version import RecentVersions, Requester, Version
 
 LOGGER = structlog.getLogger(__name__)
@@ -89,6 +97,30 @@ EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\n)")
 EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
 
 INCLUDE_REPO_QUERY = "?includeRepo=true"
+
+
+class TaskHistoryDirection(str, Enum):
+    """Direction in which to page through task history."""
+
+    AFTER = "AFTER"
+    BEFORE = "BEFORE"
+
+
+def _format_graphql_errors(errors: List[Dict[str, Any]]) -> str:
+    """
+    Format a list of GraphQL errors into a human readable string.
+
+    :param errors: The list of errors returned by the GraphQL API.
+    :return: A semicolon-separated string describing the errors.
+    """
+    messages = []
+    for error in errors:
+        message = error.get("message", str(error))
+        path = error.get("path")
+        if path:
+            message = f"{'.'.join(str(item) for item in path)}: {message}"
+        messages.append(message)
+    return "; ".join(messages)
 
 
 class EvergreenApi(object):
@@ -212,6 +244,7 @@ class EvergreenApi(object):
         params: Optional[Dict] = None,
         method: str = "GET",
         data: Optional[str] = None,
+        headers: Optional[Dict] = None,
     ) -> requests.Response:
         """
         Make a call to the evergreen api.
@@ -220,6 +253,7 @@ class EvergreenApi(object):
         :param params: parameters to pass to api.
         :param method: HTTP method to make call with.
         :param data: Extra data to send to the endpoint.
+        :param headers: Extra headers to send with the request.
         :return: response from api server.
         """
         start_time = time()
@@ -230,6 +264,7 @@ class EvergreenApi(object):
             timeout=self._timeout,
             data=data,
             method=method,
+            headers=headers,
         )
 
         # Refresh OIDC bearer token in session headers if expired
@@ -237,9 +272,16 @@ class EvergreenApi(object):
             token = self._oidc_token_manager.get_token()
             self.session.headers.update({"Authorization": f"Bearer {token}"})
 
-        response = self.session.request(
-            url=url, params=params, timeout=self._timeout, data=data, method=method
-        )
+        request_kwargs: Dict[str, Any] = {
+            "url": url,
+            "params": params,
+            "timeout": self._timeout,
+            "data": data,
+            "method": method,
+        }
+        if headers is not None:
+            request_kwargs["headers"] = headers
+        response = self.session.request(**request_kwargs)
 
         LOGGER.debug(
             "Response received",
@@ -376,6 +418,219 @@ class EvergreenApi(object):
             for result in data:
                 yield result
             params["start_at"] = evergreen_input_to_output(data[-1]["create_time"])
+
+    def graphql(
+        self,
+        query: str,
+        variables: Optional[Dict[str, Any]] = None,
+        operation_name: Optional[str] = None,
+    ) -> Any:
+        """
+        Execute a query or mutation against the Evergreen GraphQL API.
+
+        This uses the same authentication (API key headers or OIDC bearer tokens),
+        retry and timeout handling as the rest of this client. The GraphQL endpoint
+        is served at ``/graphql/query`` on the configured Evergreen API server.
+
+        :param query: The GraphQL query or mutation to execute.
+        :param variables: Optional mapping of variable names to values for the query.
+        :param operation_name: Optional name of the operation to execute.
+        :return: The "data" payload of the GraphQL response.
+        :raises EvergreenGraphQLError: If the GraphQL API returns errors in the response.
+        """
+        payload: Dict[str, Any] = {"query": query}
+        if variables is not None:
+            payload["variables"] = variables
+        if operation_name is not None:
+            payload["operationName"] = operation_name
+
+        url = f"{self._api_server}/graphql/query"
+        try:
+            response = self._call_api(
+                url,
+                data=json.dumps(payload),
+                method="POST",
+                headers={"Content-Type": "application/json"},
+            )
+        except requests.exceptions.HTTPError as err:
+            if err.response is not None:
+                try:
+                    error_json = err.response.json()
+                except JSONDecodeError:
+                    error_json = None
+                if isinstance(error_json, dict) and error_json.get("errors"):
+                    raise EvergreenGraphQLError(
+                        _format_graphql_errors(error_json["errors"])
+                    ) from err
+            raise
+
+        json_response = response.json()
+        if not isinstance(json_response, dict):
+            return json_response
+
+        errors = json_response.get("errors")
+        if errors:
+            raise EvergreenGraphQLError(_format_graphql_errors(errors))
+
+        return json_response.get("data")
+
+    def task_history(
+        self,
+        project_identifier: str,
+        task_name: str,
+        build_variant: str,
+        task_id: str,
+        direction: TaskHistoryDirection = TaskHistoryDirection.BEFORE,
+        include_cursor: bool = False,
+        limit: Optional[int] = None,
+        date: Optional[datetime] = None,
+        fields: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Get the history of executions for a task in an Evergreen project.
+
+        This wraps Evergreen's ``taskHistory`` GraphQL query. The history is paginated with
+        a cursor: pass the id of a previously returned task as ``task_id`` and page before
+        or after it. The ``date`` option, if given, takes precedence over the cursor.
+
+        :param project_identifier: Identifier of the project the task belongs to.
+        :param task_name: Name of the task to get history for.
+        :param build_variant: Build variant the task ran on.
+        :param task_id: Id of the task to page from.
+        :param direction: Whether to page before or after the cursor task.
+        :param include_cursor: Whether to include the cursor task in the results.
+        :param limit: Maximum number of tasks to return (defaults to 50 server-side).
+        :param date: Only return history relative to this date. Takes precedence over the cursor.
+        :param fields: Fields to select for each returned task. Defaults to a small set of
+                       core fields. Only simple (non-nested) field names are supported.
+        :raises ValueError: If a field name in ``fields`` is not a valid GraphQL field name.
+        :return: Mapping with the returned ``tasks`` and ``pagination`` info.
+        """
+        default_fields = ["id", "displayName", "status", "order", "buildVariant"]
+        field_name_regex = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+        task_selection = " ".join(fields or default_fields)
+        for field in task_selection.split():
+            if not field_name_regex.fullmatch(field):
+                raise ValueError(f"Invalid GraphQL field name: {field!r}")
+
+        options: Dict[str, Any] = {
+            "projectIdentifier": project_identifier,
+            "taskName": task_name,
+            "buildVariant": build_variant,
+            "cursorParams": {
+                "cursorId": task_id,
+                "direction": direction.value,
+                "includeCursor": include_cursor,
+            },
+        }
+        if limit is not None:
+            options["limit"] = limit
+        if date is not None:
+            options["date"] = date.strftime(EVG_SHORT_DATETIME_FORMAT)
+
+        query = (
+            "query TaskHistory($options: TaskHistoryOpts!) { "
+            f"taskHistory(options: $options) {{ tasks {{ {task_selection} }} "
+            "pagination { mostRecentTaskOrder oldestTaskOrder } }"
+            "}"
+        )
+        data = self.graphql(query, variables={"options": options})
+        return cast(Dict[str, Any], data)["taskHistory"]
+
+    def task_history_iter(
+        self,
+        project_identifier: str,
+        task_name: str,
+        build_variant: str,
+        task_id: str,
+        direction: TaskHistoryDirection = TaskHistoryDirection.BEFORE,
+        include_cursor: bool = False,
+        page_limit: Optional[int] = None,
+        date: Optional[datetime] = None,
+        fields: Optional[List[str]] = None,
+        max_results: Optional[int] = None,
+    ) -> Iterator[Dict[str, Any]]:
+        """
+        Iterate over the execution history of a task.
+
+        Follows the pagination cursor returned by each page of :meth:`task_history` until no
+        more tasks are returned, yielding each individual task as it goes.
+
+        :param project_identifier: Identifier of the project the task belongs to.
+        :param task_name: Name of the task to get history for.
+        :param build_variant: Build variant the task ran on.
+        :param task_id: Id of the task to page from.
+        :param direction: Whether to page before or after the cursor task.
+        :param include_cursor: Whether to include the original ``task_id`` in the first page of
+                               results. Later pages always exclude their cursor task to avoid
+                               duplicates.
+        :param page_limit: Number of tasks to fetch per page (defaults to 50 server-side). This is
+                           a pagination knob and rarely needs changing.
+        :param date: Only return history relative to this date. Takes precedence over the cursor.
+        :param fields: Fields to select for each returned task. Must include ``id`` unless the
+                       default selection is used.
+        :param max_results: Maximum number of tasks to yield before raising. Defaults to None
+                             (unbounded). Pass an int to cap iteration and raise on exceed.
+        :raises ValueError: If ``fields`` is given without ``id`` (needed for pagination) or
+                            contains an invalid GraphQL field name.
+        :raises EvergreenException: If ``max_results`` is exceeded.
+        :raises EvergreenGraphQLError: If the GraphQL API returns errors.
+        :return: Iterator over task history entries. Tasks are yielded nearest-to-cursor first
+                 (most recent first for BEFORE, chronological order for AFTER).
+        """
+        if fields is not None and "id" not in fields:
+            raise ValueError("task_history_iter requires 'id' in fields for pagination")
+
+        cursor_id = task_id
+        first_page = True
+        yielded = 0
+        while True:
+            # Only the first page honors the caller's include_cursor (to include the starting
+            # task). Subsequent pages force include_cursor=False so the boundary task, which was
+            # already yielded as the last task of the previous page, is not yielded again.
+            page_include_cursor = include_cursor if first_page else False
+            first_page = False
+            history = self.task_history(
+                project_identifier,
+                task_name,
+                build_variant,
+                task_id=cursor_id,
+                direction=direction,
+                include_cursor=page_include_cursor,
+                limit=page_limit,
+                date=date,
+                fields=fields,
+            )
+            tasks = history.get("tasks") or []
+            if not tasks:
+                break
+            # The server returns tasks sorted by order descending in both directions. For BEFORE
+            # (paging toward older tasks) that is already nearest-to-cursor first, so yield as-is.
+            # For AFTER (paging toward newer tasks) descending is farthest-from-cursor first, so
+            # yield the page reversed to get nearest-to-cursor (chronological) order.
+            page = reversed(tasks) if direction == TaskHistoryDirection.AFTER else tasks
+            for task in page:
+                if max_results is not None and yielded >= max_results:
+                    raise EvergreenException(
+                        f"task_history_iter exceeded the max_results cap of {max_results}. "
+                        f"Pass a larger max_results (or None) to override."
+                    )
+                yield task
+                yielded += 1
+
+            # Cursor advancement uses the original server ordering (descending).
+            # When paging AFTER (toward newer tasks) the cursor advances to the newest task in
+            # the page (tasks[0]); when paging BEFORE (toward older tasks) it advances to the
+            # oldest task in the page (tasks[-1]).
+            if direction == TaskHistoryDirection.AFTER:
+                next_cursor = tasks[0].get("id")
+            else:
+                next_cursor = tasks[-1].get("id")
+            if next_cursor is None:
+                raise ValueError("task_history_iter requires 'id' in fields for pagination")
+            if next_cursor == cursor_id:
+                break
+            cursor_id = next_cursor
 
     def all_distros(self) -> List[Distro]:
         """

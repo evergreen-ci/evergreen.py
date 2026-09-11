@@ -1,4 +1,13 @@
 # Changelog
+## 3.20.0 - 2026-09-10
+- Add a `graphql` method to `EvergreenApi` for querying the Evergreen GraphQL API. It reuses the client's
+  auth/retry/timeout handling and raises `EvergreenGraphQLError` when the GraphQL API returns errors.
+- Add `task_history` and `task_history_iter` methods that wrap the GraphQL `taskHistory` query, with
+  cursor pagination and selectable task fields. `task_history_iter` accepts an optional `max_results`
+  cap to prevent unbounded iteration.
+- Add missing fields to the Task, StatusDetails, Version, and Build objects to match the current
+  Evergreen REST API responses.
+
 ## 3.19.2 - 2026-09-01
 - Support OIDC auth on spawn hosts by reading the embedded `oauth.spawn_host_access_token` from `~/.evergreen.yml`.
 

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Unit tests for src/evergreen/build.py."""
+
 from __future__ import absolute_import
 
 from unittest.mock import MagicMock
@@ -12,6 +13,12 @@ class TestBuild(object):
     def test_basic_data(self, sample_build):
         build = Build(sample_build, None)
         assert sample_build["project_id"] == build.project_id
+
+    def test_new_fields_are_declared(self, sample_build):
+        build = Build(sample_build, None)
+        assert build.task_cache == sample_build["task_cache"]
+        for attr in ["batchtime", "cron", "definition_info", "failed_test_names"]:
+            getattr(build, attr)
 
     def test_get_project_identifier(self, sample_build):
         mock_api = MagicMock()

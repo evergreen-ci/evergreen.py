@@ -21,6 +21,21 @@ class EvergreenException(Exception):
         super(EvergreenException, self).__init__(msg)
 
 
+class EvergreenGraphQLError(EvergreenException):
+    """An error returned by the Evergreen GraphQL API."""
+
+    def __init__(self, msg: Optional[str] = None) -> None:
+        """
+        Create a new exception instance.
+
+        :param msg: Message describing exception.
+        """
+        if not msg:
+            msg = "Exception in Evergreen GraphQL API"
+
+        super(EvergreenGraphQLError, self).__init__(msg)
+
+
 class MetricsException(EvergreenException):
     """An exception with metrics collection."""
 

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """Representation of an evergreen build."""
+
 from __future__ import absolute_import
 
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
@@ -60,8 +61,13 @@ class Build(_BaseEvergreenObject):
     activated = evg_attrib("activated")
     activated_by = evg_attrib("activated_by")
     activated_time = evg_datetime_attrib("activated_time")
+    batchtime = evg_attrib("batchtime")
+    cron = evg_attrib("cron")
+    definition_info = evg_attrib("definition_info")
+    failed_test_names = evg_attrib("failed_test_names")
     order = evg_attrib("order")
     tags = evg_attrib("tags")
+    task_cache = evg_attrib("task_cache")
     tasks = evg_attrib("tasks")
     time_taken_ms = evg_attrib("time_taken_ms")
     display_name = evg_attrib("display_name")

@@ -1,12 +1,19 @@
 """Evergreen API Module."""
 
 # Shortcuts for importing.
-from evergreen.api import CachedEvergreenApi, EvergreenApi, Requester, RetryingEvergreenApi
+from evergreen.api import (
+    CachedEvergreenApi,
+    EvergreenApi,
+    Requester,
+    RetryingEvergreenApi,
+    TaskHistoryDirection,
+)
 from evergreen.api_requests import IssueLinkRequest
 from evergreen.build import Build
 from evergreen.commitqueue import CommitQueue
 from evergreen.config import EvgAuth, OidcConfig
 from evergreen.distro import Distro
+from evergreen.errors.exceptions import EvergreenGraphQLError
 from evergreen.host import Host
 from evergreen.manifest import Manifest
 from evergreen.oidc import OidcToken, OidcTokenManager
