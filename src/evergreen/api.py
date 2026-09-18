@@ -431,8 +431,7 @@ class EvergreenApi(object):
 
         This uses the same authentication (API key headers or OIDC bearer tokens),
         retry and timeout handling as the rest of this client. The GraphQL endpoint
-        is served at the host root (``/graphql/query``), not under the ``/api``
-        prefix used by the REST API.
+        is served at ``/graphql/query`` on the configured Evergreen API server.
 
         :param query: The GraphQL query or mutation to execute.
         :param variables: Optional mapping of variable names to values for the query.
