@@ -40,6 +40,19 @@ def parse_evergreen_short_datetime(evg_date: Optional[str]) -> Optional[datetime
     return datetime.strptime(evg_date, EVG_SHORT_DATETIME_FORMAT)
 
 
+def clean_name(name: str) -> str:
+    """
+    Clean a name the same way the Evergreen server does.
+
+    This mirrors Evergreen's ``util.CleanName``: spaces, dashes, and slashes are
+    replaced with underscores so names are safe to embed in version ids.
+
+    :param name: Name to clean.
+    :return: Name with unsafe characters replaced with underscores.
+    """
+    return name.replace("-", "_").replace(" ", "_").replace("/", "_")
+
+
 def format_evergreen_datetime(when: datetime) -> str:
     """
     Convert a datetime object into an evergreen consumable string.

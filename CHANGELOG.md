@@ -1,4 +1,12 @@
 # Changelog
+## 3.21.0 - 2026-09-18
+- Fix HTTP retries for POST requests (including GraphQL): urllib3's `Retry` excluded POST from
+  retryable methods, so POST endpoints were never retried on retryable status codes (429/5xx).
+- Add `version_by_project_and_revision` to look up a mainline version by project identifier and
+  git revision, constructing the version id the same way the Evergreen server does.
+- Fix GraphQL URL construction when the api server is configured with Evergreen's `/api` prefix
+  (e.g. `api_server_host`): GraphQL is served at the host root, not under `/api`.
+
 ## 3.20.0 - 2026-09-10
 - Add a `graphql` method to `EvergreenApi` for querying the Evergreen GraphQL API. It reuses the client's
   auth/retry/timeout handling and raises `EvergreenGraphQLError` when the GraphQL API returns errors.
