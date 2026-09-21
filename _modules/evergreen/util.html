@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.util &#8212; evergreen.py 3.20.0 documentation</title>
+    <title>evergreen.util &#8212; evergreen.py 3.21.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=cf9ada82"></script>
+    <script src="../../_static/documentation_options.js?v=be4f90db"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -85,6 +85,22 @@
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">evg_date</span><span class="p">,</span> <span class="n">EVG_SHORT_DATETIME_FORMAT</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="clean_name">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.util.clean_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clean a name the same way the Evergreen server does.</span>
+
+<span class="sd">    This mirrors Evergreen&#39;s ``util.CleanName``: spaces, dashes, and slashes are</span>
+<span class="sd">    replaced with underscores so names are safe to embed in version ids.</span>
+
+<span class="sd">    :param name: Name to clean.</span>
+<span class="sd">    :return: Name with unsafe characters replaced with underscores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span></div>
 
 
 

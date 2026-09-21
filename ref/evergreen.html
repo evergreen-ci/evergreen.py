@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen package &#8212; evergreen.py 3.20.0 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.21.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=cf9ada82"></script>
+    <script src="../_static/documentation_options.js?v=be4f90db"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -1419,6 +1419,29 @@ contains an invalid GraphQL field name.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Version queried for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="evergreen.api.EvergreenApi.version_by_project_and_revision">
+<span class="sig-name descname"><span class="pre">version_by_project_and_revision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_identifier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#evergreen.version.Version" title="evergreen.version.Version"><span class="pre">Version</span></a></span></span><a class="reference internal" href="../_modules/evergreen/api.html#EvergreenApi.version_by_project_and_revision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.api.EvergreenApi.version_by_project_and_revision" title="Link to this definition">¶</a></dt>
+<dd><p>Get a version by its project identifier and revision (git hash).</p>
+<p>Version ids for mainline commits are constructed by the Evergreen server
+as <code class="docutils literal notranslate"><span class="pre">CleanName(project)</span> <span class="pre">+</span> <span class="pre">&quot;_&quot;</span> <span class="pre">+</span> <span class="pre">revision</span></code> (see <code class="docutils literal notranslate"><span class="pre">makeVersionId</span></code> in
+Evergreen’s repotracker), so the same transformation is applied here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>project_identifier</strong> – Identifier of the project to query.</p></li>
+<li><p><strong>revision</strong> – Revision (full git hash) of the version to query.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Version queried for.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the revision is not a full 40-character git hash.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -5104,6 +5127,22 @@ If this is not a display task, returns None.</p>
 <span id="evergreen-util-module"></span><h2>evergreen.util module<a class="headerlink" href="#module-evergreen.util" title="Link to this heading">¶</a></h2>
 <p>Useful utilities for interacting with Evergreen.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="evergreen.util.clean_name">
+<span class="sig-prename descclassname"><span class="pre">evergreen.util.</span></span><span class="sig-name descname"><span class="pre">clean_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/evergreen/util.html#clean_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.util.clean_name" title="Link to this definition">¶</a></dt>
+<dd><p>Clean a name the same way the Evergreen server does.</p>
+<p>This mirrors Evergreen’s <code class="docutils literal notranslate"><span class="pre">util.CleanName</span></code>: spaces, dashes, and slashes are
+replaced with underscores so names are safe to embed in version ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name to clean.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Name with unsafe characters replaced with underscores.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="evergreen.util.evergreen_input_to_output">
 <span class="sig-prename descclassname"><span class="pre">evergreen.util.</span></span><span class="sig-name descname"><span class="pre">evergreen_input_to_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/evergreen/util.html#evergreen_input_to_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#evergreen.util.evergreen_input_to_output" title="Link to this definition">¶</a></dt>
 <dd><p>Convert a date from evergreen to a date to send back to evergreen.</p>
@@ -5762,6 +5801,7 @@ argument.</p>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.tests_by_task"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.tests_by_task()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.update_patch_status"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.update_patch_status()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.version_by_id"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.version_by_id()</span></code></a></li>
+<li><a class="reference internal" href="#evergreen.api.EvergreenApi.version_by_project_and_revision"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.version_by_project_and_revision()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.versions_by_project"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.versions_by_project()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.versions_by_project_time_window"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.versions_by_project_time_window()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.api.EvergreenApi.with_session"><code class="docutils literal notranslate"><span class="pre">EvergreenApi.with_session()</span></code></a></li>
@@ -6450,6 +6490,7 @@ argument.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-evergreen.util">evergreen.util module</a><ul>
+<li><a class="reference internal" href="#evergreen.util.clean_name"><code class="docutils literal notranslate"><span class="pre">clean_name()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.util.evergreen_input_to_output"><code class="docutils literal notranslate"><span class="pre">evergreen_input_to_output()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.util.format_evergreen_date"><code class="docutils literal notranslate"><span class="pre">format_evergreen_date()</span></code></a></li>
 <li><a class="reference internal" href="#evergreen.util.format_evergreen_datetime"><code class="docutils literal notranslate"><span class="pre">format_evergreen_datetime()</span></code></a></li>

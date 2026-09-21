@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.20.0 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.21.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=cf9ada82"></script>
+    <script src="../../_static/documentation_options.js?v=be4f90db"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -108,6 +108,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.users_for_role</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsersForRole</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">evergreen.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">EVG_SHORT_DATETIME_FORMAT</span><span class="p">,</span>
+    <span class="n">clean_name</span><span class="p">,</span>
     <span class="n">evergreen_input_to_output</span><span class="p">,</span>
     <span class="n">format_evergreen_date</span><span class="p">,</span>
     <span class="n">iterate_by_time_window</span><span class="p">,</span>
@@ -496,7 +497,12 @@
         <span class="k">if</span> <span class="n">operation_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;operationName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">operation_name</span>
 
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/graphql/query&quot;</span>
+        <span class="c1"># The REST API works at both &quot;https://evergreen.mongodb.com/&quot; and</span>
+        <span class="c1"># &quot;https://evergreen.mongodb.com/api&quot; (the &quot;/api&quot; prefix used by</span>
+        <span class="c1"># &quot;api_server_host&quot; in ~/.evergreen.yml), but GraphQL only works at</span>
+        <span class="c1"># &quot;https://evergreen.mongodb.com/&quot; — it is not served under &quot;/api&quot;.</span>
+        <span class="c1"># Strip the &quot;/api&quot; suffix so GraphQL resolves at the host root either way.</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s1">&#39;/api&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/graphql/query&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span>
                 <span class="n">url</span><span class="p">,</span>
@@ -1392,6 +1398,31 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/versions/</span><span class="si">{</span><span class="n">version_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">Version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span></div>
+
+
+<div class="viewcode-block" id="EvergreenApi.version_by_project_and_revision">
+<a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.version_by_project_and_revision">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">version_by_project_and_revision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">revision</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Version</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a version by its project identifier and revision (git hash).</span>
+
+<span class="sd">        Version ids for mainline commits are constructed by the Evergreen server</span>
+<span class="sd">        as ``CleanName(project) + &quot;_&quot; + revision`` (see ``makeVersionId`` in</span>
+<span class="sd">        Evergreen&#39;s repotracker), so the same transformation is applied here.</span>
+
+<span class="sd">        :param project_identifier: Identifier of the project to query.</span>
+<span class="sd">        :param revision: Revision (full git hash) of the version to query.</span>
+<span class="sd">        :return: Version queried for.</span>
+<span class="sd">        :raises ValueError: If the revision is not a full 40-character git hash.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[0-9a-fA-F]</span><span class="si">{40}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">revision</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected a full 40-character git hash for revision, got </span><span class="si">{</span><span class="n">revision</span><span class="si">!r}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;Short hashes cannot be used to construct a version id.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">safe_project</span> <span class="o">=</span> <span class="n">clean_name</span><span class="p">(</span><span class="n">project_identifier</span><span class="p">)</span>
+        <span class="n">version_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">safe_project</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">revision</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">version_by_id</span><span class="p">(</span><span class="n">version_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EvergreenApi.builds_by_version">
@@ -2329,6 +2360,10 @@
             <span class="n">backoff_factor</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_BACKOFF_FACTOR</span><span class="p">,</span>
             <span class="n">backoff_max</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC</span><span class="p">,</span>
             <span class="n">status_forcelist</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_CODES</span><span class="p">,</span>
+            <span class="c1"># Retry all HTTP methods, including POST, so that GraphQL and other</span>
+            <span class="c1"># POST endpoints are retried on retryable status codes. This is safe</span>
+            <span class="c1"># as long as the endpoints are idempotent (queries and task reruns).</span>
+            <span class="n">allowed_methods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">raise_on_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">raise_on_redirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
@@ -2337,6 +2372,10 @@
             <span class="n">total</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_ATTEMPTS</span><span class="p">,</span>
             <span class="n">backoff_factor</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_BACKOFF_FACTOR</span><span class="p">,</span>
             <span class="n">status_forcelist</span><span class="o">=</span><span class="n">DEFAULT_HTTP_RETRY_CODES</span><span class="p">,</span>
+            <span class="c1"># Retry all HTTP methods, including POST, so that GraphQL and other</span>
+            <span class="c1"># POST endpoints are retried on retryable status codes. This is safe</span>
+            <span class="c1"># as long as the endpoints are idempotent (queries and task reruns).</span>
+            <span class="n">allowed_methods</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">raise_on_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">raise_on_redirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
