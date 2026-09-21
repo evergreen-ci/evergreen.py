@@ -66,6 +66,7 @@ from evergreen.tst import Tst
 from evergreen.users_for_role import UsersForRole
 from evergreen.util import (
     EVG_SHORT_DATETIME_FORMAT,
+    clean_name,
     evergreen_input_to_output,
     format_evergreen_date,
     iterate_by_time_window,
@@ -444,7 +445,12 @@ class EvergreenApi(object):
         if operation_name is not None:
             payload["operationName"] = operation_name
 
-        url = f"{self._api_server}/graphql/query"
+        # The REST API works at both "https://evergreen.mongodb.com/" and
+        # "https://evergreen.mongodb.com/api" (the "/api" prefix used by
+        # "api_server_host" in ~/.evergreen.yml), but GraphQL only works at
+        # "https://evergreen.mongodb.com/" — it is not served under "/api".
+        # Strip the "/api" suffix so GraphQL resolves at the host root either way.
+        url = f"{self._api_server.removesuffix('/api')}/graphql/query"
         try:
             response = self._call_api(
                 url,
@@ -1247,6 +1253,28 @@ class EvergreenApi(object):
         """
         url = self._create_url(f"/versions/{version_id}")
         return Version(self._paginate(url), self)  # type: ignore[arg-type]
+
+    def version_by_project_and_revision(self, project_identifier: str, revision: str) -> Version:
+        """
+        Get a version by its project identifier and revision (git hash).
+
+        Version ids for mainline commits are constructed by the Evergreen server
+        as ``CleanName(project) + "_" + revision`` (see ``makeVersionId`` in
+        Evergreen's repotracker), so the same transformation is applied here.
+
+        :param project_identifier: Identifier of the project to query.
+        :param revision: Revision (full git hash) of the version to query.
+        :return: Version queried for.
+        :raises ValueError: If the revision is not a full 40-character git hash.
+        """
+        if not re.fullmatch(r"[0-9a-fA-F]{40}", revision):
+            raise ValueError(
+                f"Expected a full 40-character git hash for revision, got {revision!r}. "
+                "Short hashes cannot be used to construct a version id."
+            )
+        safe_project = clean_name(project_identifier)
+        version_id = f"{safe_project}_{revision}"
+        return self.version_by_id(version_id)
 
     def builds_by_version(self, version_id: str, params: Optional[Dict] = None) -> List[Build]:
         """
@@ -2060,6 +2088,10 @@ class RetryingEvergreenApi(EvergreenApi):
             backoff_factor=DEFAULT_HTTP_RETRY_BACKOFF_FACTOR,
             backoff_max=DEFAULT_HTTP_RETRY_BACKOFF_MAX_SEC,
             status_forcelist=DEFAULT_HTTP_RETRY_CODES,
+            # Retry all HTTP methods, including POST, so that GraphQL and other
+            # POST endpoints are retried on retryable status codes. This is safe
+            # as long as the endpoints are idempotent (queries and task reruns).
+            allowed_methods=None,
             raise_on_status=False,
             raise_on_redirect=False,
         )
@@ -2068,6 +2100,10 @@ class RetryingEvergreenApi(EvergreenApi):
             total=DEFAULT_HTTP_RETRY_ATTEMPTS,
             backoff_factor=DEFAULT_HTTP_RETRY_BACKOFF_FACTOR,
             status_forcelist=DEFAULT_HTTP_RETRY_CODES,
+            # Retry all HTTP methods, including POST, so that GraphQL and other
+            # POST endpoints are retried on retryable status codes. This is safe
+            # as long as the endpoints are idempotent (queries and task reruns).
+            allowed_methods=None,
             raise_on_status=False,
             raise_on_redirect=False,
         )

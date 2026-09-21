@@ -511,6 +511,18 @@ class TestVersionApi(object):
             url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
 
+    def test_version_by_project_and_revision(self, mocked_api):
+        revision = "a7906eed65f88ae436ddb5c19096969f198a9efe"
+        mocked_api.version_by_project_and_revision("my-project", revision)
+        expected_url = mocked_api._create_url(f"/versions/my_project_{revision}")
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
+        )
+
+    def test_version_by_project_and_revision_rejects_short_hash(self, mocked_api):
+        with pytest.raises(ValueError, match="40-character git hash"):
+            mocked_api.version_by_project_and_revision("my-project", "a7906eed65f8")
+
     def test_builds_by_version(self, mocked_api):
         mocked_api.builds_by_version("version_id")
         expected_url = mocked_api._create_url("/versions/version_id/builds")
@@ -1235,6 +1247,28 @@ class TestGraphQLApi(object):
 
         assert result == {"task": {"id": "task_id"}}
 
+    def test_graphql_url_with_api_suffix(self, mocked_api_response):
+        # An api server configured with Evergreen's "/api" prefix (e.g.
+        # "api_server_host") should still resolve GraphQL at the host root.
+        session_mock = MagicMock()
+        session_mock.request.return_value = mocked_api_response
+        api = under_test.EvergreenApi(
+            api_server="https://evergreen.corp.mongodb.com/api", session=session_mock
+        )
+        mocked_api_response.json.return_value = {"data": {"task": {"id": "task_id"}}}
+
+        api.graphql('{ task(taskId: "task_id") { id } }')
+
+        expected_url = "https://evergreen.corp.mongodb.com/graphql/query"
+        api.session.request.assert_called_with(
+            url=expected_url,
+            params=None,
+            timeout=None,
+            data=json.dumps({"query": '{ task(taskId: "task_id") { id } }'}),
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
+
     def test_graphql_with_variables_and_operation_name(self, mocked_api, mocked_api_response):
         mocked_api_response.json.return_value = {"data": {"patch": {"id": "patch_id"}}}
 
@@ -1601,6 +1635,18 @@ class TestRetryingEvergreenApi(object):
 
         mocked_retrying_api.version_by_id(self.VRSID)
 
+        assert len(responses.calls) == 2
+
+    @responses.activate
+    def test_retries_post_requests(self, mocked_retrying_api):
+        # POST requests (e.g. GraphQL) should also be retried on retryable
+        # status codes.
+        responses.post(url=self.MATCH_ALL_URL, json={}, status=503)
+        responses.post(url=self.MATCH_ALL_URL, json={"data": {"task": {"id": "task_id"}}})
+
+        data = mocked_retrying_api.graphql('{ task(taskId: "task_id") { id } }')
+
+        assert data == {"task": {"id": "task_id"}}
         assert len(responses.calls) == 2
 
     @pytest.mark.skipif(

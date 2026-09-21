@@ -98,3 +98,16 @@ class TestIteratorByTimeWindow(object):
             under_test.iterate_by_time_window(iterator, before_time, after_time, "the_time")
         )
         assert (60 // 7) + 1 == len(items)
+
+
+class TestCleanName(object):
+    def test_replaces_unsafe_characters(self):
+        # Mirrors Evergreen's util.CleanName: '-', ' ', and '/' become '_'.
+        assert under_test.clean_name("my-project") == "my_project"
+        assert under_test.clean_name("my project") == "my_project"
+        assert under_test.clean_name("my/project") == "my_project"
+
+    def test_keeps_safe_characters(self):
+        # Periods and underscores are preserved.
+        assert under_test.clean_name("v4.4-project") == "v4.4_project"
+        assert under_test.clean_name("my_project") == "my_project"
