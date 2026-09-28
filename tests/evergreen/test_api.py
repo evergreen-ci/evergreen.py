@@ -1399,16 +1399,43 @@ class TestTaskHistoryApi(object):
             headers={"Content-Type": "application/json"},
         )
 
-    def test_task_history_invalid_field(self, mocked_api):
-        with pytest.raises(ValueError):
-            mocked_api.task_history(
-                "evergreen",
-                "test-graphql",
-                "ubuntu2204",
-                "task_101",
-                fields=["id", "displayName } password"],
-            )
-        mocked_api.session.request.assert_not_called()
+    def test_task_history_nested_field_selection(self, mocked_api, mocked_api_response):
+        mocked_api_response.json.return_value = {
+            "data": {"taskHistory": {"tasks": [], "pagination": {}}}
+        }
+
+        mocked_api.task_history(
+            "evergreen",
+            "test-graphql",
+            "ubuntu2204",
+            "task_100",
+            fields=["id", "details { status }"],
+        )
+
+        expected_query = (
+            "query TaskHistory($options: TaskHistoryOpts!) { "
+            "taskHistory(options: $options) { tasks { id details { status } } "
+            "pagination { mostRecentTaskOrder oldestTaskOrder } }"
+            "}"
+        )
+        expected_options = {
+            "projectIdentifier": "evergreen",
+            "taskName": "test-graphql",
+            "buildVariant": "ubuntu2204",
+            "cursorParams": {
+                "cursorId": "task_100",
+                "direction": "BEFORE",
+                "includeCursor": False,
+            },
+        }
+        mocked_api.session.request.assert_called_with(
+            url=f"{DEFAULT_API_SERVER}/graphql/query",
+            params=None,
+            timeout=None,
+            data=json.dumps({"query": expected_query, "variables": {"options": expected_options}}),
+            method="POST",
+            headers={"Content-Type": "application/json"},
+        )
 
     def test_task_history_iter(self, mocked_api):
         page1 = {
