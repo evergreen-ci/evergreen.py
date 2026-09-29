@@ -1,4 +1,7 @@
 # Changelog
+## 3.21.1 - 2026-09-29
+- Fix an issue with task names containing special characters by URL-encoding task names.
+
 ## 3.21.0 - 2026-09-18
 - Fix HTTP retries for POST requests (including GraphQL): urllib3's `Retry` excluded POST from
   retryable methods, so POST endpoints were never retried on retryable status codes (429/5xx).

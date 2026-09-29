@@ -15,7 +15,7 @@ from http import HTTPStatus
 from json.decoder import JSONDecodeError
 from time import time
 from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 import requests
 import structlog
@@ -1107,7 +1107,7 @@ class EvergreenApi(object):
             data["num_versions"] = num_versions
         if start_at is not None:
             data["start_at"] = start_at
-        url = self._create_url(f"/projects/{project_id}/tasks/{task_name}")
+        url = self._create_url(f"/projects/{project_id}/tasks/{quote(task_name, safe='')}")
         return [
             Task(task_json, self) for task_json in self._call_api(url, data=json.dumps(data)).json()
         ]
@@ -1683,7 +1683,9 @@ class EvergreenApi(object):
         :param task_name: Name of task to query for.
         :return: Contents of 'perf.json'
         """
-        url = f"{self._api_server}/api/2/task/{task_id}/json/history/{task_name}/perf"
+        url = (
+            f"{self._api_server}/api/2/task/{task_id}/json/history/{quote(task_name, safe='')}/perf"
+        )
         return [PerformanceData(result, self) for result in self._paginate(url)]  # type: ignore[arg-type]
 
     def json_by_task(self, task_id: str, json_key: str) -> Dict[str, Any]:
@@ -1708,7 +1710,10 @@ class EvergreenApi(object):
         :param json_key: The key that json was published under, e.g. "perf".
         :return: A chronological list of json published for that task.
         """
-        url = f"{self._api_server}/api/2/task/{task_id}/json/history/{task_name}/{json_key}"
+        url = (
+            f"{self._api_server}/api/2/task/{task_id}/json/history/"
+            f"{quote(task_name, safe='')}/{json_key}"
+        )
         return cast(List[Dict[str, Any]], self._paginate(url))
 
     def _create_old_url(self, endpoint: str) -> str:
