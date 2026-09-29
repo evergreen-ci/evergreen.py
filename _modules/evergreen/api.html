@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.21.0 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.21.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=be4f90db"></script>
+    <script src="../../_static/documentation_options.js?v=1a3714c2"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -57,7 +57,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">json.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONDecodeError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span><span class="p">,</span> <span class="n">urlparse</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">structlog</span>
@@ -1237,7 +1237,7 @@
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;num_versions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_versions</span>
         <span class="k">if</span> <span class="n">start_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">data</span><span class="p">[</span><span class="s2">&quot;start_at&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_at</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/tasks/</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_url</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/tasks/</span><span class="si">{</span><span class="n">quote</span><span class="p">(</span><span class="n">task_name</span><span class="p">,</span><span class="w"> </span><span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">Task</span><span class="p">(</span><span class="n">task_json</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">task_json</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="p">]</span></div>
@@ -1888,7 +1888,9 @@
 <span class="sd">        :param task_name: Name of task to query for.</span>
 <span class="sd">        :return: Contents of &#39;perf.json&#39;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/api/2/task/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/json/history/</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s2">/perf&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/api/2/task/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/json/history/</span><span class="si">{</span><span class="n">quote</span><span class="p">(</span><span class="n">task_name</span><span class="p">,</span><span class="w"> </span><span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/perf&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">PerformanceData</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">)]</span>  <span class="c1"># type: ignore[arg-type]</span></div>
 
 
@@ -1919,7 +1921,10 @@
 <span class="sd">        :param json_key: The key that json was published under, e.g. &quot;perf&quot;.</span>
 <span class="sd">        :return: A chronological list of json published for that task.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/api/2/task/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/json/history/</span><span class="si">{</span><span class="n">task_name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">json_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_server</span><span class="si">}</span><span class="s2">/api/2/task/</span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">/json/history/&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">quote</span><span class="p">(</span><span class="n">task_name</span><span class="p">,</span><span class="w"> </span><span class="n">safe</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">json_key</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_paginate</span><span class="p">(</span><span class="n">url</span><span class="p">))</span></div>
 
 
