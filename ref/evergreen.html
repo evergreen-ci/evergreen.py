@@ -5,10 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>evergreen package &#8212; evergreen.py 3.21.1 documentation</title>
+    <title>evergreen package &#8212; evergreen.py 3.21.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../_static/readable.css?v=e058d051" />
-    <script src="../_static/documentation_options.js?v=1a3714c2"></script>
+    <script src="../_static/documentation_options.js?v=2dcf9ea8"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -1177,14 +1177,12 @@ or after it. The <code class="docutils literal notranslate"><span class="pre">da
 <li><p><strong>limit</strong> – Maximum number of tasks to return (defaults to 50 server-side).</p></li>
 <li><p><strong>date</strong> – Only return history relative to this date. Takes precedence over the cursor.</p></li>
 <li><p><strong>fields</strong> – Fields to select for each returned task. Defaults to a small set of
-core fields. Only simple (non-nested) field names are supported.</p></li>
+core fields. Each field is a simple field name, optionally with a
+sub-selection of simple names (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;details</span> <span class="pre">{</span> <span class="pre">status</span> <span class="pre">}&quot;</span></code>).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If a field name in <code class="docutils literal notranslate"><span class="pre">fields</span></code> is not a valid GraphQL field name.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Mapping with the returned <code class="docutils literal notranslate"><span class="pre">tasks</span></code> and <code class="docutils literal notranslate"><span class="pre">pagination</span></code> info.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Mapping with the returned <code class="docutils literal notranslate"><span class="pre">tasks</span></code> and <code class="docutils literal notranslate"><span class="pre">pagination</span></code> info.</p>
 </dd>
 </dl>
 </dd></dl>

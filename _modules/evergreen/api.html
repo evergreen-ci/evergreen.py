@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.21.1 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.21.2 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=1a3714c2"></script>
+    <script src="../../_static/documentation_options.js?v=2dcf9ea8"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -563,16 +563,12 @@
 <span class="sd">        :param limit: Maximum number of tasks to return (defaults to 50 server-side).</span>
 <span class="sd">        :param date: Only return history relative to this date. Takes precedence over the cursor.</span>
 <span class="sd">        :param fields: Fields to select for each returned task. Defaults to a small set of</span>
-<span class="sd">                       core fields. Only simple (non-nested) field names are supported.</span>
-<span class="sd">        :raises ValueError: If a field name in ``fields`` is not a valid GraphQL field name.</span>
+<span class="sd">                       core fields. Each field is a simple field name, optionally with a</span>
+<span class="sd">                       sub-selection of simple names (e.g. ``&quot;details { status }&quot;``).</span>
 <span class="sd">        :return: Mapping with the returned ``tasks`` and ``pagination`` info.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;displayName&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="s2">&quot;buildVariant&quot;</span><span class="p">]</span>
-        <span class="n">field_name_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[A-Za-z_][A-Za-z0-9_]*$&quot;</span><span class="p">)</span>
         <span class="n">task_selection</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span> <span class="ow">or</span> <span class="n">default_fields</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">task_selection</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">field_name_regex</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid GraphQL field name: </span><span class="si">{</span><span class="n">field</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;projectIdentifier&quot;</span><span class="p">:</span> <span class="n">project_identifier</span><span class="p">,</span>
