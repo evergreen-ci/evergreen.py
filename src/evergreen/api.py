@@ -508,16 +508,12 @@ class EvergreenApi(object):
         :param limit: Maximum number of tasks to return (defaults to 50 server-side).
         :param date: Only return history relative to this date. Takes precedence over the cursor.
         :param fields: Fields to select for each returned task. Defaults to a small set of
-                       core fields. Only simple (non-nested) field names are supported.
-        :raises ValueError: If a field name in ``fields`` is not a valid GraphQL field name.
+                       core fields. Each field is a simple field name, optionally with a
+                       sub-selection of simple names (e.g. ``"details { status }"``).
         :return: Mapping with the returned ``tasks`` and ``pagination`` info.
         """
         default_fields = ["id", "displayName", "status", "order", "buildVariant"]
-        field_name_regex = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
         task_selection = " ".join(fields or default_fields)
-        for field in task_selection.split():
-            if not field_name_regex.fullmatch(field):
-                raise ValueError(f"Invalid GraphQL field name: {field!r}")
 
         options: Dict[str, Any] = {
             "projectIdentifier": project_identifier,
