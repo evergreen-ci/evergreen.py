@@ -462,6 +462,14 @@ class TestProjectApi(object):
             method="GET",
         )
 
+    def test_tasks_by_project_and_name_with_slash_in_name(self, mocked_api):
+        mocked_api.tasks_by_project_and_name("project_id", "//foo/bar:baz")
+        expected_url = mocked_api._create_url("/projects/project_id/tasks/%2F%2Ffoo%2Fbar%3Abaz")
+        expected_data = json.dumps({})
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=expected_data, method="GET"
+        )
+
 
 class TestTaskStatsByProject(object):
     def test_with_multiple_tasks(self, mocked_api):
@@ -1013,12 +1021,20 @@ class TestTaskApi(object):
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
         )
 
+    def test_performance_results_by_task_name_with_slash_in_name(self, mocked_api):
+        mocked_api.performance_results_by_task_name("task_id", "//foo/bar:baz")
+        expected_url = (
+            f"{DEFAULT_API_SERVER}/api/2/task/task_id/json/history/%2F%2Ffoo%2Fbar%3Abaz/perf"
+        )
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
+        )
+
     def test_json_by_task(self, mocked_api):
         mocked_api.json_by_task("task_id", "json_key_id")
         expected_url = mocked_api._create_plugin_url("/task/task_id/json_key_id")
-        expected_params = None
         mocked_api.session.request.assert_called_with(
-            url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
 
     def test_json_history_for_task(self, mocked_api):
@@ -1027,6 +1043,16 @@ class TestTaskApi(object):
         expected_params = None
         mocked_api.session.request.assert_called_with(
             url=expected_url, params=expected_params, timeout=None, data=None, method="GET"
+        )
+
+    def test_json_history_for_task_with_slash_in_name(self, mocked_api):
+        mocked_api.json_history_for_task("task_id", "//foo/bar:baz", "json_key_id")
+        expected_url = (
+            f"{DEFAULT_API_SERVER}/api/2/task/task_id/json/history/"
+            "%2F%2Ffoo%2Fbar%3Abaz/json_key_id"
+        )
+        mocked_api.session.request.assert_called_with(
+            url=expected_url, params=None, timeout=None, data=None, method="GET"
         )
 
     def test_restart_task(self, mocked_api):

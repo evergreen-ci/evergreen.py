@@ -1,9 +1,12 @@
 # Changelog
-## 3.21.1 - 2026-09-28
+## 3.21.2 - 2026-09-30
 - Allow nested field selections in `task_history`'s `fields` parameter (e.g.
   `"details { status }"`), not just simple field names.
 - Remove client-side validation of the field selection: invalid selections now surface as
   `EvergreenGraphQLError` from the GraphQL server instead of a client-side `ValueError`.
+
+## 3.21.1 - 2026-09-29
+- Fix an issue with task names containing special characters by URL-encoding task names.
 
 ## 3.21.0 - 2026-09-18
 - Fix HTTP retries for POST requests (including GraphQL): urllib3's `Retry` excluded POST from
