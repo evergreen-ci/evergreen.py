@@ -1340,6 +1340,99 @@ class TestGraphQLApi(object):
 
         assert "invalid query" in str(excinfo.value)
 
+    @pytest.mark.parametrize(
+        "client_timeout,call_timeout,expected_timeout",
+        [
+            (None, None, None),
+            (60, None, 60),
+            (60, 600, 600),
+            (None, 30, 30),
+        ],
+    )
+    def test_graphql_timeout(
+        self, mocked_api, mocked_api_response, client_timeout, call_timeout, expected_timeout
+    ):
+        mocked_api._timeout = client_timeout
+        mocked_api_response.json.return_value = {"data": {}}
+
+        mocked_api.graphql("{ x }", timeout=call_timeout)
+
+        _, kwargs = mocked_api.session.request.call_args
+        assert kwargs["timeout"] == expected_timeout
+
+    def test_graphql_timeout_does_not_affect_rest_calls(self, mocked_api, mocked_api_response):
+        mocked_api._timeout = 60
+        mocked_api_response.json.return_value = {"data": {}}
+
+        mocked_api.graphql("{ x }")
+        mocked_api.all_distros()
+
+        _, kwargs = mocked_api.session.request.call_args
+        assert kwargs["timeout"] == 60
+
+
+REAUTH_ERROR = {
+    "message": "finding inactive tasks for history: (ReauthenticationRequired) Command getMore "
+    "requires reauthentication since the current authorization session has expired.",
+    "path": ["taskHistory"],
+}
+
+
+def _graphql_response(body):
+    response = MagicMock(status_code=200)
+    response.json.return_value = body
+    return response
+
+
+class TestGraphQLTransientErrorRetries(object):
+    @pytest.fixture()
+    def retrying_api(self):
+        api = under_test.RetryingEvergreenApi()
+        api._session = MagicMock()
+        return api
+
+    @patch(ns("sleep"))
+    def test_retries_transient_error_then_succeeds(self, sleep_mock, retrying_api):
+        retrying_api._session.request.side_effect = [
+            _graphql_response({"errors": [REAUTH_ERROR]}),
+            _graphql_response({"data": {"x": 1}}),
+        ]
+
+        assert retrying_api.graphql("{ x }") == {"x": 1}
+        assert retrying_api._session.request.call_count == 2
+        sleep_mock.assert_called_once()
+
+    @patch(ns("sleep"))
+    def test_raises_after_exhausting_retries(self, sleep_mock, retrying_api):
+        retrying_api._session.request.return_value = _graphql_response({"errors": [REAUTH_ERROR]})
+
+        with pytest.raises(EvergreenGraphQLError, match="ReauthenticationRequired"):
+            retrying_api.graphql("{ x }")
+
+        expected_attempts = under_test.DEFAULT_GRAPHQL_TRANSIENT_ERROR_RETRIES + 1
+        assert retrying_api._session.request.call_count == expected_attempts
+
+    @patch(ns("sleep"))
+    def test_does_not_retry_other_errors(self, sleep_mock, retrying_api):
+        retrying_api._session.request.return_value = _graphql_response(
+            {"errors": [{"message": "Cannot query field 'bogus'"}]}
+        )
+
+        with pytest.raises(EvergreenGraphQLError):
+            retrying_api.graphql("{ bogus }")
+
+        assert retrying_api._session.request.call_count == 1
+        sleep_mock.assert_not_called()
+
+    @patch(ns("sleep"))
+    def test_base_api_does_not_retry(self, sleep_mock, mocked_api):
+        mocked_api._session.request.return_value = _graphql_response({"errors": [REAUTH_ERROR]})
+
+        with pytest.raises(EvergreenGraphQLError):
+            mocked_api.graphql("{ x }")
+
+        assert mocked_api._session.request.call_count == 1
+
 
 class TestTaskHistoryApi(object):
     def test_task_history(self, mocked_api, mocked_api_response):
@@ -1495,6 +1588,23 @@ class TestTaskHistoryApi(object):
         second_call = mocked_api._session.request.call_args_list[1]
         body = json.loads(second_call.kwargs["data"])
         assert body["variables"]["options"]["cursorParams"]["cursorId"] == "t2"
+
+    def test_task_history_iter_passes_timeout_to_each_page(self, mocked_api):
+        page1 = {"data": {"taskHistory": {"tasks": [{"id": "t1"}], "pagination": {}}}}
+        page2 = {"data": {"taskHistory": {"tasks": [], "pagination": {}}}}
+        mocked_api._session.request.side_effect = [
+            MagicMock(status_code=200, json=lambda: page1),
+            MagicMock(status_code=200, json=lambda: page2),
+        ]
+
+        list(
+            mocked_api.task_history_iter(
+                "evergreen", "test-graphql", "ubuntu2204", "t0", timeout=600
+            )
+        )
+
+        timeouts = [c.kwargs["timeout"] for c in mocked_api._session.request.call_args_list]
+        assert timeouts == [600, 600]
 
     def test_task_history_iter_after_direction(self, mocked_api):
         page1 = {

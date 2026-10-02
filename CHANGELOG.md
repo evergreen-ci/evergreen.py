@@ -1,4 +1,11 @@
 # Changelog
+## 3.22.0 - 2026-10-01
+- `graphql`, `task_history` and `task_history_iter` accept a `timeout` argument to override the
+  client's timeout per call, since GraphQL queries can take much longer than REST calls.
+- `RetryingEvergreenApi` now retries GraphQL queries that fail with a transient Evergreen database
+  error (`ReauthenticationRequired`). Evergreen returns these with a 200 status code, so they
+  were never retried by the HTTP-level retries.
+
 ## 3.21.2 - 2026-09-30
 - Allow nested field selections in `task_history`'s `fields` parameter (e.g.
   `"details { status }"`), not just simple field names.
