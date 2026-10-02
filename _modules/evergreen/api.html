@@ -4,10 +4,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>evergreen.api &#8212; evergreen.py 3.21.2 documentation</title>
+    <title>evergreen.api &#8212; evergreen.py 3.22.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d7e2fa82" />
     <link rel="stylesheet" type="text/css" href="../../_static/readable.css?v=e058d051" />
-    <script src="../../_static/documentation_options.js?v=2dcf9ea8"></script>
+    <script src="../../_static/documentation_options.js?v=2c304e30"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -55,7 +55,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">http</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPStatus</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">json.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONDecodeError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span><span class="p">,</span> <span class="n">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">quote</span><span class="p">,</span> <span class="n">urlparse</span>
 
@@ -136,6 +136,12 @@
     <span class="p">}</span>
 <span class="p">)</span>
 
+<span class="c1"># Errors the GraphQL API reports (with a 200 status) when one of Evergreen&#39;s own database</span>
+<span class="c1"># calls fails transiently. These are safe to retry since the query itself was fine.</span>
+<span class="n">GRAPHQL_TRANSIENT_ERROR_MARKERS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;ReauthenticationRequired&quot;</span><span class="p">,)</span>
+<span class="n">DEFAULT_GRAPHQL_TRANSIENT_ERROR_RETRIES</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">GRAPHQL_TRANSIENT_ERROR_BACKOFF_SEC</span> <span class="o">=</span> <span class="mf">1.0</span>
+
 <span class="n">EVERGREEN_URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(https?)://evergreen\..*?(?=\n)&quot;</span><span class="p">)</span>
 <span class="n">EVERGREEN_PATCH_ID_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?&lt;=ID : )\w</span><span class="si">{24}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -150,6 +156,11 @@
     <span class="n">AFTER</span> <span class="o">=</span> <span class="s2">&quot;AFTER&quot;</span>
     <span class="n">BEFORE</span> <span class="o">=</span> <span class="s2">&quot;BEFORE&quot;</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_transient_graphql_error</span><span class="p">(</span><span class="n">err</span><span class="p">:</span> <span class="n">EvergreenGraphQLError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether a GraphQL error was caused by a transient server-side failure.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">marker</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="k">for</span> <span class="n">marker</span> <span class="ow">in</span> <span class="n">GRAPHQL_TRANSIENT_ERROR_MARKERS</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_format_graphql_errors</span><span class="p">(</span><span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -173,6 +184,9 @@
 <a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EvergreenApi</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base methods for building API objects.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Number of times to retry GraphQL queries that fail with a transient server-side error.</span>
+    <span class="n">_graphql_transient_error_retries</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -296,6 +310,7 @@
         <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make a call to the evergreen api.</span>
@@ -305,14 +320,17 @@
 <span class="sd">        :param method: HTTP method to make call with.</span>
 <span class="sd">        :param data: Extra data to send to the endpoint.</span>
 <span class="sd">        :param headers: Extra headers to send with the request.</span>
+<span class="sd">        :param timeout: Timeout (in sec) for this call. Defaults to the client&#39;s timeout.</span>
 <span class="sd">        :return: response from api server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Request to be sent&quot;</span><span class="p">,</span>
             <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
             <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
             <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
@@ -326,7 +344,7 @@
         <span class="n">request_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
             <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span>
-            <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">,</span>
+            <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">,</span>
             <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
             <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
         <span class="p">}</span>
@@ -477,6 +495,7 @@
         <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">variables</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">operation_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute a query or mutation against the Evergreen GraphQL API.</span>
@@ -488,9 +507,35 @@
 <span class="sd">        :param query: The GraphQL query or mutation to execute.</span>
 <span class="sd">        :param variables: Optional mapping of variable names to values for the query.</span>
 <span class="sd">        :param operation_name: Optional name of the operation to execute.</span>
+<span class="sd">        :param timeout: Timeout (in sec) for this query. Defaults to the client&#39;s timeout.</span>
 <span class="sd">        :return: The &quot;data&quot; payload of the GraphQL response.</span>
 <span class="sd">        :raises EvergreenGraphQLError: If the GraphQL API returns errors in the response.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">retries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphql_transient_error_retries</span>
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">retries</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graphql_once</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">operation_name</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">EvergreenGraphQLError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="n">retries</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">_is_transient_graphql_error</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+                    <span class="k">raise</span>
+                <span class="n">backoff</span> <span class="o">=</span> <span class="n">GRAPHQL_TRANSIENT_ERROR_BACKOFF_SEC</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">attempt</span>
+                <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;Retrying GraphQL query after transient error&quot;</span><span class="p">,</span>
+                    <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">),</span>
+                    <span class="n">attempt</span><span class="o">=</span><span class="n">attempt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">backoff</span><span class="o">=</span><span class="n">backoff</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">sleep</span><span class="p">(</span><span class="n">backoff</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_graphql_once</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">variables</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+        <span class="n">operation_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute a single GraphQL request. See :meth:`graphql` for parameters.&quot;&quot;&quot;</span>
         <span class="n">payload</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">variables</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;variables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">variables</span>
@@ -509,6 +554,7 @@
                 <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">),</span>
                 <span class="n">method</span><span class="o">=</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span>
                 <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">},</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">err</span><span class="o">.</span><span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -530,8 +576,7 @@
         <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">EvergreenGraphQLError</span><span class="p">(</span><span class="n">_format_graphql_errors</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">json_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span></div>
-
+        <span class="k">return</span> <span class="n">json_response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EvergreenApi.task_history">
 <a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.EvergreenApi.task_history">[docs]</a>
@@ -546,6 +591,7 @@
         <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the history of executions for a task in an Evergreen project.</span>
@@ -565,6 +611,7 @@
 <span class="sd">        :param fields: Fields to select for each returned task. Defaults to a small set of</span>
 <span class="sd">                       core fields. Each field is a simple field name, optionally with a</span>
 <span class="sd">                       sub-selection of simple names (e.g. ``&quot;details { status }&quot;``).</span>
+<span class="sd">        :param timeout: Timeout (in sec) for the query. Defaults to the client&#39;s timeout.</span>
 <span class="sd">        :return: Mapping with the returned ``tasks`` and ``pagination`` info.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">default_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;displayName&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="s2">&quot;buildVariant&quot;</span><span class="p">]</span>
@@ -591,7 +638,7 @@
             <span class="s2">&quot;pagination { mostRecentTaskOrder oldestTaskOrder } }&quot;</span>
             <span class="s2">&quot;}&quot;</span>
         <span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">options</span><span class="p">})</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">graphql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">options</span><span class="p">},</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">data</span><span class="p">)[</span><span class="s2">&quot;taskHistory&quot;</span><span class="p">]</span></div>
 
 
@@ -609,6 +656,7 @@
         <span class="n">date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">max_results</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Iterate over the execution history of a task.</span>
@@ -631,6 +679,7 @@
 <span class="sd">                       default selection is used.</span>
 <span class="sd">        :param max_results: Maximum number of tasks to yield before raising. Defaults to None</span>
 <span class="sd">                             (unbounded). Pass an int to cap iteration and raise on exceed.</span>
+<span class="sd">        :param timeout: Timeout (in sec) for each page&#39;s query. Defaults to the client&#39;s timeout.</span>
 <span class="sd">        :raises ValueError: If ``fields`` is given without ``id`` (needed for pagination) or</span>
 <span class="sd">                            contains an invalid GraphQL field name.</span>
 <span class="sd">        :raises EvergreenException: If ``max_results`` is exceeded.</span>
@@ -660,6 +709,7 @@
                 <span class="n">limit</span><span class="o">=</span><span class="n">page_limit</span><span class="p">,</span>
                 <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">,</span>
                 <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">tasks</span> <span class="o">=</span> <span class="n">history</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tasks&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">tasks</span><span class="p">:</span>
@@ -2354,6 +2404,8 @@
 <a class="viewcode-back" href="../../ref/evergreen.html#evergreen.api.RetryingEvergreenApi">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RetryingEvergreenApi</span><span class="p">(</span><span class="n">EvergreenApi</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An Evergreen Api that retries failed calls.&quot;&quot;&quot;</span>
+
+    <span class="n">_graphql_transient_error_retries</span> <span class="o">=</span> <span class="n">DEFAULT_GRAPHQL_TRANSIENT_ERROR_RETRIES</span>
 
     <span class="k">if</span> <span class="n">PackagingVersion</span><span class="p">(</span><span class="n">urllib3</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">PackagingVersion</span><span class="p">(</span><span class="s2">&quot;2.0.0&quot;</span><span class="p">):</span>
         <span class="n">DEFAULT_HTTP_RETRY</span> <span class="o">=</span> <span class="n">Retry</span><span class="p">(</span>
