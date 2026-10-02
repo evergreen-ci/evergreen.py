@@ -13,7 +13,7 @@ from enum import Enum
 from functools import lru_cache
 from http import HTTPStatus
 from json.decoder import JSONDecodeError
-from time import time
+from time import sleep, time
 from typing import Any, Callable, Dict, Generator, Iterable, Iterator, List, Optional, Union, cast
 from urllib.parse import quote, urlparse
 
@@ -94,6 +94,12 @@ DEFAULT_HTTP_RETRY_CODES = frozenset(
     }
 )
 
+# Errors the GraphQL API reports (with a 200 status) when one of Evergreen's own database
+# calls fails transiently. These are safe to retry since the query itself was fine.
+GRAPHQL_TRANSIENT_ERROR_MARKERS = ("ReauthenticationRequired",)
+DEFAULT_GRAPHQL_TRANSIENT_ERROR_RETRIES = 2
+GRAPHQL_TRANSIENT_ERROR_BACKOFF_SEC = 1.0
+
 EVERGREEN_URL_REGEX = re.compile(r"(https?)://evergreen\..*?(?=\n)")
 EVERGREEN_PATCH_ID_REGEX = re.compile(r"(?<=ID : )\w{24}")
 
@@ -105,6 +111,11 @@ class TaskHistoryDirection(str, Enum):
 
     AFTER = "AFTER"
     BEFORE = "BEFORE"
+
+
+def _is_transient_graphql_error(err: EvergreenGraphQLError) -> bool:
+    """Whether a GraphQL error was caused by a transient server-side failure."""
+    return any(marker in str(err) for marker in GRAPHQL_TRANSIENT_ERROR_MARKERS)
 
 
 def _format_graphql_errors(errors: List[Dict[str, Any]]) -> str:
@@ -126,6 +137,9 @@ def _format_graphql_errors(errors: List[Dict[str, Any]]) -> str:
 
 class EvergreenApi(object):
     """Base methods for building API objects."""
+
+    # Number of times to retry GraphQL queries that fail with a transient server-side error.
+    _graphql_transient_error_retries = 0
 
     def __init__(
         self,
@@ -246,6 +260,7 @@ class EvergreenApi(object):
         method: str = "GET",
         data: Optional[str] = None,
         headers: Optional[Dict] = None,
+        timeout: Optional[float] = None,
     ) -> requests.Response:
         """
         Make a call to the evergreen api.
@@ -255,14 +270,17 @@ class EvergreenApi(object):
         :param method: HTTP method to make call with.
         :param data: Extra data to send to the endpoint.
         :param headers: Extra headers to send with the request.
+        :param timeout: Timeout (in sec) for this call. Defaults to the client's timeout.
         :return: response from api server.
         """
+        if timeout is None:
+            timeout = self._timeout
         start_time = time()
         LOGGER.debug(
             "Request to be sent",
             url=url,
             params=params,
-            timeout=self._timeout,
+            timeout=timeout,
             data=data,
             method=method,
             headers=headers,
@@ -276,7 +294,7 @@ class EvergreenApi(object):
         request_kwargs: Dict[str, Any] = {
             "url": url,
             "params": params,
-            "timeout": self._timeout,
+            "timeout": timeout,
             "data": data,
             "method": method,
         }
@@ -425,6 +443,7 @@ class EvergreenApi(object):
         query: str,
         variables: Optional[Dict[str, Any]] = None,
         operation_name: Optional[str] = None,
+        timeout: Optional[float] = None,
     ) -> Any:
         """
         Execute a query or mutation against the Evergreen GraphQL API.
@@ -436,9 +455,34 @@ class EvergreenApi(object):
         :param query: The GraphQL query or mutation to execute.
         :param variables: Optional mapping of variable names to values for the query.
         :param operation_name: Optional name of the operation to execute.
+        :param timeout: Timeout (in sec) for this query. Defaults to the client's timeout.
         :return: The "data" payload of the GraphQL response.
         :raises EvergreenGraphQLError: If the GraphQL API returns errors in the response.
         """
+        retries = self._graphql_transient_error_retries
+        for attempt in range(retries + 1):
+            try:
+                return self._graphql_once(query, variables, operation_name, timeout)
+            except EvergreenGraphQLError as err:
+                if attempt == retries or not _is_transient_graphql_error(err):
+                    raise
+                backoff = GRAPHQL_TRANSIENT_ERROR_BACKOFF_SEC * 2**attempt
+                LOGGER.warning(
+                    "Retrying GraphQL query after transient error",
+                    error=str(err),
+                    attempt=attempt + 1,
+                    backoff=backoff,
+                )
+                sleep(backoff)
+
+    def _graphql_once(
+        self,
+        query: str,
+        variables: Optional[Dict[str, Any]],
+        operation_name: Optional[str],
+        timeout: Optional[float],
+    ) -> Any:
+        """Execute a single GraphQL request. See :meth:`graphql` for parameters."""
         payload: Dict[str, Any] = {"query": query}
         if variables is not None:
             payload["variables"] = variables
@@ -457,6 +501,7 @@ class EvergreenApi(object):
                 data=json.dumps(payload),
                 method="POST",
                 headers={"Content-Type": "application/json"},
+                timeout=timeout,
             )
         except requests.exceptions.HTTPError as err:
             if err.response is not None:
@@ -491,6 +536,7 @@ class EvergreenApi(object):
         limit: Optional[int] = None,
         date: Optional[datetime] = None,
         fields: Optional[List[str]] = None,
+        timeout: Optional[float] = None,
     ) -> Dict[str, Any]:
         """
         Get the history of executions for a task in an Evergreen project.
@@ -510,6 +556,7 @@ class EvergreenApi(object):
         :param fields: Fields to select for each returned task. Defaults to a small set of
                        core fields. Each field is a simple field name, optionally with a
                        sub-selection of simple names (e.g. ``"details { status }"``).
+        :param timeout: Timeout (in sec) for the query. Defaults to the client's timeout.
         :return: Mapping with the returned ``tasks`` and ``pagination`` info.
         """
         default_fields = ["id", "displayName", "status", "order", "buildVariant"]
@@ -536,7 +583,7 @@ class EvergreenApi(object):
             "pagination { mostRecentTaskOrder oldestTaskOrder } }"
             "}"
         )
-        data = self.graphql(query, variables={"options": options})
+        data = self.graphql(query, variables={"options": options}, timeout=timeout)
         return cast(Dict[str, Any], data)["taskHistory"]
 
     def task_history_iter(
@@ -551,6 +598,7 @@ class EvergreenApi(object):
         date: Optional[datetime] = None,
         fields: Optional[List[str]] = None,
         max_results: Optional[int] = None,
+        timeout: Optional[float] = None,
     ) -> Iterator[Dict[str, Any]]:
         """
         Iterate over the execution history of a task.
@@ -573,6 +621,7 @@ class EvergreenApi(object):
                        default selection is used.
         :param max_results: Maximum number of tasks to yield before raising. Defaults to None
                              (unbounded). Pass an int to cap iteration and raise on exceed.
+        :param timeout: Timeout (in sec) for each page's query. Defaults to the client's timeout.
         :raises ValueError: If ``fields`` is given without ``id`` (needed for pagination) or
                             contains an invalid GraphQL field name.
         :raises EvergreenException: If ``max_results`` is exceeded.
@@ -602,6 +651,7 @@ class EvergreenApi(object):
                 limit=page_limit,
                 date=date,
                 fields=fields,
+                timeout=timeout,
             )
             tasks = history.get("tasks") or []
             if not tasks:
@@ -2082,6 +2132,8 @@ class CachedEvergreenApi(EvergreenApi):
 
 class RetryingEvergreenApi(EvergreenApi):
     """An Evergreen Api that retries failed calls."""
+
+    _graphql_transient_error_retries = DEFAULT_GRAPHQL_TRANSIENT_ERROR_RETRIES
 
     if PackagingVersion(urllib3.__version__) >= PackagingVersion("2.0.0"):
         DEFAULT_HTTP_RETRY = Retry(
